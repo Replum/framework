@@ -21,12 +21,12 @@ class Table extends \nexxes\Widget {
 	
 	/**
 	 * The datasource to use
-	 * @var \nexxes\DataSourceInterface
+	 * @var \nexxes\iDataSource
 	 */
 	private $ds;
 	
 	
-	public function __construct(\nexxes\PageContext $context, \nexxes\DataSourceInterface $ds = null) {
+	public function __construct(\nexxes\PageContext $context, \nexxes\iDataSource $ds = null) {
 		parent::__construct($context);
 		$this->ds = $ds;
 	}

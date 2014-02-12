@@ -8,7 +8,7 @@ namespace nexxes;
  * Uses an entity type as the base and allows filtering and sorting based on its properties.
  * Even properties of relations are allowed and result in automatic join building.
  */
-class DoctrineDataSource implements \IteratorAggregate, DataSourceInterface {
+class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 	/**
 	 * The entity manager that is responsible for fetching entities from database 
 	 * 
