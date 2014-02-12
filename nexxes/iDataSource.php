@@ -8,7 +8,7 @@ namespace nexxes;
  * A DataSource must also implement \Traversable so iterating with foreach is possible
  * and \Countable so count($dataSource) will the return the total number of available entries
  */
-interface DataSourceInterface extends \Traversable, \Countable {
+interface iDataSource extends \Traversable, \Countable {
 	/**
 	 * @return array<string> List of field names a row contains
 	 */
@@ -27,7 +27,7 @@ interface DataSourceInterface extends \Traversable, \Countable {
 	 * 
 	 * @param string $field The field identifier to sort by
 	 * @param string $direction asc|desc for ascending or descending order
-	 * @return DataSourceInferface $this
+	 * @return iDataSource $this
 	 */
 	public function sort($field, $direction = 'asc');
 	
@@ -36,7 +36,7 @@ interface DataSourceInterface extends \Traversable, \Countable {
 	 * 
 	 * @param int $start The first row to use (starting from 0)
 	 * @param int $count Number of rows to show, -1 for all rows up to the last
-	 * @return DataSourceInferface $this
+	 * @return iDataSource $this
 	 */
 	public function limit($start = 0, $count = 15);
 	
@@ -46,7 +46,7 @@ interface DataSourceInterface extends \Traversable, \Countable {
 	 * @param string $field The field name to filter by
 	 * @param mixed $value Compare the field values to this value
 	 * @param mixed $compareBy Use to compare the field to the value
-	 * @return DataSourceInferface $this
+	 * @return iDataSource $this
 	 */
 	public function filter($field, $value, $compareBy = '=');
 }
