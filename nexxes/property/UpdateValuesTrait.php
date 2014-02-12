@@ -12,7 +12,6 @@ trait UpdateValuesTrait {
 	public function updateValues() {
 		// Widget ID
 		$id = $this->id;
-		echo "Updating properties for widget: " . $id . "<br>";
 		
 		// Property settings for this widget
 		$properties = $this->getContext()->propertyHandler->getProperties($this);
@@ -23,9 +22,7 @@ trait UpdateValuesTrait {
 			}
 			
 			$request_var = $id . '|' . $property->name;
-			echo "Checking property: " . $request_var . '<br>';
 			if (!isset($_REQUEST[$request_var])) {
-				echo 'Nothing found<br>';
 				continue;
 			}
 			
