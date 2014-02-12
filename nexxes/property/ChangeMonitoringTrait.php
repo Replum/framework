@@ -35,7 +35,7 @@ trait ChangeMonitoringTrait {
 	/**
 	 * Check if the current widget changed
 	 * 
-	 * @implements \nexxes\WidgetInterface
+	 * @implements \nexxes\iWidget
 	 * @return bool
 	 */
 	public function hasChanged() {

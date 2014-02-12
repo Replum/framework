@@ -7,7 +7,7 @@ use \nexxes\property\Config;
 /**
  * Base class that can be used for all widgets
  */
-class Widget implements WidgetInterface, \Serializable {
+class Widget implements iWidget, \Serializable {
 	use property\ChangeMonitoringTrait;
 	use property\UpdateValuesTrait;
 	

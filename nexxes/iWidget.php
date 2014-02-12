@@ -5,7 +5,7 @@ namespace nexxes;
 /**
  * Base interface for all widgets
  */
-interface WidgetInterface {
+interface iWidget {
 	/**
 	 * The widget has changed properties
 	 * @return bool
