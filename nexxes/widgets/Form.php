@@ -6,7 +6,6 @@ use \nexxes\property\Config;
 
 class Form extends \nexxes\WidgetContainer {
 	/**
-	 *
 	 * @var string
 	 * @Config(type="string")
 	 */
