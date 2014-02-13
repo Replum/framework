@@ -22,22 +22,19 @@ class Executer {
 		PageContext::$smarty->setTemplateDir(VENDOR_DIR . '/../template');
 		PageContext::$smarty->setCompileDir(VENDOR_DIR . '/../tmp/smarty-compile');
 		PageContext::$smarty->setCacheDir(VENDOR_DIR . '/../tmp/smarty-cache');
+		PageContext::$smarty->loadFilter('output', 'trimwhitespace');
 		
 		// Parse request data
 		PageContext::$request = new \nexxes\helper\RequestData();
+		PageContext::$smarty->assign('request', PageContext::$request);
 		
 		// Property annotation reader
 		PageContext::$propertyHandler = new \nexxes\property\Handler();
 		
 		// Restore persisted page
 		if (($pid = PageContext::$request->getPageID()) && (false !== ($serialized = \apc_fetch($pid)))) {
-			echo "Restoring page<br>\n";
-			
 			PageContext::$widgetRegistry = \unserialize(\apc_fetch($pid . '-widgets'));
 			PageContext::$page = \unserialize($serialized);
-			
-			echo "Page-ID: " . PageContext::$page->id . "<br>\n";
-			echo "From Registry: " . PageContext::$widgetRegistry->pageID . "<br>\n";
 		}
 		
 		else {
@@ -62,7 +59,7 @@ class Executer {
 	public function execute() {
 		PageContext::$page->render();
 		
-		PageContext::$page->persist();
+		\apc_store(PageContext::$widgetRegistry->pageID, \serialize(PageContext::$page));
 		\apc_store(PageContext::$widgetRegistry->pageID . '-widgets', \serialize(PageContext::$widgetRegistry));
 	}
 }
