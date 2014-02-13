@@ -92,7 +92,7 @@ trait ChangeMonitoringTrait {
 	 * @return mixed
 	 * @throws \InvalidArgumentException
 	 */
-	final public function __get($property) {
+	final public function &__get($property) {
 		if (!isset($this->_properties[$property])) {
 			throw new \InvalidArgumentException('Unknown property "' . $property . '" for object of class "' . \get_class($this) . '"');
 		}
@@ -127,27 +127,44 @@ trait ChangeMonitoringTrait {
 	 * @return String
 	 * @implements \Serializable
 	 */
-	final public function serialize() {
+	final public function _SerializeChangeMonitor() {
 		$o = new \stdClass();
 		
 		foreach ($this->_properties AS $property => $data) {
 			$o->$property = $data['value'];
 		}
 		
-		unset($this->_properties);
-		unset($this->_changed);
-		
 		foreach (\get_object_vars($this) AS $property => $value) {
-			if ($value instanceof \nexxes\iWidget) {
-				$o->$property = new \nexxes\WidgetIdentifier($value);
-			} else {
-				$o->$property = $value;
+			if (($property == '_properties') || ($property == '_changed')) {
+				continue;
 			}
+			
+			$o->$property = $this->_SerializeProperty($value);
 		}
 		
 		return \serialize($o);
 	}
 	
+	/**
+	 * Helper function to serialize recursive structures
+	 */
+	final private function _SerializeProperty($value) {
+		if ($value instanceof \nexxes\iWidget) {
+			return new \nexxes\WidgetIdentifier($value);
+		}
+		
+		elseif (\is_array($value)) {
+			$r = [];
+			foreach ($value AS $k => $v) {
+				$r[$k] = $this->_SerializeProperty($v);
+			}
+			return $r;
+		}
+		
+		else {
+			return $value;
+		}
+	}
 	
 	/**
 	 * Unserialize the data from the supplied object into the current widget
@@ -155,7 +172,7 @@ trait ChangeMonitoringTrait {
 	 * @param String $serialized
 	 * @implements \Serializable
 	 */
-	final public function unserialize($serialized) {
+	public function _UnserializeChangeMonitor($serialized) {
 		$this->_initializeChangeMonitoring();
 		
 		$o = \unserialize($serialized);
@@ -166,11 +183,25 @@ trait ChangeMonitoringTrait {
 		}
 		
 		foreach (\get_object_vars($o) AS $property => $value) {
-			if ($value instanceof \nexxes\WidgetIdentifier) {
-				$this->$property = $value->widget();
-			} else {
-				$this->$property = $value;
+			$this->$property = $this->_UnserializeProperties($value);
+		}
+	}
+	
+	private function _UnserializeProperties($value) {
+		if ($value instanceof \nexxes\WidgetIdentifier) {
+			return $value->widget();
+		}
+		
+		elseif (\is_array($value)) {
+			$r = [];
+			foreach ($value AS $k => $v) {
+				$r[$k] = $this->_UnserializeProperties($v);
 			}
+			return $r;
+		}
+		
+		else {
+			return $value;
 		}
 	}
 }
