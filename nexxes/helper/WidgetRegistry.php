@@ -20,14 +20,14 @@ class WidgetRegistry {
 	 * 
 	 * @var array<iWidget>
 	 */
-	private $widgets = [];
+	protected $widgets = [];
 	
 	/**
 	 * The number of seconds to keep data stored
 	 * 
 	 * @var int
 	 */
-	private $ttl = 3600;
+	protected $ttl = 3600;
 	
 	
 	
@@ -50,12 +50,12 @@ class WidgetRegistry {
 	 * 
 	 * @return string
 	 */
-	public function registerWidget(iWidget $widget, $length = 5) {
+	public function register(iWidget $widget, $length = 5) {
 		$str = 'w_' . $this->createRandomString($length);
 		
 		// If new ID is not unique, create a new one that is one char longer
 		if (isset($this->widgets[$str])) {
-			return $this->registerWidget($widget, $length + 1);
+			return $this->register($widget, $length + 1);
 		}
 		
 		$this->widgets[$str] = $widget;
