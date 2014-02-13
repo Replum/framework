@@ -2,6 +2,7 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\PageContext;
 use \nexxes\property\Config;
 
 class Table extends \nexxes\Widget {
@@ -26,8 +27,8 @@ class Table extends \nexxes\Widget {
 	private $ds;
 	
 	
-	public function __construct(\nexxes\PageContext $context, \nexxes\iDataSource $ds = null) {
-		parent::__construct($context);
+	public function __construct(\nexxes\iDataSource $ds = null) {
+		parent::__construct();
 		$this->ds = $ds;
 	}
 	
@@ -36,7 +37,7 @@ class Table extends \nexxes\Widget {
 			$this->ds->sort($this->sort, $this->order);
 		}
 		
-		$s = $this->getContext()->smarty;
+		$s = PageContext::$smarty;
 		$s->assign('id', $this->id);
 		$s->assign('datasource', $this->ds);
 		$s->assign('sort', $this->sort);

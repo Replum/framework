@@ -2,6 +2,8 @@
 
 namespace nexxes\property;
 
+use \nexxes\PageContext;
+
 /**
  * The trait removes all public properties annotated with a \nexxes\property\Config annotation
  * and handles them internaly so changes can be monitored by the __set() method.
@@ -10,11 +12,6 @@ namespace nexxes\property;
  * Also the _initializeChangeMonitoring() method must be called in the constructor
  */
 trait ChangeMonitoringTrait {
-	/**
-	 * Required for guaranteed context access
-	 */
-	use \nexxes\ContextTrait;
-	
 	/**
 	 * Contains the real values for the properties and a changed flag
 	 * 
@@ -42,6 +39,7 @@ trait ChangeMonitoringTrait {
 		return $this->_changed;
 	}
 	
+	
 	/**
 	 * Get changed values for the widget
 	 */
@@ -57,12 +55,13 @@ trait ChangeMonitoringTrait {
 		return $changed;
 	}
 	
+	
 	/**
 	 * Initialize the property magic for this widget
 	 * All public properties are removed from the object and handled thru __get and __set so all changes can be notified.
 	 */
 	final protected function _initializeChangeMonitoring() {
-		$properties = $this->getContext()->propertyHandler->getProperties($this);
+		$properties = PageContext::$propertyHandler->getProperties($this);
 		
 		foreach ($properties AS $property) {
 			$this->_properties[$property->name] = [
@@ -74,6 +73,7 @@ trait ChangeMonitoringTrait {
 		}
 	}
 	
+	
 	/**
 	 * Checks if the supplied property exists for the object
 	 * 
@@ -83,6 +83,7 @@ trait ChangeMonitoringTrait {
 	final public function __isset($property) {
 		return isset($this->_properties[$property]);
 	}
+	
 	
 	/**
 	 * Get the value for the specified property
@@ -98,6 +99,7 @@ trait ChangeMonitoringTrait {
 		
 		return $this->_properties[$property]['value'];
 	}
+	
 	
 	/**
 	 * Set the property to the specified value
@@ -117,6 +119,7 @@ trait ChangeMonitoringTrait {
 		$this->_properties[$property]['changed'] = true;
 	}
 	
+	
 	/**
 	 * Create a restorable string-representation of this widget
 	 * Current property values are stored in a default object and that is serialized
@@ -133,6 +136,7 @@ trait ChangeMonitoringTrait {
 		
 		return \serialize($o);
 	}
+	
 	
 	/**
 	 * Unserialize the data from the supplied object into the current widget

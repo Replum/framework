@@ -11,8 +11,7 @@ class Widget implements iWidget, \Serializable {
 	use property\ChangeMonitoringTrait;
 	use property\UpdateValuesTrait;
 	
-	public function __construct(PageContext $context) {
-		$this->setContext($context);
+	public function __construct() {
 		$this->_initializeChangeMonitoring();
 	}
 	

@@ -2,6 +2,8 @@
 
 namespace nexxes\property;
 
+use \nexxes\PageContext;
+
 /**
  * This trait updates property values from the request variables according the property annotation config.
  */
@@ -14,7 +16,7 @@ trait UpdateValuesTrait {
 		$id = $this->id;
 		
 		// Property settings for this widget
-		$properties = $this->getContext()->propertyHandler->getProperties($this);
+		$properties = PageContext::$propertyHandler->getProperties($this);
 		
 		foreach ($properties AS $property) {
 			if (!$property->fill) {
