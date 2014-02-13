@@ -23,12 +23,10 @@ trait UpdateValuesTrait {
 				continue;
 			}
 			
-			$request_var = $id . '|' . $property->name;
-			if (!isset($_REQUEST[$request_var])) {
+			$raw = PageContext::$request->getValue($this, $property->name);
+			if (!$raw) {
 				continue;
 			}
-			
-			$raw = $_REQUEST[$request_var];
 			
 			if ($property->scalar) {
 				$data = call_user_func([$this, 'sanitize' . \ucfirst($property->type) . 'Value'], $property, $raw);
