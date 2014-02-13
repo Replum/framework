@@ -29,6 +29,7 @@ class Table extends \nexxes\Widget {
 	
 	public function __construct(\nexxes\iDataSource $ds = null) {
 		parent::__construct();
+		$this->id = PageContext::$widgetRegistry->register($this);
 		$this->ds = $ds;
 	}
 	
@@ -38,11 +39,18 @@ class Table extends \nexxes\Widget {
 		}
 		
 		$s = PageContext::$smarty;
+		$s->loadFilter('output', 'trimwhitespace');
 		$s->assign('id', $this->id);
+		$s->assign('widget', $this);
+		$s->assign('request', PageContext::$request);
 		$s->assign('datasource', $this->ds);
 		$s->assign('sort', $this->sort);
 		$s->assign('order', $this->order);
 		
 		return $s->fetch(__DIR__ . '/Table.tpl');
+	}
+	
+	public function setDataSource(\nexxes\iDataSource $ds = null) {
+		$this->ds = $ds;
 	}
 }

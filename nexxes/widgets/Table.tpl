@@ -3,7 +3,8 @@
 	<thead>
 		<tr>
 			{foreach $datasource->fields() AS $field}
-				<th><a href="?{$id}|sort={$field}{if (($field == $sort) && ($order == 'asc'))  }&{$id}|order=desc{/if}">{$datasource->fieldName($field)}</a></th>
+<!--				<th><a href="?{$id}|sort={$field}{if (($field == $sort) && ($order == 'asc'))  }&{$id}|order=desc{/if}">{$datasource->fieldName($field)}</a></th>-->
+				<th><a href="{$request->link($widget, 'sort', $field, 'order', (($field == $sort) && ($order == 'asc') ? 'desc' : 'asc'))}">{$datasource->fieldName($field)}</a></th>
 			{/foreach}
 		</tr>
 	</thead>
@@ -12,15 +13,13 @@
 		{foreach $datasource AS $entry}
 		<tr data-nexxes-id="{$entry->id}">
 			{foreach $datasource->fields() AS $field}
-				<td>
 					{assign "value" $entry}
 					{assign "parts" explode(".", $field)}
 					
 					{foreach $parts as $part}
 							{assign "value" $value->{$part}}
 					{/foreach}
-					{$value}
-				</td>
+					<td>{$value}</td>
 			{/foreach}
 		</tr>
 		{/foreach}
