@@ -23,6 +23,12 @@ class WidgetRegistry {
 	protected $widgets = [];
 	
 	/**
+	 * Containers the id of the parent widget for each widget
+	 * @var array<string>
+	 */
+	protected $parents = [];
+	
+	/**
 	 * The number of seconds to keep data stored
 	 * 
 	 * @var int
@@ -83,6 +89,41 @@ class WidgetRegistry {
 		}
 		
 		return $this->widgets[$id];
+	}
+	
+	
+	/**
+	 * Get the parent widget for a widget.
+	 * If no parent exists, the parent is the page
+	 * 
+	 * @param \nexxes\iWidget $widget
+	 * @return \nexxes\iWidget
+	 */
+	public function getParent(iWidget $widget) {
+		if ($widget instanceof \nexxes\iPage) {
+			return null;
+		}
+		
+		elseif (isset($this->parents[$widget->id])) {
+			return $this->getWidget($this->parents[$widget->id]);
+		}
+		
+		else {
+			return \nexxes\PageContext::$page;
+		}
+	}
+	
+	
+	/**
+	 * Register the parent for a widget
+	 * 
+	 * @param \nexxes\iWidget $widget
+	 * @param \nexxes\iWidget $parent
+	 */
+	public function setParent(iWidget $widget, iWidget $parent) {
+		if (!($parent instanceof \nexxes\iPage)) {
+			$this->parents[$widget->id] = $parent->id;
+		}
 	}
 	
 	
