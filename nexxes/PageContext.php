@@ -39,7 +39,7 @@ abstract class PageContext {
 	/**
 	 * The widget registry hold references to all widgets and ensures unique identifiers
 	 * 
-	 * @var \nexxes\WidgetRegistry
+	 * @var \nexxes\helper\WidgetRegistry
 	 */
 	public static $widgetRegistry;
 }
