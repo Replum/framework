@@ -48,4 +48,9 @@ class Table extends \nexxes\Widget {
 	public function setDataSource(\nexxes\iDataSource $ds = null) {
 		$this->ds = $ds;
 	}
+	
+	public function serialize() {
+		unset($this->ds);
+		return parent::serialize();
+	}
 }
