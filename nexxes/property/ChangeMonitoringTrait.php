@@ -138,7 +138,11 @@ trait ChangeMonitoringTrait {
 		unset($this->_changed);
 		
 		foreach (\get_object_vars($this) AS $property => $value) {
-			$o->$property = $value;
+			if ($value instanceof \nexxes\iWidget) {
+				$o->$property = new \nexxes\WidgetIdentifier($value);
+			} else {
+				$o->$property = $value;
+			}
 		}
 		
 		return \serialize($o);
@@ -156,13 +160,17 @@ trait ChangeMonitoringTrait {
 		
 		$o = \unserialize($serialized);
 		
-		foreach ($this->_properties AS $property => $data) {
+		foreach ($this->_properties AS $property => &$data) {
 			$data['value'] = $o->$property;
 			unset($o->$property);
 		}
 		
 		foreach (\get_object_vars($o) AS $property => $value) {
-			$this->$property = $value;
+			if ($value instanceof \nexxes\WidgetIdentifier) {
+				$this->$property = $value->widget();
+			} else {
+				$this->$property = $value;
+			}
 		}
 	}
 }
