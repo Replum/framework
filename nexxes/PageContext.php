@@ -16,6 +16,13 @@ abstract class PageContext {
 	public static $page;
 	
 	/**
+	 * Request variables and link builder
+	 * 
+	 * @var \nexxes\helper\RequestData
+	 */
+	public static $request;
+	
+	/**
 	 * A template engine instance to use
 	 * 
 	 * @var \Smarty
@@ -28,7 +35,6 @@ abstract class PageContext {
 	 * @var \nexxes\property\Handler
 	 */
 	public static $propertyHandler;
-	
 	
 	/**
 	 * The widget registry hold references to all widgets and ensures unique identifiers

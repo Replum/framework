@@ -1,6 +1,8 @@
 <?php
 
-namespace nexxes;
+namespace nexxes\helper;
+
+use \nexxes\iWidget;
 
 /**
  * 
