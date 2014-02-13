@@ -149,7 +149,7 @@
 				highlight: true,
 				templates: {
 					suggestion: Handlebars.compile([
-						'<div><img src="{{icon}}" /> <strong>{{value}}</strong> {{#if owner}}(von: {{owner}}){{/if}}</div>',
+						'<div><img src="{{icon}}" /> <strong>{{value}}</strong> {{#if owner}}(von: {{owner}}){{/if}}</div>'
 					].join(''))
 				}
 			});
