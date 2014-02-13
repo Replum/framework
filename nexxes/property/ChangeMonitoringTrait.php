@@ -134,6 +134,13 @@ trait ChangeMonitoringTrait {
 			$o->$property = $data['value'];
 		}
 		
+		unset($this->_properties);
+		unset($this->_changed);
+		
+		foreach (\get_object_vars($this) AS $property => $value) {
+			$o->$property = $value;
+		}
+		
 		return \serialize($o);
 	}
 	
@@ -151,6 +158,11 @@ trait ChangeMonitoringTrait {
 		
 		foreach ($this->_properties AS $property => $data) {
 			$data['value'] = $o->$property;
+			unset($o->$property);
+		}
+		
+		foreach (\get_object_vars($o) AS $property => $value) {
+			$this->$property = $value;
 		}
 	}
 }
