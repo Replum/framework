@@ -66,10 +66,13 @@ class RequestData {
 	/**
 	 * 
 	 */
-	public function link($widget, $key, $value = null) {
+	public function link($widget = null, $key = null, $value = null) {
 		$args = \func_get_args();
-		$widget = \array_shift($args);
-		$id = (($widget instanceof iWidget) ? $widget->id : $widget);
+		
+		if (\count($args)) {
+			$widget = \array_shift($args);
+			$id = (($widget instanceof iWidget) ? $widget->id : $widget);
+		}
 		
 		// Build params from GET vars
 		$params = [];
