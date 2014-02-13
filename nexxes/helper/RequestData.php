@@ -3,6 +3,7 @@
 namespace nexxes\helper;
 
 use \nexxes\iWidget;
+use \nexxes\PageContext;
 
 /**
  * Parses the current request data, provides it to the page and to widgets
@@ -98,7 +99,7 @@ class RequestData {
 			}
 		}
 		
-		return $_SERVER["PHP_SELF"] . '?' . \http_build_query($params);
+		return $_SERVER["PHP_SELF"] . '?pid=' . \urlencode(PageContext::$page->id) . '&' . \http_build_query($params);
 	}
 	
 	
