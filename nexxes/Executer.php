@@ -57,7 +57,15 @@ class Executer {
 	
 	
 	public function execute() {
-		PageContext::$page->render();
+		if ($widgetID = PageContext::$request->getWidgetID()) {
+			$widget = PageContext::$widgetRegistry->getWidget($widgetID);
+			PageContext::$page->initWidget($widget);
+			echo $widget->renderHTML();
+		}
+		
+		else {
+			PageContext::$page->render();
+		}
 		
 		\apc_store(PageContext::$widgetRegistry->pageID, \serialize(PageContext::$page));
 		\apc_store(PageContext::$widgetRegistry->pageID . '-widgets', \serialize(PageContext::$widgetRegistry));
