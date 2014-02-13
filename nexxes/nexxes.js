@@ -4,8 +4,9 @@ var nexxes = nexxes || {};
  * Simple widget can ajaxify links (and forms, to come).
  * 
  * Links: widges that are wrapped inside <div class="nexxesSimpleWidget"></div>
- *        are searched for links. Clicks on these links then result in a load
- *        of the widget only which then replaces the former widgets html.
+ *        are searched for links with class nexxesSimpleWidgetLink.
+ *        Clicks on these links then result in a load of the widget only
+ *        which then replaces the former widgets html.
  */
 nexxes.simpleWidget = {
 	/**
@@ -13,7 +14,7 @@ nexxes.simpleWidget = {
 	 */
 	_workLink: function() {
 		var link = this;
-		var widget = $(link).closest('.nexxes-widget-ajax')[0];
+		var widget = $(link).closest('.nexxesSimpleWidget')[0];
 		console.log(widget);
 		var widgetID = widget.id;
 
@@ -29,7 +30,7 @@ nexxes.simpleWidget = {
 	 * Initializier function to re-enable SimpleWidget after page load
 	 */
 	init: function() {
-		$('.nexxes-widget-ajax a').each(nexxes.simpleWidget._workLink);
+		$('a.nexxesSimpleWidgetLink').each(nexxes.simpleWidget._workLink);
 	}
 };
 

@@ -1,10 +1,13 @@
-<div class="nexxes-widget-ajax" id="{$id}">
+<div id="{$id}" class="nexxesSimpleWidget">
 <table class="table table-bordered table-condensed table-hover table-striped">
 	<thead>
 		<tr>
 			{foreach $datasource->fields() AS $field}
-<!--				<th><a href="?{$id}|sort={$field}{if (($field == $sort) && ($order == 'asc'))  }&{$id}|order=desc{/if}">{$datasource->fieldName($field)}</a></th>-->
-				<th><a href="{$request->link($widget, 'sort', $field, 'order', (($field == $sort) && ($order == 'asc') ? 'desc' : 'asc'))}">{$datasource->fieldName($field)}</a></th>
+				<th>
+					<a class="nexxesSimpleWidgetLink" href="{$request->link($widget, 'sort', $field, 'order', (($field == $sort) && ($order == 'asc') ? 'desc' : 'asc'))}">
+						{$datasource->fieldName($field)}
+					</a>
+				</th>
 			{/foreach}
 		</tr>
 	</thead>
