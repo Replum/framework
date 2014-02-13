@@ -25,6 +25,13 @@ class RequestData {
 	private $pid;
 	
 	/**
+	 * Widget id of the widget to shown only
+	 * 
+	 * @var string
+	 */
+	private $wid;
+	
+	/**
 	 * All cookie variables, grouped by widget
 	 * 
 	 * @var array<string>
@@ -51,6 +58,10 @@ class RequestData {
 	public function __construct() {
 		if (isset($_REQUEST['pid'])) {
 			$this->pid = $_REQUEST['pid'];
+			
+			if (isset($_REQUEST['wid'])) {
+				$this->wid = $_REQUEST['wid'];
+			}
 		}
 		
 		elseif (isset($_REQUEST['page'])) {
@@ -128,6 +139,20 @@ class RequestData {
 	public function getPage() {
 		if (isset($this->page)) {
 			return $this->page;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Get the widget id if it is set
+	 * 
+	 * @return string
+	 */
+	public function getWidgetID() {
+		if (isset($this->wid)) {
+			return $this->wid;
 		} else {
 			return false;
 		}
