@@ -3,6 +3,8 @@
 namespace nexxes\helper;
 
 use \nexxes\iWidget;
+use \nexxes\iPage;
+use \nexxes\PageContext;
 
 /**
  * 
@@ -50,6 +52,15 @@ class WidgetRegistry {
 		} while (\apc_add($this->pageID, true) === false);
 	}
 	
+	/**
+	 * Call the initWidget function of all unserialized widgets
+	 */
+	public function initWidgets() {
+		foreach ($this->widgets as $widget) {
+			PageContext::$page->initWidget($widget);
+		}
+	}
+	
 	
 	/**
 	 * Generate a unique identifier to use in a widget and register the widget
@@ -73,7 +84,7 @@ class WidgetRegistry {
 	 * Get a widget from the registry or load it from apc cache if not already loaded
 	 * 
 	 * @param string $id
-	 * @return iWidget
+	 * @return \nexxes\iWidget
 	 */
 	public function getWidget($id) {
 		if (!isset($this->widgets[$id])) {
@@ -85,6 +96,12 @@ class WidgetRegistry {
 			
 			if ((false === $serialized) || (false === ($this->widgets[$id] = \unserialize($serialized)))) {
 				throw new \RuntimeException('Unable to restore widget "' . $id . '" for page "' . $this->pageID . '"');
+			}
+			
+			// Restore non-persistable data for the widget
+			// This may happen during page-deserialization, so page does not yet exist
+			if (PageContext::$page instanceof iPage) {
+				PageContext::$page->initWidget($this->widgets[$id]);
 			}
 		}
 		
@@ -100,7 +117,7 @@ class WidgetRegistry {
 	 * @return \nexxes\iWidget
 	 */
 	public function getParent(iWidget $widget) {
-		if ($widget instanceof \nexxes\iPage) {
+		if ($widget instanceof iPage) {
 			return null;
 		}
 		
@@ -109,7 +126,7 @@ class WidgetRegistry {
 		}
 		
 		else {
-			return \nexxes\PageContext::$page;
+			return PageContext::$page;
 		}
 	}
 	
@@ -121,7 +138,7 @@ class WidgetRegistry {
 	 * @param \nexxes\iWidget $parent
 	 */
 	public function setParent(iWidget $widget, iWidget $parent) {
-		if (!($parent instanceof \nexxes\iPage)) {
+		if (!($parent instanceof iPage)) {
 			$this->parents[$widget->id] = $parent->id;
 		}
 	}
