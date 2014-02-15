@@ -32,10 +32,8 @@ class Executer {
 		PageContext::$propertyHandler = new \nexxes\property\Handler();
 		
 		// Restore persisted page
-		if (($pid = PageContext::$request->getPageID()) && (false !== ($serialized = \apc_fetch($pid)))) {
-			PageContext::$widgetRegistry = \unserialize(\apc_fetch($pid . '-widgets'));
-			PageContext::$page = \unserialize($serialized);
-			PageContext::$widgetRegistry->initWidgets();
+		if ($pid = PageContext::$request->getPageID()) {
+			helper\WidgetRegistry::restore($pid);
 		}
 		
 		else {
@@ -52,7 +50,8 @@ class Executer {
 			}
 			
 			PageContext::$widgetRegistry = new \nexxes\helper\WidgetRegistry();
-			PageContext::$page = new $class();
+			PageContext::$widgetRegistry->page = new $class();
+			PageContext::$page = PageContext::$widgetRegistry->page;
 		}
 	}
 	
@@ -68,7 +67,6 @@ class Executer {
 			PageContext::$page->render();
 		}
 		
-		\apc_store(PageContext::$widgetRegistry->pageID, \serialize(PageContext::$page));
-		\apc_store(PageContext::$widgetRegistry->pageID . '-widgets', \serialize(PageContext::$widgetRegistry));
+		PageContext::$widgetRegistry->persist();
 	}
 }

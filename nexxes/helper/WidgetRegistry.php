@@ -18,6 +18,11 @@ class WidgetRegistry {
 	public $pageID;
 	
 	/**
+	 * @var \nexxes\iPage
+	 */
+	public $page;
+	
+	/**
 	 * A list of all registered widgets
 	 * 
 	 * @var array<iWidget>
@@ -92,7 +97,7 @@ class WidgetRegistry {
 		}
 		
 		if (!($this->widgets[$id] instanceof iWidget)) {
-			$serialized = \apc_fetch($this->pageID . '-' . $id);
+			$serialized = \gzinflate($this->widgets[$id]);
 			
 			if ((false === $serialized) || (false === ($this->widgets[$id] = \unserialize($serialized)))) {
 				throw new \RuntimeException('Unable to restore widget "' . $id . '" for page "' . $this->pageID . '"');
@@ -165,16 +170,29 @@ class WidgetRegistry {
 	 * Method called when widget registry is persisted.
 	 * Stores all widgets separately in the apc cache
 	 */
-	public function __sleep() {
+	public function persist() {
 		foreach ($this->widgets AS $id => $widget) {
 			// Persisted widget that was not restored
 			if (!($widget instanceof iWidget)) { continue; }
-			
-			$serialized = \serialize($widget);
-			apc_store($this->pageID . '-' . $id, $serialized);
-			$this->widgets[$id] = true;
+			$this->widgets[$id] = \gzdeflate(\serialize($widget), 9);
 		}
 		
-		return ['pageID', 'widgets'];
+		$this->page = \gzdeflate(\serialize($this->page), 9);
+		\apc_store($this->pageID, \serialize($this));
+	}
+	
+	public static function restore($pid) {
+		$serialized = \apc_fetch($pid);
+		if ($serialized === false) {
+			throw new \RuntimeException('Can not restore page with id "' . $pid . '"');
+		}
+		
+		PageContext::$widgetRegistry = \unserialize(\apc_fetch($pid));
+		if (!(PageContext::$widgetRegistry instanceof WidgetRegistry)) {
+			throw new \RuntimeException('Can not restore page with id "' . $pid . '"');
+		}
+		PageContext::$widgetRegistry->page = \unserialize(\gzinflate(PageContext::$widgetRegistry->page));
+		PageContext::$page = PageContext::$widgetRegistry->page;
+		PageContext::$widgetRegistry->initWidgets();
 	}
 }
