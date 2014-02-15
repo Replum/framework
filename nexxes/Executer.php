@@ -22,7 +22,7 @@ class Executer {
 		PageContext::$smarty->setTemplateDir(VENDOR_DIR . '/../template');
 		PageContext::$smarty->setCompileDir(VENDOR_DIR . '/../tmp/smarty-compile');
 		PageContext::$smarty->setCacheDir(VENDOR_DIR . '/../tmp/smarty-cache');
-		PageContext::$smarty->loadFilter('output', 'trimwhitespace');
+		//PageContext::$smarty->loadFilter('output', 'trimwhitespace');
 		
 		// Parse request data
 		PageContext::$request = new \nexxes\helper\RequestData();
@@ -35,6 +35,7 @@ class Executer {
 		if (($pid = PageContext::$request->getPageID()) && (false !== ($serialized = \apc_fetch($pid)))) {
 			PageContext::$widgetRegistry = \unserialize(\apc_fetch($pid . '-widgets'));
 			PageContext::$page = \unserialize($serialized);
+			PageContext::$widgetRegistry->initWidgets();
 		}
 		
 		else {
