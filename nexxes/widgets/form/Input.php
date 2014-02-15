@@ -46,10 +46,10 @@ class Input extends \nexxes\Widget {
 	public $size;
 	
 	/**
-	 * An error message to show
+	 * Mark field as error
 	 * 
-	 * @var string
-	 * @Config(type="string")
+	 * @var bool
+	 * @Config(type="bool")
 	 */
 	public $error;
 	
