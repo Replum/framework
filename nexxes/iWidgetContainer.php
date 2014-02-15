@@ -13,12 +13,12 @@ interface iWidgetContainer extends iWidget {
 	 * 
 	 * @param iWidget $child
 	 */
-	public function add(iWidget $child);
+	function addWidget(iWidget $child);
 	
 	/**
 	 * Get the list of current children
 	 * 
 	 * @return array<iWidget>
 	 */
-	public function children();
+	function widgets();
 }
