@@ -17,7 +17,7 @@ abstract class WidgetContainer extends Widget implements iWidgetContainer {
 	 * 
 	 * @param \nexxes\iWidget $child
 	 */
-	public function add(iWidget $child) {
+	public function addWidget(iWidget $child) {
 		$this->_children[] = $child;
 		PageContext::$widgetRegistry->setParent($child, $this);
 	}
@@ -27,7 +27,7 @@ abstract class WidgetContainer extends Widget implements iWidgetContainer {
 	 * 
 	 * @return array<iWidget>
 	 */
-	public function children() {
+	public function widgets() {
 		return $this->_children;
 	}
 	
