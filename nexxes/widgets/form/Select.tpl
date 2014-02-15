@@ -1,4 +1,4 @@
-<div class="form-group col-lg-12">
+<div class="form-group">
 	<label for="{$id}" class="col-lg-4 control-label">
 		{if isset($widget->tooltip)}<span class="tooltip-show" data-toggle="tooltip" title="{$widget->tooltip}">{/if}
 			{$widget->caption}
