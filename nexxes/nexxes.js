@@ -15,22 +15,36 @@ nexxes.simpleWidget = {
 	_workLink: function() {
 		var link = this;
 		var widget = $(link).closest('.nexxesSimpleWidget')[0];
-		console.log(widget);
 		var widgetID = widget.id;
 
-		link.onclick = function() {
-			var url = link.href + '&wid=' + widgetID + ' #' + widgetID + ' > :first-child';
-			console.log(url);
+		$(link).one("click", function() {
+			var url = link.href + '&wid=' + widgetID + ' #' + widgetID + ' > *';
 			$('#' + widgetID).load(url, nexxes.simpleWidget.init);
 			return false;
-		};
+		});
+	},
+	
+	_workForm: function() {
+		var form = this;
+		var widgetID = form.id;
+		
+		$(form).one("submit", function() {
+			var url = form.action + '&wid=' + widgetID + ' #' + widgetID + ' > *';
+			$(this).load(url, $(this).serializeArray(), nexxes.simpleWidget.init);
+			return false;
+		});
 	},
 	
 	/**
 	 * Initializier function to re-enable SimpleWidget after page load
 	 */
 	init: function() {
-		$('a.nexxesSimpleWidgetLink').each(nexxes.simpleWidget._workLink);
+		if (this instanceof HTMLFormElement) {
+			$(this).each(nexxes.simpleWidget._workForm);
+		} else {
+			$(this).find('form').andSelf().find('form.nexxesSimpleWidget').each(nexxes.simpleWidget._workForm);
+		}
+		$(this).find('a.nexxesSimpleWidgetLink').each(nexxes.simpleWidget._workLink);
 	}
 };
 
