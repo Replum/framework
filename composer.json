@@ -1,0 +1,26 @@
+{
+	"name": "nexxes/widgets",
+	"description": "nexxes web widget framework",
+	"authors": [
+		{
+			"name": "Dennis Birkholz",
+			"email": "dennis.birkholz@nexxes.net"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"nexxes\\": "src/"
+		}
+	},
+	
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "http://packages.birkholz.org"
+		}
+	],
+	
+	"require": {
+		"smarty/smarty": "v3.1.*"
+	}
+}
