@@ -25,10 +25,17 @@ class Panel extends \nexxes\WidgetContainer {
 	
 	protected function initialize() {
 		$this->addClass('panel');
-		$this->addClass('panel-' . $this->alternative);
 	}
 	
 	public function renderHTML() {
+		foreach (['default', 'primary', 'success', 'info', 'warning', 'danger',] AS $alternative) {
+			if ($this->alternative == $alternative) {
+				$this->addClass('panel-' . $alternative);
+			} else {
+				$this->delClass('panel-' . $alternative);
+			}
+		}
+		
 		return $this->renderDefaultHTML();
 	}
 }
