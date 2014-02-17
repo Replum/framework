@@ -2,7 +2,7 @@
 
 namespace nexxes;
 
-abstract class WidgetContainer extends Widget implements iWidgetContainer {
+class WidgetContainer extends Widget implements iWidgetContainer {
 	/**
 	 * The list of children added
 	 * 
