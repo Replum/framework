@@ -107,15 +107,23 @@ trait ChangeMonitoringTrait {
 	 * @todo Add type checks and setter calls
 	 * 
 	 * @param string $property
-	 * @param mixed $value
+	 * @param mixed $raw
 	 * @throws \InvalidArgumentException
 	 */
-	final public function __set($property, $value) {
+	final public function __set($property, $raw) {
 		if (!isset($this->_properties[$property])) {
 			throw new \InvalidArgumentException('Unknown property "' . $property . '" for object of class "' . \get_class($this) . '"');
 		}
 		
-		$this->_properties[$property]['value'] = $value;
+		$properties = PageContext::$propertyHandler->getProperties($this);
+		$value = $this->sanitizeValue($properties[$property], $raw);
+		
+		if ($properties[$property]->array && !is_array($value)) {
+			$this->_properties[$property]['value'][] = $value;
+		} else {
+			$this->_properties[$property]['value'] = $value;
+		}
+		
 		$this->_properties[$property]['changed'] = true;
 	}
 	

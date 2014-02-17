@@ -28,18 +28,44 @@ trait UpdateValuesTrait {
 				continue;
 			}
 			
-			if ($property->scalar) {
-				$data = call_user_func([$this, 'sanitize' . \ucfirst($property->type) . 'Value'], $property, $raw);
-			}
-			
-			else {
-				$class = $property->type;
-				$data = new $class($raw);
-			}
-			
-			// FIXME: handle arrays
-			$this->{$property->name} = $data;
+			$this->{$property->name} = $raw;
 		}
+	}
+	
+	protected function sanitizeValue(Config $property, $value) {
+		if ($property->scalar) {
+			$sanitizer = [$this, 'sanitize' . \ucfirst($property->type) . 'Value'];
+		} else {
+			$sanitizer = [$this, 'sanitizeClassProperty'];
+		}
+		
+		if ($property->array && is_array($value)) {
+			$r = [];
+			foreach ($value AS $k => $v) {
+				$r[$k] = $sanitizer($property, $v);
+			}
+			return $r;
+		}
+		
+		else {
+			return $sanitizer($property, $value);
+		}
+	}
+	
+	protected function sanitizeClassProperty(\nexxes\property\Config $property, $value) {
+		$class = $property->type;
+		
+		if ($value instanceof $class) {
+			return $value;
+		}
+		
+		if (!is_scalar($value) && !is_array($value)) {
+			throw new \InvalidArgumentException('Can not create object from supplied parameter');
+		}
+		
+		echo "Creating object: '$class'<br>\n";
+		
+		return new $class($value);
 	}
 	
 	/**
