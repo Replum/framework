@@ -9,7 +9,7 @@ class Panel extends \nexxes\WidgetContainer {
 	 * @var string
 	 * @Config(type="string", match="/^(default|primary|success|info|warning|danger)$/")
 	 */
-	public $alternative = 'default';
+	public $style = 'default';
 	
 	/**
 	 * @var array<\nexxes\iWidget>
@@ -28,11 +28,11 @@ class Panel extends \nexxes\WidgetContainer {
 	}
 	
 	public function renderHTML() {
-		foreach (['default', 'primary', 'success', 'info', 'warning', 'danger',] AS $alternative) {
-			if ($this->alternative == $alternative) {
-				$this->addClass('panel-' . $alternative);
+		foreach (['default', 'primary', 'success', 'info', 'warning', 'danger',] AS $style) {
+			if ($this->style == $style) {
+				$this->addClass('panel-' . $style);
 			} else {
-				$this->delClass('panel-' . $alternative);
+				$this->delClass('panel-' . $style);
 			}
 		}
 		
