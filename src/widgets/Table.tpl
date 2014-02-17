@@ -5,6 +5,9 @@
 				<th>
 					<a class="nexxesSimpleWidgetLink" href="{$request->link($widget, 'sort', $field, 'order', (($field == $sort) && ($order == 'asc') ? 'desc' : 'asc'))}">
 						{$datasource->fieldName($field)}
+					{if ($widget->sort == $field)}
+						<span class="glyphicon glyphicon-arrow-{if $widget->order == "desc"}down{else}up{/if}"></span>
+					{/if}
 					</a>
 				</th>
 			{/foreach}
