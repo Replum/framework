@@ -124,7 +124,27 @@ abstract class Widget implements iWidget, \Serializable {
 	 * @return string The HTML code of the widget
 	 */
 	public function renderHTML() {
-		return "";
+		return $this->renderDefaultHTML();
+	}
+	
+	/**
+	 * Try to find a template and render it
+	 * @return string
+	 */
+	protected function renderDefaultHTML() {
+		$ro = new \ReflectionObject($this);
+		$filename = $ro->getFileName();
+		
+		if ((!$filename) || (\substr($filename, -4) != '.php')) {
+			return '';
+		}
+		
+		$template = \substr($filename, 0, -4) . '.tpl';
+		if (!\file_exists($template)) {
+			return '';
+		}
+		
+		return $this->smarty()->fetch($template);
 	}
 	
 	######################################################################
