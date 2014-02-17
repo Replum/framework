@@ -62,7 +62,9 @@ class WidgetRegistry {
 	 */
 	public function initWidgets() {
 		foreach ($this->widgets as $widget) {
-			PageContext::$page->initWidget($widget);
+			if ($widget instanceof iWidget) {
+				PageContext::$page->initWidget($widget);
+			}
 		}
 	}
 	
