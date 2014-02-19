@@ -59,7 +59,6 @@ class Executer {
 	public function execute() {
 		if ($widgetID = PageContext::$request->getWidgetID()) {
 			$widget = PageContext::$widgetRegistry->getWidget($widgetID);
-			PageContext::$page->initWidget($widget);
 			echo $widget->renderHTML();
 		}
 		

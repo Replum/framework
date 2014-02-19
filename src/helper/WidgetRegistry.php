@@ -42,6 +42,13 @@ class WidgetRegistry {
 	 */
 	protected $ttl = 3600;
 	
+	/**
+	 * Mark initialized widgets to prevent double initialization
+	 * 
+	 * @var array<bool>
+	 */
+	protected $inizialized = [];
+	
 	
 	
 	
@@ -63,7 +70,7 @@ class WidgetRegistry {
 	public function initWidgets() {
 		foreach ($this->widgets as $widget) {
 			if ($widget instanceof iWidget) {
-				PageContext::$page->initWidget($widget);
+				$this->initWidget($widget);
 			}
 		}
 	}
@@ -105,16 +112,28 @@ class WidgetRegistry {
 				throw new \RuntimeException('Unable to restore widget "' . $id . '" for page "' . $this->pageID . '"');
 			}
 			
-			// Restore non-persistable data for the widget
-			// This may happen during page-deserialization, so page does not yet exist
-			if (PageContext::$page instanceof iPage) {
-				PageContext::$page->initWidget($this->widgets[$id]);
-			}
+			$this->initWidgets($this->widgets[$id]);
 		}
 		
 		return $this->widgets[$id];
 	}
 	
+	/**
+	 * Restore non-persistable data for the widget
+	 * This may happen during page-deserialization, so page does not yet exist
+	 * 
+	 * @param \nexxes\iWidget $widget
+	 */
+	protected function initWidget(iWidget $widget) {
+		if (isset($this->inizialized[$widget->id]) && $this->inizialized[$widget->id]) {
+			return;
+		}
+		
+		if (PageContext::$page instanceof iPage) {
+			PageContext::$page->initWidget($widget);
+			$this->inizialized[$widget->id] = true;
+		}
+	}
 	
 	/**
 	 * Get the parent widget for a widget.
@@ -190,6 +209,7 @@ class WidgetRegistry {
 		}
 		
 		PageContext::$widgetRegistry = \unserialize(\apc_fetch($pid));
+		PageContext::$widgetRegistry->inizialized = [];
 		if (!(PageContext::$widgetRegistry instanceof WidgetRegistry)) {
 			throw new \RuntimeException('Can not restore page with id "' . $pid . '"');
 		}
