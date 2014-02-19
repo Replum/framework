@@ -53,12 +53,10 @@ class Select extends \nexxes\Widget {
 	public $size;
 	
 	/**
-	 * An error message to show
-	 * 
 	 * @var string
-	 * @Config(type="string")
+	 * @Config(type="string", match="/^(success|error|warning)$/")
 	 */
-	public $error;
+	public $status;
 	
 	/**
 	 * Additional classes for this element
