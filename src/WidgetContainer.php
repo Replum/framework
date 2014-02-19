@@ -14,12 +14,36 @@ class WidgetContainer extends Widget implements iWidgetContainer {
 	
 	
 	/**
-	 * 
 	 * @param \nexxes\iWidget $child
+	 * @return \nexxes\WidgetContainer
 	 */
 	public function addWidget(iWidget $child) {
 		$this->_children[] = $child;
 		PageContext::$widgetRegistry->setParent($child, $this);
+		
+		return $this;
+	}
+	
+	/**
+	 * @param \nexxes\iWidget $child
+	 * @return \nexxes\WidgetContainer
+	 */
+	public function delWidget(iWidget $child) {
+		$key = \array_search($child, $this->_children);
+		if ($key !== false) {
+			unset($this->_children[$key]);
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * @return \nexxes\WidgetContainer
+	 */
+	public function clearWidgets() {
+		$this->_children = [];
+		
+		return $this;
 	}
 	
 	/**
