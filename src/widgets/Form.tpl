@@ -1,4 +1,9 @@
 <form method="POST" action="{$request->link()}" {$widget->renderCommonAttributes()}>
+	{if isset($widget->title) && $widget->title}
+	<fieldset>
+		<legend>{$widget->title|escape}</legend>
+	{/if}
+	
 	{if count($widget->errors) || ($widget->errortitle != "")}
 	<div class="alert alert-danger alert-dismissable col-lg-12">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -11,14 +16,9 @@
 	</div>
 	{/if}
 	
-	{if isset($widget->title) && $widget->title}
-	<fieldset>
-		<legend>{$widget->title|escape}</legend>
-	{/if}
-	
-		{$widget->renderChildrenHTML()}
+	{$widget->renderChildrenHTML()}
 	
 	{if isset($widget->title) && $widget->title}
 		</fieldset>
-	{/if}	
+	{/if}
 </form>
