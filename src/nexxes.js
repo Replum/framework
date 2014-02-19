@@ -45,6 +45,42 @@ nexxes.simpleWidget = {
 			$(this).find('form').andSelf().find('form.nexxesSimpleWidget').each(nexxes.simpleWidget._workForm);
 		}
 		$(this).find('a.nexxesSimpleWidgetLink').each(nexxes.simpleWidget._workLink);
+		
+		for (var i=0; i < nexxes.simpleWidget.suggests.length; ++i) {
+			var suggestor = nexxes.simpleWidget.suggests[i];
+			
+			$(suggestor.selector).typeahead(null, {
+				name: suggestor.name,
+				source: suggestor.repo.ttAdapter(),
+				autoselect: true,
+				highlight: true,
+				templates: suggestor.templates
+			});
+		}
+	},
+	
+	suggests: [],
+	
+	registerSuggest: function(name, selector, source, template, suggestions) {
+		var suggestor = {
+			name: name,
+			selector: selector,
+			repo: new Bloodhound({
+				datumTokenizer: function(d) { return d.tokens; },
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				limit: suggestions,
+				prefetch: {
+					url: source,
+					ttl: 1,
+					thumbprint: name + '-123'
+				}
+			}),
+			templates: {
+				suggestion: Handlebars.compile(template)
+			}
+		};
+		suggestor.repo.initialize();
+		this.suggests.push(suggestor);
 	}
 };
 

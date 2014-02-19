@@ -39,6 +39,8 @@
 			/* Space for fixed top navbar */
 			body { padding-top: 70px; }
 		</style>
+		
+		<link href="/style.css" rel="stylesheet" />
 	</head>
 	<body id="{$id}">
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -127,33 +129,5 @@
 				{$page->renderChildrenHTML()}
 			</div>
 		</div>
-		
-		<script>
-		{literal}
-			var charRepo = new Bloodhound({
-				datumTokenizer: function(d) { return d.tokens; },
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				prefetch: {
-					url: '/members/json/members.php',
-					ttl: 1,
-					thumbprint: 'foobar'
-				}
-			});
-
-			charRepo.initialize();
-
-			$('.guild-char-input').typeahead(null, {
-				name: 'members',
-				source: charRepo.ttAdapter(),
-				autoselect: true,
-				highlight: true,
-				templates: {
-					suggestion: Handlebars.compile([
-						'<div><img src="{{icon}}" /> <strong>{{value}}</strong> {{#if owner}}(von: {{owner}}){{/if}}</div>'
-					].join(''))
-				}
-			});
-		{/literal}
-		</script>
 	</body>
 </html>
