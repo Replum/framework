@@ -18,6 +18,7 @@ nexxes.simpleWidget = {
 		var widgetID = widget.id;
 
 		$(link).one("click", function() {
+			nexxes.simpleWidget.startLoaderAnimation();
 			var url = link.href + '&wid=' + widgetID + ' #' + widgetID + ' > *';
 			$('#' + widgetID).load(url, nexxes.simpleWidget.init);
 			return false;
@@ -29,6 +30,7 @@ nexxes.simpleWidget = {
 		var widgetID = form.id;
 		
 		$(form).one("submit", function() {
+			nexxes.simpleWidget.startLoaderAnimation();
 			var url = form.action + '&wid=' + widgetID + ' #' + widgetID + ' > *';
 			$(this).load(url, $(this).serializeArray(), nexxes.simpleWidget.init);
 			return false;
@@ -57,6 +59,8 @@ nexxes.simpleWidget = {
 				templates: suggestor.templates
 			});
 		}
+		
+		$('#pleaseWaitDialog').modal('hide');
 	},
 	
 	suggests: [],
@@ -81,6 +85,28 @@ nexxes.simpleWidget = {
 		};
 		suggestor.repo.initialize();
 		this.suggests.push(suggestor);
+	},
+	
+	startLoaderAnimation: function() {
+		var pos = 1;
+		var max = 130;
+		var interval = setInterval(function() {
+			if (pos == 1) {
+				$('#pleaseWaitDialog').modal('show');
+			}
+			
+			if (pos == max) {
+				clearInterval(interval);
+				$('#pleaseWaitDialog').modal('hide');
+			}
+			
+			$('#pleaseWaitDialog div.progress-bar').css('width', '' + Math.ceil(pos/max*100) + '%');
+			pos++;
+		}, 500);
+		
+		$('#pleaseWaitDialog').on('hide.bs.modal', function (e) {
+			clearInterval(interval);
+		});
 	}
 };
 
