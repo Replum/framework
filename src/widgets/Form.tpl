@@ -1,4 +1,4 @@
-<form method="POST" action="{$request->link()}" {$widget->renderCommonAttributes()}>
+<form method="POST" action="{if ($widget->action) && ($widget->action !="")}{$widget->action}{else}{$request->link()}{/if}" {$widget->renderCommonAttributes()}>
 	{if isset($widget->title) && $widget->title}
 	<fieldset>
 		<legend>{$widget->title|escape}</legend>

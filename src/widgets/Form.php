@@ -51,6 +51,13 @@ class Form extends \nexxes\WidgetContainer {
 	 */
 	public $errors = [];
 	
+	/**
+	 * @var string
+	 * @Config(type="string")
+	 */
+	public $action;
+	
+	
 	
 	
 	public function __construct() {
@@ -75,6 +82,12 @@ class Form extends \nexxes\WidgetContainer {
 			$this->buttons = new \nexxes\widgets\form\ButtonList();
 			$this->addWidget($this->buttons);
 		}
+		
 		$this->buttons->addWidget($button);
+	}
+	
+	public function clearWidgets() {
+		parent::clearWidgets();
+		$this->buttons = null;
 	}
 }
