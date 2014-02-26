@@ -5,6 +5,13 @@
 		{if isset($widget->tooltip)}</span>{/if}
 	</label>
 	<div class="col-lg-8">
-		<input class="form-control {if count($widget->classes)}{implode(' ', $widget->classes)}{/if}" type="{$widget->type|default:"text"}" id="{$id}" name="{$id}|value" value="{$widget->value|default:""|escape}" size="{$widget->size|default:20}" {if isset($widget->placeholder)}placeholder="{$widget->placeholder|escape}"{/if} />
+		<input id="{$id}"
+					 class="form-control {if count($widget->classes)}{implode(' ', $widget->classes)}{/if}"
+					 type="{$widget->type|default:"text"}"
+					 name="{$id}|value"
+					 value="{$widget->value|default:""|escape}"
+					 size="{$widget->size|default:20}"
+					 {if isset($widget->placeholder)}placeholder="{$widget->placeholder|escape}"{/if}
+		/>
 	</div>
 </div>
