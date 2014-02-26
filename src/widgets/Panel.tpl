@@ -5,19 +5,34 @@
 		</div>
 	{/foreach}
 	
+	{assign var="inPanelBody" value=false}
 	{foreach $widget->widgets() AS $child}
 		{if $child instanceof "nexxes\widgets\iPanelChild"}
+			{if $inPanelBody}
+				{assign var="inPanelBody" value=false}
+				</div>
+			{/if}
+			
 			{$child->renderHTML()}
 		{else}
-			<div class="panel-body">
+			{if !$inPanelBody}
+				{assign var="inPanelBody" value=true}
+				<div class="panel-body">
+			{/if}
 				{$child->renderHTML()}
-			</div>
 		{/if}
 	{/foreach}
 	
-	{foreach $widget->foot AS $child}
-		<div class="panel-footer">
-			{$child->renderHTML()}
+	{if $inPanelBody}
+		{assign var="inPanelBody" value=false}
 		</div>
-	{/foreach}
+	{/if}
+	
+	{if count($widget->foot) > 0}
+		<div class="panel-footer">
+			{foreach $widget->foot AS $child}
+				{$child->renderHTML()}
+			{/foreach}
+		</div>
+	{/if}
 </div>
