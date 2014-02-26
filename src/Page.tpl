@@ -43,90 +43,22 @@
 		<link href="/style.css" rel="stylesheet" />
 	</head>
 	<body id="{$id}">
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">Krit Happenz!</a>
-			</div>
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="/zeiten/">Zeitplan</a></li>
-					<li><a href="#">Link</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
-							<li class="divider"></li>
-							<li><a href="#">Separated link</a></li>
-							<li class="divider"></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul>
-					</li>
-				</ul>
-				
-				<ul class="nav navbar-nav navbar-right">
-				{if isset($user)}
-						<li><p class="navbar-text">Hallo, {$user->name}</p></li>
-						<li><a href="/logout.php" class="tooltip-show" data-toggle="tooltip" data-placement="left" title="Abmelden" ><span class="glyphicon glyphicon-log-out"></span></a></li>
-				{else}
-						<li><a href="/register.php">Registrieren</a></li>
-						<li><a href="/members/">Anmelden</a></li>
-				{/if}
-					</ul>
-				
-				{if isset($user)}
-					{if count($user->accounts)}
-						<form class="navbar-form navbar-right" action="addCharacter" role="form" method="post">
-							<div class="form-group">
-								<div class="input-group">
-									<input type="text" class="form-control" name="character" placeholder="Charactername" size="15"/>
-									<span class="input-group-addon">@</span>
-									<span class="input-group-btn">
-										<select name="account" class="form-control">
-											{foreach $user->accounts AS $account}
-												<option value="{$account->name}">{$account->name}</option>
-											{/foreach}
-										</select>
-									</span>
-									<span class="input-group-btn">
-										<button type="submit" class="btn btn-default tooltip-show" data-toggle="tooltip" data-placement="bottom" title="Character hinzufügen">
-											<span class="glyphicon glyphicon-user"></span>
-										</button>
-									</span>
-								</div>
+		{$page->renderChildrenHTML()}
+		
+		<div class="modal fade" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3>Bitte warten...</h3>
+					</div>
+					<div class="modal-body">
+						<div class="progress progress-striped active">
+							<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="45" style="width: 1%;">
+								<span class="sr-only">60% Complete</span>
 							</div>
-						</form>
-					{/if}
-				
-				<form class="navbar-form navbar-right" action="addAccount" role="form" method="post">
-					<div class="form-group">
-						<div class="input-group">
-							<span class="input-group-addon">@</span>
-							<input type="text" class="form-control" name="account" placeholder="Accountname" size="15"/>
-							<span class="input-group-btn input-group-btn-fix">
-								<button type="submit" class="btn btn-default tooltip-show" data-toggle="tooltip" data-placement="bottom" title="Account freischalten">
-									<span class="glyphicon glyphicon-tower"></span>
-								</button>
-							</span>
 						</div>
 					</div>
-				</form>
-				{/if}
-			</div>
-		</nav>
-		
-		<div class="container">
-			<div class="row">
-				{$page->renderChildrenHTML()}
+				</div>
 			</div>
 		</div>
 	</body>
