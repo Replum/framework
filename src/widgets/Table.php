@@ -62,6 +62,16 @@ class Table extends \nexxes\Widget implements iPanelChild {
 	 */
 	public $rowsPerPage = 15;
 	
+	/**
+	 * @var array<callable>
+	 */
+	protected $actionGenerators = [];
+	
+	/**
+	 * @var array<callable>
+	 */
+	protected $fieldTranslators = [];
+	
 	
 	
 	
@@ -108,4 +118,47 @@ class Table extends \nexxes\Widget implements iPanelChild {
 	public function pages() {
 		return \ceil(\count($this->ds) / $this->rowsPerPage);
 	}
+	
+	/**
+	 * @param callable $generator
+	 */
+	public function addActionGenerator(callable $generator) {
+		$this->actionGenerators[] = $generator;
+		return $this;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function hasActionGenerators() {
+		return (\count($this->actionGenerators) > 0);
+	}
+	
+	/**
+	 * @return array<callable>
+	 */
+	public function getActionGenerators() {
+		return $this->actionGenerators;
+	}
+	
+	/**
+	 * @param string $field
+	 * @param callable $translator
+	 */
+	public function setFieldTranslator($field, callable $translator) {
+		$this->fieldTranslators[$field] = $translator;
+		return $this;
+	}
+	
+	/**
+	 * @param string $field
+	 * @return callable
+	 */
+	public function getFieldTranslator($field) {
+		if (isset($this->fieldTranslators[$field])) {
+			return $this->fieldTranslators[$field];
+		} else {
+			return null;
+		}
+	} 
 }

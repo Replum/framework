@@ -81,7 +81,6 @@ abstract class Widget implements iWidget, \Serializable {
 	public function __construct() {
 		$this->id = PageContext::$widgetRegistry->register($this);
 		$this->_initializeChangeMonitoring();
-		$this->initialize();
 	}
 	
 	
@@ -89,7 +88,7 @@ abstract class Widget implements iWidget, \Serializable {
 	 * Called to initialize the object.
 	 * Overwrite this model in derived widgets instead of overwriting the constructor
 	 */
-	protected function initialize() {
+	public function initialize() {
 	}
 	
 	######################################################################
@@ -169,9 +168,12 @@ abstract class Widget implements iWidget, \Serializable {
 	 * @param type $name
 	 */
 	public function delClass($name) {
-		if ($key = \array_search($name, $this->classes)) {
+		$key = \array_search($name, $this->classes);
+		
+		if ($key !== false) {
 			unset($this->classes[$key]);
 		}
+		
 		return $this;
 	}
 	

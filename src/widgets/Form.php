@@ -63,12 +63,10 @@ class Form extends \nexxes\WidgetContainer {
 	public function __construct() {
 		parent::__construct();
 		$this->role = 'form';
+		$this->addClass('nexxesSimpleWidget');
 	}
 	
-	
-	
 	public function renderHTML() {
-		$this->addClass('nexxesSimpleWidget');
 		if ($this->layout) {
 			$this->addClass('form-' . $this->layout);
 		}

@@ -88,8 +88,8 @@ class RequestData {
 		// Build params from GET vars
 		$params = [];
 		foreach ($this->get AS $widget_id => $widget_data) {
-			foreach ($widget_data AS $key => $value) {
-				$params[$widget_id . '|' . $key] = $value;
+			foreach ($widget_data AS $get_key => $get_value) {
+				$params[$widget_id . '|' . $get_key] = $get_value;
 			}
 		}
 		

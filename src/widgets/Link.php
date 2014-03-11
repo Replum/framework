@@ -20,7 +20,7 @@ class Link extends \nexxes\WidgetContainer {
 	
 	
 	
-	public function __construct($url, $target = null) {
+	public function __construct($url = '', $target = null) {
 		parent::__construct();
 		
 		$this->url = $url;

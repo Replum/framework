@@ -11,6 +11,9 @@
 					</a>
 				</th>
 			{/foreach}
+			{if $widget->hasActionGenerators()}
+				<th>&nbsp;</th>
+			{/if}
 		</tr>
 	</thead>
 	
@@ -25,13 +28,25 @@
 							{assign "value" $value->{$part}}
 					{/foreach}
 					<td>
-						{if $value instanceof '\DateTimeInterface'}
+						{assign "fieldTranslator" $widget->getFieldTranslator($field)}
+						{if !is_null($fieldTranslator)}
+							{assign "translatedWidget" call_user_func($fieldTranslator, $value)}
+							{$translatedWidget->renderHTML()}
+						{elseif $value instanceof '\DateTimeInterface'}
 							{$value->format('Y-m-d H:i:s')}
 						{else}
 							{$value}
 						{/if}
 					</td>
 			{/foreach}
+			{if $widget->hasActionGenerators()}
+				<td>
+					{foreach $widget->getActionGenerators() AS $generator}
+						{assign "actionWidget" call_user_func($generator, $entry)}
+						{$actionWidget->renderHTML()}
+					{/foreach}
+				</td>
+			{/if}
 		</tr>
 		{/foreach}
 	</tbody>

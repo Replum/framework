@@ -16,7 +16,7 @@ class Image extends \nexxes\Widget {
 	
 	
 	
-	public function __construct($src, $title) {
+	public function __construct($src = '', $title = '') {
 		parent::__construct();
 		
 		$this->src = $src;

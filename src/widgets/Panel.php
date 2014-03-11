@@ -23,11 +23,9 @@ class Panel extends \nexxes\WidgetContainer {
 	 */
 	public $foot = [];
 	
-	protected function initialize() {
-		$this->addClass('panel');
-	}
-	
 	public function renderHTML() {
+		$this->addClass('panel');
+		
 		foreach (['default', 'primary', 'success', 'info', 'warning', 'danger',] AS $style) {
 			if ($this->style == $style) {
 				$this->addClass('panel-' . $style);

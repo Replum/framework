@@ -7,7 +7,7 @@
 	
 	{assign var="inPanelBody" value=false}
 	{foreach $widget->widgets() AS $child}
-		{if $child instanceof "nexxes\widgets\iPanelChild"}
+		{if $child instanceof "nexxes\widgets\iPanelChild" || in_array('panel-body', $child->classes)}
 			{if $inPanelBody}
 				{assign var="inPanelBody" value=false}
 				</div>

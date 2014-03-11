@@ -16,7 +16,8 @@ nexxes.simpleWidget = {
 		var link = this;
 		var widget = $(link).closest('.nexxesSimpleWidget')[0];
 		var widgetID = widget.id;
-
+		
+		$(link).off("click");
 		$(link).one("click", function() {
 			nexxes.simpleWidget.startLoaderAnimation();
 			var url = link.href + '&wid=' + widgetID + ' #' + widgetID + ' > *';
@@ -29,6 +30,7 @@ nexxes.simpleWidget = {
 		var form = this;
 		var widgetID = form.id;
 		
+		$(form).off("submit");
 		$(form).one("submit", function() {
 			nexxes.simpleWidget.startLoaderAnimation();
 			var url = form.action + '&wid=' + widgetID + ' #' + widgetID + ' > *';

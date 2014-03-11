@@ -67,7 +67,7 @@ class Input extends \nexxes\Widget {
 	public $classes = [];
 	
 	
-	public function __construct($caption, $tooltip = null, $placeholder = null) {
+	public function __construct($caption = '', $tooltip = null, $placeholder = null) {
 		parent::__construct();
 		
 		$this->caption = $caption;

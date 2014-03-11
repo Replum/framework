@@ -17,7 +17,7 @@ class Text extends \nexxes\Widget {
 	 */
 	public $type;
 	
-	public function __construct($text, $type = null) {
+	public function __construct($text = '', $type = null) {
 		parent::__construct();
 		
 		$this->text = $text;

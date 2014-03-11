@@ -45,7 +45,7 @@ class Button extends \nexxes\Widget {
 	public $classes = [];
 	
 	
-	public function __construct($value, $type = "submit", $tooltip = null) {
+	public function __construct($value = '', $type = "submit", $tooltip = null) {
 		parent::__construct();
 		
 		$this->value = $value;

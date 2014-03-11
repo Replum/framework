@@ -24,7 +24,7 @@ trait UpdateValuesTrait {
 			}
 			
 			$raw = PageContext::$request->getValue($this, $property->name);
-			if (!$raw) {
+			if ($raw === null) {
 				continue;
 			}
 			
