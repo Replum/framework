@@ -6,12 +6,12 @@
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<!-- Bootstrap -->
-		<link href="/bootstrap-3.0.3/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="/vendor/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="/vendor/js/jquery-1.10.2.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="/bootstrap-3.0.3/js/bootstrap.min.js"></script>
+		<script src="/vendor/bootstrap-3.1.1/js/bootstrap.min.js"></script>
 		
 		<!-- Javascript template enginge  -->
 		<script src="/vendor/js/handlebars-v1.3.0.js"></script>
