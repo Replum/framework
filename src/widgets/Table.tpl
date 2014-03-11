@@ -19,14 +19,18 @@
 	
 	<tbody>
 		{foreach $datasource AS $entry}
-		<tr data-nexxes-id="{$entry->id}">
+		<tr data-nexxes-id="{if is_array($entry)}{else}{$entry->id}{/if}">
 			{foreach $datasource->fields() AS $field}
-					{assign "value" $entry}
-					{assign "parts" explode(".", $field)}
-					
-					{foreach $parts as $part}
-							{assign "value" $value->{$part}}
-					{/foreach}
+					{if is_array($entry)}
+						{assign "value" $entry[$field]}
+					{else}
+						{assign "value" $entry}
+						{assign "parts" explode(".", $field)}
+
+						{foreach $parts as $part}
+								{assign "value" $value->{$part}}
+						{/foreach}
+					{/if}
 					<td>
 						{assign "fieldTranslator" $widget->getFieldTranslator($field)}
 						{if !is_null($fieldTranslator)}
