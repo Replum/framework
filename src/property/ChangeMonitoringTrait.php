@@ -186,12 +186,19 @@ trait ChangeMonitoringTrait {
 		$o = \unserialize($serialized);
 		
 		foreach ($this->_properties AS $property => &$data) {
-			$data['value'] = $o->$property;
-			unset($o->$property);
+			if (isset($o->$property)) {
+				$data['value'] = $o->$property;
+				unset($o->$property);
+			}
 		}
 		
-		foreach (\get_object_vars($o) AS $property => $value) {
-			$this->$property = $this->_UnserializeProperties($value);
+		if (is_object($o)) {
+			foreach (\get_object_vars($o) AS $property => $serialized_value) {
+				$value = $this->_UnserializeProperties($serialized_value);
+				if (!is_null($value)) {
+					$this->$property = $value;
+				}
+			}
 		}
 	}
 	
