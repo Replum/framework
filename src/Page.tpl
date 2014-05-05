@@ -24,7 +24,7 @@
 		<script src="/vendor/js/uri-v1.12.0.bundle.min.js"></script>
 		
 		<!-- nexxes stuff -->
-		<script src="/nexxes.js"></script>
+		<script src="/nexxes.js?t={time()}"></script>
 		
 		<script>
 			{literal}
