@@ -192,13 +192,10 @@ class WidgetRegistry {
 	 * Stores all widgets separately in the apc cache
 	 */
 	public function persist() {
-		foreach ($this->widgets AS $id => $widget) {
-			// Persisted widget that was not restored
-			if (!($widget instanceof iWidget)) { continue; }
-			$this->widgets[$id] = \gzdeflate(\serialize($widget), 9);
+		// FIXME: special handling for datasources, fix DoctrineDatasource
+		if (isset($this->page->table)) {
+			$this->page->table->setDataSource();
 		}
-		
-		$this->page = \gzdeflate(\serialize($this->page), 9);
 		\apc_store($this->pageID, \serialize($this));
 	}
 	
@@ -210,11 +207,12 @@ class WidgetRegistry {
 		
 		PageContext::$widgetRegistry = \unserialize(\apc_fetch($pid));
 		PageContext::$widgetRegistry->inizialized = [];
-		if (!(PageContext::$widgetRegistry instanceof WidgetRegistry)) {
-			throw new \RuntimeException('Can not restore page with id "' . $pid . '"');
-		}
-		PageContext::$widgetRegistry->page = \unserialize(\gzinflate(PageContext::$widgetRegistry->page));
 		PageContext::$page = PageContext::$widgetRegistry->page;
+		
+		foreach (PageContext::$widgetRegistry->widgets AS $widget) {
+			$widget->updateValues();
+		}
+		
 		PageContext::$widgetRegistry->initWidgets();
 	}
 }
