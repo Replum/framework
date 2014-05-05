@@ -7,18 +7,6 @@ namespace nexxes;
  */
 interface iWidget {
 	/**
-	 * The widget has changed properties
-	 * @return bool
-	 */
-	function hasChanged();
-	
-	/**
-	 * Returns a list of property->newvalue pairs
-	 * @return array
-	 */
-	function getChanges();
-	
-	/**
 	 * Set a property of the class
 	 * 
 	 * @param string $name Name of the property to change
