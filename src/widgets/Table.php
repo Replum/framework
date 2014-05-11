@@ -85,7 +85,7 @@ class Table extends \nexxes\Widget implements iPanelChild {
 	
 	public function renderHTML() {
 		if ($this->sort) {
-			$this->ds->sort($this->sort, $this->order);
+			$this->ds->setSort($this->sort, $this->order);
 		}
 		
 		foreach(['bordered', 'condensed', 'hover', 'striped',] AS $setting) {
