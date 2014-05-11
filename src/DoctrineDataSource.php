@@ -2,6 +2,8 @@
 
 namespace nexxes;
 
+use \nexxes\dependency\Gateway as dep;
+
 /**
  * A data source that works on doctrine entities.
  * 
@@ -10,46 +12,33 @@ namespace nexxes;
  */
 class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 	/**
-	 * The entity manager that is responsible for fetching entities from database 
+	 * Name of the model manager class to look up in the dependency registry
 	 * 
-	 * @var \Doctrine\ORM\EntityManager
+	 * @var string
 	 */
-	private $em;
+	private $modelManagerName;
 	
 	/**
-	 * Type/class of the entites to use as base
+	 * Class name of a name translator to use for human readable field names
 	 * 
-	 * @var \Doctrine\ORM\Mapping\ClassMetadata
+	 * @var string
+	 */
+	private $nameTranslator;
+	
+	/**
+	 * Type/class name of the entites to use as base
+	 * 
+	 * @var string
 	 */
 	private $entity;
 	
 	/**
-	 * This query builder is used to determine what entries to fetch
-	 * 
-	 * @var \Doctrine\ORM\QueryBuilder
-	 */
-	private $queryBuilder;
-	
-	/**
 	 * A list of fields you may fetch with this data source
+	 * Contains fieldname => [displayname, fetchdef] associations
 	 * 
-	 * @var array<string>
+	 * @var array
 	 */
-	protected $fields;
-	
-	/**
-	 * May contain a list of field=>fieldDisplayName pairs or an object implementing the StringTranslatorInterface
-	 * 
-	 * @var array<string>|\nexxes\StringTranslatorInterface
-	 */
-	protected $names;
-	
-	/**
-	 * The current result or null if no fetch happened
-	 * 
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 */
-	private $result;
+	private $fields = [];
 	
 	/**
 	 * The first result of the list of result to retrieve, starts from 0
@@ -66,30 +55,107 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 	private $limitCount = null;
 	
 	/**
-	 * Boolean filter to use in where clause
+	 * List of filter criteria to apply. Contains [fieldname, compareOperator, compareTo] tupples
 	 * 
-	 * @var \Doctrine\ORM\Query\Expr\Andx
+	 * @var array
 	 */
-	private $filter;
+	private $filter = [];
+	
+	/**
+	 * List of sort criteria, contains [fieldname, direction] pairs
+	 * 
+	 * @var array
+	 */
+	private $sorter = [];
+	
+	
+	
+	
+	/**
+	 * The entity manager that is responsible for fetching entities from database 
+	 * 
+	 * @var \Doctrine\ORM\EntityManager
+	 */
+	private $em;
+	
+	/**
+	 * This query builder is used to determine what entries to fetch
+	 * 
+	 * @var \Doctrine\ORM\QueryBuilder
+	 */
+	private $queryBuilder;
+	
+	/**
+	 * Meta information about the fields
+	 * 
+	 * @var array
+	 */
+	private $meta = [];
+	
+	/**
+	 * The current result or null if no fetch happened
+	 * 
+	 * @var \Doctrine\Common\Collections\ArrayCollection
+	 */
+	private $result;
 	
 	
 	
 	
 	/**
 	 * 
-	 * @param \Doctrine\ORM\EntityManager $em
 	 * @param string $entity
-	 * @param array<string> $fields
-	 * @param array<string>|StringTranslatorInterface $names
+	 * @param string $modelManagerName Name of the model manager class to look up in the registry
 	 */
-	public function __construct(\Doctrine\ORM\EntityManager $em, $entity, $fields, $names) {
-		$this->em = $em;
-		$this->entity = $this->em->getClassMetadata($entity);
-		$this->fields = $fields;
-		$this->names = $names;
-		$this->queryBuilder = $this->em->createQueryBuilder();
-		$this->queryBuilder->from($this->entity->getName(), 'root');
+	public function __construct($entity, $modelManagerName = \birkholz\common\DoctrineModelManager::class) {
+		$this->entity = $entity;
+		$this->modelManagerName = $modelManagerName;
 	}
+	
+	
+	
+	
+	/**
+	 * Register a string translator that is used to create human readable field names for e.g. column headings.
+	 * Translator is fetched via the dependency registry.
+	 * 
+	 * @param string $translatorDependencyName Dependency name of the translator, must be accessible by the dependency registry
+	 * @return $this for chaining
+	 */
+	public function setNameTranslator($translatorDependencyName) {
+		$this->nameTranslator = $translatorDependencyName;
+		return $this;
+	}
+	
+	
+	
+	
+	/**
+	 * Specify a field that can be accessed by this datasource.
+	 * 
+	 * $display and $fetchby default to $field.
+	 * 
+	 * @param string $field The unique identifier of this field and used e.g. in sort/filter url parameters.
+	 * @param string $display The human readable name used for column headers
+	 * @param string $fetchby The qualified possibly nested field qualifier which may also contain aggregate functions like COUNT, MIN, MAX, etc.
+	 * @return $this for chaining
+	 */
+	public function addField($field, $display = null, $fetchby = null) {
+		if (is_null($display)) {
+			$display = $field;
+		}
+		
+		if (is_null($fetchby)) {
+			$fetchby = $field;
+		}
+		
+		$this->fields[$field] = [$display, $fetchby];
+		
+		return $this;
+	}
+	
+	
+	
 	
 	/**
 	 * Get a display name for the supplied field
@@ -98,84 +164,124 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 	 * @return string
 	 */
 	public function fieldName($field) {
-		if ($this->names instanceof StringTranslatorInterface) {
-			return $this->names->translate($field);
-		}
-		
-		elseif (\is_array($this->names) && isset($this->names[$field])) {
-			return $this->names[$field];
+		if (isset($this->nameTranslator) && ($this->nameTranslator != '')) {
+			$tr = dep::get($this->nameTranslator);
+			if ($tr instanceof StringTranslatorInterface) {
+				return $tr->translate($this->fields[$field][0]);
+			}
+			
+			else {
+				throw new \RuntimeException('Name translator dependency "' . $this->nameTranslator . '" must implement interface ' . StringTranslatorInterface::class);
+			}
 		}
 		
 		else {
-			return $field;
+			return $this->fields[$field][0];
 		}
 	}
 	
+	
+	
+	
 	/**
-	 * List of available field names
+	 * List of available field identifiers
 	 * 
 	 * @return array<string>
 	 */
 	public function fields() {
-		return $this->fields;
+		return \array_keys($this->fields);
 	}
 	
-	public function filter($field, $value, $compareBy = '=') {
-		if (is_null($this->filter)) {
-			$this->filter = $this->queryBuilder->expr()->andX();
-			$this->queryBuilder->where($this->filter);
-		}
+	
+	
+	public function addFilter($field, $value, $compareBy = '=') {
+		$this->filter[] = [$field, $compareBy, $value];
 		
-		$name = $this->_getJoinName($this->entity, $field);
-		$methods = [
-				'<' => 'lt',
-				'<=' => 'lte',
-				'=' => 'eq',
-				'>=' => 'gte',
-				'>' => 'gt',
-				'<>' => 'neq',
-				'!=' => 'neq',
-				'like' => 'like',
-				'notLike' => 'notLike',
-		];
+		return $this;
+	}
+	
+	public function setSort($field, $direction) {
+		$this->sorter = [];
+		$this->sorter[] = [$field, $direction];
 		
-		$this->filter->add($this->queryBuilder->expr()->{$methods[$compareBy]}($name, $this->queryBuilder->expr()->literal($value)));
+		return $this;
 	}
 	
 	public function limit($start = 0, $count = null) {
 		$this->limitStart = $start;
 		$this->limitCount = $count;
+		
+		return $this;
 	}
 	
-	public function sort($field, $direction = 'asc') {
-		$name = $this->_getJoinName($this->entity, $field);
-		$this->queryBuilder->addOrderBy($name, $direction);
+	
+	/**
+	 * 
+	 */
+	protected function prepareQueryBuilder() {
+		$this->em = dep::get($this->modelManagerName)->doctrine;
+		
+		$this->meta = [];
+		$this->meta['root'] = [
+				'entity' => $this->em->getClassMetadata($this->entity),
+				'name' => 'root',
+		];
+		
+		$this->queryBuilder = $this->em->createQueryBuilder();
+		$this->queryBuilder->from($this->meta['root']['entity']->getName(), 'root');
+		
+		if (\count($this->filter)) {
+			$whereParts = $this->queryBuilder->expr()->andX();
+			$this->queryBuilder->where($whereParts);
+
+			foreach ($this->filter AS list($field, $compareBy, $value)) {
+				$name = $this->_getJoinName($this->meta['root']['entity'], $field);
+				$methods = [
+						'<' => 'lt',
+						'<=' => 'lte',
+						'=' => 'eq',
+						'>=' => 'gte',
+						'>' => 'gt',
+						'<>' => 'neq',
+						'!=' => 'neq',
+						'like' => 'like',
+						'notLike' => 'notLike',
+				];
+
+				$whereParts->add($this->queryBuilder->expr()->{$methods[$compareBy]}($name, $this->queryBuilder->expr()->literal($value)));
+			}
+		}
+		
+		foreach ($this->sorter AS list ($field, $direction)) {
+			$name = $this->_getJoinName($this->meta['root']['entity'], $field);
+			$this->queryBuilder->addOrderBy($name, $direction);
+		}
+		
+		
+		return $this;
 	}
+	
+	
+	
 	
 	/**
 	 * @implements \Countable
 	 * @return int
 	 */
 	public function count() {
+		if (is_null($this->queryBuilder)) {
+			$this->prepareQueryBuilder();
+		}
+		
 		$result = $this->queryBuilder->select('COUNT(root.id) as entry_count')->setFirstResult(null)->setMaxResults(null)->getQuery()->getOneOrNullResult();
 		return (int)$result['entry_count'];
 	}
 	
-	/**
-	 * Get the current result.
-	 * Fetch it if no result existed
-	 * 
-	 * @return \Doctrine\Common\Collections\ArrayCollection
-	 */
-	private function fetchResult() {
-		if (is_null($this->result)) {
-			$this->result = $this->queryBuilder->getQuery()->execute();
+	public function getIterator() {
+		if (is_null($this->queryBuilder)) {
+			$this->prepareQueryBuilder();
 		}
 		
-		return $this->result;
-	}
-
-	public function getIterator() {
 		$result = $this->queryBuilder->select('root')->setFirstResult($this->limitStart)->setMaxResults($this->limitCount)->getQuery()->execute();
 		return new \ArrayIterator($result);
 	}
@@ -229,6 +335,20 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 		}
 		
 		return $this->_getJoinName($this->entities[$qualifier], $resolve, $qualifier);
+	}
+	
+	
+	public function __sleep() {
+		return [
+			'modelManagerName',
+			'nameTranslator',
+			'entity',
+			'fields',
+			'limitStart',
+			'limitCount',
+			'filter',
+			'sorter',
+		];
 	}
 }
 
