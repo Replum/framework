@@ -62,7 +62,7 @@ class WidgetFactory {
 			$key = \array_shift($args);
 			$value = \array_shift($args);
 			
-			$widget->$key = $value;
+			$widget->set($key, $value);
 		}
 		
 		$widget->initialize();

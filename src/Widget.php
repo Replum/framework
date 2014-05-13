@@ -7,8 +7,8 @@ use \nexxes\property\Config;
 /**
  * Base class that can be used for all widgets
  */
-abstract class Widget implements iWidget, \Serializable {
-	use property\ChangeMonitoringTrait;
+abstract class Widget implements iWidget {
+	//use property\ChangeMonitoringTrait;
 	use property\UpdateValuesTrait;
 	
 	/**
@@ -80,7 +80,7 @@ abstract class Widget implements iWidget, \Serializable {
 	
 	public function __construct() {
 		$this->id = PageContext::$widgetRegistry->register($this);
-		$this->_initializeChangeMonitoring();
+		//$this->_initializeChangeMonitoring();
 	}
 	
 	
@@ -98,7 +98,16 @@ abstract class Widget implements iWidget, \Serializable {
 	/**
 	 * @implements \nexxes\iWidget
 	 */
-	public function set($property, $value) {
+	public function set($property, $raw) {
+		$properties = PageContext::$propertyHandler->getProperties($this);
+		$value = $this->sanitizeValue($properties[$property], $raw);
+		
+		if ($properties[$property]->array && !is_array($value)) {
+			$p = $this->$property;
+			$p[] = $value;
+		} else {
+			$this->$property = $value;
+		}
 		return $this;
 	}
 	
@@ -107,7 +116,7 @@ abstract class Widget implements iWidget, \Serializable {
 	 * @implements \nexxes\iWidget
 	 */
 	public function add($property, $value) {
-		return $this;
+		return $this->set($property, $value);
 	}
 	
 	/**
@@ -190,14 +199,14 @@ abstract class Widget implements iWidget, \Serializable {
 		return $smarty;
 	}
 	
-	public function serialize() {
+	/*public function serialize() {
 		return $this->_SerializeChangeMonitor();
 	}
 	
 	public function unserialize($serialized) {
 		$this->_UnserializeChangeMonitor($serialized);
 		$this->updateValues();
-	}
+	}*/
 	
 	/**
 	 * Helper function to generate an attribute list from the default attributes available
