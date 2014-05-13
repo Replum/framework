@@ -29,7 +29,7 @@ interface iDataSource extends \Traversable, \Countable {
 	 * @param string $direction asc|desc for ascending or descending order
 	 * @return iDataSource $this
 	 */
-	public function sort($field, $direction = 'asc');
+	//public function sort($field, $direction = 'asc');
 	
 	/**
 	 * Limit the rows to use when iterating over the data
@@ -38,7 +38,7 @@ interface iDataSource extends \Traversable, \Countable {
 	 * @param int $count Number of rows to show, -1 for all rows up to the last
 	 * @return iDataSource $this
 	 */
-	public function limit($start = 0, $count = 15);
+	//public function limit($start = 0, $count = 15);
 	
 	/**
 	 * Filter the contained data
@@ -48,5 +48,5 @@ interface iDataSource extends \Traversable, \Countable {
 	 * @param mixed $compareBy Use to compare the field to the value
 	 * @return iDataSource $this
 	 */
-	public function filter($field, $value, $compareBy = '=');
+	//public function filter($field, $value, $compareBy = '=');
 }
