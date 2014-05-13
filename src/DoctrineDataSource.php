@@ -180,6 +180,9 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 		}
 	}
 	
+	public function fieldRow($field) {
+		return $this->fields[$field][1];
+	}
 	
 	
 	
@@ -235,7 +238,7 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 			$this->queryBuilder->where($whereParts);
 
 			foreach ($this->filter AS list($field, $compareBy, $value)) {
-				$name = $this->_getJoinName($this->meta['root']['entity'], $field);
+				$name = $this->_getJoinName($this->meta['root']['entity'], (isset($this->fields[$field]) ? $this->fields[$field][1] : $field));
 				$methods = [
 						'<' => 'lt',
 						'<=' => 'lte',
@@ -247,16 +250,30 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 						'like' => 'like',
 						'notLike' => 'notLike',
 				];
-
-				$whereParts->add($this->queryBuilder->expr()->{$methods[$compareBy]}($name, $this->queryBuilder->expr()->literal($value)));
+				
+				if ($compareBy == 'in') {
+					if (\is_array($value)) {
+						$newvalue = $value;
+					} else {
+						$newvalue = [];
+						foreach ($value AS $obj) {
+							$newvalue[] = $obj->id;
+						}
+					}
+					
+					$whereParts->add($this->queryBuilder->expr()->in($name, $newvalue));
+				}
+				
+				else {
+					$whereParts->add($this->queryBuilder->expr()->{$methods[$compareBy]}($name, $this->queryBuilder->expr()->literal($value)));
+				}
 			}
 		}
 		
 		foreach ($this->sorter AS list ($field, $direction)) {
-			$name = $this->_getJoinName($this->meta['root']['entity'], $field);
+			$name = $this->_getJoinName($this->meta['root']['entity'], $this->fields[$field][1]);
 			$this->queryBuilder->addOrderBy($name, $direction);
 		}
-		
 		
 		return $this;
 	}
