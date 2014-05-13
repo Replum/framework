@@ -1,9 +1,15 @@
 <div {$widget->renderCommonAttributes()}>
-	{foreach $widget->head AS $child}
+	{if is_array($widget->head)}
+		{foreach $widget->head AS $child}
+			<div class="panel-heading">
+				{$child->renderHTML()}
+			</div>
+		{/foreach}
+	{else}
 		<div class="panel-heading">
-			{$child->renderHTML()}
+			{$widget->head->renderHTML()}
 		</div>
-	{/foreach}
+	{/if}
 	
 	{assign var="inPanelBody" value=false}
 	{foreach $widget->widgets() AS $child}
