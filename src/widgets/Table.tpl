@@ -22,13 +22,18 @@
 		<tr data-nexxes-id="{if is_array($entry)}{else}{$entry->id}{/if}">
 			{foreach $datasource->fields() AS $field}
 					{if is_array($entry)}
-						{assign "value" $entry[$field]}
+						{assign "value" $entry[$datasource->fieldRow($field)]}
 					{else}
 						{assign "value" $entry}
-						{assign "parts" explode(".", $field)}
+						{assign "parts" explode(".", $datasource->fieldRow($field))}
 
 						{foreach $parts as $part}
+							{if isset($value->{$part})}
 								{assign "value" $value->{$part}}
+							{else}
+								{assign "value" ""}
+								{break}
+							{/if}
 						{/foreach}
 					{/if}
 					<td>
