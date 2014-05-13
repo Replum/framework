@@ -64,7 +64,7 @@
 		{assign var="pages" value=$widget->pages()}
 		<tfoot>
 			<tr>
-				<td colspan="{count($datasource->fields())}" class="text-center">
+				<td colspan="{count($datasource->fields()) + ((count($widget->getActionGenerators()) > 0) ? 1 : 0)}" class="text-center">
 					<ul class="pagination pull-left">
 						{if ($widget->page === 1)}
 							<li class="disabled"><span><span class="glyphicon glyphicon-chevron-left" style="margin-right: -5px;"></span><span class="glyphicon glyphicon-chevron-left"></span></span></li>
