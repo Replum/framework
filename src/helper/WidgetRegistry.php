@@ -192,10 +192,6 @@ class WidgetRegistry {
 	 * Stores all widgets separately in the apc cache
 	 */
 	public function persist() {
-		// FIXME: special handling for datasources, fix DoctrineDatasource
-		if (isset($this->page->table)) {
-			$this->page->table->setDataSource();
-		}
 		\apc_store($this->pageID, \serialize($this));
 	}
 	
