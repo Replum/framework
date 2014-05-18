@@ -106,8 +106,13 @@ class Table extends \nexxes\Widget implements iPanelChild {
 		return $s->fetch(__DIR__ . '/Table.tpl');
 	}
 	
+	public function getDataSource() {
+		return $this->ds;
+	}
+	
 	public function setDataSource(\nexxes\iDataSource $ds = null) {
 		$this->ds = $ds;
+		return $this;
 	}
 	
 	public function serialize() {
