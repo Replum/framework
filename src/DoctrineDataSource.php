@@ -207,6 +207,10 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 		$this->sorter = [];
 		$this->sorter[] = [$field, $direction];
 		
+		if ($field != 'id') {
+			$this->sorter[] = ['id', 'desc'];
+		}
+		
 		return $this;
 	}
 	
@@ -271,7 +275,7 @@ class DoctrineDataSource implements \IteratorAggregate, iDataSource {
 		}
 		
 		foreach ($this->sorter AS list ($field, $direction)) {
-			$name = $this->_getJoinName($this->meta['root']['entity'], $this->fields[$field][1]);
+			$name = $this->_getJoinName($this->meta['root']['entity'], (isset($this->fields[$field]) ? $this->fields[$field][1] : $field));
 			$this->queryBuilder->addOrderBy($name, $direction);
 		}
 		
