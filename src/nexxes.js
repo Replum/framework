@@ -53,7 +53,7 @@ nexxes.simpleWidget = {
 		for (var i=0; i < nexxes.simpleWidget.suggests.length; ++i) {
 			var suggestor = nexxes.simpleWidget.suggests[i];
 			
-			$(suggestor.selector).typeahead(null, {
+			$(this).find(suggestor.selector).typeahead(null, {
 				name: suggestor.name,
 				source: suggestor.repo.ttAdapter(),
 				autoselect: true,
