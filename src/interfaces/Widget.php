@@ -1,17 +1,17 @@
 <?php
 
-namespace nexxes;
+namespace nexxes\widgets\interfaces;
 
 /**
  * Base interface for all widgets
  */
-interface iWidget {
+interface Widget {
 	/**
 	 * Set a property of the class
 	 * 
-	 * @param string $name Name of the property to change
+	 * @param string $property Name of the property to change
 	 * @param mixed $value The value to set
-	 * @return \nexxes\iWidget The widget for chaining
+	 * @return Widget $this for chaining
 	 */
 	function set($property, $value);
 	
@@ -20,7 +20,7 @@ interface iWidget {
 	 * 
 	 * @param string $property Name of the property to modify
 	 * @param mixed $value The value to add to the property
-	 * @return \nexxes\iWidget The widget for chaining
+	 * @return Widget $this for chaining
 	 */
 	function add($property, $value);
 	
@@ -29,7 +29,7 @@ interface iWidget {
 	 * 
 	 * @param string $property Name of the property to modify
 	 * @param mixed $value The value to remove from the property
-	 * @return \nexxes\iWidget The widget for chaining
+	 * @return Widget $this for chaining
 	 */
 	function del($property, $value);
 	

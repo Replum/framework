@@ -1,39 +1,39 @@
 <?php
 
-namespace nexxes;
+namespace nexxes\widgets\interfaces;
 
 /**
  * Widgets that can contain other widgets are called containers.
  * 
  * This interface contains all methods required to manage child handling.
  */
-interface iWidgetContainer extends iWidget {
+interface WidgetContainer extends Widget {
 	/**
 	 * Add a child to the container
 	 * 
-	 * @param iWidget $child
-	 * @return iWidgetContainer $this for chaining
+	 * @param Widget $child
+	 * @return WidgetContainer $this for chaining
 	 */
-	function addWidget(iWidget $child);
+	function addWidget(Widget $child);
 	
 	/**
 	 * Remove a child from the container
 	 * 
-	 * @param iWidget $child
-	 * @return iWidgetContainer $this for chaining
+	 * @param Widget $child
+	 * @return WidgetContainer $this for chaining
 	 */
-	function delWidget(iWidget $child);
+	function delWidget(Widget $child);
 	
 	/**
 	 * Remove all children from the container
-	 * @return iWidgetContainer $this for chaining
+	 * @return WidgetContainer $this for chaining
 	 */
 	function clearWidgets();
 	
 	/**
 	 * Get the list of current children
 	 * 
-	 * @return array<iWidget>
+	 * @return array<Widget>
 	 */
 	function widgets();
 }
