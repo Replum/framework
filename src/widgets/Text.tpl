@@ -1,1 +1,0 @@
-{if ($widget->type != "")}<{$widget->type} {$commonAttributes}>{/if}{$widget->text|escape}{if ($widget->type != "")}</{$widget->type}>{/if}
