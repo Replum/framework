@@ -1,5 +1,5 @@
 {
-	"name": "nexxes/widgets",
+	"name": "nexxes/widget-base",
 	"description": "nexxes web widget framework",
 	"authors": [
 		{
@@ -9,18 +9,12 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"nexxes\\": "src/"
+			"nexxes\\widgets\\": "src/"
 		}
 	},
 	
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "http://packages.birkholz.org"
-		}
-	],
-	
 	"require": {
+		"nexxes/dependency": "*@dev",
 		"smarty/smarty": "3.1.*"
 	}
 }
