@@ -2,6 +2,9 @@
 
 namespace nexxes\widgets\traits;
 
+use \nexxes\dependency\Gateway as dep;
+use \nexxes\widgets\WidgetRegistry;
+
 /**
  * Default implementation for the Identifiable interface
  */
@@ -32,10 +35,19 @@ trait Identifiable {
 			return;
 		}
 		
-		/* @var $registry \nexxes\widgets\WidgetRegistry */
-		$registry = \nexxes\dependency\Gateway::get(\nexxes\widgets\WidgetRegistry::class);
+		/* @var $registry WidgetRegistry */
+		$registry = dep::get(WidgetRegistry::class);
 		
 		$registry->notifyIdChange($this);
 		return $this;
+	}
+	
+	/**
+	 * 
+	 * @return string
+	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
+	 */
+	protected function getIDHTML() {
+		return (\is_null($this->id) ? '' : ' id="' . $this->escape($this->id) . '"');
 	}
 }

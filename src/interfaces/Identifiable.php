@@ -9,12 +9,13 @@ namespace nexxes\widgets\interfaces;
  * Widgets that implement the iIdentifiable interface contain a page unique identifier so they can be accessed
  * and modified directly after the page has been rendered initially without rerendering the complete page.
  */
-interface Identifiable extends Widget {
+interface Identifiable extends HTMLWidget {
 	/**
 	 * Get the identifier of the widget.
 	 * The identifier is unique for all widgets within a page.
 	 * 
 	 * @return string
+	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
 	function getID();
 	
@@ -27,6 +28,7 @@ interface Identifiable extends Widget {
 	 * 
 	 * @param string $newID
 	 * @throws \InvalidArgumentException
+	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
 	function setID($newID);
 }
