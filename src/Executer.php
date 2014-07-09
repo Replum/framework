@@ -1,9 +1,12 @@
 <?php
 
-namespace nexxes;
+namespace nexxes\widgets;
 
-use \nexxes\PageContext;
+use \nexxes\dependency\Gateway as dep;
 
+/**
+ * The Executer creates or restores the current page and the associated widget registry
+ */
 class Executer {
 	/**
 	 * The namespace each page class must exist in
@@ -11,37 +14,30 @@ class Executer {
 	 */
 	private $pageNamespace;
 	
+	const SESSION_VAR = 's';
 	
 	
 	
 	public function __construct($pageNamespace = '\nexxes\pages') {
 		$this->pageNamespace = $pageNamespace;
 		
-		// Initialize smarty
-		PageContext::$smarty = new \Smarty();
-		PageContext::$smarty->setTemplateDir(VENDOR_DIR . '/../template');
-		PageContext::$smarty->setCompileDir(VENDOR_DIR . '/../tmp/smarty-compile');
-		PageContext::$smarty->setCacheDir(VENDOR_DIR . '/../tmp/smarty-cache');
-		//PageContext::$smarty->loadFilter('output', 'trimwhitespace');
-		
-		// Parse request data
-		PageContext::$request = new \nexxes\helper\RequestData();
-		PageContext::$smarty->assign('request', PageContext::$request);
-		
-		// Property annotation reader
-		PageContext::$propertyHandler = new \nexxes\property\Handler();
-		
 		// Restore persisted page
-		if ($pid = PageContext::$request->getPageID()) {
-			helper\WidgetRegistry::restore($pid);
+//		if ($pid = PageContext::$request->getPageID()) {
+//			helper\WidgetRegistry::restore($pid);
+//		}
+		
+//		else {
+			// Get page from request or set default
+			//if (!($page = PageContext::$request->getPage())) {
+				
+			//}
+			
+		if (isset($_REQUEST['page']) && ($_REQUEST['page'] != "")) {
+			$page = $_REQUEST['page'];
+		} else {
+			$page = 'Index';
 		}
 		
-		else {
-			// Get page from request or set default
-			if (!($page = PageContext::$request->getPage())) {
-				$page = 'Index';
-			}
-			
 			// Get the name and class of the current page
 			$class = $this->pageNamespace . '\\' . $page;
 
@@ -49,14 +45,37 @@ class Executer {
 				throw new \InvalidArgumentException('Invalid page "' . $page . '"!');
 			}
 			
-			PageContext::$widgetRegistry = new \nexxes\helper\WidgetRegistry();
-			PageContext::$widgetRegistry->page = new $class();
-			PageContext::$page = PageContext::$widgetRegistry->page;
+					\ini_set('session.use_cookies', false);
+		\ini_set('session.use_only_cookies', false);
+		
+		//\session_name(self::SESSION_VAR);
+		
+		//echo '<p>Session-Name: ' . \session_name() . '</p>';
+		
+		if (!\session_start()) {
+			echo "<p>Failed to start session</p>";
+		} else {
+			echo "<p>Session started!</p>";
 		}
+		
+		if (!isset($_SESSION['counter'])) {
+			$_SESSION['counter'] = 0;
+		}
+		
+		echo "<p>Counter: " . ++$_SESSION['counter'] . "</p>";
+		
+			/* @var $page interfaces\Page */
+			$page = new $class();
+			dep::registerObject(interfaces\Page::class, $page);
+			dep::registerObject(WidgetRegistry::class, $page->getWidgetRegistry());
+//		}
 	}
 	
 	
 	public function execute() {
+		dep::get(interfaces\Page::class)->render();
+		
+		/*
 		if ($widgetID = PageContext::$request->getWidgetID()) {
 			$widget = PageContext::$widgetRegistry->getWidget($widgetID);
 			echo $widget->renderHTML();
@@ -67,5 +86,6 @@ class Executer {
 		}
 		
 		PageContext::$widgetRegistry->persist();
+	 */
 	}
 }

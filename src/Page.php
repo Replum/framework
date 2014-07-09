@@ -1,11 +1,11 @@
 <?php
 
-namespace nexxes;
+namespace nexxes\widgets;
 
 use \nexxes\PageContext;
 use \nexxes\property\Config;
 
-abstract class Page extends WidgetContainer implements iPage {
+abstract class Page extends WidgetContainer implements interfaces\Page {
 	/**
 	 * The page title
 	 * 
@@ -14,8 +14,15 @@ abstract class Page extends WidgetContainer implements iPage {
 	 */
 	public $title;
 	
+	protected $widgetRegistry;
+	
 	public function __construct() {
-		$this->id = PageContext::$widgetRegistry->pageID;
+		$this->id = "page123";
+		$this->widgetRegistry = new WidgetRegistry();
+	}
+	
+	public function getWidgetRegistry() {
+		return $this->widgetRegistry;
 	}
 	
 	public function render() {

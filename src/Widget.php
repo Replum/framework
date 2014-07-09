@@ -1,21 +1,18 @@
 <?php
 
-namespace nexxes;
-
-use \nexxes\property\Config;
+namespace nexxes\widgets;
 
 /**
  * Base class that can be used for all widgets
  */
-abstract class Widget implements iWidget {
+abstract class Widget implements interfaces\Widget {
 	//use property\ChangeMonitoringTrait;
-	use property\UpdateValuesTrait;
+	//use property\UpdateValuesTrait;
 	
 	/**
 	 * Unique identifier for the widget within the page
 	 * 
 	 * @var string
-	 * @Config(type="string")
 	 */
 	public $id;
 	
@@ -192,7 +189,7 @@ abstract class Widget implements iWidget {
 	 * @return \Smarty
 	 */
 	protected function smarty() {
-		$smarty = clone PageContext::$smarty;
+		$smarty = clone \nexxes\dependency\Gateway::get(\Smarty::class);
 		$smarty->assign('id', $this->id);
 		$smarty->assign('widget', $this);
 		

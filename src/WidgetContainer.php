@@ -1,12 +1,12 @@
 <?php
 
-namespace nexxes;
+namespace nexxes\widgets;
 
-class WidgetContainer extends Widget implements iWidgetContainer {
+class WidgetContainer extends Widget implements interfaces\WidgetContainer {
 	/**
 	 * The list of children added
 	 * 
-	 * @var array<iWidget>
+	 * @var array<interfaces\Widget>
 	 */
 	protected $_children = [];
 	
@@ -14,21 +14,21 @@ class WidgetContainer extends Widget implements iWidgetContainer {
 	
 	
 	/**
-	 * @param \nexxes\iWidget $child
-	 * @return \nexxes\WidgetContainer
+	 * @param interfaces\Widget $child
+	 * @return WidgetContainer $this for chaining
 	 */
-	public function addWidget(iWidget $child) {
+	public function addWidget(interfaces\Widget $child) {
 		$this->_children[] = $child;
-		PageContext::$widgetRegistry->setParent($child, $this);
+		//PageContext::$widgetRegistry->setParent($child, $this);
 		
 		return $this;
 	}
 	
 	/**
-	 * @param \nexxes\iWidget $child
-	 * @return \nexxes\WidgetContainer
+	 * @param interfaces\Widget $child
+	 * @return WidgetContainer $this for chaining
 	 */
-	public function delWidget(iWidget $child) {
+	public function delWidget(interfaces\Widget $child) {
 		$key = \array_search($child, $this->_children);
 		if ($key !== false) {
 			unset($this->_children[$key]);
@@ -38,7 +38,7 @@ class WidgetContainer extends Widget implements iWidgetContainer {
 	}
 	
 	/**
-	 * @return \nexxes\WidgetContainer
+	 * @return WidgetContainer $this for chaining
 	 */
 	public function clearWidgets() {
 		$this->_children = [];
@@ -49,7 +49,7 @@ class WidgetContainer extends Widget implements iWidgetContainer {
 	/**
 	 * Get the list of current children
 	 * 
-	 * @return array<iWidget>
+	 * @return array<interfaces\Widget>
 	 */
 	public function widgets() {
 		return $this->_children;
