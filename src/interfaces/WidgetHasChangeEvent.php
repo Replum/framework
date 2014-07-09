@@ -12,16 +12,22 @@ namespace nexxes\widgets\interfaces;
  * 
  * NOTE: You must not register closures as event handler as PHP closures can not be serialized and thus can not be called when the widget is restored (unserialized) on the event.
  */
-interface WidgetHasChangeEvent extends Identifiable {
+interface WidgetHasChangeEvent extends WidgetHasEvents {
+	/**
+	 * Suffix used to build event names
+	 */
+	const EVENT_NAME = "onchange";
+	
 	/**
 	 * Register a handler for the change event.
 	 * Multiple handler methods can be registered with this method.
 	 * They are called in the order they are registered.
 	 * 
 	 * @param callable $eventHandler
+	 * @param int $prio
 	 * @return WidgetHasChangeEvent $this for chaining
 	 */
-	function onChange(callable $eventHandler);
+	function onChange(callable $eventHandler, $prio = 5);
 	
 	/**
 	 * Register a handler for the change event that is only executed on the first occurence of the event and removed afterwards.
@@ -30,7 +36,7 @@ interface WidgetHasChangeEvent extends Identifiable {
 	 * @param callable $eventHandler
 	 * @return WidgetHasChangeEvent $this for chaining
 	 */
-	function onChangeOnce(callable $eventHandler);
+	function onChangeOnce(callable $eventHandler, $prio = 5);
 	
 	/**
 	 * Remove a previously registered event handler.
