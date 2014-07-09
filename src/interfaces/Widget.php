@@ -7,31 +7,28 @@ namespace nexxes\widgets\interfaces;
  */
 interface Widget {
 	/**
-	 * Set a property of the class
+	 * Check if the selected widget is the topmost widget aka the page
 	 * 
-	 * @param string $property Name of the property to change
-	 * @param mixed $value The value to set
-	 * @return Widget $this for chaining
+	 * @return boolean
 	 */
-	function set($property, $value);
+	function isRoot();
 	
 	/**
-	 * Add the supplied value to the array property named $property
+	 * Get the parent of this widget, used to navigate to the top of the widget tree.
 	 * 
-	 * @param string $property Name of the property to modify
-	 * @param mixed $value The value to add to the property
-	 * @return Widget $this for chaining
+	 * @return Widget
 	 */
-	function add($property, $value);
+	function getParent();
 	
 	/**
-	 * Remove the supplied value from the array property named $property
+	 * Set the current parent widget for the current widget.
+	 * Should not called directly to avoid creating corrupt widget hierarchies.
+	 * Instead this method should be called from a container when a widget is added to that container.
 	 * 
-	 * @param string $property Name of the property to modify
-	 * @param mixed $value The value to remove from the property
+	 * @param Widget $newParent
 	 * @return Widget $this for chaining
 	 */
-	function del($property, $value);
+	function setParent(Widget $newParent);
 	
 	/**
 	 * Render the HTML representation of the widget and return it as a string

@@ -39,4 +39,14 @@ class IdentifiableMock implements interfaces\Identifiable {
 
 	public function setTitle($newTitle) {
 	}
+
+	public function getParent() {
+	}
+
+	public function isRoot() {
+	}
+
+	public function setParent(interfaces\Widget $newParent) {
+	}
+
 }

@@ -3,6 +3,7 @@
 namespace nexxes\widgets\traits;
 
 class HTMLWidgetMock implements \nexxes\widgets\interfaces\HTMLWidget {
+	use Widget;
 	use HTMLWidget {
 		getClassesHTML as public;
 		getTabIndexHTML as public;
