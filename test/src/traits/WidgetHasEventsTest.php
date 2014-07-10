@@ -24,8 +24,8 @@ class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @covers WidgetHasEvents::registerEventHandler
-	 * @covers WidgetHasEvents::removeEventHandler
+	 * @covers \nexxes\widgets\traits\WidgetHasEvents::registerEventHandler
+	 * @covers \nexxes\widgets\traits\WidgetHasEvents::removeEventHandler
 	 */
 	public function testRegisterEventHandler() {
 		$widget = new WidgetHasEventsMock();
@@ -63,7 +63,7 @@ class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @covers WidgetHasEvents::registerOnceEventHandler
+	 * @covers \nexxes\widgets\traits\WidgetHasEvents::registerOnceEventHandler
 	 */
 	public function testRegisterOnceEventHandler() {
 		$widget = new WidgetHasEventsMock();
@@ -95,7 +95,7 @@ class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @covers WidgetHasEvents::removeOnceEventHandler
+	 * @covers \nexxes\widgets\traits\WidgetHasEvents::removeOnceEventHandler
 	 */
 	public function testRemoveOnceEventHandler() {
 		$widget = new WidgetHasEventsMock();
