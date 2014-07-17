@@ -1,6 +1,6 @@
 {
-	"name": "nexxes/widget-base",
-	"description": "nexxes web widget framework",
+	"name": "nexxes/widgets-base",
+	"description": "nexxes web widget framework: basic interfaces and main functionality",
 	"authors": [
 		{
 			"name": "Dennis Birkholz",
