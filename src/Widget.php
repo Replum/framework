@@ -6,6 +6,8 @@ namespace nexxes\widgets;
  * Base class that can be used for all widgets
  */
 abstract class Widget implements interfaces\Widget {
+	use traits\Widget;
+	
 	//use property\ChangeMonitoringTrait;
 	//use property\UpdateValuesTrait;
 	
