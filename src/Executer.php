@@ -49,6 +49,10 @@ class Executer {
 			throw new \Exception('Failed to start new session');
 		}
 		
+		if (isset($_REQUEST['nexxes_event'])) {
+			return $this->handleEvent($_REQUEST['nexxes_event'], $_REQUEST['nexxes_pid'], $_REQUEST['nexxes_source']);
+		}
+		
 		// Get the name and class of the current page
 		$class = $this->pageNamespace . '\\' . $pagename;
 
@@ -82,6 +86,43 @@ class Executer {
 		$page->render();
 		
 		\apc_store($this->cacheNamespace . '.' . $page->id, $page, 0);
+	}
+	
+	
+	
+	/**
+	 * Handle an ajax event
+	 * 
+	 * @param string $event
+	 * @param string $page_id
+	 * @param string $widget_id
+	 * @throws \RuntimeException
+	 */
+	public function handleEvent($event, $page_id, $widget_id) {
+		if ($event != "change") {
+			throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
+		}
+
+		/* @var $page interfaces\Page */
+		$page = \apc_fetch($this->cacheNamespace . '.' . $page_id);
+
+		if (!($page instanceof interfaces\Page)) {
+			throw new \RuntimeException('Can not restore page!');
+		}
+
+		$widget = $page->getWidgetRegistry()->getWidget($widget_id);
+		$widget->setValue('Changed man!');
+
+		$data = [];
+		$data[] = [
+			'nexxes_action' => 'replace',
+			'nexxes_target' => $widget->getID(),
+			'nexxes_data' => $widget->renderHTML(),
+		];
+
+		header('Content-Type: text/json');
+		echo json_encode($data);
+		exit;
 	}
 	
 	
