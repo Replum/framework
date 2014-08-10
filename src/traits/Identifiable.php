@@ -14,21 +14,21 @@ trait Identifiable {
 	 * 
 	 * @var string
 	 */
-	private $id;
+	private $_trait_Identifiable_id;
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\Identifiable
 	 */
 	public function getID() {
-		return $this->id;
+		return $this->_trait_Identifiable_id;
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\Identifiable
 	 */
 	public function setID($newID) {
-		$oldID = $this->id;
-		$this->id = $newID;
+		$oldID = $this->_trait_Identifiable_id;
+		$this->_trait_Identifiable_id = $newID;
 		
 		// Prevent recursion
 		if (is_null($oldID) || ($oldID === $newID)) {
@@ -48,6 +48,6 @@ trait Identifiable {
 	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
 	protected function getIDHTML() {
-		return (\is_null($this->id) ? '' : ' id="' . $this->escape($this->id) . '"');
+		return (\is_null($this->_trait_Identifiable_id) ? '' : ' id="' . $this->escape($this->_trait_Identifiable_id) . '"');
 	}
 }

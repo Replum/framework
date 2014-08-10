@@ -9,14 +9,15 @@ trait HTMLWidget {
 	 * @var array<string>
 	 * @see http://www.w3.org/TR/html5/dom.html#classes
 	 */
-	private $classes = [];
+	private $_trait_HTMLWidget_classes = [];
 	
 	/**
 	 *  @implements \nexxes\widgets\interfaces\HTMLWidget
 	 */
 	public function addClass($newClass) {
-		if (!\in_array($newClass, $this->classes, true)) {
-			$this->classes[] = $newClass;
+		if (!\in_array($newClass, $this->_trait_HTMLWidget_classes, true)) {
+			$this->_trait_HTMLWidget_classes[] = $newClass;
+			$this->setChanged(true);
 		}
 		
 		return $this;
@@ -26,8 +27,9 @@ trait HTMLWidget {
 	 * @implements \nexxes\widgets\interfaces\HTMLWidget
 	 */
 	public function delClass($newClass) {
-		if (($key = \array_search($newClass, $this->classes)) !== false) {
-			unset($this->classes[$key]);
+		if (($key = \array_search($newClass, $this->_trait_HTMLWidget_classes)) !== false) {
+			unset($this->_trait_HTMLWidget_classes[$key]);
+			$this->setChanged(true);
 		}
 		
 		return $this;
@@ -37,15 +39,15 @@ trait HTMLWidget {
 	 * @implements \nexxes\widgets\interfaces\HTMLWidget
 	 */
 	public function hasClass($class) {
-		return \in_array($class, $this->classes);
+		return \in_array($class, $this->_trait_HTMLWidget_classes);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\HTMLWidget
 	 */
 	public function getClasses() {
-		\sort($this->classes);
-		return $this->classes;
+		\sort($this->_trait_HTMLWidget_classes);
+		return $this->_trait_HTMLWidget_classes;
 	}
 	
 	/**
@@ -54,8 +56,8 @@ trait HTMLWidget {
 	 * @return string
 	 */
 	protected function getClassesHTML() {
-		\sort($this->classes);
-		return (\count($this->classes) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->classes)) . '"' : '');
+		\sort($this->_trait_HTMLWidget_classes);
+		return (\count($this->_trait_HTMLWidget_classes) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->_trait_HTMLWidget_classes)) . '"' : '');
 	}
 	
 	/**
@@ -64,13 +66,13 @@ trait HTMLWidget {
 	 * @var int
 	 * @see http://www.w3.org/TR/html5/editing.html#attr-tabindex
 	 */
-	private $tabindex;
+	private $_trait_HTMLWidget_tabindex;
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\HTMLWidget
 	 */
 	public function getTabIndex() {
-		return $this->tabindex;
+		return $this->_trait_HTMLWidget_tabindex;
 	}
 	
 	/**
@@ -81,7 +83,10 @@ trait HTMLWidget {
 			throw new \InvalidArgumentException('TabIndex can only be set to an integer value!');
 		}
 		
-		$this->tabindex = (int)$newTabIndex;
+		if ($this->_trait_HTMLWidget_tabindex !== $newTabIndex) {
+			$this->_trait_HTMLWidget_tabindex = (int)$newTabIndex;
+			$this->setChanged(true);
+		}
 		
 		return $this;
 	}
@@ -92,7 +97,7 @@ trait HTMLWidget {
 	 * @return string
 	 */
 	protected function getTabIndexHTML() {
-		return (\is_null($this->tabindex) ? '' : ' tabindex="' . $this->tabindex . '"');
+		return (\is_null($this->_trait_HTMLWidget_tabindex) ? '' : ' tabindex="' . $this->_trait_HTMLWidget_tabindex . '"');
 	}
 	
 	/**
@@ -101,13 +106,13 @@ trait HTMLWidget {
 	 * @var string
 	 * @see http://www.w3.org/TR/html5/dom.html#attr-title
 	 */
-	private $title;
+	private $_trait_HTMLWidget_title;
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\HTMLWidget
 	 */
 	public function getTitle() {
-		return $this->title;
+		return $this->_trait_HTMLWidget_title;
 	}
 	
 	/**
@@ -118,7 +123,10 @@ trait HTMLWidget {
 			throw new \InvalidArgumentException('Title can only be set to a string value!');
 		}
 		
-		$this->title = $newTitle;
+		if ($this->_trait_HTMLWidget_title !== $newTitle) {
+			$this->_trait_HTMLWidget_title = $newTitle;
+			$this->setChanged(true);
+		}
 		
 		return $this;
 	}
@@ -129,7 +137,7 @@ trait HTMLWidget {
 	 * @return string
 	 */
 	protected function getTitleHTML() {
-		return (\is_null($this->title) ? '' : ' title="' . $this->escape($this->title) . '"');
+		return (\is_null($this->_trait_HTMLWidget_title) ? '' : ' title="' . $this->escape($this->_trait_HTMLWidget_title) . '"');
 	}
 	
 	/**

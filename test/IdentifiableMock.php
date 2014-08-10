@@ -9,11 +9,11 @@ class IdentifiableMock implements interfaces\Identifiable {
 		return $this->id;
 	}
 
-	public function renderHTML() {
-	}
-
 	public function setID($newID) {
 		$this->id = $newID;
+	}
+
+	public function renderHTML() {
 	}
 
 	public function addClass($newClass) {
@@ -47,6 +47,12 @@ class IdentifiableMock implements interfaces\Identifiable {
 	}
 
 	public function setParent(interfaces\Widget $newParent) {
+	}
+
+	public function isChanged() {
+	}
+
+	public function setChanged($changed = true) {
 	}
 
 }

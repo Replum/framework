@@ -31,6 +31,21 @@ interface Widget {
 	function setParent(Widget $newParent);
 	
 	/**
+	 * Check if the widget is marked as changed
+	 * 
+	 * @return boolean
+	 */
+	function isChanged();
+	
+	/**
+	 * Set/unset the changed status of the widget
+	 * 
+	 * @param boolean $changed
+	 * @return Widget $this for chaining
+	 */
+	function setChanged($changed = true);
+	
+	/**
 	 * Render the HTML representation of the widget and return it as a string
 	 * 
 	 * @return string The HTML code of the widget

@@ -6,16 +6,35 @@ class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents 
 	use Identifiable;
 	use WidgetHasEvents;
 	
+	// interface Widget
+	
+	public function isRoot() {
+	}
+	
+	public function renderHTML() {
+	}
+	
+	public function getParent() {
+	}
+	
+	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
+	}
+	
+	public function isChanged() {
+	}
+	
+	public function setChanged($changed = true) {
+	}
+	
+	// interface HTMLWidget
+	
 	public function addClass($newClass) {
 	}
 
 	public function delClass($delClass) {
 	}
-
+	
 	public function getClasses() {
-	}
-
-	public function getParent() {
 	}
 
 	public function getTabIndex() {
@@ -25,15 +44,6 @@ class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents 
 	}
 
 	public function hasClass($class) {
-	}
-
-	public function isRoot() {
-	}
-
-	public function renderHTML() {
-	}
-
-	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
 	}
 
 	public function setTabIndex($newTabIndex) {
