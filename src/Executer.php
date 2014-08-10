@@ -17,6 +17,7 @@ class Executer {
 	
 	const SESSION_VAR = 's';
 	
+	private $cacheNamespace = 'nexxes.pages';
 	
 	
 	public function __construct($pageNamespace = '\nexxes\pages') {
@@ -33,18 +34,32 @@ class Executer {
 				
 			//}
 			
-		if (isset($_REQUEST['page']) && ($_REQUEST['page'] != "")) {
-			$page = $_REQUEST['page'];
-		} else {
-			$page = 'Index';
+		if (isset($_REQUEST['nexxes.page']) && ($_REQUEST['nexxes.page'] != "")) {
+			$pagename = $_REQUEST['nexxes.page'];
+		}	else {
+			$pagename = 'Index';
+		}
+		
+		// Handle vendor resources
+		if (\substr($pagename, 0, 7) === 'vendor/') {
+			return $this->handleVendorResource($pagename);
+		}
+		
+		if (!\session_start()) {
+			throw new \Exception('Failed to start new session');
 		}
 		
 		// Get the name and class of the current page
-		$class = $this->pageNamespace . '\\' . $page;
+		$class = $this->pageNamespace . '\\' . $pagename;
 
 		if (!\class_exists($class)) {
-			throw new \InvalidArgumentException('Invalid page "' . $page . '"!');
+			throw new \InvalidArgumentException('Invalid page "' . $pagename . '"!');
 		}
+		
+		// Restore a page
+		/* @var $page interfaces\Page */
+		$page = new $class();
+		$page->id = $this->generatePageID();
 		
 		//\ini_set('session.use_cookies', false);
 		//\ini_set('session.use_only_cookies', false);
@@ -53,35 +68,38 @@ class Executer {
 		
 		//echo '<p>Session-Name: ' . \session_name() . '</p>';
 		
-		if (!\session_start()) {
-			echo "<p>Failed to start session</p>";
-		} else {
-			echo "<p>Session started!</p>";
-		}
-		
-		/* @var $page interfaces\Page */
-		$page = new $class();
 		dep::registerObject(interfaces\Page::class, $page);
 		dep::registerObject(WidgetRegistry::class, $page->getWidgetRegistry());
 	}
 	
 	
+	
+	
+	
 	public function execute() {
-		dep::get(interfaces\Page::class)->render();
+		/* @var $page interfaces\Page */
+		$page = dep::get(interfaces\Page::class);
+		$page->render();
 		
-		/*
-		if ($widgetID = PageContext::$request->getWidgetID()) {
-			$widget = PageContext::$widgetRegistry->getWidget($widgetID);
-			echo $widget->renderHTML();
-		}
-		
-		else {
-			PageContext::$page->render();
-		}
-		
-		PageContext::$widgetRegistry->persist();
-	 */
+		\apc_store($this->cacheNamespace . '.' . $page->id, $page, 0);
 	}
+	
+	
+	
+	
+	protected function generatePageID() {
+		$length = 8;
+		
+		do {
+			$r = new \nexxes\common\RandomString($length);
+			$length++;
+		} while (\apc_exists($this->cacheNamespace . '.' . $r));
+		
+		return (string)$r;
+	}
+	
+	
+	
 	
 	/**
 	 * Handle a resource that is accessed via the vendor/ directory in the web root.
@@ -99,10 +117,20 @@ class Executer {
 	 * @throws \InvalidArgumentException
 	 */
 	public function handleVendorResource($resourceName) {
-		$this->createVendorResourceSymlink($resourceName, VENDOR_DIR, $_SERVER['DOCUMENT_ROOT']);
+		try {
+			$this->createVendorResourceSymlink($resourceName, VENDOR_DIR, $_SERVER['DOCUMENT_ROOT']);
+		} catch (\Exception $e) {
+			header("HTTP/1.0 404 Not Found");
+			echo '<pre>' . $e . '</pre>';
+			exit;
+		}
+		
 		header('Location: ' . $_SERVER["REQUEST_URI"]);
 		exit;
 	}
+	
+	
+	
 	
 	/**
 	 * @param string $resource The resource name = path below the document root
