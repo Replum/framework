@@ -22,7 +22,7 @@ class WidgetRegistry {
 	 * @return string
 	 */
 	public function register(interfaces\Identifiable $widget, $length = 5) {
-		$newID = 'w_' . $this->createRandomString($length);
+		$newID = 'w_' . (new \nexxes\common\RandomString($length));
 		
 		// If new ID is not unique, create a new one that is one char longer
 		if (isset($this->widgets[$newID])) {
@@ -71,22 +71,5 @@ class WidgetRegistry {
 		}
 		
 		return $this->widgets[$id];
-	}
-	
-	/**
-	 * Create a random string from the supplied character pool with the supplied number of chars
-	 * 
-	 * @param int $length
-	 * @param array<char> $chars
-	 * @return string
-	 */
-	private function createRandomString($length = 8, $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
-		$str = '';
-		
-		for ($i=0; $i<$length; $i++) {
-			$str .= $chars[rand(0, \strlen($chars)-1)];
-		}
-		
-		return $str;
 	}
 }

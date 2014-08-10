@@ -2,27 +2,14 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\PageContext;
-use \nexxes\property\Config;
-
-abstract class Page extends WidgetContainer implements interfaces\Page {
-	/**
-	 * The page title
-	 * 
-	 * @var string
-	 * @Config(type="string")
-	 */
-	public $title;
+abstract class Page implements interfaces\Page {
+	use traits\Page, traits\WidgetContainer, traits\Widget;
 	
-	protected $widgetRegistry;
 	
 	public function __construct() {
-		$this->id = "page123";
-		$this->widgetRegistry = new WidgetRegistry();
-	}
-	
-	public function getWidgetRegistry() {
-		return $this->widgetRegistry;
+		$this->widgetRegistry = new WidgetRegistry;
+		
+		$this->addScript((new \nexxes\widgets\html\ScriptLink)->setUrl('/vendor/nexxes/widgets-base/js/jquery-1.11.1.js'));
 	}
 	
 	public function render() {
@@ -30,8 +17,11 @@ abstract class Page extends WidgetContainer implements interfaces\Page {
 	}	
 	
 	public function renderHTML() {
-		$s = $this->smarty();
-		$s->assign('page', $this);
-		return $s->fetch(__DIR__ . '/Page.tpl');
+		/* @var $smarty \Smarty */
+		$smarty = clone \nexxes\dependency\Gateway::get(\Smarty::class);
+		$smarty->assign('id', $this->id);
+		$smarty->assign('page', $this);
+		
+		return $smarty->fetch(__DIR__ . '/Page.tpl');
 	}
 }

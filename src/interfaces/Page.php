@@ -13,6 +13,14 @@ interface Page extends WidgetContainer {
 	function getWidgetRegistry();
 	
 	/**
+	 * Initialize the widget registry so it can be used
+	 * @implements \nexxes\widgets\interfaces\Page
+	 * @param \nexxes\widgets\WidgetRegistry $newWidgetRegistry
+	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 */
+	function initWidgetRegistry(\nexxes\widgets\WidgetRegistry $newWidgetRegistry = null);
+	
+	/**
 	 * Get the document title
 	 * @return string
 	 */
