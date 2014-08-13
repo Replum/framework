@@ -16,7 +16,7 @@ interface Widget {
 	/**
 	 * Get the parent of this widget, used to navigate to the top of the widget tree.
 	 * 
-	 * @return Widget
+	 * @return \nexxes\widgets\interfaces\Widget
 	 */
 	function getParent();
 	
@@ -25,10 +25,17 @@ interface Widget {
 	 * Should not called directly to avoid creating corrupt widget hierarchies.
 	 * Instead this method should be called from a container when a widget is added to that container.
 	 * 
-	 * @param Widget $newParent
-	 * @return Widget $this for chaining
+	 * @param \nexxes\widgets\interfaces\Widget $newParent
+	 * @return \nexxes\widgets\interfaces\Widget $this for chaining
 	 */
 	function setParent(Widget $newParent);
+	
+	/**
+	 * Get the page this widget belongs to
+	 * 
+	 * @return \nexxes\widgets\interfaces\Page
+	 */
+	function getPage();
 	
 	/**
 	 * Check if the widget is marked as changed
@@ -41,7 +48,7 @@ interface Widget {
 	 * Set/unset the changed status of the widget
 	 * 
 	 * @param boolean $changed
-	 * @return Widget $this for chaining
+	 * @return \nexxes\widgets\interfaces\Widget $this for chaining
 	 */
 	function setChanged($changed = true);
 	

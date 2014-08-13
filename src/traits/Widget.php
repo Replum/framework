@@ -31,6 +31,24 @@ trait Widget {
 	}
 	
 	/**
+	 * @implements \nexxes\widgets\interfaces\Widget
+	 */
+	public function getPage() {
+		if ($this instanceof \nexxes\widgets\interfaces\Page) {
+			return $this;
+		}
+		
+		elseif ($this->_trait_widget_parent !== null) {
+			return $this->_trait_widget_parent->getParent()->getPage();
+		}
+		
+		else {
+			return null;
+		}
+	}
+	
+	
+	/**
 	 * @var boolean
 	 */
 	private $_trait_widget_changed = false;
