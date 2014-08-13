@@ -11,19 +11,22 @@ class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents 
 	public function isRoot() {
 	}
 	
-	public function renderHTML() {
-	}
-	
 	public function getParent() {
 	}
 	
 	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
 	}
 	
+	public function getPage() {
+	}
+	
 	public function isChanged() {
 	}
 	
 	public function setChanged($changed = true) {
+	}
+	
+	public function renderHTML() {
 	}
 	
 	// interface HTMLWidget
@@ -37,16 +40,16 @@ class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents 
 	public function getClasses() {
 	}
 
-	public function getTabIndex() {
-	}
-
-	public function getTitle() {
-	}
-
 	public function hasClass($class) {
 	}
 
+	public function getTabIndex() {
+	}
+
 	public function setTabIndex($newTabIndex) {
+	}
+
+	public function getTitle() {
 	}
 
 	public function setTitle($newTitle) {
