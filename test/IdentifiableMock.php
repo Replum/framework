@@ -4,7 +4,11 @@ namespace nexxes\widgets;
 
 class IdentifiableMock implements interfaces\Identifiable {
 	protected $id;
-
+	
+	public function __construct($id = null) {
+		$this->id = $id;
+	}
+	
 	public function getID() {
 		return $this->id;
 	}
@@ -12,47 +16,53 @@ class IdentifiableMock implements interfaces\Identifiable {
 	public function setID($newID) {
 		$this->id = $newID;
 	}
-
+	
+	// interface Widget
+	
+	public function isRoot() {
+	}
+	
+	public function getParent() {
+	}
+	
+	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
+	}
+	
+	public function getPage() {
+	}
+	
+	public function isChanged() {
+	}
+	
+	public function setChanged($changed = true) {
+	}
+	
 	public function renderHTML() {
 	}
-
+	
+	// interface HTMLWidget
+	
 	public function addClass($newClass) {
 	}
 
 	public function delClass($delClass) {
 	}
-
+	
 	public function getClasses() {
-	}
-
-	public function getTabIndex() {
-	}
-
-	public function getTitle() {
 	}
 
 	public function hasClass($class) {
 	}
 
+	public function getTabIndex() {
+	}
+
 	public function setTabIndex($newTabIndex) {
+	}
+
+	public function getTitle() {
 	}
 
 	public function setTitle($newTitle) {
 	}
-
-	public function getParent() {
-	}
-
-	public function isRoot() {
-	}
-
-	public function setParent(interfaces\Widget $newParent) {
-	}
-
-	public function isChanged() {
-	}
-
-	public function setChanged($changed = true) {
-	}
-
 }
