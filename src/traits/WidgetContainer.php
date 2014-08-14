@@ -91,5 +91,11 @@ trait WidgetContainer {
 	public function count() {
 		return \count($this->_trait_WidgetContainer_children);
 	}
-
+	
+	/**
+	 * @implements \nexxes\widgets\interfaces\WidgetContainer
+	 */
+	public function hasChild(\nexxes\widgets\interfaces\Widget $widget) {
+		return \in_array($widget, $this->_trait_WidgetContainer_children, true);
+	}
 }

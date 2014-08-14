@@ -25,11 +25,13 @@ class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
 		$i1->setID('id1');
 		$l[] = $i1;
 		$this->assertSame($i1, $l[1]);
+		$this->assertTrue($l->hasChild($i1));
 		
 		$i2 = new WidgetMock();
 		$i2->setID('id2');
 		$l[] = $i2;
 		$this->assertSame($i2, $l[2]);
+		$this->assertTrue($l->hasChild($i2));
 		
 		$this->assertSame(3, \count($l));
 		
@@ -37,6 +39,8 @@ class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
 		$i3->setID('id3');
 		$l[1] = $i3;
 		$this->assertSame($i3, $l[1]);
+		$this->assertFalse($l->hasChild($i1));
+		$this->assertTrue($l->hasChild($i3));
 		
 		$this->assertSame(\count($l), 3);
 		
