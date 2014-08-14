@@ -26,7 +26,7 @@ class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents 
 	public function setChanged($changed = true) {
 	}
 	
-	public function renderHTML() {
+	public function __toString() {
 	}
 	
 	// interface HTMLWidget

@@ -10,6 +10,6 @@ namespace nexxes\widgets\traits;
 class WidgetContainerMock implements \nexxes\widgets\interfaces\WidgetContainer {
 	use WidgetContainer, Widget;
 	
-	public function renderHTML() {
+	public function __toString() {
 	}
 }

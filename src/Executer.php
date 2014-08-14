@@ -83,7 +83,7 @@ class Executer {
 	public function execute() {
 		/* @var $page interfaces\Page */
 		$page = dep::get(interfaces\Page::class);
-		$page->render();
+		echo $page->__toString();
 		
 		\apc_store($this->cacheNamespace . '.' . $page->id, $page, 0);
 	}

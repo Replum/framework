@@ -10,6 +10,6 @@ class HTMLWidgetMock implements \nexxes\widgets\interfaces\HTMLWidget {
 		getTitleHTML as public;
 	}
 	
-	public function renderHTML() {
+	public function __toString() {
 	}
 }

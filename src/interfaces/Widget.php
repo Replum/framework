@@ -57,5 +57,5 @@ interface Widget {
 	 * 
 	 * @return string The HTML code of the widget
 	 */
-	function renderHTML();
+	function __toString();
 }

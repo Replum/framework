@@ -37,7 +37,7 @@ class IdentifiableMock implements interfaces\Identifiable {
 	public function setChanged($changed = true) {
 	}
 	
-	public function renderHTML() {
+	public function __toString() {
 	}
 	
 	// interface HTMLWidget
