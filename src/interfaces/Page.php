@@ -14,11 +14,23 @@ interface Page extends WidgetContainer {
 	
 	/**
 	 * Initialize the widget registry so it can be used
-	 * @implements \nexxes\widgets\interfaces\Page
 	 * @param \nexxes\widgets\WidgetRegistry $newWidgetRegistry
 	 * @return \nexxes\widgets\interfaces\Page $this for chaining
 	 */
 	function initWidgetRegistry(\nexxes\widgets\WidgetRegistry $newWidgetRegistry = null);
+	
+	/**
+	 * Get the parameter registry that holds all callbacks to fill widget properties from request variables
+	 * @return \nexxes\widgets\ParameterRegistry
+	 */
+	function getParameterRegistry();
+	
+	/**
+	 * Initialize the parameter registry with the supplied parameter registry object or create a new object
+	 * @param \nexxes\widgets\ParameterRegistry $newParameterRegistry
+	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 */
+	function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null);
 	
 	/**
 	 * Get the document title
@@ -56,4 +68,12 @@ interface Page extends WidgetContainer {
 	 * @return array<\nexxes\widgets\interfaces\Script>
 	 */
 	function getScripts();
+	
+	/**
+	 * Escape the supplied string according to the current HTML escaping rules
+	 * 
+	 * @param string $unquoted
+	 * @return string
+	 */
+	function escape($unquoted);
 }
