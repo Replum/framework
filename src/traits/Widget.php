@@ -6,46 +6,70 @@ trait Widget {
 	/**
 	 * @var \nexxes\widgets\interfaces\Widget
 	 */
-	private $_trait_widget_parent = null;
+	private $_trait_Widget_parent = null;
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\Widget
 	 */
 	public function isRoot() {
-		return (($this instanceof \nexxes\widgets\interfaces\Page) || is_null($this->_trait_widget_parent));
+		return (($this instanceof \nexxes\widgets\interfaces\Page) || is_null($this->_trait_Widget_parent));
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\Widget
 	 */
 	public function getParent() {
-		return $this->_trait_widget_parent;
+		if (is_null($this->_trait_Widget_parent)) {
+			throw new \InvalidArgumentException('No parent exists for this widget!');
+		}
+		
+		return $this->_trait_Widget_parent;
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\Widget
 	 */
-	public function setParent(\nexxes\widgets\interfaces\Widget $newWidget) {
-		$this->_trait_widget_parent = $newWidget;
+	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
+		// Avoid recursion
+		if ($this->_trait_Widget_parent === $newParent) {
+			return $this;
+		}
+		
+		$this->_trait_Widget_parent = $newParent;
+		
+		// Add to parent if it is a widget container (not for composites!)
+		if (($newParent instanceof \nexxes\widgets\interfaces\WidgetContainer) && (!$newParent->hasChild($this))) {
+			$newParent[] = $this;
+		}
+		
 		return $this;
 	}
+	
+	
+	
+	
+	/**
+	 * @var \nexxes\widgets\interfaces\Page
+	 */
+	private $_trait_Widget_page = null;
 	
 	/**
 	 * @implements \nexxes\widgets\interfaces\Widget
 	 */
 	public function getPage() {
+		if (!is_null($this->_trait_Widget_page)) {
+			return $this->_trait_Widget_page;
+		}
+		
 		if ($this instanceof \nexxes\widgets\interfaces\Page) {
 			return $this;
 		}
 		
-		elseif ($this->_trait_widget_parent !== null) {
-			return $this->_trait_widget_parent->getParent()->getPage();
-		}
-		
-		else {
-			return null;
-		}
+		$this->_trait_Widget_page = $this->getParent()->getPage();
+		return $this->_trait_Widget_page;
 	}
+	
+	
 	
 	
 	/**
