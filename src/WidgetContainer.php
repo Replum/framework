@@ -2,14 +2,20 @@
 
 namespace nexxes\widgets;
 
-class WidgetContainer implements interfaces\WidgetContainer {
-	use traits\Widget, traits\WidgetContainer;
+class WidgetContainer implements WidgetContainerInterface, HTMLWidgetInterface, IdentifiableInterface {
+	use WidgetTrait, WidgetContainerTrait, HTMLWidgetTrait, IdentifiableTrait;
 	
 	public function __toString() {
+		$x = $this->getIDHTML()
+			. $this->getClassesHTML()
+			. $this->getTabIndexHTML()
+			. $this->getTitleHTML();
+		
 		$r = '';
 		foreach ($this AS $child) {
 			$r .= $child;
 		}
-		return $r;
+		
+		return ($x !== '' ? '<div ' . $x . '>' . $r . '</div>' : $r);
 	}
 }
