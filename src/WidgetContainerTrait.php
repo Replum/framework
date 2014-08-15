@@ -35,7 +35,7 @@ trait WidgetContainerTrait {
 	 */
 	public function offsetSet($offset, $value) {
 		if (!($value instanceof \nexxes\widgets\WidgetInterface)) {
-			throw new \InvalidArgumentException('A widget container can only contain contain elements implementing the ' . \nexxes\widgets\interfaces\Widget::class . ' interface');
+			throw new \InvalidArgumentException('A widget container can only contain contain elements implementing the ' . \nexxes\widgets\WidgetInterface::class . ' interface');
 		}
 		
 		// Get next offset for append [] operation

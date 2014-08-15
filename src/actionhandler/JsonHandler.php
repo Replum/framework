@@ -27,10 +27,10 @@ class JsonHandler {
 		
 		$page_id = $request->request->get('nexxes_pid');
 		
-		/* @var $page interfaces\Page */
+		/* @var $page \nexxes\widgets\PageInterface */
 		$page = \apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id);
 
-		if (!($page instanceof \nexxes\widgets\interfaces\Page)) {
+		if (!($page instanceof \nexxes\widgets\PageInterface)) {
 			throw new \RuntimeException('Can not restore page!');
 		}
 

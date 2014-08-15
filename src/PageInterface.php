@@ -15,7 +15,7 @@ interface PageInterface extends WidgetContainerInterface {
 	/**
 	 * Initialize the widget registry so it can be used
 	 * @param \nexxes\widgets\WidgetRegistry $newWidgetRegistry
-	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 * @return \nexxes\widgets\PageInterface $this for chaining
 	 */
 	function initWidgetRegistry(\nexxes\widgets\WidgetRegistry $newWidgetRegistry = null);
 	
@@ -28,7 +28,7 @@ interface PageInterface extends WidgetContainerInterface {
 	/**
 	 * Initialize the parameter registry with the supplied parameter registry object or create a new object
 	 * @param \nexxes\widgets\ParameterRegistry $newParameterRegistry
-	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 * @return \nexxes\widgets\PageInterface $this for chaining
 	 */
 	function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null);
 	

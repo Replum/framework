@@ -2,12 +2,12 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\interfaces\StyleSheet;
+use \nexxes\widgets\StyleSheetInterface;
 
 /**
  * Represents a <link rel="stylesheet"> element in the head of an html page
  */
-class StyleSheetLink implements StyleSheet {
+class StyleSheetLink implements StyleSheetInterface {
 	/**
 	 * Stylesheet is prefered or alternate style sheet
 	 * @var boolean

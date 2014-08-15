@@ -2,16 +2,15 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\interfaces;
-use \nexxes\widgets\traits;
+use \nexxes\widgets;
 
 /**
  * Description of TextInput
  *
  * @author dennis
  */
-class TextInput implements interfaces\HTMLWidget, interfaces\Identifiable {
-	use traits\Widget, traits\Identifiable, traits\HTMLWidget;
+class TextInput implements widgets\HTMLWidgetInterface, IdentifiableInterface {
+	use widgets\WidgetTrait, widgets\IdentifiableTrait, widgets\HTMLWidgetTrait;
 	
 	/**
 	 * @var string

@@ -43,10 +43,10 @@ class PageHandler {
 			throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
 		}
 		
-		/* @var $page \nexxes\widgets\interfaces\Page */
+		/* @var $page \nexxes\widgets\PageInterface */
 		$page = new $class();
 		$page->id = $this->generatePageID();
-		dep::registerObject(\nexxes\widgets\interfaces\Page::class, $page);
+		dep::registerObject(\nexxes\widgets\PageInterface::class, $page);
 		
 		$response = new Response((string)$page);
 		

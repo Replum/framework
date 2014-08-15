@@ -12,14 +12,14 @@ class Event extends \Symfony\Component\EventDispatcher\Event {
 	}
 	
 	/**
-	 * @var interfaces\WidgetHasEvents
+	 * @var WidgetHasEventsInterface
 	 */
 	private $widget;
 	
 	/**
 	 * Get the widget that caused this event
 	 * 
-	 * @return \nexxes\widgets\WidgetInterface
+	 * @return \nexxes\widgets\WidgetHasEventsInterface
 	 */
 	public function getWidget() {
 		return $this->widget;
@@ -28,9 +28,9 @@ class Event extends \Symfony\Component\EventDispatcher\Event {
 	/**
 	 * Set the widget that caused this event
 	 * 
-	 * @param \nexxes\widgets\WidgetInterface
+	 * @param \nexxes\widgets\WidgetHasEventsInterface
 	 */
-	public function setWidget(WidgetInterface $widget) {
+	public function setWidget(WidgetHasEventsInterface $widget) {
 		$this->widget = $widget;
 	}
 }

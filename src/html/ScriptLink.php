@@ -2,14 +2,14 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\interfaces\Script;
+use \nexxes\widgets\ScriptInterface;
 
 /**
  * Description of ScriptLink
  *
  * @author dennis
  */
-class ScriptLink implements Script {
+class ScriptLink implements ScriptInterface {
 /**
 	 * The url of the style sheet
 	 * @var string
