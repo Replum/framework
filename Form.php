@@ -2,11 +2,10 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\interfaces;
-use \nexxes\widgets\traits;
+use \nexxes\widgets;
 
-class Form implements interfaces\HTMLWidget, interfaces\WidgetContainer {
-	use traits\WidgetContainer, traits\HTMLWidget, traits\Identifiable, traits\Widget;
+class Form implements widgets\HTMLWidgetInterface, widgets\WidgetContainerInterface {
+	use widgets\WidgetContainerTrait, widgets\HTMLWidgetTrait, widgets\IdentifiableTrait, widgets\WidgetTrait;
 	
 	public function __toString() {
 		$r = '<form role="form"'
