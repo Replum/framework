@@ -1,6 +1,6 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
 /**
  * Interface for widgets with identity.
@@ -9,7 +9,7 @@ namespace nexxes\widgets\interfaces;
  * Widgets that implement the iIdentifiable interface contain a page unique identifier so they can be accessed
  * and modified directly after the page has been rendered initially without rerendering the complete page.
  */
-interface Identifiable extends HTMLWidget {
+interface IdentifiableInterface extends WidgetInterface {
 	/**
 	 * Get the identifier of the widget.
 	 * The identifier is unique for all widgets within a page.
@@ -26,7 +26,7 @@ interface Identifiable extends HTMLWidget {
 	 * 
 	 * If the identifier is already used an exception is thrown.
 	 * 
-	 * @param string $newID
+	 * @param string
 	 * @throws \InvalidArgumentException
 	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */

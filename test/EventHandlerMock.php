@@ -1,6 +1,6 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
 use \nexxes\widgets\Event;
 use \Symfony\Component\EventDispatcher\EventDispatcherInterface;

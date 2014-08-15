@@ -1,11 +1,11 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
-trait WidgetContainer {
+trait WidgetContainerTrait {
 	/**
 	 * The children of this widget, stored by their slot
-	 * @var array<\nexxes\widgets\interfaces\Widget>
+	 * @var array<\nexxes\widgets\WidgetInterface>
 	 */
 	private $_trait_WidgetContainer_children = [];
 	
@@ -34,7 +34,7 @@ trait WidgetContainer {
 	 * @implements \ArrayAccess
 	 */
 	public function offsetSet($offset, $value) {
-		if (!($value instanceof \nexxes\widgets\interfaces\Widget)) {
+		if (!($value instanceof \nexxes\widgets\WidgetInterface)) {
 			throw new \InvalidArgumentException('A widget container can only contain contain elements implementing the ' . \nexxes\widgets\interfaces\Widget::class . ' interface');
 		}
 		
@@ -93,9 +93,9 @@ trait WidgetContainer {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetContainer
+	 * @implements \nexxes\widgets\WidgetContainerInterface
 	 */
-	public function hasChild(\nexxes\widgets\interfaces\Widget $widget) {
+	public function hasChild(\nexxes\widgets\WidgetInterface $widget) {
 		return \in_array($widget, $this->_trait_WidgetContainer_children, true);
 	}
 }

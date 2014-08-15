@@ -2,6 +2,8 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\common\RandomString;
+
 /**
  * The widget registry class holds references to all widgets that can be accessed by id
  */
@@ -9,7 +11,7 @@ class WidgetRegistry {
 	/**
 	 * A list of all registered widgets
 	 * 
-	 * @var array<interfaces\Widget>
+	 * @var array<WidgetInterface>
 	 */
 	protected $widgets = [];
 	
@@ -21,8 +23,8 @@ class WidgetRegistry {
 	 * 
 	 * @return string
 	 */
-	public function register(interfaces\Identifiable $widget, $length = 5) {
-		$newID = 'w_' . (new \nexxes\common\RandomString($length));
+	public function register(IdentifiableInterface $widget, $length = 5) {
+		$newID = 'w_' . (new RandomString($length));
 		
 		// If new ID is not unique, create a new one that is one char longer
 		if (isset($this->widgets[$newID])) {
@@ -37,9 +39,9 @@ class WidgetRegistry {
 	/**
 	 * Notify the registry that the ID of a widget was changed
 	 * 
-	 * @param interfaces\Identifiable $widget
+	 * @param IdentifiableInterface $widget
 	 */
-	public function notifyIdChange(interfaces\Identifiable $widget) {
+	public function notifyIdChange(IdentifiableInterface $widget) {
 		$oldID = \array_search($widget, $this->widgets, true);
 		
 		if (!$oldID) {
@@ -63,7 +65,7 @@ class WidgetRegistry {
 	 * Get a widget from the registry or load it from apc cache if not already loaded
 	 * 
 	 * @param string $id
-	 * @return interfaces\Identifiable
+	 * @return IdentifiableInterface
 	 */
 	public function getWidget($id) {
 		if (!isset($this->widgets[$id])) {

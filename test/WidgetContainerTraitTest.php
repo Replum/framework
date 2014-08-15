@@ -1,42 +1,37 @@
 <?php
 
-namespace nexxes\widgets\traits;
-
-require_once(__DIR__ . '/WidgetContainerMock.php');
-require_once(__DIR__ . '/../IdentifiableMock.php');
-
-use \nexxes\widgets\IdentifiableMock AS WidgetMock;
+namespace nexxes\widgets;
 
 /**
- * 
+ * @coversDefaultClass WidgetContainerTrait
  */
-class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
+class WidgetContainerTraitTest extends \PHPUnit_Framework_TestCase {
 	public function testGetSet() {
-		$l = new WidgetContainerMock;
+		$l = new WidgetContainerTraitMock;
 		
-		$i0 = new WidgetMock();
-		$i0->setID('id0');
+		$i0 = $this->getMock(WidgetInterface::class);
+		//$i0->setID('id0');
 		$l[] = $i0;
 		$this->assertSame($i0, $l[0]);
 		$this->assertTrue(isset($l[0]));
 		$this->assertFalse(isset($l[1]));
 		
-		$i1 = new WidgetMock();
-		$i1->setID('id1');
+		$i1 = $this->getMock(WidgetInterface::class);
+		//$i1->setID('id1');
 		$l[] = $i1;
 		$this->assertSame($i1, $l[1]);
 		$this->assertTrue($l->hasChild($i1));
 		
-		$i2 = new WidgetMock();
-		$i2->setID('id2');
+		$i2 = $this->getMock(WidgetInterface::class);
+		//$i2->setID('id2');
 		$l[] = $i2;
 		$this->assertSame($i2, $l[2]);
 		$this->assertTrue($l->hasChild($i2));
 		
 		$this->assertSame(3, \count($l));
 		
-		$i3 = new WidgetMock();
-		$i3->setID('id3');
+		$i3 = $this->getMock(WidgetInterface::class);
+		//$i3->setID('id3');
 		$l[1] = $i3;
 		$this->assertSame($i3, $l[1]);
 		$this->assertFalse($l->hasChild($i1));
@@ -53,10 +48,10 @@ class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
 	public function testIterator() {
 		$num = 7;
 		
-		$l = new WidgetContainerMock;
+		$l = new WidgetContainerTraitMock;
 		
 		for ($i=0; $i<$num; $i++) {
-			$l[] = new WidgetMock();
+			$l[] = $this->getMock(WidgetInterface::class);
 		}
 		
 		$count = 0;
@@ -72,7 +67,7 @@ class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testNotAllowedClass() {
-		$l = new WidgetContainerMock;
+		$l = new WidgetContainerTraitMock;
 		$l[] = new \stdClass();
 	}
 	
@@ -80,9 +75,9 @@ class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testReadIllegalOffset() {
-		$l = new WidgetContainerMock;
+		$l = new WidgetContainerTraitMock;
 		
-		$l[] = new WidgetMock();
+		$l[] = $this->getMock(WidgetInterface::class);
 		echo $l[2];
 	}
 	
@@ -90,37 +85,62 @@ class WidgetContainerTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetIllegalOffsetString() {
-		$l = new WidgetContainerMock;
+		$l = new WidgetContainerTraitMock;
 		
 		// This does not trigger the exception as it seems to be auto-converted to an integer before the offsetSet method is called
 		//$l["0"] = new WidgetMock();
 		
 		$i = "0";
-		$l[$i] = new WidgetMock();
+		$l[$i] = $this->getMock(WidgetInterface::class);
 	}
 	
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetIllegalOffsetNegative() {
-		$l = new WidgetContainerMock;
-		$l[-1] = new WidgetMock();
+		$l = new WidgetContainerTraitMock;
+		$l[-1] = $this->getMock(WidgetInterface::class);
 	}
 	
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetIllegalOffsetSparse() {
-		$l = new WidgetContainerMock;
-		$l[100] = new WidgetMock();
+		$l = new WidgetContainerTraitMock;
+		$l[100] = $this->getMock(WidgetInterface::class);
 	}
 	
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testUnsetIllegalOffset() {
-		$l = new WidgetContainerMock;
-		$l[] = new WidgetMock();
+		$l = new WidgetContainerTraitMock;
+		$l[] = $this->getMock(WidgetInterface::class);
 		unset($l[2]);
+	}
+}
+
+class WidgetContainerTraitMock implements WidgetContainerInterface {
+	use WidgetContainerTrait;
+	
+	public function __toString() {
+	}
+
+	public function getPage() {
+	}
+
+	public function getParent() {
+	}
+
+	public function isChanged() {
+	}
+
+	public function isRoot() {
+	}
+
+	public function setChanged($changed = true) {
+	}
+
+	public function setParent(WidgetInterface $newParent) {
 	}
 }

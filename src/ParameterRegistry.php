@@ -45,12 +45,12 @@ class ParameterRegistry {
 	 * Closures must not be used as callback as they can not be serialized.
 	 * 
 	 * @param string $requestVar The request variable to bind the widget to.
-	 * @param \nexxes\widgets\interfaces\Widget $widget The widget that claims the variable.
+	 * @param \nexxes\widgets\WidgetInterface $widget The widget that claims the variable.
 	 * @param callable $setter Callback to set the variable.
 	 * @param callable $validator Callback to validate the variable.
 	 * @return ParameterRegistry $this for chaining.
 	 */
-	public function register($requestVar, \nexxes\widgets\interfaces\Widget $widget, callable $setter, callable $validator = null) {
+	public function register($requestVar, WidgetInterface $widget, callable $setter, callable $validator = null) {
 		if (isset($this->params[$requestVar])) {
 			throw new \InvalidArgumentException('Parameter "' . $requestVar . '" is already bound to another widget!');
 		}
@@ -88,10 +88,10 @@ class ParameterRegistry {
 	 * Unregister all request variables assigned by the supplied widget.
 	 * Use if a widget is replaced by another widget.
 	 * 
-	 * @param \nexxes\widgets\interfaces\Widget $widget
+	 * @param \nexxes\widgets\WidgetInterface $widget
 	 * @return \nexxes\widgets\ParameterRegistry $this for chaining
 	 */
-	public function unregister(\nexxes\widgets\interfaces\Widget $widget) {
+	public function unregister(\nexxes\widgets\WidgetInterface $widget) {
 		foreach ($this->params AS $requestVar => $settings) {
 			if ($settings['widget'] !== $widget) { continue; }
 			

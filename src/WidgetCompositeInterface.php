@@ -1,6 +1,6 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
 /**
  * A composite is a widget that is composed from other widgets.
@@ -11,12 +11,12 @@ namespace nexxes\widgets\interfaces;
  * $widgetcomposite["childname"] = new ChildWidget();
  * </code>
  */
-interface WidgetComposite extends Widget, \ArrayAccess, \Countable, \IteratorAggregate {
+interface WidgetCompositeInterface extends WidgetInterface, \ArrayAccess, \Countable, \IteratorAggregate {
 	/**
 	 * Create a new child slot.
 	 * 
 	 * @param string $name The composite unique slot name
 	 * @param array<string> $allowedClasses List of possible classes/interfaces allowed for this slot
 	 */
-	function childSlot($name, array $allowedClasses = [ \nexxes\widgets\interfaces\Widget::class ]);
+	function childSlot($name, array $allowedClasses = [ \nexxes\widgets\WidgetInterface::class ]);
 }

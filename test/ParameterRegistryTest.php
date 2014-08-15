@@ -2,7 +2,7 @@
 
 namespace nexxes\widgets;
 
-class WidgetMock implements \nexxes\widgets\interfaces\Widget {
+class WidgetMock implements WidgetInterface {
 	// interface Widget
 	
 	public function isRoot() {
@@ -11,7 +11,7 @@ class WidgetMock implements \nexxes\widgets\interfaces\Widget {
 	public function getParent() {
 	}
 	
-	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
+	public function setParent(WidgetInterface $newParent) {
 	}
 	
 	public function getPage() {
@@ -80,7 +80,7 @@ class ParameterRegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Test registration works and set callback is called
 	 */
 	public function testImportSetter() {
-		$r = new \nexxes\widgets\ParameterRegistry;
+		$r = new ParameterRegistry;
 		$m1 = new WidgetMock('Mock1.id');
 		
 		$r->register('test', $m1, [$m1, 'setter']);
@@ -93,7 +93,7 @@ class ParameterRegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Test registration works, validator callback is executed and return value is passed to setter
 	 */
 	public function testImportValidator() {
-		$r = new \nexxes\widgets\ParameterRegistry;
+		$r = new ParameterRegistry;
 		$m1 = new WidgetMock('Mock1.id');
 		
 		$r->register('test', $m1, [$m1, 'setter'], [$m1, 'validator']);
@@ -107,7 +107,7 @@ class ParameterRegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Test only registered request vars are used
 	 */
 	public function testImport() {
-		$r = new \nexxes\widgets\ParameterRegistry;
+		$r = new ParameterRegistry;
 		
 		$m1 = new WidgetMock('Mock1.id');
 		$r->register('test1', $m1, [$m1, 'setter']);
@@ -145,7 +145,7 @@ class ParameterRegistryTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedException \Exception
 	 */
 	public function testRegisterDuplicateRegistration() {
-		$r = new \nexxes\widgets\ParameterRegistry;
+		$r = new ParameterRegistry;
 		
 		$m1 = new WidgetMock('Mock1.id');
 		$m2 = new WidgetMock('Mock2.id');
@@ -158,7 +158,7 @@ class ParameterRegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Verify unregistering works and only remaining widgets are called
 	 */
 	public function testUnregister() {
-		$r = new \nexxes\widgets\ParameterRegistry;
+		$r = new ParameterRegistry;
 		
 		$m1 = new WidgetMock('Mock1.id');
 		$r->register('test1', $m1, [$m1, 'setter']);

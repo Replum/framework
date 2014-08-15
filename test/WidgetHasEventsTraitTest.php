@@ -1,6 +1,6 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
 use \nexxes\dependency\Gateway as dep;
 use \nexxes\widgets\WidgetRegistry;
@@ -12,7 +12,10 @@ use \Symfony\Component\EventDispatcher\EventDispatcher;
 require_once(__DIR__ . '/WidgetHasEventsMock.php');
 require_once(__DIR__ . '/EventHandlerMock.php');
 
-class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @coversDefaultClass \nexxes\widgets\WidgetHasEventsTrait
+ */
+class WidgetHasEventsTraitTest extends \PHPUnit_Framework_TestCase {
 	public function setUp() {
 		parent::setUp();
 		
@@ -24,8 +27,8 @@ class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @covers \nexxes\widgets\traits\WidgetHasEvents::registerEventHandler
-	 * @covers \nexxes\widgets\traits\WidgetHasEvents::removeEventHandler
+	 * @covers ::registerEventHandler
+	 * @covers ::removeEventHandler
 	 */
 	public function testRegisterEventHandler() {
 		$widget = new WidgetHasEventsMock();
@@ -63,7 +66,7 @@ class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @covers \nexxes\widgets\traits\WidgetHasEvents::registerOnceEventHandler
+	 * @covers ::registerOnceEventHandler
 	 */
 	public function testRegisterOnceEventHandler() {
 		$widget = new WidgetHasEventsMock();
@@ -95,7 +98,7 @@ class WidgetHasEventsTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @covers \nexxes\widgets\traits\WidgetHasEvents::removeOnceEventHandler
+	 * @covers ::removeOnceEventHandler
 	 */
 	public function testRemoveOnceEventHandler() {
 		$widget = new WidgetHasEventsMock();

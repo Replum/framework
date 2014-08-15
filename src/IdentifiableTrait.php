@@ -1,6 +1,6 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
 use \nexxes\dependency\Gateway as dep;
 use \nexxes\widgets\WidgetRegistry;
@@ -8,7 +8,7 @@ use \nexxes\widgets\WidgetRegistry;
 /**
  * Default implementation for the Identifiable interface
  */
-trait Identifiable {
+trait IdentifiableTrait {
 	/**
 	 * The page unique identifier for this widget
 	 * 
@@ -17,14 +17,14 @@ trait Identifiable {
 	private $_trait_Identifiable_id;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Identifiable
+	 * @implements \nexxes\widgets\IdentifiableInterface
 	 */
 	public function getID() {
 		return $this->_trait_Identifiable_id;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Identifiable
+	 * @implements \nexxes\widgets\IdentifiableInterface
 	 */
 	public function setID($newID) {
 		$oldID = $this->_trait_Identifiable_id;

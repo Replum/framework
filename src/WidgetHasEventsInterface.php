@@ -1,18 +1,18 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
 /**
  * Mark a widget as capable of emiting events.
  */
-interface WidgetHasEvents extends Identifiable {
+interface WidgetHasEventsInterface extends IdentifiableInterface {
 	/**
 	 * Register the supplied callback as an event handler for the named event with the given priority.
 	 * 
 	 * @param string $eventName
 	 * @param callable $handler
 	 * @param int $prio
-	 * @return WidgetHasEvents $this for chaining
+	 * @return WidgetHasEventsInterface $this for chaining
 	 */
 	function registerEventHandler($eventName, callable $handler, $prio = 5);
 	
@@ -23,7 +23,7 @@ interface WidgetHasEvents extends Identifiable {
 	 * @param string $eventName
 	 * @param callable $handler
 	 * @param int $prio
-	 * @return WidgetHasEvents $this for chaining
+	 * @return WidgetHasEventsInterface $this for chaining
 	 */
 	function registerOnceEventHandler($eventName, callable $handler, $prio = 5);
 	
@@ -32,7 +32,7 @@ interface WidgetHasEvents extends Identifiable {
 	 * 
 	 * @param string $eventname
 	 * @param callable $handler
-	 * @return WidgetHasEvents $this for chaining
+	 * @return WidgetHasEventsInterface $this for chaining
 	 */
 	function removeEventHandler($eventname, callable $handler);
 	
@@ -41,7 +41,7 @@ interface WidgetHasEvents extends Identifiable {
 	 * 
 	 * @param string $eventName
 	 * @param callable $handler
-	 * @return WidgetHasEvents $this for chaining
+	 * @return WidgetHasEventsInterface $this for chaining
 	 */
 	function removeOnceEventHandler($eventName, callable $handler);
 	

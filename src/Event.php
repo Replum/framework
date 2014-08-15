@@ -7,7 +7,7 @@ namespace nexxes\widgets;
  * Contains the widget that fired the event.
  */
 class Event extends \Symfony\Component\EventDispatcher\Event {
-	public function __construct(interfaces\WidgetHasEvents $widget) {
+	public function __construct(WidgetHasEventsInterface $widget) {
 		$this->widget = $widget;
 	}
 	
@@ -19,7 +19,7 @@ class Event extends \Symfony\Component\EventDispatcher\Event {
 	/**
 	 * Get the widget that caused this event
 	 * 
-	 * @return interfaces\WidgetHasEvents
+	 * @return \nexxes\widgets\WidgetInterface
 	 */
 	public function getWidget() {
 		return $this->widget;
@@ -28,9 +28,9 @@ class Event extends \Symfony\Component\EventDispatcher\Event {
 	/**
 	 * Set the widget that caused this event
 	 * 
-	 * @param interfaces\WidgetHasEvents $widget
+	 * @param \nexxes\widgets\WidgetInterface
 	 */
-	public function setWidget(interfaces\Widget $widget) {
+	public function setWidget(WidgetInterface $widget) {
 		$this->widget = $widget;
 	}
 }

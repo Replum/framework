@@ -1,6 +1,6 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
 /**
  * This interface indicates that the client-side (HTML) representation of this widget can fire the "change" event.
@@ -12,7 +12,7 @@ namespace nexxes\widgets\interfaces;
  * 
  * NOTE: You must not register closures as event handler as PHP closures can not be serialized and thus can not be called when the widget is restored (unserialized) on the event.
  */
-interface WidgetHasChangeEvent extends WidgetHasEvents {
+interface WidgetHasChangeEventInterface extends WidgetHasEventsInterface {
 	/**
 	 * Suffix used to build event names
 	 */

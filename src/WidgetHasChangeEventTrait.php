@@ -1,36 +1,34 @@
 <?php
 
-namespace nexxes\widgets\traits;
-
-use \nexxes\widgets\interfaces\WidgetHasChangeEvent AS WidgetHasChangeEventInterface;
+namespace nexxes\widgets;
 
 /**
- * Provides the methods required to implement the \nexxes\widgets\interfaces\WidgetHasChangeEvent interface
+ * Provides the methods required to implement the \nexxes\widgets\WidgetHasChangeEventInterface
  */
-trait WidgetHasChangeEvent {
+trait WidgetHasChangeEventTrait {
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasChangeEvent
+	 * @implements \nexxes\widgets\WidgetHasChangeEventInterface
 	 */
 	public function onChange(callable $eventHandler, $prio = 5) {
 		return $this->registerEventHandler(WidgetHasChangeEventInterface::EVENT_NAME, $eventHandler, $prio);
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasChangeEvent
+	 * @implements \nexxes\widgets\WidgetHasChangeEventInterface
 	 */
 	public function onChangeOnce(callable $eventHandler, $prio = 5) {
 		return $this->registerOnceEventHandler(WidgetHasChangeEventInterface::EVENT_NAME, $eventHandler, $prio);
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasChangeEvent
+	 * @implements \nexxes\widgets\WidgetHasChangeEventInterface
 	 */
 	public function removeOnChange(callable $eventHandler) {
 		return $this->removeEventHandler(WidgetHasChangeEventInterface::EVENT_NAME, $eventHandler);
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasChangeEvent
+	 * @implements \nexxes\widgets\WidgetHasChangeEventInterface
 	 */
 	public function removeOnChangeOnce(callable $eventHandler) {
 		return $this->removeOnceEventHandler(WidgetHasChangeEventInterface::EVENT_NAME, $eventHandler);

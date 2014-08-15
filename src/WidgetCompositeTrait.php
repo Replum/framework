@@ -1,8 +1,8 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
-trait WidgetComposite {
+trait WidgetCompositeTrait {
 	/**
 	 * The real normalized slot definition
 	 * @var array
@@ -11,7 +11,7 @@ trait WidgetComposite {
 	
 	/**
 	 * The children of this widget, stored by their slot
-	 * @var array<\nexxes\widgets\interfaces\Widget>
+	 * @var array<\nexxes\widgets\WidgetInterface>
 	 */
 	private $_trait_WidgetComposite_children = [];
 	
@@ -19,9 +19,9 @@ trait WidgetComposite {
 	
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetComposite
+	 * @implements \nexxes\widgets\WidgetCompositeInterface
 	 */
-	public function childSlot($name, array $allowedClasses = [ \nexxes\widgets\interfaces\Widget::class ]) {
+	public function childSlot($name, array $allowedClasses = [ \nexxes\widgets\WidgetInterface::class ]) {
 		$this->_trait_WidgetComposite_slots[$name] = $allowedClasses;
 	}
 	

@@ -1,8 +1,8 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
-trait HTMLWidget {
+trait HTMLWidgetTrait {
 	/**
 	 * The list of classes this html widgets has
 	 * 
@@ -12,7 +12,7 @@ trait HTMLWidget {
 	private $_trait_HTMLWidget_classes = [];
 	
 	/**
-	 *  @implements \nexxes\widgets\interfaces\HTMLWidget
+	 *  @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function addClass($newClass) {
 		if (!\in_array($newClass, $this->_trait_HTMLWidget_classes, true)) {
@@ -24,7 +24,7 @@ trait HTMLWidget {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function delClass($newClass) {
 		if (($key = \array_search($newClass, $this->_trait_HTMLWidget_classes)) !== false) {
@@ -36,14 +36,14 @@ trait HTMLWidget {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function hasClass($class) {
 		return \in_array($class, $this->_trait_HTMLWidget_classes);
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function getClasses() {
 		\sort($this->_trait_HTMLWidget_classes);
@@ -69,14 +69,14 @@ trait HTMLWidget {
 	private $_trait_HTMLWidget_tabindex;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function getTabIndex() {
 		return $this->_trait_HTMLWidget_tabindex;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function setTabIndex($newTabIndex) {
 		if (!\is_null($newTabIndex) && !\is_int($newTabIndex)) {
@@ -109,14 +109,14 @@ trait HTMLWidget {
 	private $_trait_HTMLWidget_title;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function getTitle() {
 		return $this->_trait_HTMLWidget_title;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\HTMLWidget
+	 * @implements \nexxes\widgets\HTMLWidgetInterface
 	 */
 	public function setTitle($newTitle) {
 		if (!\is_null($newTitle) && !\is_string($newTitle)) {

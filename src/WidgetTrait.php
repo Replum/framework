@@ -1,22 +1,22 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
-trait Widget {
+trait WidgetTrait {
 	/**
-	 * @var \nexxes\widgets\interfaces\Widget
+	 * @var \nexxes\widgets\WidgetInterface
 	 */
 	private $_trait_Widget_parent = null;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function isRoot() {
-		return (($this instanceof \nexxes\widgets\interfaces\Page) || is_null($this->_trait_Widget_parent));
+		return (($this instanceof \nexxes\widgets\PageInterface) || is_null($this->_trait_Widget_parent));
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getParent() {
 		if (is_null($this->_trait_Widget_parent)) {
@@ -27,9 +27,9 @@ trait Widget {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
-	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
+	public function setParent(\nexxes\widgets\WidgetInterface $newParent) {
 		// Avoid recursion
 		if ($this->_trait_Widget_parent === $newParent) {
 			return $this;
@@ -38,7 +38,7 @@ trait Widget {
 		$this->_trait_Widget_parent = $newParent;
 		
 		// Add to parent if it is a widget container (not for composites!)
-		if (($newParent instanceof \nexxes\widgets\interfaces\WidgetContainer) && (!$newParent->hasChild($this))) {
+		if (($newParent instanceof \nexxes\widgets\WidgetContainerInterface) && (!$newParent->hasChild($this))) {
 			$newParent[] = $this;
 		}
 		
@@ -49,19 +49,19 @@ trait Widget {
 	
 	
 	/**
-	 * @var \nexxes\widgets\interfaces\Page
+	 * @var \nexxes\widgets\PageInterface
 	 */
 	private $_trait_Widget_page = null;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getPage() {
 		if (!is_null($this->_trait_Widget_page)) {
 			return $this->_trait_Widget_page;
 		}
 		
-		if ($this instanceof \nexxes\widgets\interfaces\Page) {
+		if ($this instanceof \nexxes\widgets\PageInterface) {
 			return $this;
 		}
 		
@@ -78,21 +78,21 @@ trait Widget {
 	private $_trait_widget_changed = false;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function isChanged() {
 		return $this->_trait_widget_changed;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function setChanged($changed = true) {
 		$this->_trait_widget_changed = $changed;
 		
 		// If the current widget is not identifiable, it is not available in the list of widgets and can not be replaced in the web page.
 		// Mark the parent widget as changed so it is re-rendered including this widget
-		if ($changed && !($this instanceof \nexxes\widgets\interfaces\Identifiable) && !$this->isRoot()) {
+		if ($changed && !($this instanceof \nexxes\widgets\IdentifiableInterface) && !$this->isRoot()) {
 			$this->getParent()->setChanged($changed);
 		}
 		

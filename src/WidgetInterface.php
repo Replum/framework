@@ -1,11 +1,11 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
 /**
  * Base interface for all widgets
  */
-interface Widget {
+interface WidgetInterface {
 	/**
 	 * Check if the selected widget is the topmost widget aka the page
 	 * 
@@ -16,7 +16,7 @@ interface Widget {
 	/**
 	 * Get the parent of this widget, used to navigate to the top of the widget tree.
 	 * 
-	 * @return \nexxes\widgets\interfaces\Widget
+	 * @return \nexxes\widgets\WidgetInterface
 	 */
 	function getParent();
 	
@@ -25,15 +25,15 @@ interface Widget {
 	 * Should not called directly to avoid creating corrupt widget hierarchies.
 	 * Instead this method should be called from a container when a widget is added to that container.
 	 * 
-	 * @param \nexxes\widgets\interfaces\Widget $newParent
-	 * @return \nexxes\widgets\interfaces\Widget $this for chaining
+	 * @param \nexxes\widgets\WidgetInterface
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
 	 */
-	function setParent(Widget $newParent);
+	function setParent(WidgetInterface $newParent);
 	
 	/**
 	 * Get the page this widget belongs to
 	 * 
-	 * @return \nexxes\widgets\interfaces\Page
+	 * @return \nexxes\widgets\PageInterface
 	 */
 	function getPage();
 	
@@ -47,8 +47,8 @@ interface Widget {
 	/**
 	 * Set/unset the changed status of the widget
 	 * 
-	 * @param boolean $changed
-	 * @return \nexxes\widgets\interfaces\Widget $this for chaining
+	 * @param boolean
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
 	 */
 	function setChanged($changed = true);
 	

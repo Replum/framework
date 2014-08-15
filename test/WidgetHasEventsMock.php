@@ -1,10 +1,9 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
-class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents {
-	use Identifiable;
-	use WidgetHasEvents;
+class WidgetHasEventsMock implements WidgetHasEventsInterface {
+	use IdentifiableTrait, WidgetHasEventsTrait;
 	
 	// interface Widget
 	
@@ -14,7 +13,7 @@ class WidgetHasEventsMock implements \nexxes\widgets\interfaces\WidgetHasEvents 
 	public function getParent() {
 	}
 	
-	public function setParent(\nexxes\widgets\interfaces\Widget $newParent) {
+	public function setParent(WidgetInterface $newParent) {
 	}
 	
 	public function getPage() {

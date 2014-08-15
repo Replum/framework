@@ -1,8 +1,8 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
-interface HTMLWidget extends Widget {
+interface HTMLWidgetInterface extends WidgetInterface {
 	/**
 	 * Add the class to the list of classes if not already contained.
 	 * 

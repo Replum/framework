@@ -1,14 +1,14 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
 use \nexxes\dependency\Gateway as dep;
 use \nexxes\widgets\EventHandlerCallOnceWrapper;
 use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-trait WidgetHasEvents {
+trait WidgetHasEventsTrait {
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasEvents
+	 * @implements \nexxes\widgets\WidgetHasEventsInterface
 	 */
 	public function registerEventHandler($eventName, callable $handler, $prio = 5) {
 		$eventName = $this->_getFullEventName($eventName);
@@ -21,14 +21,14 @@ trait WidgetHasEvents {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasEvents
+	 * @implements \nexxes\widgets\WidgetHasEventsInterface
 	 */
 	public function registerOnceEventHandler($eventName, callable $handler, $prio = 5) {
 		return $this->registerEventHandler($eventName, new EventHandlerCallOnceWrapper($handler), $prio);
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasEvents
+	 * @implements \nexxes\widgets\WidgetHasEventsInterface
 	 */
 	public function removeEventHandler($eventName, callable $handler) {
 		$eventName = $this->_getFullEventName($eventName);
@@ -41,7 +41,7 @@ trait WidgetHasEvents {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasEvents
+	 * @implements \nexxes\widgets\WidgetHasEventsInterface
 	 */
 	public function removeOnceEventHandler($eventName, callable $handler) {
 		$eventName = $this->_getFullEventName($eventName);
@@ -64,7 +64,7 @@ trait WidgetHasEvents {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\WidgetHasEvents
+	 * @implements \nexxes\widgets\WidgetHasEventsInterface
 	 */
 	public function hasEventHandler($eventName) {
 		$eventName = $this->_getFullEventName($eventName);

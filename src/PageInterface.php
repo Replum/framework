@@ -1,11 +1,11 @@
 <?php
 
-namespace nexxes\widgets\interfaces;
+namespace nexxes\widgets;
 
 /**
  * A page represents the main entity to visualize
  */
-interface Page extends WidgetContainer {
+interface PageInterface extends WidgetContainerInterface {
 	/**
 	 * Get the widget registry associated with this page
 	 * @return \nexxes\widgets\WidgetRegistry
@@ -41,38 +41,38 @@ interface Page extends WidgetContainer {
 	/**
 	 * Set the document title
 	 * @param string $newTitle
-	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 * @return \nexxes\widgets\PageInterface $this for chaining
 	 */
 	function setTitle($newTitle);
 	
 	/**
 	 * Add a style sheet to the document
-	 * @param \nexxes\widgets\interfaces\StyleSheet $style
-	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 * @param \nexxes\widgets\StyleSheetInterface $style
+	 * @return \nexxes\widgets\PageInterface $this for chaining
 	 */
-	function addStyleSheet(StyleSheet $style);
+	function addStyleSheet(StyleSheetInterface $style);
 	
 	/**
-	 * @return array<\nexxes\widgets\interfaces\StyleSheet>
+	 * @return array<\nexxes\widgets\StyleSheetInterface>
 	 */
 	function getStyleSheets();
 	
 	/**
 	 * Add a script to the document
-	 * @param \nexxes\widgets\interfaces\Script $script
-	 * @return \nexxes\widgets\interfaces\Page $this for chaining
+	 * @param \nexxes\widgets\ScriptInterface $script
+	 * @return \nexxes\widgets\PageInterface $this for chaining
 	 */
-	function addScript(Script $script);
+	function addScript(ScriptInterface $script);
 	
 	/**
-	 * @return array<\nexxes\widgets\interfaces\Script>
+	 * @return array<\nexxes\widgets\ScriptInterface>
 	 */
 	function getScripts();
 	
 	/**
 	 * Escape the supplied string according to the current HTML escaping rules
 	 * 
-	 * @param string $unquoted
+	 * @param string The raw string
 	 * @return string
 	 */
 	function escape($unquoted);

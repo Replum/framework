@@ -1,23 +1,23 @@
 <?php
 
-namespace nexxes\widgets\traits;
+namespace nexxes\widgets;
 
-trait Page {
+trait PageTrait {
 	/**
-	 * @var array<\nexxes\widgets\interfaces\StyleSheet>
+	 * @var array<\nexxes\widgets\StyleSheetInterface>
 	 */
 	private $_trait_Page_styles = [];
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
-	public function addStyleSheet(\nexxes\widgets\interfaces\StyleSheet $style) {
+	public function addStyleSheet(\nexxes\widgets\StyleSheetInterface $style) {
 		$this->_trait_Page_styles[] = $style;
 		return $this;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getStyleSheets() {
 		return $this->_trait_Page_styles;
@@ -27,20 +27,20 @@ trait Page {
 	
 	
 	/**
-	 * @var array<\nexxes\widgets\interfaces\Script>
+	 * @var array<\nexxes\widgets\ScriptInterface>
 	 */
 	private $_trait_Page_scripts = [];
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
-	public function addScript(\nexxes\widgets\interfaces\Script $script) {
+	public function addScript(\nexxes\widgets\ScriptInterface $script) {
 		$this->_trait_Page_scripts[] = $script;
 		return $this;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getScripts() {
 		return $this->_trait_Page_scripts;
@@ -55,14 +55,14 @@ trait Page {
 	private $_trait_Page_title;
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getTitle() {
 		return $this->_trait_Page_title;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function setTitle($newTitle) {
 		$this->_trait_Page_title = $newTitle;
@@ -79,7 +79,7 @@ trait Page {
 	
 	/**
 	 * Silently initializes the widget registry with the provided default implementation on first access
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getWidgetRegistry() {
 		if (is_null($this->_trait_Page_widgetRegistry)) {
@@ -90,7 +90,7 @@ trait Page {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function initWidgetRegistry(\nexxes\widgets\WidgetRegistry $newWidgetRegistry = null) {
 		if (!is_null($this->_trait_Page_widgetRegistry)) {
@@ -116,7 +116,7 @@ trait Page {
 	
 	/**
 	 * Silently initializes the parameter registry with the provided default implementation on first access
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getParameterRegistry() {
 		if (is_null($this->_trait_Page_parameterRegistry)) {
@@ -127,7 +127,7 @@ trait Page {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null) {
 		if (!is_null($this->_trait_Page_parameterRegistry)) {
