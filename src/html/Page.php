@@ -2,28 +2,23 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\interfaces;
-use \nexxes\widgets\traits;
+use \nexxes\widgets;
 
-abstract class Page implements interfaces\Page {
-	use traits\Page, traits\WidgetContainer, traits\Widget;
+abstract class Page implements widgets\PageInterface {
+	use widgets\PageInterface, widgets\WidgetContainerInterface, widgets\WidgetInterface;
 	
 	public $id = "";
 	
 	
-	public function __construct() {
-		
-	}
-	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Page
+	 * {@inheritdoc}
 	 */
-	public function escape($string) {
-		return \htmlentities($string, null, 'UTF-8');
+	public function escape($unquoted) {
+		return \htmlentities($unquoted, null, 'UTF-8');
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\interfaces\Widget
+	 * {@inheritdoc}
 	 */
 	public function __toString() {
 		$r  = '<!DOCTYPE html>';
