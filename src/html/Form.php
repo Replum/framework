@@ -9,7 +9,7 @@ class Form implements interfaces\HTMLWidget, interfaces\WidgetContainer {
 	use traits\WidgetContainer, traits\HTMLWidget, traits\Identifiable, traits\Widget;
 	
 	public function __toString() {
-		$r = '<form'
+		$r = '<form role="form"'
 			. $this->getClassesHTML()
 			. $this->getIDHTML()
 			. $this->getTabIndexHTML()
