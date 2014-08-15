@@ -10,18 +10,97 @@ use \nexxes\common\RelativePath;
  */
 class Executer {
 	/**
+	 * @var \Symfony\Component\HttpFoundation\Request
+	 */
+	private $request = null;
+	
+	/**
+	 * Get the request object of the current request
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Request
+	 */
+	public function getRequest() {
+		return $this->request;
+	}
+	
+	
+	
+	
+	/**
+	 * @var \Symfony\Component\HttpFoundation\Session\Session
+	 */
+	private $session = null;
+	
+	/**
+	 * Get the currently active session
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Session\Session
+	 */
+	public function getSession() {
+		return $this->session;
+	}
+	
+	
+	
+	
+	/**
 	 * The namespace each page class must exist in
 	 * @var string
 	 */
 	private $pageNamespace;
 	
-	const SESSION_VAR = 's';
+	public function getPageNamespace() {
+		return $this->pageNamespace;
+	}
 	
 	private $cacheNamespace = 'nexxes.pages';
+	
+	public function getCacheNamespace() {
+		return $this->cacheNamespace;
+	}
+	
+	private $actionhandler = [];
+	
+	public function registerAction($actionName, $handlerClass) {
+		$this->actionhandler[$actionName] = $handlerClass;
+		return $this;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public function __construct($pageNamespace = '\nexxes\pages') {
 		$this->pageNamespace = $pageNamespace;
+		
+		// Handle request and session
+		$this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+		
+		if ($this->request->hasPreviousSession() || $this->request->hasSession()) {
+			$this->session = $this->request->getSession();
+		} else {
+			$this->session = new \Symfony\Component\HttpFoundation\Session\Session();
+			$this->request->setSession($this->session);
+		}
+		
+		if (!$this->session->isStarted()) {
+			$this->session->start();
+		}
+		
+		// Security measure: regenerate session id to avoid session fixation
+		//$this->session->migrate();
+		
+		$this->registerAction('page', \nexxes\widgets\actionhandler\PageHandler::class);
+		$this->registerAction('json', \nexxes\widgets\actionhandler\JsonHandler::class);
+		$this->registerAction('vendor', \nexxes\widgets\actionhandler\VendorHandler::class);
+		
+
 		
 		// Restore persisted page
 //		if ($pid = PageContext::$request->getPageID()) {
@@ -33,6 +112,7 @@ class Executer {
 			//if (!($page = PageContext::$request->getPage())) {
 				
 			//}
+		/*
 			
 		if (isset($_REQUEST['nexxes.page']) && ($_REQUEST['nexxes.page'] != "")) {
 			$pagename = $_REQUEST['nexxes.page'];
@@ -61,7 +141,7 @@ class Executer {
 		}
 		
 		// Restore a page
-		/* @var $page interfaces\Page */
+		/ * @var $page interfaces\Page * /
 		$page = new $class();
 		$page->id = $this->generatePageID();
 		
@@ -73,7 +153,7 @@ class Executer {
 		//echo '<p>Session-Name: ' . \session_name() . '</p>';
 		
 		dep::registerObject(interfaces\Page::class, $page);
-		dep::registerObject(WidgetRegistry::class, $page->getWidgetRegistry());
+		dep::registerObject(WidgetRegistry::class, $page->getWidgetRegistry());*/
 	}
 	
 	
@@ -81,11 +161,21 @@ class Executer {
 	
 	
 	public function execute() {
-		/* @var $page interfaces\Page */
-		$page = dep::get(interfaces\Page::class);
-		echo $page->__toString();
+		$action = $this->request->query->get('nexxes_action', 'page');
+		if (($action == 'page') && $this->request->isXmlHttpRequest()) {
+			$action = 'json';
+		}
 		
-		\apc_store($this->cacheNamespace . '.' . $page->id, $page, 0);
+		if (!isset($this->actionhandler[$action])) {
+			throw new \InvalidArgumentException('Unknown action type: ' . $action);
+		}
+		
+		$class = $this->actionhandler[$action];
+		$handler = new $class($this);
+		
+		/* @var $response \Symfony\Component\HttpFoundation\Response */
+		$response = $handler->execute();
+		$response->send();
 	}
 	
 	
@@ -123,102 +213,5 @@ class Executer {
 		header('Content-Type: text/json');
 		echo json_encode($data);
 		exit;
-	}
-	
-	
-	
-	
-	protected function generatePageID() {
-		$length = 8;
-		
-		do {
-			$r = new \nexxes\common\RandomString($length);
-			$length++;
-		} while (\apc_exists($this->cacheNamespace . '.' . $r));
-		
-		return (string)$r;
-	}
-	
-	
-	
-	
-	/**
-	 * Handle a resource that is accessed via the vendor/ directory in the web root.
-	 * Vendor resources must exist in the public/ directory of the composer installed
-	 * dependency, which is $PROJECT_ROOT/vendor/$VENDOR/$PROJECT/public/.
-	 * 
-	 * If a dependency has no public/ folder, it can not export static file into the web root.
-	 * 
-	 * The resources are symlinked from the public/ directory into the vendor/-directory under the document root.
-	 * 
-	 * A test.js-file of the nexxes/jstest dependency would result in a symlink from
-	 * $PROJECT_ROOT/vendor/nexxes/jstest/public/test.js to $DOCUMENT_ROOT/vendor/nexxes/jstest/test.js
-	 * 
-	 * @param type $resourceName
-	 * @throws \InvalidArgumentException
-	 */
-	public function handleVendorResource($resourceName) {
-		try {
-			$this->createVendorResourceSymlink($resourceName, VENDOR_DIR, $_SERVER['DOCUMENT_ROOT']);
-		} catch (\Exception $e) {
-			header("HTTP/1.0 404 Not Found");
-			echo '<pre>' . $e . '</pre>';
-			exit;
-		}
-		
-		header('Location: ' . $_SERVER["REQUEST_URI"]);
-		exit;
-	}
-	
-	
-	
-	
-	/**
-	 * @param string $resource The resource name = path below the document root
-	 * @param string $vendor_dir Vendor dir used by composer to install dependencies into
-	 * @param string $document_root Directory that is accessible thru the web server
-	 * @throws \InvalidArgumentException
-	 * @see self::handleVendorResource
-	 */
-	protected function createVendorResourceSymlink($resourceName, $vendor_dir, $document_root) {
-		@list($prefix, $vendor, $package, $path) = \explode('/', $resourceName, 4);
-		
-		if ($prefix != 'vendor') {
-			throw new \InvalidArgumentException('Invalid resource selection!', 1);
-		}
-		
-		if (($vendor == '.') || ($vendor == '..')) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 2);
-		}
-		
-		if (!\is_dir($vendor_dir . '/' . $vendor)) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 3);
-		}
-		
-		if (($package == '.') || ($package == '..')) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 4);
-		}
-		
-		if (!\is_dir($vendor_dir . '/' . $vendor . '/' . $package)) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 5);
-		}
-		
-		if (!\is_dir($vendor_dir . '/' . $vendor . '/' . $package . '/public')) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 6);
-		}
-		
-		if (\strpos($path, '..') !== false) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 7);
-		}
-		
-		if (!\file_exists($vendor_dir . '/' . $vendor . '/' . $package . '/public/' . $path)) {
-			throw new \InvalidArgumentException('Invalid resource selection!', 8);
-		}
-		
-		$linkname = $document_root . '/vendor/' . $vendor . '/' . $package . '/' . $path;
-		$fulltarget = $vendor_dir . '/' . $vendor . '/' . $package . '/public/' . $path;
-		
-		\mkdir(\dirname($linkname), 0755, true);
-		\symlink((string)new RelativePath($linkname, $fulltarget), $linkname);
 	}
 }
