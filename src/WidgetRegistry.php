@@ -23,7 +23,7 @@ class WidgetRegistry implements \IteratorAggregate {
 	 * 
 	 * @return string
 	 */
-	public function register(IdentifiableInterface $widget, $length = 5) {
+	public function register(WidgetInterface $widget, $length = 5) {
 		$newID = 'w_' . (new RandomString($length));
 		
 		// If new ID is not unique, create a new one that is one char longer
@@ -32,7 +32,7 @@ class WidgetRegistry implements \IteratorAggregate {
 		}
 		
 		$this->widgets[$newID] = $widget;
-		$widget->setID($newID);
+		$widget->setID($newID, true);
 		return $newID;
 	}
 	
@@ -41,7 +41,7 @@ class WidgetRegistry implements \IteratorAggregate {
 	 * 
 	 * @param IdentifiableInterface $widget
 	 */
-	public function notifyIdChange(IdentifiableInterface $widget) {
+	public function notifyIdChange(WidgetInterface $widget) {
 		$oldID = \array_search($widget, $this->widgets, true);
 		
 		if (!$oldID) {
@@ -65,7 +65,7 @@ class WidgetRegistry implements \IteratorAggregate {
 	 * Get a widget from the registry or load it from apc cache if not already loaded
 	 * 
 	 * @param string $id
-	 * @return IdentifiableInterface
+	 * @return \nexxes\widgets\WidgetInterface
 	 */
 	public function getWidget($id) {
 		if (!isset($this->widgets[$id])) {

@@ -5,7 +5,7 @@ namespace nexxes\widgets;
 /**
  * Mark a widget as capable of emiting events.
  */
-interface WidgetHasEventsInterface extends IdentifiableInterface {
+interface WidgetHasEventsInterface extends WidgetInterface {
 	/**
 	 * Register the supplied callback as an event handler for the named event with the given priority.
 	 * 

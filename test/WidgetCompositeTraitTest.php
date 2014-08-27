@@ -98,28 +98,3 @@ class WidgetCompositeTest extends \PHPUnit_Framework_TestCase {
 		unset($composite['test']);
 	}
 }
-
-class WidgetCompositeTraitMock implements WidgetCompositeInterface {
-	use WidgetCompositeTrait;
-	
-	public function __toString() {
-	}
-
-	public function getPage() {
-	}
-
-	public function getParent() {
-	}
-
-	public function isChanged() {
-	}
-
-	public function isRoot() {
-	}
-
-	public function setChanged($changed = true) {
-	}
-
-	public function setParent(WidgetInterface $newParent) {
-	}
-}

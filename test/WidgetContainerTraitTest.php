@@ -119,28 +119,3 @@ class WidgetContainerTraitTest extends \PHPUnit_Framework_TestCase {
 		unset($l[2]);
 	}
 }
-
-class WidgetContainerTraitMock implements WidgetContainerInterface {
-	use WidgetContainerTrait;
-	
-	public function __toString() {
-	}
-
-	public function getPage() {
-	}
-
-	public function getParent() {
-	}
-
-	public function isChanged() {
-	}
-
-	public function isRoot() {
-	}
-
-	public function setChanged($changed = true) {
-	}
-
-	public function setParent(WidgetInterface $newParent) {
-	}
-}

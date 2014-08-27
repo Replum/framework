@@ -3,28 +3,15 @@
 namespace nexxes\widgets;
 
 /**
- * @coversDefaultClass \nexxes\widgets\HTMLWidgetTrait
+ * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
-	/**
-	 * Helper method to create a new mock
-	 * @return \nexxes\widgets\HTMLWidgetTrait
-	 */
-	private function createMock() {
-		$mock = $this->getMockForTrait(HTMLWidgetTrait::class, [], '', true, true, true, ['setChanged']);
-		$mock->expects($this->any())
-			->method('setChanged')
-			->will($this->returnSelf());
-		
-		return $mock;
-	}
-	
+class WidgetTraitTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @covers ::addClass
 	 * @covers ::getClasses
 	 */
 	public function testAddClass() {
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		
 		$mock->addClass('test1');
 		$this->assertContains('test1', $mock->getClasses());
@@ -41,7 +28,7 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 	 * @covers ::getClasses
 	 */
 	public function testDelClass() {
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		
 		$mock->addClass('test1');
 		$mock->addClass('test2');
@@ -68,7 +55,7 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$class2 = 'test-bar';
 		$class3 = 'est-foo';
 		
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		$mock->addClass($class1);
 		$mock->addClass($class2);
 		$mock->addClass($class3);
@@ -90,7 +77,7 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$class2 = 'test-bar';
 		$class3 = 'bar-foo';
 		
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		$this->assertFalse($mock->hasClass($class1));
 		
 		$mock->addClass($class1);
@@ -115,33 +102,14 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$class2 = 'test-bar';
 		$class3 = 'bar-foo';
 		
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		$mock->addClass($class1);
 		$mock->addClass($class2);
 		$mock->addClass($class3);
 		$this->assertCount(3, $mock->getClasses());
-		$this->assertCount(1, $mock->getClasses('^bar-', true));
-		$this->assertCount(2, $mock->getClasses('^test-', true));
+		$this->assertCount(1, $mock->getClasses('/^bar-/', true));
+		$this->assertCount(2, $mock->getClasses('/^test-/', true));
 	}
-	
-	/**
-	 * @covers ::getClassesHTML
-	 */
-	/* Can not test this private method directly, try it later
-	public function testGetClassesHTML() {
-		$mock = $this->createMock();
-		
-		$this->assertSame($mock->getClassesHTML(), '');
-		
-		$mock->addClass('test2');
-		$this->assertSame($mock->getClassesHTML(), ' class="test2"');
-		
-		$mock->addClass('test1');
-		$this->assertSame($mock->getClassesHTML(), ' class="test1 test2"');
-		
-		$mock->addClass('test3<4');
-		$this->assertSame($mock->getClassesHTML(), ' class="test1 test2 test3&lt;4"');
-	}*/
 	
 	/**
 	 * @covers ::getTabIndex
@@ -151,7 +119,7 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$tabindex1 = 10;
 		$tabindex2 = 5000;
 		
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		
 		$mock->setTabIndex($tabindex1);
 		$this->assertEquals($tabindex1, $mock->getTabIndex());
@@ -170,7 +138,7 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$title1 = 'TestTitle';
 		$title2 = 'AnotherTestTitle';
 		
-		$mock = $this->createMock();
+		$mock = new WidgetTraitMock();
 		
 		$mock->setTitle($title1);
 		$this->assertEquals($title1, $mock->getTitle());
@@ -180,5 +148,21 @@ class HTMLWidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$mock->setTitle($title2);
 		$this->assertEquals($title2, $mock->getTitle());
 	}
+	
+	/**
+	 * @covers ::getID
+	 * @covers ::setID
+	 */
+	public function testGetSetID() {
+		$id1 = 'widgetId1';
+		$id2 = 'widgetId2';
+		
+		$mock = new WidgetTraitMock();
+		
+		$mock->setID($id1, true);
+		$this->assertEquals($id1, $mock->getID());
+		
+		$mock->setID($id2, true);
+		$this->assertEquals($id2, $mock->getID());
+	}
 }
-

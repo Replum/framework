@@ -9,9 +9,6 @@ use \nexxes\widgets\Event;
 use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
 
-require_once(__DIR__ . '/WidgetHasEventsMock.php');
-require_once(__DIR__ . '/EventHandlerMock.php');
-
 /**
  * @coversDefaultClass \nexxes\widgets\WidgetHasEventsTrait
  */
@@ -31,8 +28,10 @@ class WidgetHasEventsTraitTest extends \PHPUnit_Framework_TestCase {
 	 * @covers ::removeEventHandler
 	 */
 	public function testRegisterEventHandler() {
-		$widget = new WidgetHasEventsMock();
-		dep::get(WidgetRegistry::class)->register($widget);
+		$page = new PageTraitMock();
+		
+		$widget = (new WidgetHasEventsTraitMock())->setParent($page);
+		$page->getWidgetRegistry()->register($widget);
 		
 		$handler = new EventHandlerMock();
 		$eventName = __FUNCTION__ . '_testevent';
@@ -44,7 +43,7 @@ class WidgetHasEventsTraitTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(0, $handler->counter, true);
 		
 		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
+		$dispatcher = $page->getEventDispatcher();
 		
 		$max_counter = 10;
 		
@@ -69,8 +68,10 @@ class WidgetHasEventsTraitTest extends \PHPUnit_Framework_TestCase {
 	 * @covers ::registerOnceEventHandler
 	 */
 	public function testRegisterOnceEventHandler() {
-		$widget = new WidgetHasEventsMock();
-		dep::get(WidgetRegistry::class)->register($widget);
+		$page = new PageTraitMock();
+		
+		$widget = (new WidgetHasEventsTraitMock())->setParent($page);
+		$page->getWidgetRegistry()->register($widget);
 		
 		$handler = new EventHandlerMock();
 		$eventName = __FUNCTION__ . '_testevent';
@@ -82,7 +83,7 @@ class WidgetHasEventsTraitTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(0, $handler->counter, true);
 		
 		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
+		$dispatcher = $page->getEventDispatcher();
 		
 		$dispatcher->dispatch($realEventName, new Event($widget));
 		$this->assertEquals($realEventName, $handler->eventname);
@@ -101,15 +102,17 @@ class WidgetHasEventsTraitTest extends \PHPUnit_Framework_TestCase {
 	 * @covers ::removeOnceEventHandler
 	 */
 	public function testRemoveOnceEventHandler() {
-		$widget = new WidgetHasEventsMock();
-		dep::get(WidgetRegistry::class)->register($widget);
+		$page = new PageTraitMock();
+		
+		$widget = (new WidgetHasEventsTraitMock())->setParent($page);
+		$page->getWidgetRegistry()->register($widget);
 		
 		$handler = new EventHandlerMock();
 		$eventName = __FUNCTION__ . '_testevent';
 		$realEventName = 'widget.' . $widget->getID() . '.' . $eventName;
 		
 		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
+		$dispatcher = $page->getEventDispatcher();
 		
 		$widget->registerOnceEventHandler($eventName, [$handler, 'handler']);
 		$this->assertCount(1, $dispatcher->getListeners($realEventName));
