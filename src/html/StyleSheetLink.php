@@ -84,7 +84,7 @@ class StyleSheetLink implements StyleSheetInterface {
 		return '<link'
 			. ' rel="' . ($this->alternate && $this->title ? 'alternate ' : '') . 'stylesheet"'
 			. ($this->title ? ' title="' . \htmlentities($this->title, null, 'UTF-8') . '"' : '')
-			. ($this->url ? ' href="' . \htmlentities($this->url, null, 'UTF-8') . '"' : '')
+			. ($this->url ? ' href="' . \htmlentities($this->url, null, 'UTF-8') . '?t=' . time() . '"' : '')
 			. ($this->type ? ' type="' . \htmlentities($this->type, null, 'UTF-8') . '"' : '')
 			. ' />';
 	}
