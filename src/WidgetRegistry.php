@@ -7,13 +7,13 @@ use \nexxes\common\RandomString;
 /**
  * The widget registry class holds references to all widgets that can be accessed by id
  */
-class WidgetRegistry {
+class WidgetRegistry implements \IteratorAggregate {
 	/**
 	 * A list of all registered widgets
 	 * 
 	 * @var array<WidgetInterface>
 	 */
-	protected $widgets = [];
+	private $widgets = [];
 	
 	
 	
@@ -31,8 +31,8 @@ class WidgetRegistry {
 			return $this->register($widget, $length + 1);
 		}
 		
-		$widget->setID($newID);
 		$this->widgets[$newID] = $widget;
+		$widget->setID($newID);
 		return $newID;
 	}
 	
@@ -73,5 +73,13 @@ class WidgetRegistry {
 		}
 		
 		return $this->widgets[$id];
+	}
+	
+	/**
+	 * Allow to iterate over all widgets
+	 * @return \ArrayIterator
+	 */
+	public function getIterator() {
+		return new \ArrayIterator($this->widgets);
 	}
 }
