@@ -5,7 +5,7 @@ namespace nexxes\widgets\html;
 use \nexxes\widgets;
 
 abstract class Page implements widgets\PageInterface {
-	use widgets\PageInterface, widgets\WidgetContainerInterface, widgets\WidgetInterface;
+	use widgets\PageTrait, widgets\WidgetContainerTrait, widgets\WidgetTrait;
 	
 	public $id = "";
 	
