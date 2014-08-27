@@ -2,6 +2,8 @@
 
 namespace nexxes\widgets\actionhandler;
 
+use \nexxes\widgets\Event;
+
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
@@ -19,9 +21,7 @@ class JsonHandler {
 		/* $var $request \Symfony\Component\HttpFoundation\Request */
 		$request = $this->executer->getRequest();
 		
-		$event = $request->request->get('nexxes_event');
-		
-		if ($event != "change") {
+		if ($request->request->get('nexxes_event') != "change") {
 			throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
 		}
 		
@@ -35,23 +35,32 @@ class JsonHandler {
 		}
 
 		$widget = $page->getWidgetRegistry()->getWidget($request->request->get('nexxes_source'));
-		$widget->setValue($request->request->get($widget->getName()));
+		$widget->setValue($request->request->get('nexxes_value'));
 		
-		if ($widget->getValue() == 'test') {
-			$widget->getParent()->addClass('has-success')->delClass('has-error');
-		} else {
-			$widget->getParent()->addClass('has-error')->delClass('has-success');
-		}
+		$page->getEventDispatcher()->dispatch('widget.' . $widget->getID() . '.onchange', new Event($widget));
 		
-		$data = [];
-		$data[] = [
-			'nexxes_action' => 'replace',
-			'nexxes_target' => $widget->getParent()->getID(),
-			'nexxes_data' => (string)$widget->getParent(),
-		];
+		$data = $this->handleChangedWidgets($page->getWidgetRegistry());
 
 		header('Content-Type: text/json');
 		echo json_encode($data);
 		exit;
+	}
+	
+	protected function handleChangedWidgets(\nexxes\widgets\WidgetRegistry $registry) {
+		$data = [];
+		
+		foreach ($registry AS $widget) {
+			/* @var $widget \nexxes\widgets\WidgetInterface */
+			if ($widget->isChanged()) {
+				/* @var $widget \nexxes\widgets\bootstrap\FormGroup */
+				$data[] = [
+					'nexxes_action' => 'replace',
+					'nexxes_target' => $widget->getID(),
+					'nexxes_data' => (string)$widget,
+				];
+			}
+		}
+		
+		return $data;
 	}
 }
