@@ -9,7 +9,7 @@ use \nexxes\widgets;
  *
  * @author dennis
  */
-class TextInput implements widgets\HTMLWidgetInterface, IdentifiableInterface {
+class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInterface {
 	use widgets\WidgetTrait, widgets\IdentifiableTrait, widgets\HTMLWidgetTrait;
 	
 	/**
