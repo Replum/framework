@@ -48,7 +48,7 @@ nexxes.widgets = {
 		this.actionQueue.push(new nexxesWidgetAction(
 		 'change',
 		 elem,
-		 $(elem.form).serializeArray()
+		 []
 		));
 		
 		this._executeActions();
@@ -71,6 +71,7 @@ nexxes.widgets = {
 		this.currentAction.params.push( { name: "nexxes_pid", value: document.body.id } );
 		this.currentAction.params.push( { name: "nexxes_event", value: this.currentAction.event } );
 		this.currentAction.params.push( { name: "nexxes_source", value: this.currentAction.source.id } );
+		this.currentAction.params.push( { name: "nexxes_value", value: this.currentAction.source.value } );
 		
 		console.log("Executing action with parameters: ");
 		console.log(this.currentAction.params);
