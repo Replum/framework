@@ -53,29 +53,6 @@ trait PageTrait {
 	
 	
 	/**
-	 * @var string
-	 */
-	private $PageTraitTitle;
-	
-	/**
-	 * @implements \nexxes\widgets\PageInterface
-	 */
-	public function getTitle() {
-		return $this->PageTraitTitle;
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\PageInterface
-	 */
-	public function setTitle($newTitle) {
-		$this->PageTraitTitle = $newTitle;
-		return $this;
-	}
-	
-	
-	
-	
-	/**
 	 * @var \nexxes\widgets\WidgetRegistry
 	 */
 	private $PageTraitWidgetRegistry;
