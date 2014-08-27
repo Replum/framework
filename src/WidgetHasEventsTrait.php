@@ -2,7 +2,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\dependency\Gateway as dep;
 use \nexxes\widgets\EventHandlerCallOnceWrapper;
 use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -13,8 +12,7 @@ trait WidgetHasEventsTrait {
 	public function registerEventHandler($eventName, callable $handler, $prio = 5) {
 		$eventName = $this->_getFullEventName($eventName);
 		
-		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
+		$dispatcher = $this->getPage()->getEventDispatcher();
 		$dispatcher->addListener($eventName, $handler, $prio);
 		
 		return $this;
@@ -33,8 +31,7 @@ trait WidgetHasEventsTrait {
 	public function removeEventHandler($eventName, callable $handler) {
 		$eventName = $this->_getFullEventName($eventName);
 		
-		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
+		$dispatcher = $this->getPage()->getEventDispatcher();
 		$dispatcher->removeListener($eventName, $handler);
 		
 		return $this;
@@ -47,7 +44,7 @@ trait WidgetHasEventsTrait {
 		$eventName = $this->_getFullEventName($eventName);
 		
 		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
+		$dispatcher = $this->getPage()->getEventDispatcher();
 		
 		foreach ($dispatcher->getListeners($eventName) AS $listener) {
 			if (!($listener instanceof EventHandlerCallOnceWrapper)) {
@@ -68,17 +65,10 @@ trait WidgetHasEventsTrait {
 	 */
 	public function hasEventHandler($eventName) {
 		$eventName = $this->_getFullEventName($eventName);
-		
-		/* @var $dispatcher EventDispatcherInterface */
-		$dispatcher = dep::get(EventDispatcherInterface::class);
-		
-		return $dispatcher->hasListeners($eventName);
+		return $this->getPage()->getEventDispatcher()->hasListeners($eventName);
 	}
-	
 	
 	private function _getFullEventName($eventName) {
 		return 'widget.' . $this->getID() . '.' . $eventName;
 	}
 }
-
-
