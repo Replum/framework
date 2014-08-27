@@ -22,6 +22,8 @@ if (!defined('VENDOR_DIR')) {
 	
 	$autoloader = require_once(VENDOR_DIR .  '/autoload.php');
 	
+	$autoloader->addPsr4('nexxes\\widgets\\', __DIR__ . '/test');
+	
 	// Load dependencies injected by composer
 	\nexxes\dependency\Gateway::registerObject(\Composer\Autoload\ClassLoader::class, $autoloader);
 }
