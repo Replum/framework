@@ -65,10 +65,13 @@ class Executer {
 	
 	
 	
+	/**
+	 * @var array<callable>
+	 */
 	private $actionhandler = [];
 	
-	public function registerAction($actionName, $handlerClass) {
-		$this->actionhandler[$actionName] = $handlerClass;
+	public function registerAction($actionName, callable $handler) {
+		$this->actionhandler[$actionName] = $handler;
 		return $this;
 	}
 	
@@ -95,9 +98,9 @@ class Executer {
 		// Security measure: regenerate session id to avoid session fixation
 		//$this->session->migrate();
 		
-		$this->registerAction('page', \nexxes\widgets\actionhandler\PageHandler::class);
-		$this->registerAction('json', \nexxes\widgets\actionhandler\JsonHandler::class);
-		$this->registerAction('vendor', \nexxes\widgets\actionhandler\VendorHandler::class);
+		$this->registerAction('page', function(Executer $exec) { return [new \nexxes\widgets\actionhandler\PageHandler($exec), 'execute']; });
+		$this->registerAction('json', function(Executer $exec) { return [new \nexxes\widgets\actionhandler\JsonHandler($exec), 'execute']; });
+		$this->registerAction('vendor', function(Executer $exec) { return [new \nexxes\widgets\actionhandler\VendorHandler($exec), 'execute']; });
 	}
 	
 	public function execute() {
@@ -110,11 +113,10 @@ class Executer {
 			throw new \InvalidArgumentException('Unknown action type: ' . $action);
 		}
 		
-		$class = $this->actionhandler[$action];
-		$handler = new $class($this);
+		$handler = $this->actionhandler[$action]($this);
 		
 		/* @var $response \Symfony\Component\HttpFoundation\Response */
-		$response = $handler->execute();
+		$response = $handler();
 		$response->send();
 	}
 }
