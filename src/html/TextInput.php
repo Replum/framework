@@ -9,30 +9,8 @@ use \nexxes\widgets;
  *
  * @author dennis
  */
-class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInterface {
-	use widgets\WidgetTrait, widgets\IdentifiableTrait, widgets\HTMLWidgetTrait;
-	
-	/**
-	 * @var string
-	 */
-	private $value;
-	
-	/**
-	 * @param string $newValue
-	 * @return \nexxes\widgets\html\TextInput $this for chaining
-	 */
-	public function setValue($newValue) {
-		$this->value = $newValue;
-		return $this;
-	}
-	
-	public function getValue() {
-		return $this->value;
-	}
-	
-	protected function getValueHTML() {
-		return (\is_null($this->value) ? '' : ' value="' . $this->escape($this->value) . '"');
-	}
+class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInterface, widgets\WidgetHasChangeEventInterface {
+	use widgets\WidgetTrait, widgets\IdentifiableTrait, widgets\HTMLWidgetTrait, widgets\WidgetHasChangeEventTrait, widgets\WidgetHasEventsTrait;
 	
 	/**
 	 * @var string
@@ -57,6 +35,46 @@ class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInte
 	}
 	
 	
+	
+	
+	/**
+	 * @var string
+	 */
+	private $value;
+	
+	/**
+	 * @param string $newValue
+	 * @return \nexxes\widgets\html\TextInput $this for chaining
+	 */
+	public function setValue($newValue) {
+		$this->value = $newValue;
+		return $this;
+	}
+	
+	public function getValue() {
+		return $this->value;
+	}
+	
+	protected function getValueHTML() {
+		return (\is_null($this->value) ? '' : ' value="' . $this->escape($this->value) . '"');
+	}
+	
+	
+	
+	
+	/**
+	 * @param \nexxes\widgets\WidgetInterface $parent
+	 * @param string $name
+	 */
+	public function __construct(widgets\WidgetInterface $parent, $name) {
+		$this->setParent($parent);
+		$this->getPage()->getWidgetRegistry()->register($this);
+		$this->setName($name);
+	}
+	
+	
+	
+	
 	public function __toString() {
 		return '<input type="text"'
 			. $this->getIDHTML()
@@ -64,10 +82,11 @@ class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInte
 			. $this->getTabIndexHTML()
 			. $this->getTitleHTML()
 			
+			. $this->renderChangeHandlerHTML()
+			
 			. $this->getNameHTML()
 			. $this->getValueHTML()
 			
-			. ' onchange="nexxes.widgets.onchange(this);"'
 			. ' />';
 	}
 }
