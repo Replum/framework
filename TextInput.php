@@ -9,8 +9,8 @@ use \nexxes\widgets;
  *
  * @author dennis
  */
-class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInterface, widgets\WidgetHasChangeEventInterface {
-	use widgets\WidgetTrait, widgets\IdentifiableTrait, widgets\HTMLWidgetTrait, widgets\WidgetHasChangeEventTrait, widgets\WidgetHasEventsTrait;
+class TextInput implements widgets\WidgetHasChangeEventInterface {
+	use widgets\WidgetTrait, widgets\WidgetHasChangeEventTrait, widgets\WidgetHasEventsTrait;
 	
 	/**
 	 * @var string
@@ -77,10 +77,7 @@ class TextInput implements widgets\HTMLWidgetInterface, widgets\IdentifiableInte
 	
 	public function __toString() {
 		return '<input type="text"'
-			. $this->getIDHTML()
-			. $this->getClassesHTML()
-			. $this->getTabIndexHTML()
-			. $this->getTitleHTML()
+			. $this->getAttributesHTML()
 			
 			. $this->renderChangeHandlerHTML()
 			
