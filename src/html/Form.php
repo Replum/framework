@@ -4,15 +4,12 @@ namespace nexxes\widgets\html;
 
 use \nexxes\widgets;
 
-class Form implements widgets\HTMLWidgetInterface, widgets\WidgetContainerInterface {
-	use widgets\WidgetContainerTrait, widgets\HTMLWidgetTrait, widgets\IdentifiableTrait, widgets\WidgetTrait;
+class Form implements widgets\WidgetContainerInterface {
+	use widgets\WidgetContainerTrait, widgets\WidgetTrait;
 	
 	public function __toString() {
 		$r = '<form role="form"'
-			. $this->getClassesHTML()
-			. $this->getIDHTML()
-			. $this->getTabIndexHTML()
-			. $this->getTitleHTML()
+			. $this->getAttributesHTML()
 			. '>' . "\n";
 		
 		foreach ($this AS $widget) {

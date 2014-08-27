@@ -10,7 +10,7 @@ use \nexxes\widgets;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 abstract class FormElement implements FormElementInterface {
-	use widgets\WidgetTrait, widgets\HTMLWidgetTrait, widgets\IdentifiableTrait, widgets\WidgetHasChangeEventTrait, widgets\WidgetHasEventsTrait;
+	use widgets\WidgetTrait, widgets\WidgetHasChangeEventTrait, widgets\WidgetHasEventsTrait;
 	
 	/**
 	 * {@inheritdoc}

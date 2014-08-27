@@ -8,7 +8,7 @@ use \nexxes\widgets;
  *
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-interface FormElementInterface extends widgets\HTMLWidgetInterface, widgets\IdentifiableInterface, widgets\WidgetHasChangeEventInterface {
+interface FormElementInterface extends widgets\WidgetHasChangeEventInterface {
 	/**
 	 * Get the form this FormElement is associated with
 	 * 
