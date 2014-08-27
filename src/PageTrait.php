@@ -2,17 +2,20 @@
 
 namespace nexxes\widgets;
 
+use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use \Symfony\Component\EventDispatcher\EventDispatcher;
+
 trait PageTrait {
 	/**
 	 * @var array<\nexxes\widgets\StyleSheetInterface>
 	 */
-	private $_trait_Page_styles = [];
+	private $PageTraitStyles = [];
 	
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function addStyleSheet(\nexxes\widgets\StyleSheetInterface $style) {
-		$this->_trait_Page_styles[] = $style;
+		$this->PageTraitStyles[] = $style;
 		return $this;
 	}
 	
@@ -20,7 +23,7 @@ trait PageTrait {
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getStyleSheets() {
-		return $this->_trait_Page_styles;
+		return $this->PageTraitStyles;
 	}
 	
 	
@@ -29,13 +32,13 @@ trait PageTrait {
 	/**
 	 * @var array<\nexxes\widgets\ScriptInterface>
 	 */
-	private $_trait_Page_scripts = [];
+	private $PageTraitScripts = [];
 	
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function addScript(\nexxes\widgets\ScriptInterface $script) {
-		$this->_trait_Page_scripts[] = $script;
+		$this->PageTraitScripts[] = $script;
 		return $this;
 	}
 	
@@ -43,7 +46,7 @@ trait PageTrait {
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getScripts() {
-		return $this->_trait_Page_scripts;
+		return $this->PageTraitScripts;
 	}
 	
 	
@@ -52,20 +55,20 @@ trait PageTrait {
 	/**
 	 * @var string
 	 */
-	private $_trait_Page_title;
+	private $PageTraitTitle;
 	
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getTitle() {
-		return $this->_trait_Page_title;
+		return $this->PageTraitTitle;
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function setTitle($newTitle) {
-		$this->_trait_Page_title = $newTitle;
+		$this->PageTraitTitle = $newTitle;
 		return $this;
 	}
 	
@@ -75,32 +78,32 @@ trait PageTrait {
 	/**
 	 * @var \nexxes\widgets\WidgetRegistry
 	 */
-	private $_trait_Page_widgetRegistry;
+	private $PageTraitWidgetRegistry;
 	
 	/**
 	 * Silently initializes the widget registry with the provided default implementation on first access
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getWidgetRegistry() {
-		if (is_null($this->_trait_Page_widgetRegistry)) {
+		if (is_null($this->PageTraitWidgetRegistry)) {
 			$this->initWidgetRegistry();
 		}
 		
-		return $this->_trait_Page_widgetRegistry;
+		return $this->PageTraitWidgetRegistry;
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function initWidgetRegistry(\nexxes\widgets\WidgetRegistry $newWidgetRegistry = null) {
-		if (!is_null($this->_trait_Page_widgetRegistry)) {
+		if (!is_null($this->PageTraitWidgetRegistry)) {
 			throw new \RuntimeException("Can not replace existing widget registry!");
 		}
 		
 		if (is_null($newWidgetRegistry)) {
-			$this->_trait_Page_widgetRegistry = new \nexxes\widgets\WidgetRegistry();
+			$this->PageTraitWidgetRegistry = new \nexxes\widgets\WidgetRegistry();
 		} else {
-			$this->_trait_Page_widgetRegistry = $newWidgetRegistry;
+			$this->PageTraitWidgetRegistry = $newWidgetRegistry;
 		}
 		
 		return $this;
@@ -112,32 +115,69 @@ trait PageTrait {
 	/**
 	 * @var \nexxes\widgets\ParameterRegistry
 	 */
-	private $_trait_Page_parameterRegistry;
+	private $PageTraitParameterRegistry;
 	
 	/**
 	 * Silently initializes the parameter registry with the provided default implementation on first access
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function getParameterRegistry() {
-		if (is_null($this->_trait_Page_parameterRegistry)) {
+		if (is_null($this->PageTraitParameterRegistry)) {
 			$this->initParameterRegistry();
 		}
 		
-		return $this->_trait_Page_parameterRegistry;
+		return $this->PageTraitParameterRegistry;
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
 	public function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null) {
-		if (!is_null($this->_trait_Page_parameterRegistry)) {
+		if (!is_null($this->PageTraitParameterRegistry)) {
 			throw new \RuntimeException("Can not replace existing parameter registry!");
 		}
 		
 		if (is_null($newParameterRegistry)) {
-			$this->_trait_Page_parameterRegistry = new \nexxes\widgets\ParameterRegistry();
+			$this->PageTraitParameterRegistry = new \nexxes\widgets\ParameterRegistry();
 		} else {
-			$this->_trait_Page_parameterRegistry = $newParameterRegistry;
+			$this->PageTraitParameterRegistry = $newParameterRegistry;
+		}
+		
+		return $this;
+	}
+	
+	
+	
+	
+	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 */
+	private $PageTraitEventDispatcher;
+	
+	/**
+	 * Silently initializes the event dispatcher with a default implementation on first access
+	 * @implements \nexxes\widgets\PageInterface
+	 */
+	public function getEventDispatcher() {
+		if (is_null($this->PageTraitEventDispatcher)) {
+			$this->initEventDispatcher();
+		}
+		
+		return $this->PageTraitEventDispatcher;
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\PageInterface
+	 */
+	public function initEventDispatcher(EventDispatcherInterface $newEventDispatcher = null) {
+		if (!is_null($this->PageTraitEventDispatcher)) {
+			throw new \RuntimeException("Can not replace existing event dispatcher!");
+		}
+		
+		if (is_null($newEventDispatcher)) {
+			$this->PageTraitEventDispatcher = new EventDispatcher();
+		} else {
+			$this->PageTraitEventDispatcher = $newEventDispatcher;
 		}
 		
 		return $this;
