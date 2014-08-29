@@ -309,6 +309,7 @@ trait WidgetTrait {
 	 * Get a HTML representation of the widget
 	 * 
 	 * @return string
+	 * @codeCoverageIgnore
 	 */
 	protected function getAttributesHTML() {
 		\sort($this->WidgetTraitClasses);
@@ -328,6 +329,7 @@ trait WidgetTrait {
 	 * 
 	 * @param string $string
 	 * @return string
+	 * @codeCoverageIgnore
 	 */
 	protected function escape($string) {
 		return \htmlentities($string, ENT_HTML5, 'UTF-8');

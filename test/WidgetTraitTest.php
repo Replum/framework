@@ -4,6 +4,7 @@ namespace nexxes\widgets;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @coversDefaultClass \nexxes\widgets\WidgetTrait
  */
 class WidgetTraitTest extends \PHPUnit_Framework_TestCase {
 	/**
@@ -131,6 +132,15 @@ class WidgetTraitTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
+	 * @covers ::setTabIndex
+	 * @expectedException \Exception
+	 */
+	public function testSetTabIndexWrongType() {
+		$mock = new WidgetTraitMock();
+		$mock->setTabIndex("fail");
+	}
+	
+	/**
 	 * @covers ::getTitle
 	 * @covers ::setTitle
 	 */
@@ -150,6 +160,15 @@ class WidgetTraitTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
+	 * @covers ::setTitle
+	 * @expectedException \Exception
+	 */
+	public function testSetTitleWrongType() {
+		$mock = new WidgetTraitMock();
+		$mock->setTitle(new \stdClass());
+	}
+	
+	/**
 	 * @covers ::getID
 	 * @covers ::setID
 	 */
@@ -164,5 +183,51 @@ class WidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		
 		$mock->setID($id2, true);
 		$this->assertEquals($id2, $mock->getID());
+	}
+	
+	/**
+	 * @covers ::isRoot
+	 */
+	public function testIsRoot() {
+		// No parent exists, so it is root
+		$mock1 = new WidgetTraitMock();
+		$this->assertTrue($mock1->isRoot());
+		
+		// Parent exists, so no root
+		$mock2 = new WidgetTraitMock();
+		$mock3 = (new WidgetTraitMock())->setParent($mock2);
+		$this->assertFalse($mock3->isRoot());
+		
+		// Page is always root
+		$page = new PageTraitMock();
+		$this->assertTrue($page->isRoot());
+	}
+	
+	/**
+	 * @covers ::getParent
+	 * @covers ::setParent
+	 */
+	public function testGetSetParent() {
+		$parent = new WidgetTraitMock();
+		
+		// Setter must return object
+		$child = (new WidgetTraitMock())->setParent($parent);
+		$this->assertInstanceOf(WidgetTraitMock::class, $child);
+		
+		// Verify parent was set
+		$this->assertSame($parent, $child->getParent());
+		
+		// Duplicate set should just return object itself
+		$this->assertSame($child, $child->setParent($parent));
+		$this->assertSame($parent, $child->getParent());
+	}
+	
+	/**
+	 * @covers ::getParent
+	 * @expectedException \Exception
+	 */
+	public function testGetParentNoParentSet() {
+		$child = new WidgetTraitMock();
+		$child->getParent();
 	}
 }
