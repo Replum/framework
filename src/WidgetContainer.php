@@ -5,6 +5,10 @@ namespace nexxes\widgets;
 class WidgetContainer implements WidgetContainerInterface {
 	use WidgetTrait, WidgetContainerTrait;
 	
+	public function __construct(WidgetInterface $parent) {
+		$this->setParent($parent);
+	}
+	
 	public function __toString() {
 		$x = $this->getAttributesHTML();
 		
