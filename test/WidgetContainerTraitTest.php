@@ -118,4 +118,17 @@ class WidgetContainerTraitTest extends \PHPUnit_Framework_TestCase {
 		$l[] = $this->getMock(WidgetInterface::class);
 		unset($l[2]);
 	}
+	
+	/**
+	 * Verify the same object is only added once to the container
+	 */
+	public function testAddSameObject() {
+		$l = new WidgetContainerTraitMock;
+		
+		$mock = $this->getMock(WidgetInterface::class);
+		$l[] = $mock;
+		$l[] = $mock;
+		
+		$this->assertCount(1, $l);
+	}
 }
