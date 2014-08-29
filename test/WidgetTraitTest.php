@@ -230,4 +230,34 @@ class WidgetTraitTest extends \PHPUnit_Framework_TestCase {
 		$child = new WidgetTraitMock();
 		$child->getParent();
 	}
+	
+	/**
+	 * Verify the escape function quotes only what is desired.
+	 */
+	public function testEscape() {
+		$widget = new WidgetTraitMock();
+		
+		$checkEquals = [
+			'SimpleString',
+			// don't quote dots
+			'Namespace.Class',
+			// Allow scripts inside event handlers
+			'alert(\'Hello World\');',
+		];
+		
+		foreach ($checkEquals AS $string) {
+			$this->assertEquals($string, $widget->publicEscape($string));
+		}
+		
+		$checkQuotes = [
+			// No html tag injections
+			'<script>unsave()</script>',
+			// No break out of double quoted attribute values
+			'" inject="',
+		];
+		
+		foreach ($checkQuotes AS $string) {
+			$this->assertNotEquals($string, $widget->publicEscape($string));
+		}
+	}
 }

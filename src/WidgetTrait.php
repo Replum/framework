@@ -332,6 +332,6 @@ trait WidgetTrait {
 	 * @codeCoverageIgnore
 	 */
 	protected function escape($string) {
-		return \htmlentities($string, ENT_HTML5, 'UTF-8');
+		return \htmlspecialchars($string, ENT_HTML5|ENT_COMPAT, 'UTF-8');
 	}
 }

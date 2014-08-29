@@ -11,4 +11,11 @@ class WidgetTraitMock implements WidgetInterface {
 	public function __toString() {
 		return "";
 	}
+	
+	/**
+	 * Make escape accessible from tests
+	 */
+	public function publicEscape($string) {
+		return $this->escape($string);
+	}
 }
