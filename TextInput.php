@@ -66,10 +66,9 @@ class TextInput implements widgets\WidgetHasChangeEventInterface {
 	 * @param \nexxes\widgets\WidgetInterface $parent
 	 * @param string $name
 	 */
-	public function __construct(widgets\WidgetInterface $parent, $name) {
+	public function __construct(widgets\WidgetInterface $parent) {
 		$this->setParent($parent);
 		$this->getPage()->getWidgetRegistry()->register($this);
-		$this->setName($name);
 	}
 	
 	
