@@ -1,6 +1,10 @@
 <?php
 
-namespace nexxes\widgets;
+namespace nexxes\widgets\pagedef;
+
+use \nexxes\widgets\PageInterface;
+use \nexxes\widgets\WidgetContainerInterface;
+use \nexxes\widgets\WidgetCompositeInterface;
 
 /**
  * The PageInitializer creates the widget structure specified for a page.
@@ -15,58 +19,34 @@ namespace nexxes\widgets;
  *
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class PageInitializer {
-	public $namespaces = [
-		'\nexxes\widgets\bootstrap',
-		'\nexxes\widgets\html',
-		'\nexxes\widgets',
-	];
+class ArrayImporter implements ImporterInterface {
+	/**
+	 * List of namespaces to search in for Widget class creation
+	 * @var array<string>
+	 */
+	private $namespaces = [];
 	
-	function blubb() {
-		$pageStructureDefinition = [
-			// Named properties: (e.g. title, class, id)
-			// These properties should not contain other widgets, use slots or children for that
-			'properties' => [
-				'title' => 'test page title',
-			],
-			
-			// If the page implements WidgetComposite, slots can be used
-			'slots' => [
-				'slotname' => $widgetStructureDefinition,
-			],
-			
-			'widgets' => [
-				$widgetStructureDefinition,
-			]
-		];
-		
-		// A widget structure definition is similar to the $pageStructureDefinition
-		$widgetStructureDefinition = [
-			// the class of the widget to create
-			'class' => 'WidgetClass',
-			
-			// Properties like in $pageStructureDefinition
-			'properties' => [
-				'propname' => 'propvalue',
-			],
-			
-			// If the widget implements the WidgetCompositeInterface, slots can be used
-			'slots' => [
-				'slotname' => $widgetStructureDefinition,
-			],
-			
-			// If the widget implements the WidgetContainerInterface, widgets can be created
-			'widgets' => [
-				$widgetStructureDefinition,
-			],
-		];
+	/**
+	 * @param array<string> $namespaces
+	 */
+	public function __construct($namespaces = []) {
+		$this->namespaces = $namespaces;
 	}
 	
-	public function run(PageInterface $page, array $pageStructure) {
-		$pageStructure['class'] = \get_class($page);
+	public function importFile(PageInterface $page, $filename) {
+		if (!\file_exists($filename) || !\is_readable($filename)) {
+			throw new \RuntimeException('Can not open page structure file "' . $filename . '"');
+		}
+		
+		$data = \file_get_contents($filename);
+		return $this->import($page, $data);
+	}
+	
+	public function import(PageInterface $page, $data) {
+		$data['class'] = \get_class($page);
 		
 		return 'return function(' . PageInterface::class . ' $page) {' . PHP_EOL
-			. $this->generateWidgetInitialization([], 'page', $pageStructure) . PHP_EOL
+			. $this->generateWidgetInitialization([], 'page', $data) . PHP_EOL
 			. '};' . PHP_EOL;
 	}
 	
@@ -117,10 +97,10 @@ class PageInitializer {
 					throw new \InvalidArgumentException('No accessible setter for property "' . $propertyName . '" found.');
 				}
 				
-				$r .= "\t" . '->' . $setter . '(' . \var_export($propertyValue, true) . ')' . PHP_EOL;
+				$r .= PHP_EOL . "\t" . '->' . $setter . '(' . \var_export($propertyValue, true) . ')';
 			}
 			
-			$r .= ';' . PHP_EOL;
+			$r .= PHP_EOL . ';' . PHP_EOL . PHP_EOL;
 		}
 		
 		// Add children
@@ -141,7 +121,7 @@ class PageInitializer {
 			}
 			
 			foreach ($widgetStructure['slots'] AS $slotName => $slotStructure) {
-				$r .= $currentVar . '[' . $slotName . '] = ' . $this->generateWidgetInitialization($newPrefix, $slotName, $slotStructure) . PHP_EOL;
+				$r .= $currentVar . '[' . \var_export($slotName, true) . '] = ' . $this->generateWidgetInitialization($newPrefix, $slotName, $slotStructure) . PHP_EOL;
 			}
 		}
 		

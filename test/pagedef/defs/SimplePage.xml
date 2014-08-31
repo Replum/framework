@@ -1,0 +1,8 @@
+<page>
+	<WidgetContainer>
+		<property name="class" value="row" />
+		<Text>
+			<property name="text">This is a simple text</property>
+		</Text>
+	</WidgetContainer>
+</page>
