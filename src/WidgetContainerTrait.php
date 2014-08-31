@@ -111,7 +111,7 @@ trait WidgetContainerTrait {
 	 */
 	protected function validateWidget($widget) {
 		if (!($widget instanceof WidgetInterface)) {
-			throw new \InvalidArgumentException('A widget container can only contain contain elements implementing the ' . WidgetInterface::class . ' interface');
+			throw new \InvalidArgumentException('A widget container can only contain elements implementing the ' . WidgetInterface::class . ' interface');
 		}
 	}
 }
