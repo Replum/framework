@@ -61,6 +61,11 @@ class XMLImporter implements ImporterInterface {
 			$struct['class'] = $node->attributes->getNamedItem('class')->value;
 		}
 		
+		// Attribute of $page to use as a shortcut to this widget
+		if ($node->hasAttributes() && ($node->attributes->getNamedItem('name') !== null)) {
+			$struct['name'] = $node->attributes->getNamedItem('name')->value;
+		}
+		
 		foreach ($node->childNodes AS $childNode) {
 			if (($childNode instanceof \DOMText) && ($childNode->isWhitespaceInElementContent())) { continue; }
 			

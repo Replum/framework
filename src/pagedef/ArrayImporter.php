@@ -76,6 +76,11 @@ class ArrayImporter implements ImporterInterface {
 		// Non-page widgets must be created first
 		else {
 			$class = $this->resolveClass($widgetStructure['class']);
+			
+			if (isset($widgetStructure['name'])) {
+				$r .= '$page->' . $widgetStructure['name'] . ' = ';
+			}
+			
 			$r .= $currentVar . ' = new ' . $class . '(' . $parentVar . ');' . PHP_EOL;
 		}
 		

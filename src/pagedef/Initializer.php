@@ -3,9 +3,10 @@
 namespace nexxes\widgets\pagedef;
 
 /**
- * The Initializer creates the widgets according to a (cached) page structure definition.
+ * The Initializer creates the widgets according to a page structure definition.
+ * Currently xml and php-array are available as possible storage formats.
  * 
- *
+ * @todo Implement caching
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class Initializer {
@@ -61,8 +62,6 @@ class Initializer {
 		else {
 			throw new \InvalidArgumentException('Can not initialize widgets for page "' . \get_class($page) . '"');
 		}
-		
-		echo '<pre>' . $phpCode . '</pre><br>' . PHP_EOL;
 		
 		$initializer = eval($phpCode);
 		$initializer($page);
