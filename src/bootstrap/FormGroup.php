@@ -4,8 +4,6 @@ namespace nexxes\widgets\bootstrap;
 
 use \nexxes\widgets\html\FormElement;
 use \nexxes\widgets\html\FormElementInterface;
-
-use \nexxes\widgets\WidgetTrait;
 use \nexxes\widgets\WidgetCompositeInterface;
 use \nexxes\widgets\WidgetCompositeTrait;
 
@@ -13,7 +11,7 @@ use \nexxes\widgets\WidgetCompositeTrait;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class FormGroup extends FormElement implements FormElementInterface, WidgetCompositeInterface {
-	use WidgetTrait, WidgetCompositeTrait;
+	use WidgetCompositeTrait;
 	
 	/**
 	 * Get success status of this form element
@@ -138,26 +136,26 @@ class FormGroup extends FormElement implements FormElementInterface, WidgetCompo
 		
 		$r = '<div'
 			. $this->getAttributesHTML()
-			. '>'
-			. '<label class="control-label col-lg-2" for="' . $this['element']->getID() . '">' . $this['element']->getName() . '</label>'
+			. '>' . PHP_EOL
+			. '<label class="control-label col-lg-2" for="' . $this['element']->getID() . '">' . $this['element']->getName() . '</label>' . PHP_EOL
 			. ($this['label'] ?: "")
 			. '<div class="col-lg-10">' . ($this['element'] ?: "")
 		;
 		
 		if ($this->hasFeedback()) {
 			if ($this->hasSuccess()) {
-				$r .= '<span class="glyphicon glyphicon-ok form-control-feedback"></span>';
+				$r .= '<span class="glyphicon glyphicon-ok form-control-feedback"></span>' . PHP_EOL;
 			} elseif ($this->hasWarning()) {
-				$r .= '<span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>';
+				$r .= '<span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>' . PHP_EOL;
 			} elseif ($this->hasError()) {
-				$r .= '<span class="glyphicon glyphicon-remove sign form-control-feedback"></span>';
+				$r .= '<span class="glyphicon glyphicon-remove sign form-control-feedback"></span>' . PHP_EOL;
 			}
 		}
 		
-		$r .= '<span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.A block of help text that breaks onto a new line and may extend beyond one line.</span>'
-			. '</div>'
-			. '<script>window.setTimeout(function(){ console.log("Remove element"); $("#' . $this->getID() . '").removeClass("has-success"); $("#' . $this->getID() . ' .form-control-feedback").addClass("hidden"); }, 5000);</script>'
-			. '</div>'
+		$r .= '<span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.A block of help text that breaks onto a new line and may extend beyond one line.</span>'  . PHP_EOL
+			. '</div>'  . PHP_EOL
+			. '<script>window.setTimeout(function(){ console.log("Remove element"); $("#' . $this->getID() . '").removeClass("has-success"); $("#' . $this->getID() . ' .form-control-feedback").addClass("hidden"); }, 5000);</script>'  . PHP_EOL
+			. '</div>'  . PHP_EOL
 		;
 		
 		return $r;
