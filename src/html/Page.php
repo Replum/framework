@@ -2,10 +2,12 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets;
+use \nexxes\widgets\PageInterface;
+use \nexxes\widgets\PageTrait;
+use \nexxes\widgets\WidgetContainerTrait;
 
-abstract class Page implements widgets\PageInterface {
-	use widgets\PageTrait, widgets\WidgetContainerTrait, widgets\WidgetTrait;
+abstract class Page implements PageInterface {
+	use PageTrait, WidgetContainerTrait;
 	
 	public $id = "";
 	
