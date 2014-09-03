@@ -2,13 +2,14 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets;
+use \nexxes\widgets\WidgetInterface;
+use \nexxes\widgets\WidgetTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class Text implements widgets\WidgetInterface {
-	use widgets\WidgetTrait;
+class Text implements WidgetInterface {
+	use WidgetTrait;
 	
 	/**
 	 * The text value of this Text widget
@@ -79,10 +80,10 @@ class Text implements widgets\WidgetInterface {
 	 * @return array<string> The list of possible types to set via setType()
 	 */
 	public function validTypes() {
-		return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ];
+		return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', ];
 	}
 	
-	public function __construct(widgets\WidgetInterface $parent) {
+	public function __construct(WidgetInterface $parent) {
 		$this->setParent($parent);
 	}
 	
