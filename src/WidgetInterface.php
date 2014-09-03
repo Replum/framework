@@ -31,6 +31,26 @@ interface WidgetInterface {
 	function setParent(WidgetInterface $newParent);
 	
 	/**
+	 * Return the complete list of ancestors of this widget up to the root element.
+	 * The first element is the parent and the last element is the root.
+	 * If $filterByType is supplied, only elements that are an instance of this type are returned.
+	 * 
+	 * @param string $filterByType
+	 * @return array<\nexxes\widgets\WidgetInterface>
+	 */
+	function getAncestors($filterByType = null);
+	
+	/**
+	 * Return the list of all widgets below this widget in the tree.
+	 * The returned list is not ordnered in a specific way.
+	 * If $filterByType is supplied, only elements that are an instance of this type are returned.
+	 * 
+	 * @param string $filterByType
+	 * @return array<\nexxes\widgets\WidgetInterface>
+	 */
+	function getDescendants($filterByType = null);
+	
+	/**
 	 * Get the page this widget belongs to
 	 * 
 	 * @return \nexxes\widgets\PageInterface

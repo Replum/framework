@@ -29,6 +29,30 @@ trait WidgetTrait {
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
+	public function getAncestors($filterByType = null) {
+		if ($this->isRoot()) {
+			return [];
+		}
+		
+		$ancestors = $this->getParent()->getAncestors($filterByType);
+		
+		if (is_null($filterByType) || ($this->getParent() instanceof $filterByType)) {
+			\array_unshift($ancestors, $this->getParent());
+		}
+		
+		return $ancestors;
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function getDescendants($filterByType = null) {
+		return [];
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
 	public function setParent(WidgetInterface $newParent) {
 		// Avoid recursion
 		if ($this->WidgetTraitParent === $newParent) {
