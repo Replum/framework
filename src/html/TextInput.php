@@ -2,15 +2,17 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets;
+use \nexxes\widgets\WidgetHasChangeEventInterface;
+use \nexxes\widgets\WidgetHasChangeEventTrait;
+use \nexxes\widgets\WidgetHasEventsTrait;
+use \nexxes\widgets\WidgetInterface;
+use \nexxes\widgets\WidgetTrait;
 
 /**
- * Description of TextInput
- *
- * @author dennis
+ * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class TextInput implements widgets\WidgetHasChangeEventInterface {
-	use widgets\WidgetTrait, widgets\WidgetHasChangeEventTrait, widgets\WidgetHasEventsTrait;
+class TextInput implements WidgetHasChangeEventInterface {
+	use WidgetTrait, WidgetHasChangeEventTrait, WidgetHasEventsTrait;
 	
 	/**
 	 * @var string
@@ -33,8 +35,6 @@ class TextInput implements widgets\WidgetHasChangeEventInterface {
 	protected function getNameHTML() {
 		return (\is_null($this->name) ? '' : ' name="' . $this->escape($this->name) . '"');
 	}
-	
-	
 	
 	
 	/**
@@ -60,18 +60,14 @@ class TextInput implements widgets\WidgetHasChangeEventInterface {
 	}
 	
 	
-	
-	
 	/**
 	 * @param \nexxes\widgets\WidgetInterface $parent
 	 * @param string $name
 	 */
-	public function __construct(widgets\WidgetInterface $parent) {
+	public function __construct(WidgetInterface $parent) {
 		$this->setParent($parent);
 		$this->getPage()->getWidgetRegistry()->register($this);
 	}
-	
-	
 	
 	
 	public function __toString() {
