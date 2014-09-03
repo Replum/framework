@@ -2,18 +2,23 @@
 
 namespace nexxes\widgets;
 
+/**
+ * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ */
 trait WidgetCompositeTrait {
+	use WidgetTrait;
+	
 	/**
 	 * The real normalized slot definition
 	 * @var array
 	 */
-	private $_trait_WidgetComposite_slots = [];
+	private $WidgetCompositeTraitSlots=  [];
 	
 	/**
 	 * The children of this widget, stored by their slot
 	 * @var array<\nexxes\widgets\WidgetInterface>
 	 */
-	private $_trait_WidgetComposite_children = [];
+	private $WidgetCompositeTraitChildren = [];
 	
 	
 	
@@ -22,25 +27,25 @@ trait WidgetCompositeTrait {
 	 * @implements \nexxes\widgets\WidgetCompositeInterface
 	 */
 	public function childSlot($name, array $allowedClasses = [ \nexxes\widgets\WidgetInterface::class ]) {
-		$this->_trait_WidgetComposite_slots[$name] = $allowedClasses;
+		$this->WidgetCompositeTraitSlots[$name] = $allowedClasses;
 	}
 	
 	/**
 	 * @implements \ArrayAccess
 	 */
 	public function offsetExists($slot) {
-		return isset($this->_trait_WidgetComposite_children[$slot]);
+		return isset($this->WidgetCompositeTraitChildren[$slot]);
 	}
 	
 	/**
 	 * @implements \ArrayAccess
 	 */
 	public function offsetGet($slot) {
-		if (isset($this->_trait_WidgetComposite_children[$slot])) {
-			return $this->_trait_WidgetComposite_children[$slot];
+		if (isset($this->WidgetCompositeTraitChildren[$slot])) {
+			return $this->WidgetCompositeTraitChildren[$slot];
 		}
 		
-		if (isset($this->_trait_WidgetComposite_slots[$slot])) {
+		if (isset($this->WidgetCompositeTraitSlots[$slot])) {
 			return null;
 		}
 		
@@ -51,41 +56,41 @@ trait WidgetCompositeTrait {
 	 * @implements \ArrayAccess
 	 */
 	public function offsetSet($slot, $value) {
-		if (!isset($this->_trait_WidgetComposite_slots[$slot])) {
+		if (!isset($this->WidgetCompositeTraitSlots[$slot])) {
 			throw new \InvalidArgumentException('Trying to set invalid slot "' . $slot . '"');
 		}
 		
-		if (isset($this->_trait_WidgetComposite_children[$slot]) && ($this->_trait_WidgetComposite_children[$slot] === $value)) {
+		if (isset($this->WidgetCompositeTraitChildren[$slot]) && ($this->WidgetCompositeTraitChildren[$slot] === $value)) {
 			return $value;
 		}
 		
-		foreach ($this->_trait_WidgetComposite_slots[$slot] AS $class) {
+		foreach ($this->WidgetCompositeTraitSlots[$slot] AS $class) {
 			if ($value instanceof $class) {
 				// FIXME: unset parent of old child
-				$this->_trait_WidgetComposite_children[$slot] = $value;
+				$this->WidgetCompositeTraitChildren[$slot] = $value;
 				$value->setParent($this);
 				$this->setChanged(true);
 				return $value;
 			}
 		}
 		
-		throw new \InvalidArgumentException('Cannot set slot "' . $slot . '", supplied argument does not implement one of the possible classes "' . \implode('", "', $this->_trait_WidgetComposite_slots[$slot]) . '"');
+		throw new \InvalidArgumentException('Cannot set slot "' . $slot . '", supplied argument does not implement one of the possible classes "' . \implode('", "', $this->WidgetCompositeTraitSlots[$slot]) . '"');
 	}
 	
 	/**
 	 * @implements \ArrayAccess
 	 */
 	public function offsetUnset($slot) {
-		if (!isset($this->_trait_WidgetComposite_slots[$slot])) {
+		if (!isset($this->WidgetCompositeTraitSlots[$slot])) {
 			throw new \InvalidArgumentException('Invalid slot "' . $slot . '"');
 		}
 		
-		if (!isset($this->_trait_WidgetComposite_children[$slot])) {
+		if (!isset($this->WidgetCompositeTraitChildren[$slot])) {
 			return;
 		}
 		
 		// FIXME: unset parent of old child
-		unset($this->_trait_WidgetComposite_children[$slot]);
+		unset($this->WidgetCompositeTraitChildren[$slot]);
 		$this->setChanged(true);
 	}
 	
@@ -93,13 +98,13 @@ trait WidgetCompositeTrait {
 	 * @implements \IteratorAggregate
 	 */
 	public function getIterator() {
-		return new \ArrayIterator($this->_trait_WidgetComposite_children);
+		return new \ArrayIterator($this->WidgetCompositeTraitChildren);
 	}
 	
 	/**
 	 * @implements \Countable
 	 */
 	public function count() {
-		return \count($this->_trait_WidgetComposite_children);
+		return \count($this->WidgetCompositeTraitChildren);
 	}
 }
