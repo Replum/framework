@@ -2,71 +2,69 @@
 
 namespace nexxes\widgets\pagedef;
 
-use \nexxes\widgets\PageInterface;
+use \nexxes\widgets\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class XMLImporter implements ImporterInterface {
 	/**
-	 * @var \nexxes\widgets\pagedef\ArrayImporter
+	 * The resolver to find fully qualified class names
+	 * @var callable
 	 */
-	private $arrayImporter;
+	private $resolver;
 	
-	/**
-	 * Initialize the XMLImporter with an ArrayImporter if the ArrayImporter requires special setup like additional namespaces, etc.
-	 * 
-	 * @param \nexxes\widgets\pagedef\ArrayImporter $arrayImporter
-	 */
-	public function __construct(ArrayImporter $arrayImporter = null) {
-		$this->arrayImporter = ($arrayImporter ?: new ArrayImporter());
+	
+	
+	public function __construct(callable $resolver = null) {
+		if ($resolver !== null) {
+			$this->resolver = $resolver;
+		} else {
+			$this->resolver = [$this, 'defaultResolver'];
+		}
 	}
 	
-	public function importFile(PageInterface $page, $filename) {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function importFile(WidgetInterface $root, $filename) {
 		if (!\file_exists($filename) || !\is_readable($filename)) {
-			throw new \RuntimeException('Can not open page structure file "' . $filename . '"');
+			throw new \RuntimeException('Can not open widget structure file "' . $filename . '"');
 		}
 		
 		$data = \file_get_contents($filename);
-		return $this->import($page, $data);
-	}
-	
-	public function import(PageInterface $page, $data) {
-		return $this->arrayImporter->import($page, $this->createArrayStructure($data));
+		return $this->import($root, $data);
 	}
 	
 	/**
-	 * @param string $xmlstring
+	 * {@inheritdoc}
 	 */
-	public function createArrayStructure($xmlstring) {
-		$root = new \DOMDocument();
-		$root->loadXML($xmlstring);
+	public function import(WidgetInterface $root, $xmlstring) {
+		$dom = new \DOMDocument();
+		$dom->loadXML($xmlstring);
 		
-		if (!$root->hasChildNodes() || ($root->childNodes->item(0)->nodeName !== 'page')) {
-			throw new \RuntimeException('Invalid document structure, XML document must be contained within a <page> element.');
+		// FIXME: better error handling
+		if (!$dom->hasChildNodes()) {
+			throw new \RuntimeException('Invalid document structure, empty root element');
 		}
 		
-		return $this->recurse($root->childNodes->item(0));
+		$struct = $this->recurse(new structure\Widget(\get_class($root)), $dom->childNodes->item(0));
+		return $struct->generateCode(null, [], 'root');
 	}
 	
-	public function recurse(\DOMNode $node, $depth = 0) {
-		$struct = [
-			'properties' => [],
-			'children' => [],
-			'slots' => [],
-		];
-		
-		// Class to use for this widget
+	private function recurse(structure\Widget $widget, \DOMNode $node) {
+		// Class to use for child widget
 		if ($node->hasAttributes() && ($node->attributes->getNamedItem('class') !== null)) {
-			$struct['class'] = $node->attributes->getNamedItem('class')->value;
+			$widget->class = \call_user_func($this->resolver, $node->attributes->getNamedItem('class')->value);
 		}
-		
-		// Attribute of $page to use as a shortcut to this widget
-		if ($node->hasAttributes() && ($node->attributes->getNamedItem('name') !== null)) {
-			$struct['name'] = $node->attributes->getNamedItem('name')->value;
+
+		// Use XML tag as class name
+		elseif ($widget->class === null) {
+			$widget->class = \call_user_func($this->resolver, $node->nodeName);
 		}
 		
 		foreach ($node->childNodes AS $childNode) {
+			// Skip whitespace
 			if (($childNode instanceof \DOMText) && ($childNode->isWhitespaceInElementContent())) { continue; }
 			
 			/* @var $childNode \DOMNode */
@@ -74,37 +72,35 @@ class XMLImporter implements ImporterInterface {
 			
 			// Property handling
 			if ($childName === 'property') {
-				$struct['properties'] = \array_merge($struct['properties'], $this->parseProperty($childNode));
+				// FIXME
+				$widget->properties[] = $this->parseProperty($childNode);
 			}
 			
 			// Child nodes
-			elseif ($childNode->hasChildNodes()) {
-				$data = $this->recurse($childNode, $depth+1);
-				if (!isset($data['class'])) {
-					$data['class'] = $childName;
+			else {
+				// Check for slot
+				if (isset($childNode->attributes) && ($childNode->attributes->getNamedItem('slot') !== null)) {
+					$slotname = $childNode->attributes->getNamedItem('slot')->value;
+					if (\substr($slotname, -2) === '[]') {
+						$slotname = \substr($slotname, 0, \strlen($slotname)-2);
+						$append = true;
+					} else {
+						$append = false;
+					}
+					
+					$childWidget = new structure\Slot(null, $slotname, $append);
 				}
 				
-				if ($childNode->attributes->getNamedItem('slot')) {
-					$struct['slots'][$childNode->attributes->getNamedItem('slot')->value] = $data;
-				} else {
-					$struct['children'][] = $data;
+				// Simple child
+				else {
+					$childWidget = new structure\Child(null);
 				}
+				
+				$widget->add($this->recurse($childWidget, $childNode));
 			}
 		}
 		
-		if (!\count($struct['properties'])) {
-			unset($struct['properties']);
-		}
-		
-		if (!\count($struct['children'])) {
-			unset($struct['children']);
-		}
-		
-		if ($struct['slots'] === []) {
-			unset($struct['slots']);
-		}
-		
-		return $struct;
+		return $widget;
 	}
 	
 	/**
@@ -112,7 +108,7 @@ class XMLImporter implements ImporterInterface {
 	 * 
 	 * @param \DOMNode $node
 	 */
-	public function parseProperty(\DOMNode $node) {
+	private function parseProperty(\DOMNode $node) {
 		if ($node->nodeName !== 'property') {
 			throw new \InvalidArgumentException('Non-property node should never have been suplied to ' . __METHOD__);
 		}
@@ -150,14 +146,24 @@ class XMLImporter implements ImporterInterface {
 					throw new \UnexpectedValueException('Can only assign a single widget to a property in line ' . $propertyChildNode->getLineNo());
 				}
 
-				$attrValue = $this->recurse($propertyChildNode);
+				$attrValue = $this->recurse(new structure\Widget(null), $propertyChildNode);
 			}
 		}
 
 		if (!isset($attrValue)) {
 			throw new \UnexpectedValueException('No property value set in line ' . $node->getLineNo());
 		}
-
-		return [ $attrName => $attrValue ];
+		
+		return new structure\Property($attrName, $attrValue);
+	}
+	
+	/**
+	 * The default resolver just returns the classname unchanged, supply a custom resolver if required
+	 * 
+	 * @param string $classname
+	 * @return string
+	 */
+	private function defaultResolver($classname) {
+		return $classname;
 	}
 }

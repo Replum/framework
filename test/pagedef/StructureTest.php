@@ -3,7 +3,6 @@
 namespace nexxes\widgets\pagedef;
 
 use \nexxes\widgets\PageTraitMock;
-use \nexxes\widgets\WidgetContainer;
 use \nexxes\widgets\WidgetCompositeTraitMock;
 use \nexxes\widgets\WidgetContainerTraitMock;
 use \nexxes\widgets\html\Text;
@@ -13,8 +12,10 @@ use \nexxes\widgets\html\Text;
  * @  coversDefaultClass \nexxes\widgets\pagedef\ArrayImporter
  */
 class StructureTest extends \PHPUnit_Framework_TestCase {
-	protected function loadStruct($name) {
-		return include(__DIR__ . '/defs/' . \substr($name, 4) . '.php');
+	protected function loadInizializer($name, $root) {
+		$struct = include(__DIR__ . '/defs/' . \substr($name, 4) . '.php');
+		$code = $struct->generateCode(null, [], 'root');
+		return eval($code);
 	}
 	
 	/**
@@ -23,9 +24,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testSimpleStruct() {
 		$page = new PageTraitMock();
-		$struct = $this->loadStruct(__FUNCTION__);
-		$code = $struct->generateCode(null, [], 'root');
-		$func = eval($code);
+		$func = $this->loadInizializer(__FUNCTION__, $page);
 		$func($page);
 		
 		$this->assertCount(1, $page);
@@ -40,9 +39,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testMultiChildrenStruct() {
 		$page = new PageTraitMock();
-		$struct = $this->loadStruct(__FUNCTION__);
-		$code = $struct->generateCode(null, [], 'root');
-		$func = eval($code);
+		$func = $this->loadInizializer(__FUNCTION__, $page);
 		$func($page);
 		
 		$this->assertCount(3, $page);
@@ -62,9 +59,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase {
 		$root->childSlot('slot3');
 		$root['slot3'] = new WidgetContainerTraitMock();
 		
-		$struct = $this->loadStruct(__FUNCTION__);
-		$code = $struct->generateCode(null, [], 'root');
-		$func = eval($code);
+		$func = $this->loadInizializer(__FUNCTION__, $root);
 		$func($root);
 		
 		$this->assertTrue($root['slot1']->hasClass('class1'));

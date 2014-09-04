@@ -1,0 +1,17 @@
+<root>
+	<Text class="\nexxes\widgets\html\Text" slot="slot1">
+		<property name="class" value="class1" />
+	</Text>
+	
+	<Text class="\nexxes\widgets\html\Text" slot="slot2">
+		<property name="class" value="class2" />
+	</Text>
+	
+	<Text class="\nexxes\widgets\html\Text" slot="slot3[]">
+		<property name="class" value="class3" />
+	</Text>
+	
+	<Text class="\nexxes\widgets\html\Text" slot="slot3[]">
+		<property name="class" value="class4" />
+	</Text>
+</root>

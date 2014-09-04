@@ -48,10 +48,10 @@ class Initializer {
 		$scriptFile = $reflectionClass->getFileName();
 		$defFile = \substr($scriptFile, 0, \strlen($scriptFile)-4);
 		
-		$arrayImporter = new ArrayImporter($this->namespaces);
+		//$arrayImporter = new ArrayImporter($this->namespaces);
 		
 		if (\file_exists($defFile . '.xml')) {
-			$xmlImporter = new XMLImporter($arrayImporter);
+			$xmlImporter = new XMLImporter([$this, 'resolveClass']);
 			$phpCode = $xmlImporter->importFile($page, $defFile . '.xml');
 		}
 		
@@ -65,5 +65,21 @@ class Initializer {
 		
 		$initializer = eval($phpCode);
 		$initializer($page);
+	}
+	
+	public function resolveClass($className) {
+		if (\class_exists($className)) {
+			return $className;
+		}
+		
+		foreach ($this->namespaces AS $ns) {
+			$qualified = $ns . '\\' . $className;
+			
+			if (\class_exists($qualified)) {
+				return $qualified;
+			}
+		}
+		
+		throw new \RuntimeException('Can not resolve class "' . $className . '"');
 	}
 }
