@@ -52,18 +52,18 @@ class Initializer {
 		
 		if (\file_exists($defFile . '.xml')) {
 			$xmlImporter = new XMLImporter([$this, 'resolveClass']);
-			$phpCode = $xmlImporter->importFile($page, $defFile . '.xml');
+			$initializer = $xmlImporter->importFile($page, $defFile . '.xml');
 		}
 		
 		elseif (\file_exists($defFile . '.struct.php')) {
-			$phpCode = $arrayImporter->importFile($page, $defFile . '.struct.php');
+			$structImporter = new StructImporter();
+			$initializer = $structImporter->importFile($page, $defFile . '.struct.php');
 		}
 		
 		else {
 			throw new \InvalidArgumentException('Can not initialize widgets for page "' . \get_class($page) . '"');
 		}
 		
-		$initializer = eval($phpCode);
 		$initializer($page);
 	}
 	

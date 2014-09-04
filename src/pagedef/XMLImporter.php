@@ -7,7 +7,7 @@ use \nexxes\widgets\WidgetInterface;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class XMLImporter implements ImporterInterface {
+class XMLImporter extends StructImporter {
 	/**
 	 * The resolver to find fully qualified class names
 	 * @var callable
@@ -49,7 +49,7 @@ class XMLImporter implements ImporterInterface {
 		}
 		
 		$struct = $this->recurse(new structure\Widget(\get_class($root)), $dom->childNodes->item(0));
-		return $struct->generateCode(null, [], 'root');
+		return parent::import($root, $struct);
 	}
 	
 	/**

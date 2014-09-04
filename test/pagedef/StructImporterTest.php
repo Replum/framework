@@ -11,11 +11,10 @@ use \nexxes\widgets\html\Text;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  * @  coversDefaultClass \nexxes\widgets\pagedef\ArrayImporter
  */
-class StructureTest extends \PHPUnit_Framework_TestCase {
+class StructImporterTest extends \PHPUnit_Framework_TestCase {
 	protected function loadInizializer($name, $root) {
-		$struct = include(__DIR__ . '/defs/' . \substr($name, 4) . '.php');
-		$code = $struct->generateCode(null, [], 'root');
-		return eval($code);
+		$importer = new StructImporter();
+		return $importer->importFile($root, __DIR__ . '/defs/' . \substr($name, 4) . '.php');
 	}
 	
 	/**
