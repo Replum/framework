@@ -34,6 +34,19 @@ class StructureTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
+	 * Test simple structure
+	 * @test
+	 */
+	public function testRefStruct() {
+		$page = new PageTraitMock();
+		$page->testref = '';
+		$func = $this->loadInizializer(__FUNCTION__, $page);
+		$func($page);
+		
+		$this->assertSame($page->testref, $page[0]);
+	}
+	
+	/**
 	 * Test multiple children
 	 * @test
 	 */

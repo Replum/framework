@@ -52,14 +52,28 @@ class XMLImporter implements ImporterInterface {
 		return $struct->generateCode(null, [], 'root');
 	}
 	
+	/**
+	 * Parse XML subtree in $node into the supplied $widget.
+	 * 
+	 * @param \nexxes\widgets\pagedef\structure\Widget $widget
+	 * @param \DOMNode $node
+	 * @return \nexxes\widgets\pagedef\structure\Widget
+	 */
 	private function recurse(structure\Widget $widget, \DOMNode $node) {
-		// Class to use for child widget
-		if ($node->hasAttributes() && ($node->attributes->getNamedItem('class') !== null)) {
-			$widget->class = \call_user_func($this->resolver, $node->attributes->getNamedItem('class')->value);
+		if ($node->hasAttributes()) {
+			// Class to use for child widget
+			if ($node->attributes->getNamedItem('class') !== null) {
+				$widget->class = \call_user_func($this->resolver, $node->attributes->getNamedItem('class')->value);
+			}
+			
+			// Create reference in root linking to current widget
+			if ($node->attributes->getNamedItem('ref') !== null) {
+				$widget->ref = $node->attributes->getNamedItem('ref')->value;
+			}
 		}
-
+		
 		// Use XML tag as class name
-		elseif ($widget->class === null) {
+		if ($widget->class === null) {
 			$widget->class = \call_user_func($this->resolver, $node->nodeName);
 		}
 		

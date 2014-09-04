@@ -43,6 +43,12 @@ class Widget {
 		$this->class = $class;
 	}
 	
+	/**
+	 * Add a child, slot or property to this widget
+	 * 
+	 * @param Child|Slot|Property $data
+	 * @return \nexxes\widgets\pagedef\structure\Widget $this for chaining
+	 */
 	public function add($data) {
 		$args = \func_get_args();
 		
@@ -58,6 +64,16 @@ class Widget {
 			}
 		}
 		
+		return $this;
+	}
+	
+	/**
+	 * Set the ref
+	 * @param string $ref
+	 * @return \nexxes\widgets\pagedef\structure\Widget $this for chaining
+	 */
+	public function ref($ref) {
+		$this->ref = $ref;
 		return $this;
 	}
 	
@@ -89,7 +105,8 @@ class Widget {
 		if ($parent === null) {
 			return 'return function(\\nexxes\\widgets\\WidgetInterface $root) {' . PHP_EOL . $r . '};' . PHP_EOL;
 		} else {
-			return $currentVar . ' = new ' . $this->class . '(' . $parentVar . ');' . PHP_EOL . $r;
+			return ($this->ref !== null ? '$root->' . $this->ref . ' = ' : '')
+				. $currentVar . ' = new ' . $this->class . '(' . $parentVar . ');' . PHP_EOL . $r;
 		}
 	}
 }

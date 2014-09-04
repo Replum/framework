@@ -1,0 +1,6 @@
+<root>
+	<Text class="\nexxes\widgets\html\Text" ref="testref">
+		<property name="class" value="testclass" />
+		<property name="text">Test Text</property>
+	</Text>
+</root>
