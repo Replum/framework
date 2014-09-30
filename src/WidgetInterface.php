@@ -50,12 +50,14 @@ interface WidgetInterface {
 	 */
 	function getDescendants($filterByType = null);
 	
+	
 	/**
 	 * Get the page this widget belongs to
 	 * 
 	 * @return \nexxes\widgets\PageInterface
 	 */
 	function getPage();
+	
 	
 	/**
 	 * Check if the widget is marked as changed
@@ -72,12 +74,14 @@ interface WidgetInterface {
 	 */
 	function setChanged($changed = true);
 	
+	
 	/**
 	 * Render the HTML representation of the widget and return it as a string
 	 * 
 	 * @return string The HTML code of the widget
 	 */
 	function __toString();
+	
 	
 	/**
 	 * Every widget can have an ID.
@@ -90,7 +94,7 @@ interface WidgetInterface {
 	 * must be set.
 	 * 
 	 * @return boolean
-	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
+	 * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
 	function hasID();
 	
@@ -99,7 +103,7 @@ interface WidgetInterface {
 	 * The identifier is unique for all widgets within a page.
 	 * 
 	 * @return string
-	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
+	 * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
 	function getID();
 	
@@ -115,16 +119,17 @@ interface WidgetInterface {
 	 * 
 	 * @param string
 	 * @throws \InvalidArgumentException
-	 * @see http://www.w3.org/TR/html5/dom.html#the-id-attribute
+	 * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
 	function setID($newID = null);
+	
 	
 	/**
 	 * Add the class to the list of classes if not already contained.
 	 * 
 	 * @param string $class Class to add
-	 * @return HTMLWidget $this for chaining
-	 * @see http://www.w3.org/TR/html5/dom.html#classes
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @link http://www.w3.org/TR/html5/dom.html#classes
 	 */
 	function addClass($class);
 	
@@ -134,8 +139,8 @@ interface WidgetInterface {
 	 * 
 	 * @param string $class The class name or regex to remove by
 	 * @param boolean $isRegex Indicates if $class specifies the literal class name or a (perl compatible) regex to match classes against
-	 * @return HTMLWidget $this for chaining
-	 * @see http://www.w3.org/TR/html5/dom.html#classes
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @link http://www.w3.org/TR/html5/dom.html#classes
 	 */
 	function delClass($class, $isRegex = false);
 	
@@ -145,7 +150,7 @@ interface WidgetInterface {
 	 * @param string $class The class name or regex to check against
 	 * @param boolean $isRegex Indicates if $removeClass specifies the literal class name or a (perl compatible) regex to match classes against
 	 * @return boolean
-	 * @see http://www.w3.org/TR/html5/dom.html#classes
+	 * @link http://www.w3.org/TR/html5/dom.html#classes
 	 */
 	function hasClass($class, $isRegex = false);
 	
@@ -153,16 +158,17 @@ interface WidgetInterface {
 	 * Get the list of classes set
 	 * 
 	 * @param string $regex The regex to filter awailable classes with.
-	 * @return array<String>
-	 * @see http://www.w3.org/TR/html5/dom.html#classes
+	 * @return array<string>
+	 * @link http://www.w3.org/TR/html5/dom.html#classes
 	 */
 	function getClasses($regex = null);
+	
 	
 	/**
 	 * Get the tabindex attribute.
 	 * 
 	 * @return int
-	 * @see http://www.w3.org/TR/html5/editing.html#attr-tabindex
+	 * @link http://www.w3.org/TR/html5/editing.html#attr-tabindex
 	 */
 	function getTabIndex();
 	
@@ -170,16 +176,17 @@ interface WidgetInterface {
 	 * Set the tabindex attribute.
 	 * 
 	 * @param int $newTabIndex
-	 * @return HTMLWidget $this for chaining
-	 * @see http://www.w3.org/TR/html5/editing.html#attr-tabindex
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @link http://www.w3.org/TR/html5/editing.html#attr-tabindex
 	 */
 	function setTabIndex($newTabIndex);
+	
 	
 	/**
 	 * Get the title attribute of the element
 	 * 
 	 * @return string
-	 * @see http://www.w3.org/TR/html5/dom.html#attr-title
+	 * @link http://www.w3.org/TR/html5/dom.html#attr-title
 	 */
 	function getTitle();
 	
@@ -187,8 +194,8 @@ interface WidgetInterface {
 	 * Set the title attribute of this element
 	 * 
 	 * @param string $newTitle
-	 * @return HTMLWidget $this for chaining
-	 * @see http://www.w3.org/TR/html5/dom.html#attr-title
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @link http://www.w3.org/TR/html5/dom.html#attr-title
 	 */
 	function setTitle($newTitle);
 }
