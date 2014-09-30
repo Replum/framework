@@ -11,7 +11,7 @@ use \nexxes\widgets\WidgetTrait;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class TextInput implements WidgetHasChangeEventInterface {
+class TextInput extends FormElement implements WidgetHasChangeEventInterface {
 	use WidgetTrait, WidgetHasChangeEventTrait, WidgetHasEventsTrait;
 	
 	/**
@@ -57,16 +57,6 @@ class TextInput implements WidgetHasChangeEventInterface {
 	
 	protected function getValueHTML() {
 		return (\is_null($this->value) ? '' : ' value="' . $this->escape($this->value) . '"');
-	}
-	
-	
-	/**
-	 * @param \nexxes\widgets\WidgetInterface $parent
-	 * @param string $name
-	 */
-	public function __construct(WidgetInterface $parent) {
-		$this->setParent($parent);
-		$this->getPage()->getWidgetRegistry()->register($this);
 	}
 	
 	
