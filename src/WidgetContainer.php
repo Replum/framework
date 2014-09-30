@@ -8,8 +8,8 @@ namespace nexxes\widgets;
 class WidgetContainer implements WidgetContainerInterface {
 	use WidgetContainerTrait;
 	
-	public function __construct(WidgetInterface $parent) {
-		$this->setParent($parent);
+	public function __construct(WidgetInterface $parent = null) {
+		if ($parent !== null) { $this->setParent($parent); }
 	}
 	
 	public function __toString() {
