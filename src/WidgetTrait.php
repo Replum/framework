@@ -99,7 +99,7 @@ trait WidgetTrait {
 	/**
 	 * @var boolean
 	 */
-	private $WidgetTraitChanged = false;
+	private $WidgetTraitChanged = true;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
@@ -112,6 +112,11 @@ trait WidgetTrait {
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function setChanged($changed = true) {
+		// Nothing new here
+		if ($changed === $this->WidgetTraitChanged) {
+			return $this;
+		}
+		
 		$this->WidgetTraitChanged = $changed;
 		
 		// If the current widget is not identifiable, it is not available in the list of widgets and can not be replaced in the web page.
@@ -141,27 +146,45 @@ trait WidgetTrait {
 	private $WidgetTraitId;
 	
 	/**
-	 * @implements \nexxes\widgets\IdentifiableInterface
+	 * {@inheritdoc}
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function hasID() {
+		return ($this->WidgetTraitId !== null);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getID() {
+		if (!$this->hasID()) {
+			$this->setID();
+		}
 		return $this->WidgetTraitId;
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\IdentifiableInterface
+	 * {@inheritdoc}
+	 * @implements \nexxes\widgets\WidgetInterface
 	 */
-	public function setID($newID, $skipNotify = false) {
+	public function setID($newID = null, $skipNotify = false) {
+		// Do not recalculate IDs
+		if (($newID === null) && $this->hasID()) {
+			return $this;
+		}
+		
 		$oldID = $this->WidgetTraitId;
 		$this->WidgetTraitId = $newID;
 		
 		// Prevent recursion
-		if ($skipNotify || ($oldID === $newID)) {
+		if ($skipNotify || (($newID !== null) && ($oldID === $newID))) {
 			return $this;
 		}
 		
 		/* @var $registry WidgetRegistry */
 		$registry = $this->getPage()->getWidgetRegistry();
-		$registry->notifyIdChange($this);
+		$registry->register($this);
 		
 		$this->setChanged(true);
 		
@@ -325,8 +348,6 @@ trait WidgetTrait {
 		
 		return $this;
 	}
-	
-	
 	
 	
 	/**

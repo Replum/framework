@@ -20,45 +20,56 @@ class WidgetRegistry implements \IteratorAggregate {
 	
 	/**
 	 * Generate a unique identifier to use in a widget and register the widget
-	 * 
-	 * @return string
 	 */
-	public function register(WidgetInterface $widget, $length = 5) {
-		$newID = 'w_' . (new RandomString($length));
+	public function register(WidgetInterface $widget) {
+		if ($widget->hasID()) {
+			$newID = $widget->getID();
+		} else {
+			$newID = $this->generateId();
+		}
 		
-		// If new ID is not unique, create a new one that is one char longer
-		if (isset($this->widgets[$newID])) {
-			return $this->register($widget, $length + 1);
+		// Check no other widget has ID
+		if ($this->hasWidget($newID)) {
+			if ($this->widgets[$newID] !== $widget) {
+				throw new \InvalidArgumentException('The supplied widget ID "' . $newID . '" is already used by another widget!');
+			}
+			// Nothing changed
+			return;
+		}
+		
+		// Cleanup old mapping
+		if (false !== ($oldID = \array_search($widget, $this->widgets, true))) {
+			unset($this->widgets[$oldID]);
 		}
 		
 		$this->widgets[$newID] = $widget;
 		$widget->setID($newID, true);
-		return $newID;
 	}
 	
 	/**
-	 * Notify the registry that the ID of a widget was changed
+	 * Generate a new random ID that is not associated to a widget yet.
 	 * 
-	 * @param IdentifiableInterface $widget
+	 * @param int $length
 	 */
-	public function notifyIdChange(WidgetInterface $widget) {
-		$oldID = \array_search($widget, $this->widgets, true);
+	public function generateId($length = 5) {
+		$newID = 'w_' . (new RandomString($length));
 		
-		if (!$oldID) {
-			throw new \InvalidArgumentException('The supplied widget has not been registered yet!');
+		if (!$this->hasWidget($newID)) {
+			return $newID;
 		}
 		
-		// ID unchanged, nothing to do
-		if ($oldID === $widget->getID()) {
-			return;
-		}
-		
-		if (isset($this->widgets[$widget->getID()]) && ($this->widgets[$widget->getID()] !== $widget)) {
-			throw new \InvalidArgumentException('The supplied widget ID "' . $widget->getID() . '" is already used by another widget!');
-		}
-		
-		unset($this->widgets[$oldID]);
-		$this->widgets[$widget->getID()] = $widget;
+		// If new ID is not unique, create a new one that is one char longer
+		return $this->generateId($length + 1);
+	}
+	
+	/**
+	 * Check whether a widget exists for the supplied ID
+	 * 
+	 * @param string $id
+	 * @return boolean
+	 */
+	public function hasWidget($id) {
+		return isset($this->widgets[$id]);
 	}
 	
 	/**
@@ -68,7 +79,7 @@ class WidgetRegistry implements \IteratorAggregate {
 	 * @return \nexxes\widgets\WidgetInterface
 	 */
 	public function getWidget($id) {
-		if (!isset($this->widgets[$id])) {
+		if (!$this->hasWidget($id)) {
 			throw new \InvalidArgumentException('Unknown widget with id "' . $id . '"');
 		}
 		
