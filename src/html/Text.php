@@ -8,7 +8,7 @@ use \nexxes\widgets\WidgetTrait;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class Text implements WidgetInterface {
+class Text implements WidgetInterface, PhrasingContentInterface {
 	use WidgetTrait;
 	
 	/**
@@ -80,11 +80,11 @@ class Text implements WidgetInterface {
 	 * @return array<string> The list of possible types to set via setType()
 	 */
 	public function validTypes() {
-		return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', ];
+		return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'legend', ];
 	}
 	
-	public function __construct(WidgetInterface $parent) {
-		$this->setParent($parent);
+	public function __construct(WidgetInterface $parent = null) {
+		if ($parent !== null) { $this->setParent($parent); }
 	}
 	
 	public function __toString() {
