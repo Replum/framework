@@ -22,6 +22,7 @@
 		
 		"components/jquery": "1.*",
 		"components/bootstrap": "3.*",
-		"components/bootstrap-default": "3.*"
+		"components/bootstrap-default": "3.*",
+		"eternicode/bootstrap-datepicker": "dev-master"
 	}
 }
