@@ -115,8 +115,13 @@ class Executer {
 		
 		$handler = $this->actionhandler[$action]($this);
 		
-		/* @var $response \Symfony\Component\HttpFoundation\Response */
-		$response = $handler();
-		$response->send();
+		try {
+			/* @var $response \Symfony\Component\HttpFoundation\Response */
+			$response = $handler();
+			$response->send();
+		} catch (\Exception $e) {
+			echo '<pre>' . $e . '</pre>';
+			exit;
+		}
 	}
 }
