@@ -198,4 +198,24 @@ interface WidgetInterface {
 	 * @link http://www.w3.org/TR/html5/dom.html#attr-title
 	 */
 	function setTitle($newTitle);
+	
+	
+	/**
+	 * Get the ARIA role of the element if defined.
+	 * 
+	 * @return string
+	 * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
+	 * @link http://www.w3.org/TR/wai-aria/roles
+	 */
+	function getRole();
+	
+	/**
+	 * Set the ARIA role of the element.
+	 * 
+	 * @param string $newRole
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
+	 * @link http://www.w3.org/TR/wai-aria/roles
+	 */
+	function setRole($newRole);
 }

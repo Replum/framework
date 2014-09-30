@@ -350,6 +350,67 @@ trait WidgetTrait {
 	}
 	
 	
+	
+	
+	/**
+	 * Roles are defined and described by their characteristics. Characteristics define the structural function of a role, such as what a role is, concepts behind it, and what instances the role can or must contain. In the case of widgets this also includes how it interacts with the user agent based on mapping to HTML forms and XForms. States and properties from WAI-ARIA that are supported by the role are also indicated.
+	 * 
+	 * @var string
+	 * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
+	 * @link http://www.w3.org/TR/wai-aria/roles
+	 */
+	private $WidgetTraitRole;
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function getRole() {
+		return $this->WidgetTraitRole;
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function setRole($newRole) {
+		if (!\is_null($newRole) && !\is_string($newRole)) {
+			throw new \InvalidArgumentException('Role can only be set to a string value!');
+		}
+		
+		if ($this->WidgetTraitRole !== $newRole) {
+			$this->WidgetTraitRole = $newRole;
+			$this->setChanged(true);
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * List of available roles.
+	 * Overwrite method to limit roles for this element.
+	 * 
+	 * @link http://www.w3.org/TR/wai-aria/appendices#quickref
+	 */
+	protected function validRoles() {
+		return [
+			'alert', 'alertdialog', 'application', 'article', 'banner',
+			'button', 'checkbox', 'columnheader', 'combobox', 'complementary',
+			'contentinfo', 'definition', 'dialog', 'directory', 'document',
+			'form', 'grid', 'gridcell', 'group', 'heading',
+			'img', 'link', 'list', 'listbox', 'listitem',
+			'log', 'main', 'marquee', 'math', 'menu',
+			'menubar', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'navigation',
+			'note', 'option', 'presentation', 'progressbar', 'radio',
+			'radiogroup', 'region', 'row', 'rowgroup', 'rowheader',
+			'search', 'separator', 'scrollbar', 'slider', 'spinbutton',
+			'status', 'tab', 'tablist', 'tabpanel', 'textbox',
+			'timer', 'toolbar', 'tooltip', 'tree', 'treegrid',
+			'treeitem',
+		];
+	}
+	
+	
+	
+	
 	/**
 	 * Get a HTML representation of the widget
 	 * 
@@ -361,6 +422,7 @@ trait WidgetTrait {
 		
 		return (\is_null($this->WidgetTraitId) ? '' : ' id="' . $this->escape($this->WidgetTraitId) . '"')
 			. (\count($this->WidgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->WidgetTraitClasses)) . '"' : '')
+			. (\is_null($this->WidgetTraitRole) ? '' : ' role="' . $this->escape($this->WidgetTraitRole) . '"')
 			. (\is_null($this->WidgetTraitTitle) ? '' : ' title="' . $this->escape($this->WidgetTraitTitle) . '"')
 			. (\is_null($this->WidgetTraitTabindex) ? '' : ' tabindex="' . $this->WidgetTraitTabindex . '"')
 		;
