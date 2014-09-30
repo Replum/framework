@@ -3,10 +3,7 @@
 namespace nexxes\widgets\bootstrap;
 
 use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\HTMLWidgetInterface;
-
 use \nexxes\widgets\WidgetTrait;
-use \nexxes\widgets\HTMLWidgetTrait;
 
 /**
  * This class represents a glyphicon icon.
@@ -16,8 +13,8 @@ use \nexxes\widgets\HTMLWidgetTrait;
  * @see http://getbootstrap.com/components/#glyphicons
  * @see http://glyphicons.com/
  */
-class Glyphicon implements WidgetInterface, HTMLWidgetInterface {
-	use WidgetTrait, HTMLWidgetTrait;
+class Glyphicon implements WidgetInterface {
+	use WidgetTrait;
 	
 	/**
 	 * @var string
@@ -52,14 +49,10 @@ class Glyphicon implements WidgetInterface, HTMLWidgetInterface {
 	}
 	
 	public function __toString() {
-		$this->delClass('/^glyphicon-');
+		$this->delClass('/^glyphicon-/');
 		$this->addClass('glyphicon');
 		$this->addClass('glyphicon-' . $this->name);
 		
-		return '<span '
-			. $this->getClassesHTML()
-			. $this->getTabIndexHTML()
-			. $this->getTitleHTML()
-			. '</span>';
+		return '<span ' . $this->getAttributesHTML() . '></span>' . PHP_EOL;
 	}
 }
