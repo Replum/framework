@@ -218,4 +218,24 @@ interface WidgetInterface {
 	 * @link http://www.w3.org/TR/wai-aria/roles
 	 */
 	function setRole($newRole);
+	
+	
+	/**
+	 * Get the data attribute for the supplied name or all data attributes set for the object.
+	 * 
+	 * @param string $name
+	 * @return array<string>|string
+	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
+	 */
+	function getData($name = null);
+	
+	/**
+	 * Set a data attribute for the widget.
+	 * 
+	 * @param string $name
+	 * @param string $newValue
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
+	 */
+	function setData($name, $newValue);
 }

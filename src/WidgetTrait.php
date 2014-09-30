@@ -412,6 +412,103 @@ trait WidgetTrait {
 	
 	
 	/**
+	 * Custom data attributes
+	 * 
+	 * @var array<string>
+	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
+	 */
+	private $WidgetTraitData = [];
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function getData($name = null) {
+		if (is_null($name)) {
+			return $this->WidgetTraitData;
+		}
+		
+		elseif (isset($this->WidgetTraitData[$name])) {
+			return $this->WidgetTraitData[$name];
+		}
+		
+		else {
+			return null;
+		}
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function setData($name, $newValue) {
+		if (\is_null($name) || !\is_string($name)) {
+			throw new \InvalidArgumentException('Data attribute requires a name!');
+		}
+		
+		if (\strpos($name, ':') !== false) {
+			throw new \InvalidArgumentException('Data attribute name "' . $name . '" contains illegal character ":".');
+		}
+		
+		if (\strtolower(\substr($name, 0, 3)) === 'xml') {
+			throw new \InvalidArgumentException('Data attribute name "' . $name . '" must not start with "xml".');
+		}
+		
+		if (!$this->validateAttributeName($name)) {
+			throw new \InvalidArgumentException('Invalid data attribute name "' . $name . '".');
+		}
+		
+		if (\preg_match('/-[a-z]/', $name)) {
+			throw new \InvalidArgumentException('Data attribute name "' . $name . '" must not contain a "-" followed by a lowercase character.');
+		}
+		
+		if (\is_null($newValue)) {
+			if (isset($this->WidgetTraitData[$name])) {
+				unset($this->WidgetTraitData[$name]);
+				$this->setChanged(true);
+			}
+		}
+		
+		elseif (!\is_string($newValue)) {
+			throw new \InvalidArgumentException('Can not set data attribute "' . $name . '" to a non-string value.');
+		}
+		
+		elseif (!isset($this->WidgetTraitData[$name]) || ($this->WidgetTraitData[$name] !== $newValue)) {
+			$this->WidgetTraitData[$name] = $newValue;
+			$this->setChanged(true);
+		}
+		
+		return $this;
+	}
+	
+	protected function getDataHTML() {
+		$r = '';
+		
+		foreach ($this->WidgetTraitData as $dataName => $dataValue) {
+			$dataName = \preg_replace_callback('/[A-Z]/', function($matches) { return '-' . \strtolower($matches[0]); }, $dataName);
+			$r .= ' data-' . $dataName . '="' . $this->escape($dataValue) . '"';
+		}
+		
+		return $r;
+	}
+	
+	/**
+	 * Verify the supplied name is a valid xml attribute name
+	 * 
+	 * @param string $name
+	 * @return boolean
+	 * @link http://www.w3.org/TR/xml/#NT-Name
+	 */
+	protected function validateAttributeName($name) {
+		$nameStartChar = ':|[A-Z]|_|[a-z]|[\xC0-\xD6]|[\xD8-\xF6]|[\xF8-\x{2FF}]|[\x{370}-\x{37D}]|[\x{37F}-\x{1FFF}]|[\x{200C}-\x{200D}]|[\x{2070}-\x{218F}]|[\x{2C00}-\x{2FEF}]|[\x{3001}-\x{D7FF}]|[\x{F900}-\x{FDCF}]|[\x{FDF0}-\x{FFFD}]';
+		// |[\x{10000}-\x{EFFFF}] must be appended according to the ref but is invalid in PHP/PCRE
+		$nameChar = $nameStartChar . '|-|.|[0-9]|\xB7|[\x{0300}-\x{036F}]|[\x{203F}-\x{2040}]';
+		
+		return \preg_match('/^(' . $nameStartChar . ')(' . $nameChar . ')*$/u', $name);
+	}
+	
+	
+	
+	
+	/**
 	 * Get a HTML representation of the widget
 	 * 
 	 * @return string
@@ -422,6 +519,7 @@ trait WidgetTrait {
 		
 		return (\is_null($this->WidgetTraitId) ? '' : ' id="' . $this->escape($this->WidgetTraitId) . '"')
 			. (\count($this->WidgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->WidgetTraitClasses)) . '"' : '')
+			. $this->getDataHTML()
 			. (\is_null($this->WidgetTraitRole) ? '' : ' role="' . $this->escape($this->WidgetTraitRole) . '"')
 			. (\is_null($this->WidgetTraitTitle) ? '' : ' title="' . $this->escape($this->WidgetTraitTitle) . '"')
 			. (\is_null($this->WidgetTraitTabindex) ? '' : ' tabindex="' . $this->WidgetTraitTabindex . '"')
