@@ -218,7 +218,7 @@ class Listing implements WidgetContainerInterface {
 	 * Enforce that only list elements can be members of a list
 	 */
 	protected function validateWidget($widget) {
-		if (!($widget instanceof ListElement)) {
+		if (!($widget instanceof Listing) && (!($widget instanceof ListElement))) {
 			throw new \InvalidArgumentException('A list can only contain ' . ListElement::class . ' elements.');
 		}
 	}
