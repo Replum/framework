@@ -10,10 +10,10 @@ use \nexxes\widgets\html\ScriptLink;
  */
 abstract class Page extends \nexxes\widgets\html\Page {
 	public function __construct() {
-		$this->addStyleSheet((new StyleSheetLink())->setUrl('/vendor/nexxes/widgets-base/css/bootstrap-3.2.0.css'));
-		$this->addStyleSheet((new StyleSheetLink())->setUrl('/vendor/nexxes/widgets-base/css/bootstrap-theme-3.2.0.css'));
+		$this->addStyleSheet((new StyleSheetLink())->setUrl('/components/bootstrap/css/bootstrap.css'));
+		$this->addStyleSheet((new StyleSheetLink())->setUrl('/components/bootstrap/css/bootstrap-theme.css'));
 		
-		$this->addScript((new ScriptLink())->setUrl('/vendor/nexxes/widgets-base/js/jquery-1.11.1.js'));
-		$this->addScript((new ScriptLink())->setUrl('/vendor/nexxes/widgets-base/js/bootstrap-3.2.0.js'));
+		$this->addScript((new ScriptLink())->setUrl('/components/jquery/jquery.js'));
+		$this->addScript((new ScriptLink())->setUrl('/components/bootstrap/js/bootstrap.js'));
 	}
 }
