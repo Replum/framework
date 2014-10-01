@@ -95,3 +95,19 @@ nexxes.widgets = {
 	}
 	
 };
+
+
+$(document).ready(function() {
+	timer = $('#logoutCounter');
+	console.log(timer);
+	remaining = 15*60;
+	callback = function() {
+		console.log("Blubb: " + remaining);
+		timer.html("" + Math.floor(remaining / 60) + ':' + ("0" + (remaining % 60)).substr(-2));
+		remaining--;
+	};
+	
+	console.log("Foobar");
+	
+	window.setInterval(callback, 1000);
+});
