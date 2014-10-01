@@ -53,7 +53,7 @@ use \nexxes\widgets\events\WidgetRemoveEvent;
  */
 class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 	/**
-	 * @var WidgetContainerInterface
+	 * @var WidgetInterface
 	 */
 	private $owner;
 	
@@ -74,10 +74,10 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 	
 	
 	/**
-	 * @param WidgetContainerInterface $owner
+	 * @param WidgetInterface $owner
 	 * @param boolean $auxiliary
 	 */
-	public function __construct(WidgetContainerInterface $owner, $auxiliary = true) {
+	public function __construct(WidgetInterface $owner, $auxiliary = true) {
 		$this->owner = $owner;
 		$this->auxiliary = $auxiliary;
 	}
@@ -112,7 +112,28 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 	 * @return WidgetInterface
 	 */
 	public function offsetGet($offset) {
-		return $this->widgets[$offset];
+		if (\is_int($offset)) {
+			if (!isset($this->widgets[$offset])) {
+				throw new \InvalidArgumentException('No widget exists with offset "' . $offset . '"');
+			}
+			
+			return $this->widgets[$offset];
+		}
+		
+		else {
+			foreach ($this->widgets as $widget) {
+				/* @var $widget WidgetInterface */
+				if ($widget->hasID() && ($widget->getID() == $offset)) {
+					return $widget;
+				}
+				
+				if (\method_exists($widget, 'getName') && ($widget->getName() == $offset)) {
+					return $widget;
+				}
+			}
+			
+			throw new \InvalidArgumentException('No widget exists with id/name "' . $offset . '"');
+		}
 	}
 	
 	/**

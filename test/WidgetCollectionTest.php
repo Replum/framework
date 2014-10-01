@@ -26,7 +26,7 @@ namespace nexxes\widgets;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetLifecycleEventsTest extends \PHPUnit_Framework_TestCase {
+class WidgetCollectionTest extends \PHPUnit_Framework_TestCase {
 	private $events = [];
 	
 	/**
@@ -44,6 +44,24 @@ class WidgetLifecycleEventsTest extends \PHPUnit_Framework_TestCase {
 		
 		return $page;
 	}
+	
+	/**
+	 * @test
+	 */
+	public function testOffsetGet() {
+		$page = $this->createPage();
+		
+		$container = new WidgetContainer($page);
+		$widget1 = new WidgetTraitMock($container);
+		$widget2 = new WidgetTraitMock($container);
+		
+		$this->assertEquals($widget1, $container->children()[0]);
+		$this->assertEquals($widget2, $container->children()[1]);
+		
+		$widget1->setID("testid");
+		$this->assertEquals($widget1, $container->children()["testid"]);
+	}
+	
 	
 	/**
 	 * @test
