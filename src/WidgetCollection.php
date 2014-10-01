@@ -62,11 +62,24 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 	 */
 	private $widgets = [];
 	
+	/**
+	 * An auxiliary WidgetCollection just holds other widgets without maintaining their
+	 *  parent and without issuing lifecycle events.
+	 * 
+	 * @var boolean
+	 */
+	private $auxiliary = false;
 	
 	
 	
-	public function __construct(WidgetContainerInterface $owner) {
+	
+	/**
+	 * @param WidgetContainerInterface $owner
+	 * @param boolean $auxiliary
+	 */
+	public function __construct(WidgetContainerInterface $owner, $auxiliary = true) {
 		$this->owner = $owner;
+		$this->auxiliary = $auxiliary;
 	}
 	
 	
@@ -168,14 +181,19 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 			return $this;
 		}
 		
-		// Remove widget from previous owner first
-		if (!$widget->isRoot() && ($widget->getParent() instanceof WidgetContainerInterface)) {
-			$widget->getParent()->children()->remove($widget);
+		if (!$this->auxiliary) {
+			// Remove widget from previous owner first
+			if (!$widget->isRoot() && ($widget->getParent() instanceof WidgetContainerInterface)) {
+				$widget->getParent()->children()->remove($widget);
+			}
 		}
 		
 		$this->widgets[] = $widget;
-		$widget->setParent($this->owner);
-		$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $widget));
+		
+		if (!$this->auxiliary) {
+			$widget->setParent($this->owner);
+			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $widget));
+		}
 		
 		return $this;
 	}
@@ -193,7 +211,10 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		
 		$key = $this->find($widget);
 		unset($this->widgets[$key]);
-		$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $widget));
+		
+		if (!$this->auxiliary) {
+			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $widget));
+		}
 		
 		$this->reindex();
 		
@@ -211,13 +232,18 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 			throw new \InvalidArgumentException('Can not replace widget that is not in collection!');
 		}
 		
-		$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $oldWidget));
+		if (!$this->auxiliary) {
+			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $oldWidget));
+		}
 		
 		$this->widgets[$key] = $newWidget;
-		$newWidget->setParent($this->owner);
-		$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetReplaceEvent::class, new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
 		
-		$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $newWidget));
+		if (!$this->auxiliary) {
+			$newWidget->setParent($this->owner);
+			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetReplaceEvent::class, new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
+
+			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $newWidget));
+		}
 		
 		return $this;
 	}

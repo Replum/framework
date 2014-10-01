@@ -18,7 +18,7 @@ trait WidgetContainerTrait {
 	 */
 	public function children() {
 		if (is_null($this->WidgetContainerTraitChildren)) {
-			$this->WidgetContainerTraitChildren = new WidgetCollection($this);
+			$this->WidgetContainerTraitChildren = new WidgetCollection($this, false);
 		}
 		
 		return $this->WidgetContainerTraitChildren;
