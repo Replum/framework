@@ -8,6 +8,12 @@ namespace nexxes\widgets;
 class WidgetTraitMock implements WidgetInterface {
 	use WidgetTrait;
 	
+	public function __construct(WidgetInterface $parent = null) {
+		if (!is_null($parent)) {
+			$this->setParent($parent);
+		}
+	}
+	
 	public function __toString() {
 		return "";
 	}
