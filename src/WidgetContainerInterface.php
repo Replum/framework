@@ -11,7 +11,7 @@ namespace nexxes\widgets;
 interface WidgetContainerInterface extends WidgetInterface {
 	/**
 	 * Get the list of children of this container.
-	 * @return DependentWidgetList
+	 * @return WidgetCollection
 	 */
 	public function children();
 }

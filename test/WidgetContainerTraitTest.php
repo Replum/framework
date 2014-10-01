@@ -80,7 +80,6 @@ class WidgetContainerTraitTest extends \PHPUnit_Framework_TestCase {
 	
 	/**
 	 * Verify the same object is only added once to the container
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testAddSameObject() {
 		$page = new PageTraitMock();

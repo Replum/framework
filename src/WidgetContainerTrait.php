@@ -9,7 +9,7 @@ trait WidgetContainerTrait {
 	use WidgetTrait;
 	
 	/**
-	 * @var DependentWidgetList
+	 * @var WidgetCollection
 	 */
 	private $WidgetContainerTraitChildren;
 	
@@ -18,7 +18,7 @@ trait WidgetContainerTrait {
 	 */
 	public function children() {
 		if (is_null($this->WidgetContainerTraitChildren)) {
-			$this->WidgetContainerTraitChildren = new DependentWidgetList($this);
+			$this->WidgetContainerTraitChildren = new WidgetCollection($this);
 		}
 		
 		return $this->WidgetContainerTraitChildren;
