@@ -23,7 +23,7 @@ class WidgetRegistryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @covers \nexxes\widgets\WidgetRegistry::notifyIdChange
+	 * @covers \nexxes\widgets\WidgetRegistry::register
 	 * @covers \nexxes\widgets\WidgetTrait::getId
 	 * @covers \nexxes\widgets\WidgetTrait::setId
 	 */
@@ -44,7 +44,7 @@ class WidgetRegistryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @covers \nexxes\widgets\WidgetRegistry::notifyIdChange
+	 * @covers \nexxes\widgets\WidgetRegistry::register
 	 * @covers \nexxes\widgets\WidgetTrait::getId
 	 * @covers \nexxes\widgets\WidgetTrait::setId
 	 * @expectedException \Exception
@@ -69,7 +69,7 @@ class WidgetRegistryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @covers \nexxes\widgets\WidgetRegistry::notifyIdChange
+	 * @covers \nexxes\widgets\WidgetRegistry::register
 	 */
 	public function testNotifyIdChangeNotRegistered() {
 		$page = new PageTraitMock();
