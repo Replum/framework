@@ -1,0 +1,5 @@
+<Page>
+	<Text class="\nexxes\widgets\html\Text">
+		<property>Test Text</property>
+	</Text>
+</Page>
