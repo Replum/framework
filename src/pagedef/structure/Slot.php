@@ -30,7 +30,7 @@ class Slot extends Widget {
 	}
 	
 	public function generateCode($parent, array $prefix, $name) {
-		return '$' . \implode('_', $prefix) . '[' . \var_export($this->name, true) . ']' . ($this->append ? '[]' : '') . ' = '
+		return '$' . \implode('_', $prefix) . '[' . \var_export($this->name, true) . ']' . ($this->append ? '->children()[]' : '') . ' = '
 			. parent::generateCode($parent, $prefix, $this->name . ($this->append ? $name : ''));
 	}
 }

@@ -70,25 +70,19 @@ class WidgetRegistryTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @covers \nexxes\widgets\WidgetRegistry::notifyIdChange
-	 * @expectedException \Exception
 	 */
 	public function testNotifyIdChangeNotRegistered() {
-		try {
-			$page = new PageTraitMock();
-			
-			$w1 = (new WidgetTraitMock())->setParent($page);
-			$w2 = (new WidgetTraitMock())->setParent($page);
-			
-			$r = $page->getWidgetRegistry();
-			$r->register($w2);
-			
-			$w2->setID('widget2');
-		} catch (\Exception $e) {
-			$this->fail($e->getMessage());
-		}
+		$page = new PageTraitMock();
+
+		$w1 = (new WidgetTraitMock())->setParent($page);
+		$w2 = (new WidgetTraitMock())->setParent($page);
+
+		$r = $page->getWidgetRegistry();
+		$r->register($w2);
+
+		$w2->setID('widget2');
 		
-		echo $w1->getID() . "\n";
-		
+		$w1ID = $w1->getID();
 		$w1->setID('widget1');
 	}
 	

@@ -43,7 +43,7 @@ abstract class Page implements PageInterface {
 		
 		$r .= '<body id="' . $this->escape($this->id) . '">';
 		
-		foreach ($this AS $child) {
+		foreach ($this->children() AS $child) {
 			$r .= $child;
 		}
 		

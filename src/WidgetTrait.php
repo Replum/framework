@@ -2,6 +2,8 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\widgets\events\WidgetChangeEvent;
+
 trait WidgetTrait {
 	/**
 	 * @var \nexxes\widgets\WidgetInterface
@@ -60,10 +62,11 @@ trait WidgetTrait {
 		}
 		
 		$this->WidgetTraitParent = $newParent;
+		$this->setChanged(true);
 		
 		// Add to parent if it is a widget container (not for composites!)
-		if (($newParent instanceof WidgetContainerInterface) && (!$newParent->hasChild($this))) {
-			$newParent[] = $this;
+		if (($newParent instanceof WidgetContainerInterface) && (!$newParent->children()->contains($this))) {
+			$newParent->children()[] = $this;
 		}
 		
 		return $this;
@@ -85,11 +88,14 @@ trait WidgetTrait {
 			return $this->WidgetTraitPage;
 		}
 		
-		if ($this instanceof \nexxes\widgets\PageInterface) {
-			return $this;
+		if ($this instanceof PageInterface) {
+			$this->WidgetTraitPage = $this;
+		} elseif ($this->getParent() instanceof PageInterface) {
+			$this->WidgetTraitPage = $this->getParent();
+		} else {
+			$this->WidgetTraitPage = $this->getParent()->getPage();
 		}
 		
-		$this->WidgetTraitPage = $this->getParent()->getPage();
 		return $this->WidgetTraitPage;
 	}
 	
@@ -118,12 +124,7 @@ trait WidgetTrait {
 		}
 		
 		$this->WidgetTraitChanged = $changed;
-		
-		// If the current widget is not identifiable, it is not available in the list of widgets and can not be replaced in the web page.
-		// Mark the parent widget as changed so it is re-rendered including this widget
-		if ($changed && is_null($this->getID()) && !$this->isRoot()) {
-			$this->getParent()->setChanged($changed);
-		}
+		$this->getPage()->getEventDispatcher()->dispatch(WidgetChangeEvent::class, new WidgetChangeEvent($this));
 		
 		return $this;
 	}

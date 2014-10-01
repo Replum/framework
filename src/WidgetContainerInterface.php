@@ -8,12 +8,10 @@ namespace nexxes\widgets;
  * The WidgetContainer may arrange the children in a specific visual order (e.g. rows or columns).
  * The difference between a container and a composite is that the container can hold any children whereas the composite is always assembled of the same set of child widgets.
  */
-interface WidgetContainerInterface extends WidgetInterface, \ArrayAccess, \Countable, \IteratorAggregate {
+interface WidgetContainerInterface extends WidgetInterface {
 	/**
-	 * Check whether the supplied widget is a child of this container
-	 * 
-	 * @param \nexxes\widgets\WidgetInterface
-	 * @return boolean
+	 * Get the list of children of this container.
+	 * @return DependentWidgetList
 	 */
-	function hasChild(\nexxes\widgets\WidgetInterface $widget);
+	public function children();
 }
