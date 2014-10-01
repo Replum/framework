@@ -206,7 +206,7 @@ class Listing implements WidgetContainerInterface {
 			. ($this->isOrdered() && ($this->getType() !== null) ? ' type="' . $this->escape($this->getType()) . '"' : '')
 			. '>';
 		
-		foreach ($this AS $child) {
+		foreach ($this->children() AS $child) {
 			$r .= $child;
 		}
 		

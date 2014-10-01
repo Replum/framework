@@ -2,18 +2,13 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\WidgetContainerInterface;
-use \nexxes\widgets\WidgetContainerTrait;
+use \nexxes\widgets\WidgetContainer;
 use \nexxes\widgets\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class Form implements WidgetContainerInterface {
-	use WidgetContainerTrait {
-		setParent as private setParentFromTrait;
-	}
-	
+class Form extends WidgetContainer {
 	/**
 	 * @var string
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-fs-action
@@ -76,7 +71,7 @@ class Form implements WidgetContainerInterface {
 	 * {@inheritdoc}
 	 */
 	public function setParent(WidgetInterface $newParent) {
-		$this->setParentFromTrait($newParent);
+		parent::setParent($newParent);
 		
 		if ($this->isChanged()) {
 			$ancestors = \array_reverse($this->getAncestors());
@@ -104,7 +99,7 @@ class Form implements WidgetContainerInterface {
 			. $this->getAttributesHTML()
 			. '>' . "\n";
 		
-		foreach ($this AS $widget) {
+		foreach ($this->children() AS $widget) {
 			$r .= $widget . "\n";
 		}
 		
