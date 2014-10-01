@@ -70,6 +70,7 @@ class DateInput extends FormElement implements WidgetHasChangeEventInterface {
 		
 		$this->setData('provide', 'datepicker');
 		$this->setData('dateLanguage', 'de-DE');
+		$this->setData('dateAutoclose', '1');
 	}
 	
 	
