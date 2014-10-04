@@ -11,8 +11,8 @@ use \nexxes\widgets\WidgetTrait;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class DateInput extends FormElement implements WidgetHasChangeEventInterface {
-	use WidgetTrait, WidgetHasChangeEventTrait, WidgetHasEventsTrait;
+class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
+	use WidgetTrait, FormElementTrait, WidgetHasEventsTrait, WidgetHasChangeEventTrait;
 	
 	/**
 	 * @var string

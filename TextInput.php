@@ -2,17 +2,16 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
-use \nexxes\widgets\WidgetHasEventsTrait;
-use \nexxes\widgets\WidgetInterface;
 use \nexxes\widgets\WidgetTrait;
+use \nexxes\widgets\WidgetHasChangeEventInterface;
+use \nexxes\widgets\WidgetHasEventsTrait;
+use \nexxes\widgets\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class TextInput extends FormElement implements WidgetHasChangeEventInterface {
-	use WidgetTrait, WidgetHasChangeEventTrait, WidgetHasEventsTrait;
+class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
+	use WidgetTrait, FormElementTrait, WidgetHasEventsTrait, WidgetHasChangeEventTrait;
 	
 	/**
 	 * @var string
