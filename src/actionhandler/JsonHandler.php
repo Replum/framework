@@ -21,7 +21,9 @@ class JsonHandler {
 		/* $var $request \Symfony\Component\HttpFoundation\Request */
 		$request = $this->executer->getRequest();
 		
-		if ($request->request->get('nexxes_event') != "change") {
+		$event = $request->request->get('nexxes_event');
+		
+		if (!\in_array($event, ['click', 'change'])) {
 			throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
 		}
 		
@@ -35,9 +37,11 @@ class JsonHandler {
 		}
 
 		$widget = $page->getWidgetRegistry()->getWidget($request->request->get('nexxes_source'));
-		$widget->setValue($request->request->get('nexxes_value'));
+		if ($request->request->get('nexxes_value')) {
+			$widget->setValue($request->request->get('nexxes_value'));
+		}
 		
-		$page->getEventDispatcher()->dispatch('widget.' . $widget->getID() . '.onchange', new Event($widget));
+		$page->getEventDispatcher()->dispatch('widget.' . $widget->getID() . '.on' . $event, new Event($widget));
 		
 		$data = $this->handleChangedWidgets($page->getWidgetRegistry());
 
