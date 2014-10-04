@@ -33,7 +33,7 @@ use \nexxes\widgets\WidgetContainerInterface;
  */
 class WidgetReplaceEvent extends \Symfony\Component\EventDispatcher\Event {
 	/**
-	 * @var WidgetContainerInterface
+	 * @var WidgetInterface
 	 */
 	public $parent;
 	
@@ -50,7 +50,7 @@ class WidgetReplaceEvent extends \Symfony\Component\EventDispatcher\Event {
 	/**
 	 * @param WidgetInterface $widget
 	 */
-	public function __construct(WidgetContainerInterface $parent, WidgetInterface $oldWidget, WidgetInterface $newWidget) {
+	public function __construct(WidgetInterface $parent, WidgetInterface $oldWidget, WidgetInterface $newWidget) {
 		$this->parent = $parent;
 		$this->old = $oldWidget;
 		$this->new = $newWidget;

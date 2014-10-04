@@ -33,7 +33,7 @@ use \nexxes\widgets\WidgetContainerInterface;
  */
 class WidgetRemoveEvent extends \Symfony\Component\EventDispatcher\Event {
 	/**
-	 * @var WidgetContainerInterface
+	 * @var WidgetInterface
 	 */
 	public $parent;
 	
@@ -45,7 +45,7 @@ class WidgetRemoveEvent extends \Symfony\Component\EventDispatcher\Event {
 	/**
 	 * @param WidgetInterface $widget
 	 */
-	public function __construct(WidgetContainerInterface $parent, WidgetInterface $widget) {
+	public function __construct(WidgetInterface $parent, WidgetInterface $widget) {
 		$this->parent = $parent;
 		$this->widget = $widget;
 	}
