@@ -2,17 +2,17 @@
 
 namespace nexxes\widgets\bootstrap;
 
-use \nexxes\widgets\html\FormElement;
 use \nexxes\widgets\html\FormElementInterface;
+use \nexxes\widgets\html\FormElementTrait;
+use \nexxes\widgets\WidgetInterface;
 use \nexxes\widgets\WidgetCompositeInterface;
 use \nexxes\widgets\WidgetCompositeTrait;
-use \nexxes\widgets\WidgetContainer;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class FormGroup extends FormElement implements FormElementInterface, WidgetCompositeInterface {
-	use WidgetCompositeTrait;
+class FormGroup implements WidgetCompositeInterface, FormElementInterface {
+	use WidgetCompositeTrait, FormElementTrait;
 	
 	/**
 	 * Get success status of this form element
@@ -124,7 +124,7 @@ class FormGroup extends FormElement implements FormElementInterface, WidgetCompo
 	
 	
 	
-	public function __construct(\nexxes\widgets\WidgetInterface $parent = null) {
+	public function __construct(WidgetInterface $parent = null) {
 		if ($parent !== null) { $this->setParent($parent); }
 		
 		$this->childSlot('label');
