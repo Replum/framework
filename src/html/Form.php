@@ -3,6 +3,7 @@
 namespace nexxes\widgets\html;
 
 use \nexxes\widgets\WidgetContainer;
+use \nexxes\widgets\WidgetCollection;
 use \nexxes\widgets\WidgetInterface;
 
 /**
@@ -88,10 +89,17 @@ class Form extends WidgetContainer {
 	
 	
 	/**
-	 *
-	 * @var type 
+	 * @var WidgetCollection 
 	 */
 	private $elements;
+	
+	public function elements() {
+		if (is_null($this->elements)) {
+			$this->elements = new WidgetCollection($this);
+		}
+		
+		return $this->elements;
+	}
 	
 	
 	public function __toString() {
