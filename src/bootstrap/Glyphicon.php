@@ -41,13 +41,6 @@ class Glyphicon implements WidgetInterface {
 		return $this;
 	}
 	
-	/**
-	 * @param string $name The name of the icon to show (without the "glyphicon-" prefix
-	 */
-	public function __construct($name) {
-		$this->name = $name;
-	}
-	
 	public function __toString() {
 		$this->delClass('/^glyphicon-/');
 		$this->addClass('glyphicon');
