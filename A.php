@@ -24,13 +24,17 @@
 namespace nexxes\widgets\html;
 
 use \nexxes\widgets\WidgetContainer;
+use \nexxes\widgets\WidgetHasClickEventInterface;
+use \nexxes\widgets\WidgetHasClickEventTrait;
+use \nexxes\widgets\WidgetHasEventsTrait;
 
 /**
- * Description of A
- *
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class A extends WidgetContainer {
+class A extends WidgetContainer implements WidgetHasClickEventInterface {
+	use WidgetHasEventsTrait, WidgetHasClickEventTrait;
+	
+	
 	protected function validTypes() {
 		return ['a'];
 	}
@@ -62,6 +66,7 @@ class A extends WidgetContainer {
 	
 	protected function getAttributesHTML() {
 		return parent::getAttributesHTML()
-			. (!\is_null($this->href) ? ' href="' . $this->escape($this->href) . '"' : '');
+			. (!\is_null($this->href) ? ' href="' . $this->escape($this->href) . '"' : '')
+			. $this->renderClickHandlerHTML();
 	}
 }
