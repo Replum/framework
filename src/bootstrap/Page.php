@@ -10,6 +10,8 @@ use \nexxes\widgets\html\ScriptLink;
  */
 abstract class Page extends \nexxes\widgets\html\Page {
 	public function __construct() {
+		parent::__construct();
+		
 		$this->addStyleSheet((new StyleSheetLink())->setUrl('/components/bootstrap/css/bootstrap.css'));
 		$this->addStyleSheet((new StyleSheetLink())->setUrl('/components/bootstrap/css/bootstrap-theme.css'));
 		$this->addStyleSheet((new StyleSheetLink())->setUrl('/components/bootstrap-datepicker/css/datepicker3.css'));
