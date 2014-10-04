@@ -9,8 +9,12 @@ use \nexxes\widgets\WidgetContainerTrait;
 abstract class Page implements PageInterface {
 	use PageTrait, WidgetContainerTrait;
 	
-	public $id = "";
 	
+	
+	
+	public function __construct() {
+		$this->getEventDispatcher()->addSubscriber(new FormSynchronizer());
+	}
 	
 	/**
 	 * {@inheritdoc}
