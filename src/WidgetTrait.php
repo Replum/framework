@@ -5,6 +5,11 @@ namespace nexxes\widgets;
 use \nexxes\widgets\events\WidgetChangeEvent;
 
 trait WidgetTrait {
+	public function __construct(WidgetInterface $parent = null) {
+		if (!is_null($parent)) { $this->setParent($parent); }
+	}
+	
+	
 	/**
 	 * @var \nexxes\widgets\WidgetInterface
 	 */
