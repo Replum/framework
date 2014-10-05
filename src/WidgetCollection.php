@@ -268,4 +268,13 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		
 		return $this;
 	}
+	
+	/**
+	 * Clean collection of all contained elements
+	 */
+	public function blank() {
+		foreach ($this->widgets as $widget) {
+			$this->remove($widget);
+		}
+	}
 }
