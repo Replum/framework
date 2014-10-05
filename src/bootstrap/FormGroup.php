@@ -153,11 +153,11 @@ class FormGroup implements WidgetCompositeInterface, FormElementInterface {
 		
 		if ($this->hasFeedback()) {
 			if ($this->hasSuccess()) {
-				$icon = (new Glyphicon('ok'))->addClass('form-control-feedback');
+				$icon = (new Glyphicon($this))->setName('ok')->addClass('form-control-feedback');
 			} elseif ($this->hasWarning()) {
-				$icon = (new Glyphicon('warning-sign'))->addClass('form-control-feedback');
+				$icon = (new Glyphicon($this))->setName('warning-sign')->addClass('form-control-feedback');
 			} elseif ($this->hasError()) {
-				$icon = (new Glyphicon('remove'))->addClass('form-control-feedback');
+				$icon = (new Glyphicon($this))->setName('remove')->addClass('form-control-feedback');
 			}
 		}
 		
