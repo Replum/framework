@@ -34,6 +34,6 @@ class TableFooter implements WidgetInterface, TableSectionInterface {
 	use WidgetTrait, TableSectionTrait;
 	
 	public function __toString() {
-		return $this->renderTableSectionHTML('tfoot');
+		return $this->renderTableSection('tfoot');
 	}
 }

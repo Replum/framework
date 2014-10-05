@@ -34,6 +34,6 @@ class TableBody implements WidgetInterface, TableSectionInterface {
 	use WidgetTrait, TableSectionTrait;
 	
 	public function __toString() {
-		return $this->renderTableSectionHTML('tbody');
+		return $this->renderTableSection('tbody');
 	}
 }

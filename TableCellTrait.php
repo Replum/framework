@@ -91,7 +91,7 @@ trait TableCellTrait {
 	}
 	
 	
-	protected function renderTableCellHTML() {
+	protected function renderTableCell() {
 		return ($this->getColSpan() > 1 ? ' colspan=' . $this->getColSpan() : '')
 			. ($this->getRowSpan() > 1 ? ' rowspan=' . $this->getRowSpan() : '');
 	}

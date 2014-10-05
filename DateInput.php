@@ -32,7 +32,7 @@ class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
 		return $this->name;
 	}
 	
-	protected function getNameHTML() {
+	protected function renderNameAttribute() {
 		return (\is_null($this->name) ? '' : ' name="' . $this->escape($this->name) . '"');
 	}
 	
@@ -55,7 +55,7 @@ class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
 		return $this->value;
 	}
 	
-	protected function getValueHTML() {
+	protected function renderValueAttribute() {
 		return (\is_null($this->value) ? '' : ' value="' . $this->escape($this->value) . '"');
 	}
 	
@@ -76,12 +76,12 @@ class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
 	
 	public function __toString() {
 		return '<input type="date"'
-			. $this->getAttributesHTML()
+			. $this->renderAttributes()
 			
-			. $this->renderChangeHandlerHTML()
+			. $this->renderChangeHandler()
 			
-			. $this->getNameHTML()
-			. $this->getValueHTML()
+			. $this->renderNameAttribute()
+			. $this->renderValueAttribute()
 			
 			. ' />';
 	}
