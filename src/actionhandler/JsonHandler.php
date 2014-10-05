@@ -47,6 +47,8 @@ class JsonHandler {
 
 		header('Content-Type: text/json');
 		echo json_encode($data);
+		
+		\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
 		exit;
 	}
 	
