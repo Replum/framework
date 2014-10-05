@@ -113,6 +113,7 @@ nexxes.widgets = {
 		}
 		
 		nexxes.widgets.currentAction = null;
+		nexxes.widgets._executeActions();
 	}
 	
 };
