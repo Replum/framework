@@ -51,7 +51,7 @@ class TableRow implements WidgetInterface {
 	}
 	
 	public function __toString() {
-		$r = '<tr' . $this->getAttributesHTML() . '>' . PHP_EOL;
+		$r = '<tr' . $this->renderAttributes() . '>' . PHP_EOL;
 		
 		foreach ($this->cells() as $cell) {
 			$r .= $cell;

@@ -76,7 +76,7 @@ class Table implements WidgetInterface {
 	}
 	
 	public function __toString() {
-		$r = '<table' . $this->getAttributesHTML() . '>' . PHP_EOL;
+		$r = '<table' . $this->renderAttributes() . '>' . PHP_EOL;
 
 		if (!is_null($this->getHeader())) {
 			$r .= $this->getHeader();

@@ -28,7 +28,7 @@ trait WidgetContainerTrait {
 	 * Simple helper to iterate over all children and render them.
 	 * @return string
 	 */
-	protected function renderChildrenHTML() {
+	protected function renderChildren() {
 		$r = '';
 		
 		foreach ($this->children() AS $child) {

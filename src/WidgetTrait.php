@@ -485,7 +485,7 @@ trait WidgetTrait {
 		return $this;
 	}
 	
-	protected function getDataHTML() {
+	protected function renderDataAttribute() {
 		$r = '';
 		
 		foreach ($this->WidgetTraitData as $dataName => $dataValue) {
@@ -520,12 +520,12 @@ trait WidgetTrait {
 	 * @return string
 	 * @codeCoverageIgnore
 	 */
-	protected function getAttributesHTML() {
+	protected function renderAttributes() {
 		\sort($this->WidgetTraitClasses);
 		
 		return (\is_null($this->WidgetTraitId) ? '' : ' id="' . $this->escape($this->WidgetTraitId) . '"')
 			. (\count($this->WidgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->WidgetTraitClasses)) . '"' : '')
-			. $this->getDataHTML()
+			. $this->renderDataAttribute()
 			. (\is_null($this->WidgetTraitRole) ? '' : ' role="' . $this->escape($this->WidgetTraitRole) . '"')
 			. (\is_null($this->WidgetTraitTitle) ? '' : ' title="' . $this->escape($this->WidgetTraitTitle) . '"')
 			. (\is_null($this->WidgetTraitTabindex) ? '' : ' tabindex="' . $this->WidgetTraitTabindex . '"')

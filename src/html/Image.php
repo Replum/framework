@@ -38,6 +38,6 @@ class Image implements WidgetInterface {
 	}
 	
 	public function __toString() {
-		return '<img src="' . $this->escape($this->getSource()) . '"' . $this->getAttributesHTML() . ' />';
+		return '<img src="' . $this->escape($this->getSource()) . '"' . $this->renderAttributes() . ' />';
 	}
 }

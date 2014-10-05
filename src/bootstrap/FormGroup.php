@@ -167,7 +167,7 @@ class FormGroup implements WidgetCompositeInterface, FormElementInterface {
 		
 		$inline = false;
 		
-		$r = '<div' . $this->getAttributesHTML() . '>' . PHP_EOL
+		$r = '<div' . $this->renderAttributes() . '>' . PHP_EOL
 			. ($this['label'] ?: "")
 			. (!$inline ? '<div class="col-lg-9">' : '')
 			. ($this['element'] ?: "")

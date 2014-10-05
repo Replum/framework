@@ -34,6 +34,6 @@ class TableHeader implements WidgetInterface, TableSectionInterface {
 	use WidgetTrait, TableSectionTrait;
 	
 	public function __toString() {
-		return $this->renderTableSectionHTML('thead');
+		return $this->renderTableSection('thead');
 	}
 }

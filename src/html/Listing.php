@@ -200,7 +200,7 @@ class Listing implements WidgetContainerInterface {
 	 */
 	public function __toString() {
 		$r = '<' . ($this->isOrdered() ? 'ol' : 'ul')
-			. $this->getAttributesHTML()
+			. $this->renderAttributes()
 			. ($this->isReversed() ? ' reversed="reversed"' : '')
 			. ($this->getStart() !== null ? ' start="' . $this->escape($this->getStart()) . '"' : '')
 			. ($this->isOrdered() && ($this->getType() !== null) ? ' type="' . $this->escape($this->getType()) . '"' : '')

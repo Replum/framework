@@ -104,7 +104,7 @@ class Form extends WidgetContainer {
 	
 	public function __toString() {
 		$r = '<form role="form"'
-			. $this->getAttributesHTML()
+			. $this->renderAttributes()
 			. '>' . "\n";
 		
 		foreach ($this->children() AS $widget) {

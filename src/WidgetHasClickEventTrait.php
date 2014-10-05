@@ -37,7 +37,7 @@ trait WidgetHasClickEventTrait {
 	/**
 	 * Render the click handler registration required for this widget
 	 */
-	protected function renderClickHandlerHTML() {
+	protected function renderClickHandler() {
 		return ($this->hasEventHandler(WidgetHasClickEventInterface::EVENT_NAME) ? ' onclick="nexxes.widgets.' . WidgetHasClickEventInterface::EVENT_NAME . '(this);"' : '');
 	}
 }

@@ -34,6 +34,6 @@ class TableDataCell implements WidgetContainerInterface, TableCellInterface {
 	use WidgetContainerTrait, TableCellTrait;
 	
 	public function __toString() {
-		return '<td ' . $this->getAttributesHTML() . $this->renderTableCellHTML() . '>' . $this->renderChildrenHTML() . '</td>' . PHP_EOL;
+		return '<td ' . $this->renderAttributes() . $this->renderTableCell() . '>' . $this->renderChildren() . '</td>' . PHP_EOL;
 	}
 }

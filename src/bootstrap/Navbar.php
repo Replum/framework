@@ -192,7 +192,7 @@ class Navbar implements WidgetCompositeInterface {
 	public function __toString() {
 		$this->updateNavbarClasses();
 		
-		return '<nav' . $this->getAttributesHTML() . '>' . PHP_EOL
+		return '<nav' . $this->renderAttributes() . '>' . PHP_EOL
 			. '<div class="container-fluid">' . PHP_EOL
 			. '<div class="navbar-header">' . PHP_EOL
 			. '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#' . $this->escape($this['elements']->getID()) . '">' . PHP_EOL

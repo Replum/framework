@@ -88,7 +88,7 @@ class Text implements WidgetInterface, PhrasingContentInterface {
 	}
 	
 	public function __toString() {
-		$attributes = $this->getAttributesHTML();
+		$attributes = $this->renderAttributes();
 		
 		if (!is_null($this->type) || ($attributes != '')) {
 			return '<' . ($this->type ?: 'span') . $attributes . '>' . $this->escape($this->text) . '</' . ($this->type ?: 'span') . '>';

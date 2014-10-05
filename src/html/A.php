@@ -64,9 +64,9 @@ class A extends WidgetContainer implements WidgetHasClickEventInterface {
 		return $this;
 	}
 	
-	protected function getAttributesHTML() {
-		return parent::getAttributesHTML()
+	protected function renderAttributes() {
+		return parent::renderAttributes()
 			. (!\is_null($this->href) ? ' href="' . $this->escape($this->href) . '"' : '')
-			. $this->renderClickHandlerHTML();
+			. $this->renderClickHandler();
 	}
 }

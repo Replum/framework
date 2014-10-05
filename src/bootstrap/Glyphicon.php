@@ -46,6 +46,6 @@ class Glyphicon implements WidgetInterface {
 		$this->addClass('glyphicon');
 		$this->addClass('glyphicon-' . $this->name);
 		
-		return '<span ' . $this->getAttributesHTML() . '></span>' . PHP_EOL;
+		return '<span ' . $this->renderAttributes() . '></span>' . PHP_EOL;
 	}
 }

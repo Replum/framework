@@ -47,8 +47,8 @@ trait TableSectionTrait {
 		return $this->TableSectionTraitRows;
 	}
 	
-	protected function renderTableSectionHTML($tag) {
-		$r = '<' . $tag . $this->getAttributesHTML() . '>' . PHP_EOL;
+	protected function renderTableSection($tag) {
+		$r = '<' . $tag . $this->renderAttributes() . '>' . PHP_EOL;
 		
 		foreach ($this->rows() as $row) {
 			$r .= $row;

@@ -79,8 +79,8 @@ class Label extends WidgetContainer {
 	 * Add for attribute when printing
 	 * @return string
 	 */
-	protected function getAttributesHTML() {
+	protected function renderAttributes() {
 		return ($this->getFor() !== null ? ' for="' . $this->escape($this->getFor()->getID()) . '"' : '')
-			. parent::getAttributesHTML();
+			. parent::renderAttributes();
 	}
 }

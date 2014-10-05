@@ -37,7 +37,7 @@ trait WidgetHasChangeEventTrait {
 	/**
 	 * Render the change handler registration required for this widget
 	 */
-	protected function renderChangeHandlerHTML() {
+	protected function renderChangeHandler() {
 		return ($this->hasEventHandler(WidgetHasChangeEventInterface::EVENT_NAME) ? ' onchange="nexxes.widgets.' . WidgetHasChangeEventInterface::EVENT_NAME . '(this);"' : '');
 	}
 }
