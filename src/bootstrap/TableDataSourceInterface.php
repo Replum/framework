@@ -28,19 +28,19 @@ namespace nexxes\widgets\bootstrap;
  * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-interface TableDataSourceInterface extends \Countable {
+interface TableDataSourceInterface extends \Traversable, \Countable {
+	/**
+	 * Get the list of available fields
+	 * @return array<string>
+	 */
+	function fields();
+	
 	/**
 	 * Check whether a field is sortable
 	 * @param string $fieldName
 	 * @return boolean
 	 */
 	function isSortable($fieldName);
-	
-	/**
-	 * Get the list of available fields
-	 * @return array<string>
-	 */
-	function fields();
 	
 	/**
 	 * Get the (translated) name to show for a field
@@ -58,9 +58,27 @@ interface TableDataSourceInterface extends \Countable {
 	function value($id, $fieldName);
 	
 	/**
-	 * Get the list of IDs of the entries to show on the current page, in that order.
+	 * Sort the contained entities by the given field
 	 * 
-	 * @return array<mixed>
+	 * @param string $fieldName
+	 * @param boolean $descending
+	 * @return TableDataSourceInterface $this for chaining
 	 */
-	function ids();
+	function sort($fieldName, $descending = false);
+	
+	/**
+	 * Seek to the $pos-th entity in this data source
+	 * 
+	 * @param int $pos
+	 * @return TableDataSourceInterface $this for chaining
+	 */
+	function seek($pos = 0);
+	
+	/**
+	 * Set the number of entities to iterate over
+	 * 
+	 * @param int $count
+	 * @return TableDataSourceInterface $this for chaining
+	 */
+	function limit($count = 15);
 }

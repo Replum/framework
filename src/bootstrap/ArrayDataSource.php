@@ -26,9 +26,20 @@ namespace nexxes\widgets\bootstrap;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class ArrayDataSource implements TableDataSourceInterface {
-	public $fields;
-	public $data;
+class ArrayDataSource implements \IteratorAggregate, TableDataSourceInterface {
+	private $fields;
+	private $data;
+	
+	private $ids;
+	
+	private $start = 0;
+	private $limit = 15;
+	
+	public function __construct(array $fields, array $data) {
+		$this->fields = $fields;
+		$this->data = $data;
+		$this->ids = \array_keys($this->data);
+	}
 	
 	public function count($mode = 'COUNT_NORMAL') {
 		return \count($this->data);
@@ -42,15 +53,33 @@ class ArrayDataSource implements TableDataSourceInterface {
 		return \array_keys($this->fields);
 	}
 
-	public function ids() {
-		return \array_keys($this->data);
-	}
-
 	public function isSortable($fieldName) {
 		return true;
 	}
 
 	public function value($id, $fieldName) {
 		return $this->data[$id][$fieldName];
+	}
+	
+	public function sort($fieldName, $sortDesc = false) {
+		usort($this->ids, function($a, $b) use ($fieldName) {
+			return strnatcmp($this->data[$a][$fieldName], $this->data[$b][$fieldName]);
+		});
+		
+		if ($sortDesc) {
+			$this->ids = \array_reverse($this->ids);
+		}
+	}
+
+	public function seek($pos = 0) {
+		$this->start = $pos;
+	}
+	
+	public function limit($count = 15) {
+		$this->limit = $count;
+	}
+	
+	public function getIterator() {
+		return new \ArrayIterator(\array_slice($this->ids, $this->start, $this->limit));
 	}
 }

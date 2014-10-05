@@ -35,6 +35,7 @@ use \nexxes\widgets\html\TableRow;
 use \nexxes\widgets\html\TableHeaderCell;
 use \nexxes\widgets\html\TableDataCell;
 use \nexxes\widgets\html\Text;
+use \nexxes\widgets\Event;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
@@ -68,13 +69,19 @@ class Table implements WidgetInterface {
 	 */
 	private $footer;
 	
+	private $sortBy;
+	private $sortDesc;
+	private $sorter = [];
+	
 	
 	protected function updateTable() {
 		if (is_null($this->table)) {
 			$this->table = new HTMLTable($this);
 			$this->header = new TableHeader($this->table);
+			$this->header->getID();
 			$this->table->setHeader($this->header);
 			$this->body = new TableBody($this->table);
+			$this->body->getID();
 			$this->table->bodies()->add($this->body);
 			$this->footer = new TableFooter($this->table);
 			$this->table->setFooter($this->footer);
@@ -89,16 +96,23 @@ class Table implements WidgetInterface {
 			if ($this->datasource->isSortable($fieldName)) {
 				$link = new A($cell);
 				$link->children()->add($text);
-				$link->getID();
+				$this->sorter[$link->getID()] = $fieldName;
 				$link->onClick([$this, 'sortHandler']);
 				
-			} else {
+				if ($fieldName === $this->sortBy) {
+					$link->children()->add((new Glyphicon($link))->setName('arrow-' . ($this->sortDesc ? 'up' : 'down')));
+				} else {
+					$link->children()->add((new Glyphicon($link))->setName('arrow-down')->addClass('table-link-hint'));
+				}
+			}
+			
+			else {
 				$cell->children()->add($text);
 			}
 		}
 		
 		// Build the data cells
-		foreach ($this->datasource->ids() as $id) {
+		foreach ($this->datasource as $id) {
 			$this->body->rows()->add($row = new TableRow($this->body));
 			
 			foreach ($this->datasource->fields() as $fieldName) {
@@ -134,7 +148,18 @@ class Table implements WidgetInterface {
 	/**
 	 * Registered as the event handler for the sort event clicks
 	 */
-	public function sortHandler() {
-		throw new \RuntimeException("Handler called!");
+	public function sortHandler(Event $event) {
+		$field = $this->sorter[$event->getWidget()->getID()];
+		$this->sortDesc = (($this->sortBy === $field) && !$this->sortDesc);
+		$this->sortBy = $field;
+		$this->datasource->sort($this->sortBy, $this->sortDesc);
+		
+		$this->header->rows()->blank();
+		$this->header->setChanged(true);
+		
+		$this->body->rows()->blank();
+		$this->body->setChanged(true);
+		
+		$this->updateTable();
 	}
 }
