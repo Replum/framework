@@ -1,0 +1,20 @@
+{
+	"name": "nexxes/widgets-html",
+	"description": "nexxes web widget framework: html widgets",
+	"authors": [
+		{
+			"name": "Dennis Birkholz",
+			"email": "dennis.birkholz@nexxes.net"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"nexxes\\widgets\\html\\": "src/"
+		}
+	},
+	
+	"require": {
+		"nexxes/widgets-base": "*@dev",
+		"nexxes/dependency": "*@dev"
+	}
+}
