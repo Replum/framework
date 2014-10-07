@@ -14,13 +14,12 @@ namespace nexxes\widgets\html;
 use \nexxes\widgets\WidgetContainer;
 use \nexxes\widgets\WidgetHasClickEventInterface;
 use \nexxes\widgets\WidgetHasClickEventTrait;
-use \nexxes\widgets\WidgetHasEventsTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class A extends WidgetContainer implements WidgetHasClickEventInterface {
-	use WidgetHasEventsTrait, WidgetHasClickEventTrait;
+	use WidgetHasClickEventTrait;
 	
 	
 	protected function validTypes() {

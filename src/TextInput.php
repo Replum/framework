@@ -13,14 +13,13 @@ namespace nexxes\widgets\html;
 
 use \nexxes\widgets\WidgetTrait;
 use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasEventsTrait;
 use \nexxes\widgets\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
-	use WidgetTrait, FormElementTrait, WidgetHasEventsTrait, WidgetHasChangeEventTrait;
+	use WidgetTrait, FormElementTrait, WidgetHasChangeEventTrait;
 	
 	/**
 	 * @var string

@@ -13,7 +13,6 @@ namespace nexxes\widgets\html;
 
 use \nexxes\widgets\WidgetHasChangeEventInterface;
 use \nexxes\widgets\WidgetHasChangeEventTrait;
-use \nexxes\widgets\WidgetHasEventsTrait;
 use \nexxes\widgets\WidgetInterface;
 use \nexxes\widgets\WidgetTrait;
 
@@ -21,7 +20,7 @@ use \nexxes\widgets\WidgetTrait;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
-	use WidgetTrait, FormElementTrait, WidgetHasEventsTrait, WidgetHasChangeEventTrait;
+	use WidgetTrait, FormElementTrait, WidgetHasChangeEventTrait;
 	
 	/**
 	 * @var string

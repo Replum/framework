@@ -16,7 +16,10 @@ use \nexxes\widgets\PageTrait;
 use \nexxes\widgets\WidgetContainerTrait;
 
 abstract class Page implements PageInterface {
-	use PageTrait, WidgetContainerTrait;
+	use PageTrait, WidgetContainerTrait {
+		PageTrait::__wakeup as private PageTraitWakeup;
+		WidgetContainerTrait::__wakeup as private WidgetContainerTraitWakeup;
+	}
 	
 	
 	
@@ -64,5 +67,10 @@ abstract class Page implements PageInterface {
 		$r .= '</html>';
 		
 		return $r;
+	}
+	
+	public function __wakeup() {
+		$this->WidgetContainerTraitWakeup();
+		$this->PageTraitWakeup();
 	}
 }
