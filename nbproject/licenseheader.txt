@@ -1,0 +1,12 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}This file is part of the nexxes/widgets-html package.
+${licensePrefix}
+${licensePrefix}Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+${licensePrefix}
+${licensePrefix}For the full copyright and license information, please view the LICENSE
+${licensePrefix}file that was distributed with this source code.
+<#if licenseLast??>
+${licenseLast}
+</#if>

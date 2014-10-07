@@ -1,12 +1,12 @@
 <?php
 
-if (false !== ($autoloaders = \spl_autoload_functions()) {
+if (false !== ($autoloaders = \spl_autoload_functions())) {
 	foreach ($autoloaders as $a) {
 		if (
 			\is_array($a)
-			&& isset($a[0]
+			&& isset($a[0])
 			&& \is_object($a[0])
-			(\get_class($a[0]) === 'Composer\\Autoload\\ClassLoader')
+			&& (\get_class($a[0]) === 'Composer\\Autoload\\ClassLoader')
 		) {
 			$autoloader = $a;
 			break;

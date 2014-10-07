@@ -2,11 +2,10 @@
 	"name": "nexxes/widgets-html",
 	"description": "nexxes web widget framework: html widgets",
 	"authors": [
-		{
-			"name": "Dennis Birkholz",
-			"email": "dennis.birkholz@nexxes.net"
-		}
+		{ "name": "Dennis Birkholz", "email": "dennis.birkholz@nexxes.net" }
 	],
+	"license": "LGPL-3.0+",
+	
 	"autoload": {
 		"psr-4": {
 			"nexxes\\widgets\\html\\": "src/"
