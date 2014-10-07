@@ -34,16 +34,16 @@ interface PageInterface extends WidgetContainerInterface {
 	
 	/**
 	 * Get the event dispatcher that handles ajax events
-	 * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 * @return \nexxes\widgets\events\WidgetEventDispatcher
 	 */
 	function getEventDispatcher();
 	
 	/**
 	 * Initialize the event dispatcher with the supplied event dispatcher object or create a new object
-	 * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+	 * @param \nexxes\widgets\events\WidgetEventDispatcher $eventDispatcher
 	 * @return \nexxes\widgets\PageInterface $this for chaining
 	 */
-	function initEventDispatcher(\Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher = null);
+	function initEventDispatcher(\nexxes\widgets\events\WidgetEventDispatcher $eventDispatcher = null);
 	
 	/**
 	 * Get the document title

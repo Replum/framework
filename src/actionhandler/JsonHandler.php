@@ -4,6 +4,9 @@ namespace nexxes\widgets\actionhandler;
 
 use \nexxes\widgets\Event;
 
+use \nexxes\widgets\events\WidgetOnChangeEvent;
+use \nexxes\widgets\events\WidgetOnClickEvent;
+
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
@@ -41,7 +44,11 @@ class JsonHandler {
 			$widget->setValue($request->request->get('nexxes_value'));
 		}
 		
-		$page->getEventDispatcher()->dispatch('widget.' . $widget->getID() . '.on' . $event, new Event($widget));
+		if ($event == 'click') {
+			$page->getEventDispatcher()->dispatch(WidgetOnClickEvent::class . ':' . $widget->getID(), new WidgetOnClickEvent($widget));
+		} elseif ($event == 'change') {
+			$page->getEventDispatcher()->dispatch(WidgetOnChangeEvent::class . ':' . $widget->getID(), new WidgetOnChangeEvent($widget));
+		}
 		
 		$data = $this->handleChangedWidgets($page->getWidgetRegistry());
 

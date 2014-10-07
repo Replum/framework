@@ -1,23 +1,32 @@
 <?php
 
+/*
+ * This file is part of the nexxes/widgets-base package.
+ * 
+ * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * 
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace nexxes\widgets;
 
 /**
  * This interface indicates that the client-side (HTML) representation of this widget can fire the "change" event.
  * Handler registration implies the registration of the corresponding JavaScript event handler on the client side.
  * 
- * Event handler should be stored in the EventHandlerRegistry so the handler are executed by the Executer.
+ * Widgets with events must have an ID, otherwise events can not be mapped to the originating widget.
+ * If you do not assign an event handler in the original page creation but in another event handler,
+ * ensure to call setID() in the original page creation so the later assigned handler can work.
  * 
- * The implementation of the Identifiable interface is required. The ID of the widget must be present so the origin of the event on the client side can be mapped to the widget on the server side.
+ * You should not implement that methods provided by this interface yourself.
+ * Instead, use the implementation in the WidgetHasChangeEventTrait and call the
+ *  renderChangeHandler() method when rendering the start tag.
  * 
- * NOTE: You must not register closures as event handler as PHP closures can not be serialized and thus can not be called when the widget is restored (unserialized) on the event.
+ * NOTE: You must not register closures as event handlers as PHP closures can not be serialized.
+ *       This results in errors when any handler is executed and effectively disables handlers.
  */
-interface WidgetHasChangeEventInterface extends WidgetHasEventsInterface {
-	/**
-	 * Suffix used to build event names
-	 */
-	const EVENT_NAME = "onchange";
-	
+interface WidgetHasChangeEventInterface extends WidgetInterface {
 	/**
 	 * Register a handler for the change event.
 	 * Multiple handler methods can be registered with this method.

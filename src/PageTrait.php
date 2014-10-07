@@ -2,8 +2,7 @@
 
 namespace nexxes\widgets;
 
-use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use \Symfony\Component\EventDispatcher\EventDispatcher;
+use \nexxes\widgets\events\WidgetEventDispatcher;
 
 trait PageTrait {
 	/**
@@ -127,7 +126,7 @@ trait PageTrait {
 	
 	
 	/**
-	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 * @var WidgetEventDispatcher
 	 */
 	private $PageTraitEventDispatcher;
 	
@@ -146,17 +145,29 @@ trait PageTrait {
 	/**
 	 * @implements \nexxes\widgets\PageInterface
 	 */
-	public function initEventDispatcher(EventDispatcherInterface $newEventDispatcher = null) {
+	public function initEventDispatcher(WidgetEventDispatcher $newEventDispatcher = null) {
 		if (!is_null($this->PageTraitEventDispatcher)) {
 			throw new \RuntimeException("Can not replace existing event dispatcher!");
 		}
 		
 		if (is_null($newEventDispatcher)) {
-			$this->PageTraitEventDispatcher = new EventDispatcher();
+			$this->PageTraitEventDispatcher = new WidgetEventDispatcher();
 		} else {
 			$this->PageTraitEventDispatcher = $newEventDispatcher;
 		}
 		
+		$container = \nexxes\dependency\Container::get();
+		$container[WidgetEventDispatcher::class] = function() {
+			return $this->getEventDispatcher();
+		};
+		
 		return $this;
+	}
+	
+	public function __wakeup() {
+		$container = \nexxes\dependency\Container::get();
+		$container[WidgetEventDispatcher::class] = function() {
+			return $this->getEventDispatcher();
+		};
 	}
 }
