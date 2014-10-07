@@ -20,9 +20,6 @@
 		"symfony/event-dispatcher": "2.5.*",
 		"symfony/http-foundation": "2.5.*",
 		
-		"components/jquery": "1.*",
-		"components/bootstrap": "3.*",
-		"components/bootstrap-default": "3.*",
-		"eternicode/bootstrap-datepicker": "dev-master"
+		"components/jquery": "1.*"
 	}
 }
