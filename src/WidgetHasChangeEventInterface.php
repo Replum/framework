@@ -20,11 +20,12 @@ namespace nexxes\widgets;
  * ensure to call setID() in the original page creation so the later assigned handler can work.
  * 
  * You should not implement that methods provided by this interface yourself.
- * Instead, use the implementation in the WidgetHasChangeEventTrait and call the
- *  renderChangeHandler() method when rendering the start tag.
+ * Instead, use the implementation in the {@see WidgetHasChangeEventTrait WidgetHasChangeEventTrait} and call the
+ *  {@see WidgetHasChangeEventTrait::renderChangeHandler() renderChangeHandler()} method when rendering the start tag.
  * 
- * NOTE: You must not register closures as event handlers as PHP closures can not be serialized.
- *       This results in errors when any handler is executed and effectively disables handlers.
+ * #### Warning
+ * You must not register closures as event handlers as PHP closures can not be serialized.
+ * This results in errors when any handler is executed and effectively disables handlers.
  */
 interface WidgetHasChangeEventInterface extends WidgetInterface {
 	/**
@@ -43,6 +44,7 @@ interface WidgetHasChangeEventInterface extends WidgetInterface {
 	 * Multiple handler methods can be registered with this method.
 	 * 
 	 * @param callable $eventHandler
+	 * @param int $prio
 	 * @return WidgetHasChangeEvent $this for chaining
 	 */
 	function onChangeOnce(callable $eventHandler, $prio = 5);
