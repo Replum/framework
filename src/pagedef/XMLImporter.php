@@ -67,14 +67,20 @@ class XMLImporter extends StructImporter {
 	 */
 	private function recurse(structure\Widget $widget, \DOMNode $node) {
 		if ($node->hasAttributes()) {
-			// Class to use for child widget
-			if ($node->attributes->getNamedItem('class') !== null) {
-				$widget->class = \call_user_func($this->resolver, $node->attributes->getNamedItem('class')->value);
-			}
-			
-			// Create reference in root linking to current widget
-			if ($node->attributes->getNamedItem('ref') !== null) {
-				$widget->ref = $node->attributes->getNamedItem('ref')->value;
+			foreach ($node->attributes as $attribute) {
+				// Class to use for child widget
+				if ($attribute->name === 'class') {
+					$widget->class = \call_user_func($this->resolver, $attribute->value);
+				}
+				
+				// Create reference in root linking to current widget
+				elseif ($attribute->name === 'ref') {
+					$widget->ref = $attribute->value;
+				}
+				
+				elseif (\preg_match('/^(' . \implode('|', $this->propertyTags) . ')\.(.*)$/', $attribute->name, $matches)) {
+					$widget->properties[] = new structure\Property($matches[2], $attribute->value);
+				}
 			}
 		}
 		
