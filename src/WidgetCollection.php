@@ -23,9 +23,13 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\widgets\events\WidgetEventDispatcher;
 use \nexxes\widgets\events\WidgetAddEvent;
 use \nexxes\widgets\events\WidgetReplaceEvent;
 use \nexxes\widgets\events\WidgetRemoveEvent;
+
+use \nexxes\dependency\Container;
+
 
 /**
  * The WidgetCollection represents a set of widgets.
@@ -213,7 +217,7 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		
 		if (!$this->auxiliary) {
 			$widget->setParent($this->owner);
-			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $widget));
+			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $widget));
 		}
 		
 		return $this;
@@ -234,7 +238,7 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		unset($this->widgets[$key]);
 		
 		if (!$this->auxiliary) {
-			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $widget));
+			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $widget));
 		}
 		
 		$this->reindex();
@@ -254,16 +258,16 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		}
 		
 		if (!$this->auxiliary) {
-			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $oldWidget));
+			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $oldWidget));
 		}
 		
 		$this->widgets[$key] = $newWidget;
 		
 		if (!$this->auxiliary) {
 			$newWidget->setParent($this->owner);
-			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetReplaceEvent::class, new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
+			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetReplaceEvent::class, new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
 
-			$this->owner->getPage()->getEventDispatcher()->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $newWidget));
+			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $newWidget));
 		}
 		
 		return $this;
