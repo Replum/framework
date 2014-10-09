@@ -19,63 +19,47 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
-	use WidgetTrait, FormElementTrait, WidgetHasChangeEventTrait;
-	
-	/**
-	 * @var string
-	 */
-	private $name;
-	
-	/**
-	 * @param string $newName
-	 * @return \nexxes\widgets\html\TextInput $this for chaining
-	 */
-	public function setName($newName) {
-		$this->name = $newName;
-		return $this;
+	use WidgetTrait,  WidgetHasChangeEventTrait;
+	use FormInputTrait {
+		hasAutocomplete as public;
+		enableAutocomplete as public;
+		disableAutocomplete as public;
+		unsetAutocomplete as public;
+		
+		hasAutofocus as public;
+		enableAutofocus as public;
+		disableAutofocus as public;
+		
+		getMinlength as public;
+		setMinlength as public;
+		
+		getMaxlength as public;
+		setMaxlength as public;
+		
+		getPlaceholder as public;
+		setPlaceholder as public;
+		
+		isReadonly as public;
+		enableReadonly as public;
+		disableReadonly as public;
+		
+		isRequired as public;
+		enableRequired as public;
+		disableRequired as public;
 	}
 	
-	public function getName() {
-		return $this->name;
-	}
-	
-	protected function renderNameAttribute() {
-		return (\is_null($this->name) ? '' : ' name="' . $this->escape($this->name) . '"');
-	}
-	
-	
-	/**
-	 * @var string
-	 */
-	private $value;
-	
-	/**
-	 * @param string $newValue
-	 * @return \nexxes\widgets\html\TextInput $this for chaining
-	 */
-	public function setValue($newValue) {
-		$this->value = $newValue;
-		return $this;
-	}
-	
-	public function getValue() {
-		return $this->value;
-	}
-	
-	protected function renderValueAttribute() {
-		return (\is_null($this->value) ? '' : ' value="' . $this->escape($this->value) . '"');
+	public function __construct(\nexxes\widgets\WidgetInterface $parent = null) {
+		if (!is_null($parent)) { $this->setParent($parent); }
+		$this->setType('text');
 	}
 	
 	
 	public function __toString() {
-		return '<input type="text"'
+		return '<input'
 			. $this->renderAttributes()
+			. $this->renderFormInputAttributes()
 			
 			. $this->renderChangeHandler()
-			
-			. $this->renderNameAttribute()
-			. $this->renderValueAttribute()
-			
 			. ' />';
 	}
 }
