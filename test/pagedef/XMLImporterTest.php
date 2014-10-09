@@ -24,4 +24,33 @@ class XMLImporterTest extends StructImporterTest {
 		$func = $this->loadInizializer(__FUNCTION__, $page);
 		$func($page);
 	}
+	
+	/**
+	 * Test a property that is itself a Widget
+	 * 
+	 * @test
+	 */
+	public function testPropertyIsWidget() {
+		$page = new PageTraitMock();
+		$func = $this->loadInizializer(__FUNCTION__, $page);
+		$func($page);
+	}
+	
+	public function testPropertyWithoutSetterPublic() {
+		$page = new PageTraitMock();
+		$func = $this->loadInizializer(__FUNCTION__, $page);
+		$func($page);
+	}
+	
+	public function testPropertyWithoutSetterProtected() {
+		$page = new PageTraitMock();
+		$func = $this->loadInizializer(__FUNCTION__, $page);
+		$func($page);
+	}
+	
+	public function testPropertyWithoutSetterPrivate() {
+		$page = new PageTraitMock();
+		$func = $this->loadInizializer(__FUNCTION__, $page);
+		$func($page);
+	}
 }
