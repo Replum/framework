@@ -11,10 +11,10 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
 use \nexxes\widgets\WidgetInterface;
 use \nexxes\widgets\WidgetTrait;
+use \nexxes\widgets\WidgetHasChangeEventInterface;
+use \nexxes\widgets\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>

@@ -19,7 +19,7 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
+class FileInput implements FormElementInterface, WidgetHasChangeEventInterface {
 	use WidgetTrait,  WidgetHasChangeEventTrait;
 	use FormInputTrait {
 		hasAutocomplete as public;
@@ -49,9 +49,40 @@ class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
 		disableRequired as public;
 	}
 	
+	/**
+	 * @var string
+	 * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
+	 */
+	private $accept;
+	
+	/**
+	 * @return string
+	 * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
+	 */
+	public function getAccept() {
+		return $this->accept;
+	}
+	
+	/**
+	 * @param string $newAccept
+	 * @return \nexxes\widgets\html\Input $this for chaining
+	 * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
+	 */
+	public function setAccept($newAccept) {
+		$this->accept = $newAccept;
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	protected function renderAcceptAttribute() {
+		return (!\is_null($this->accept) ? ' accept="' . $this->escape($this->accept) . '"' : '');
+	}
+	
 	public function __construct(WidgetInterface $parent = null) {
 		if (!is_null($parent)) { $this->setParent($parent); }
-		$this->setType('text');
+		$this->setType('file');
 	}
 	
 	
