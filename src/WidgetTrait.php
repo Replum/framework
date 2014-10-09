@@ -9,6 +9,33 @@ trait WidgetTrait {
 		if (!is_null($parent)) { $this->setParent($parent); }
 	}
 	
+	public function __get($propertyName) {
+		if (\method_exists($this, 'get' . \ucfirst($propertyName))) {
+			return $this->{'get' . \ucfirst($propertyName)}();
+		}
+		
+		if (\method_exists($this, 'is' . \ucfirst($propertyName))) {
+			return $this->{'is' . \ucfirst($propertyName)}();
+		}
+		
+		if (\method_exists($this, 'has' . \ucfirst($propertyName))) {
+			return $this->{'has' . \ucfirst($propertyName)}();
+		}
+		
+		throw new \InvalidArgumentException('Access to unknown property "' . $propertyName . '"');
+	}
+	
+	public function __set($propertyName, $value) {
+		if (\method_exists($this, 'set' . \ucfirst($propertyName))) {
+			$this->{'set' . \ucfirst($propertyName)}($value);
+		}
+		
+		else {
+			throw new \InvalidArgumentException('Writing unknown property "' . $propertyName . '"');	
+		}
+		
+		return $value;
+	}
 	
 	/**
 	 * @var \nexxes\widgets\WidgetInterface
