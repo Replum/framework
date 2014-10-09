@@ -1,10 +1,10 @@
 <root>
 	<Text class="\nexxes\widgets\html\Text">
-		<property name="class" value="class1" />
+		<p name="class" value="class1" />
 	</Text>
 	
 	<Text class="\nexxes\widgets\html\Text">
-		<property name="class" value="class2" />
+		<prop name="class" value="class2" />
 	</Text>
 	
 	<Text class="\nexxes\widgets\html\Text">

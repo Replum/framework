@@ -14,6 +14,12 @@ class XMLImporter extends StructImporter {
 	 */
 	private $resolver;
 	
+	/**
+	 * @var array<string>
+	 */
+	private $propertyTags = [ 'p', 'prop', 'property', ];
+	
+	
 	
 	
 	public function __construct(callable $resolver = null) {
@@ -85,8 +91,7 @@ class XMLImporter extends StructImporter {
 			$childName = $childNode->nodeName;
 			
 			// Property handling
-			if ($childName === 'property') {
-				// FIXME
+			if (\in_array($childName, $this->propertyTags)) {
 				$widget->properties[] = $this->parseProperty($childNode);
 			}
 			
@@ -123,7 +128,7 @@ class XMLImporter extends StructImporter {
 	 * @param \DOMNode $node
 	 */
 	private function parseProperty(\DOMNode $node) {
-		if ($node->nodeName !== 'property') {
+		if (!\in_array($node->nodeName, $this->propertyTags)) {
 			throw new \InvalidArgumentException('Non-property node should never have been suplied to ' . __METHOD__);
 		}
 		
