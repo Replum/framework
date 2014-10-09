@@ -30,6 +30,15 @@ class Property {
 	public function generateCode(Widget $parent, array $prefix) {
 		$parentVar = '$' . \implode('_', $prefix);
 		
+		$r = '';
+		
+		if ($this->value instanceof Widget) {
+			$r .= $this->value->generateCode($parent, $prefix, $this->name);
+			$value = '$' . \implode('_', \array_merge($prefix, [$this->name]));
+		} else {
+			$value = \var_export($this->value, true);
+		}
+		
 		if (\method_exists($parent->class, 'add' . \ucfirst($this->name))) {
 			$setter = 'add' . \ucfirst($this->name);
 		} elseif (\method_exists($parent->class, 'set' . \ucfirst($this->name))) {
@@ -38,15 +47,7 @@ class Property {
 			throw new \InvalidArgumentException('No accessible setter for property "' . $this->name . '" in class "' . $parent->class . '" found.');
 		}
 		
-		if ($this->value instanceof Widget) {
-			$currentVar = '$' . \implode('_', \array_merge($prefix, [$this->name]));
-			
-			return $this->value->generateCode($parent, $prefix, $this->name)
-				. $parentVar . '->' . $setter . '(' . $currentVar . ');' . PHP_EOL;
-		}
-		
-		else {
-			return '->' . $setter . '(' . \var_export($this->value, true) . ');';
-		}
+		$r .= $parentVar . '->' . $setter . '(' . $value . ');' . PHP_EOL;
+		return $r;
 	}
 }

@@ -86,14 +86,7 @@ class Widget {
 			
 		if (\count($this->properties)) {
 			foreach ($this->properties AS $property) {
-				/* @var Property $property */
-				if ($property->value instanceof Widget) {
-					$r .= $property->generateCode($this, $prefix) . PHP_EOL;
-				}
-				
-				else {
-					$r .= $currentVar . $property->generateCode($this, $prefix) . ';' . PHP_EOL;
-				}
+				$r .= $property->generateCode($this, $prefix) . PHP_EOL;
 			}
 		}
 		
