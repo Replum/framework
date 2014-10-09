@@ -1,0 +1,6 @@
+<root>
+	<Text class="\nexxes\widgets\html\Text" p.class="class1" />
+	<Text class="\nexxes\widgets\html\Text" prop.class="class2" />
+	<Text class="\nexxes\widgets\html\Text" property.class="class3" />
+	<Text class="\nexxes\widgets\html\Text" p.class="class4" prop.class="class5" property.class="class6" />
+</root>
