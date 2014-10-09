@@ -37,6 +37,15 @@ trait WidgetTrait {
 		return $value;
 	}
 	
+	public function __unset($propertyName) {
+		if (\method_exists($this, 'unset' . \ucfirst($propertyName))) {
+			return $this->{'unset' . \ucfirst($propertyName)}();
+		}
+		
+		throw new \InvalidArgumentException('Unsetting unknown property "' . $propertyName . '"');	
+	}
+	
+	
 	/**
 	 * @var \nexxes\widgets\WidgetInterface
 	 */
