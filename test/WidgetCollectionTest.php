@@ -23,6 +23,9 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\dependency\Container;
+use \nexxes\widgets\events\WidgetEventDispatcher;
+
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
@@ -33,6 +36,8 @@ class WidgetCollectionTest extends \PHPUnit_Framework_TestCase {
 	 * @return PageTraitMock
 	 */
 	protected function createPage() {
+		unset(Container::get()[WidgetEventDispatcher::class]);
+		
 		$instance = $this;
 		$this->events = [];
 		
