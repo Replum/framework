@@ -40,11 +40,11 @@ class Property {
 		}
 		
 		if (\method_exists($parent->class, 'add' . \ucfirst($this->name))) {
-			$r .= $parentVar . '->add' . \ucfirst($this->name) . '(' . $value . ')';
+			return $r . $parentVar . '->add' . \ucfirst($this->name) . '(' . $value . ');' . PHP_EOL;
 		}
 		
 		elseif (\method_exists($parent->class, 'set' . \ucfirst($this->name))) {
-			$r .= $parentVar . '->set' . \ucfirst($this->name) . '(' . $value . ')';
+			return $r . $parentVar . '->set' . \ucfirst($this->name) . '(' . $value . ');' . PHP_EOL;
 		}
 		
 		else {
@@ -52,7 +52,7 @@ class Property {
 				// Throws if no property is found
 				$reflectionProperty = (new \ReflectionClass($parent->class))->getProperty($this->name);
 				if ($reflectionProperty->isPublic()) {
-					$r .= $parentVar . '->' . $this->name . ' = ' . $value;
+					return $r . $parentVar . '->' . $this->name . ' = ' . $value . ';' . PHP_EOL;
 				}
 				
 				else {
@@ -60,6 +60,7 @@ class Property {
 					$r .= '$reflectionProperty = $reflectionObject->getProperty("' . $this->name . '");' . PHP_EOL;
 					$r .= '$reflectionProperty->setAccessible(true);' . PHP_EOL;
 					$r .= '$reflectionProperty->setValue(' . $parentVar . ', ' . $value . ');' . PHP_EOL;
+					return $r;
 				}
 			}
 			
@@ -67,7 +68,5 @@ class Property {
 				throw new \InvalidArgumentException('No accessible setter for property "' . $this->name . '" in class "' . $parent->class . '" found.');
 			}
 		}
-		
-		return $r . ';' . PHP_EOL;
 	}
 }
