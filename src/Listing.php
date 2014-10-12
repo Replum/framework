@@ -227,7 +227,7 @@ class Listing implements WidgetContainerInterface {
 	 * {@inheritdoc}
 	 */
 	protected function renderAttributes() {
-		return parent::renderAttributes()
+		return $this->renderWidgetAttributes()
 			. ($this->isReversed() ? ' reversed="reversed"' : '') 
 			. ($this->getStart() !== null ? ' start="' . $this->escape($this->getStart()) . '"' : '')
 			. ($this->isOrdered() && ($this->getType() !== null) ? ' type="' . $this->escape($this->getType()) . '"' : '')
