@@ -3,7 +3,15 @@
 namespace nexxes\widgets;
 
 /**
+ * A widget using the WidgetContainerTrait is rendered as a DIV tag by default.
+ * 
+ * To limit the valid tags for a widget, overwrite the validTags() method and return a list of possible tags.
+ * The first tag in that list is then used as the default tag (instead of DIV).
+ * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property WidgetCollection $children Access the children array (collection) of this container.
+ * @property-read array<WidgetInterface> $descendants All widgets below this widget in the tree.
+ * @property string $tag The HTML tag to render this widget as.
  */
 trait WidgetContainerTrait {
 	use WidgetTrait;
@@ -61,20 +69,20 @@ trait WidgetContainerTrait {
 	 * The HTML tag to use for this container, defaults to DIV
 	 * @var string
 	 */
-	private $WidgetContainerTraitType;
+	private $WidgetContainerTraitTag;
 	
 	/**
 	 * Return the HTML tag for this container
 	 * 
 	 * @return string
 	 */
-	public function getType() {
+	public function getTag() {
 		return (
-			$this->WidgetContainerTraitType !== null
-			? $this->WidgetContainerTraitType
+			$this->WidgetContainerTraitTag !== null
+			? $this->WidgetContainerTraitTag
 			: (
-					$this->validTypes() !== null
-					? $this->validTypes()[0]
+					$this->validTags() !== null
+					? $this->validTags()[0]
 					: 'div'
 				)
 		);
@@ -83,16 +91,16 @@ trait WidgetContainerTrait {
 	/**
 	 * Change the used tag for this container
 	 * 
-	 * @param string $newType
+	 * @param string $newTag
 	 * @return \nexxes\widgets\WidgetContainer $this for chaining
 	 */
-	public function setType($newType) {
-		if (($this->validTypes() !== null) && !\in_array($newType, $this->validTypes())) {
-			throw new \UnexpectedValueException('Invalid tag "' . $newType . '" for class "' . static::class . '", valid tags are: ' . \implode(', ', $this->validTypes()));
+	public function setTag($newTag) {
+		if (($this->validTags() !== null) && !\in_array($newTag, $this->validTags())) {
+			throw new \UnexpectedValueException('Invalid tag "' . $newTag . '" for class "' . static::class . '", valid tags are: ' . \implode(', ', $this->validTags()));
 		}
 		
-		if ($this->WidgetContainerTraitType !== $newType) {
-			$this->WidgetContainerTraitType = $newType;
+		if ($this->WidgetContainerTraitTag !== $newTag) {
+			$this->WidgetContainerTraitTag = $newTag;
 			$this->setChanged(true);
 		}
 		
@@ -102,7 +110,7 @@ trait WidgetContainerTrait {
 	/**
 	 * @return array<String> List of valid tags nor NULL for no restriction
 	 */
-	protected function validTypes() {
+	protected function validTags() {
 		return null;
 	}
 }

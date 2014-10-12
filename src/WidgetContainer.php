@@ -13,6 +13,6 @@ class WidgetContainer implements WidgetContainerInterface {
 	}
 	
 	public function __toString() {
-		return '<' . $this->escape($this->getType()) . $this->renderAttributes() . '>' . PHP_EOL . $this->renderChildren() . '</' . $this->escape($this->getType()) . '>';
+		return '<' . $this->escape($this->getTag()) . $this->renderAttributes() . '>' . PHP_EOL . $this->renderChildren() . '</' . $this->escape($this->getTag()) . '>';
 	}
 }
