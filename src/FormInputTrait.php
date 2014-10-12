@@ -15,6 +15,7 @@ namespace nexxes\widgets\html;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  * @property boolean $disabled Enable/disable status of the form element
  * @property string $name Name of this button
+ * @property string $type Type of the input
  * @property string $value Value to submit if this button is used to submit the formular
  */
 trait FormInputTrait {
@@ -565,6 +566,13 @@ trait FormInputTrait {
 		return ['hidden', 'text', 'search', 'tel', 'url', 'email', 'password', 'date', 'time', 'number', 'range', 'color', 'checkbox', 'radio', 'file', 'submit', 'image', 'reset', 'button',];
 	}
 	
+	/**
+	 * @return string
+	 */
+	protected function renderTypeAttribute() {
+		return (!\is_null($this->type) ? ' type="' . $this->escape($this->type) . '"' : '');
+	}
+	
 	
 	/**
 	 * @var string
@@ -613,6 +621,7 @@ trait FormInputTrait {
 			. $this->renderPlaceholderAttribute()
 			. $this->renderReadonlyAttribute()
 			. $this->renderRequiredAttribute()
+			. $this->renderTypeAttribute()
 			. $this->renderValueAttribute();
 	}
 }
