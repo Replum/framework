@@ -13,6 +13,9 @@ namespace nexxes\widgets\html;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property boolean $disabled Enable/disable status of the form element
+ * @property string $name Name of this button
+ * @property string $value Value to submit if this button is used to submit the formular
  */
 trait FormInputTrait {
 	use FormElementTrait;
@@ -539,11 +542,11 @@ trait FormInputTrait {
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-input-type
 	 */
 	protected function setType($newType) {
-		$types = ['hidden', 'text', 'search', 'tel', 'url', 'email', 'password', 'date', 'time', 'number', 'range', 'color', 'checkbox', 'radio', 'file', 'submit', 'image', 'reset', 'button',];
+		$types = $this->validTypes();
 		$type = \strtolower($newType);
 		
 		if (!\in_array($type, $types)) {
-			throw new \InvalidArgumentException('Invalid button type "' . $newType . '", valid types are: "' . \implode('", "', $types) . '"');
+			throw new \InvalidArgumentException('Invalid form element type "' . $newType . '", valid types are: "' . \implode('", "', $types) . '"');
 		}
 		
 		if ($this->type !== $type) {
@@ -552,6 +555,14 @@ trait FormInputTrait {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * Override in implementations to further restrict possible types
+	 * @return array<string>
+	 */
+	protected function validTypes() {
+		return ['hidden', 'text', 'search', 'tel', 'url', 'email', 'password', 'date', 'time', 'number', 'range', 'color', 'checkbox', 'radio', 'file', 'submit', 'image', 'reset', 'button',];
 	}
 	
 	
