@@ -25,7 +25,7 @@ class Aside extends WidgetContainer {
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function validTypes() {
+	protected function validTags() {
 		return [ 'aside' ];
 	}
 }

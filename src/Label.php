@@ -21,7 +21,7 @@ class Label extends WidgetContainer {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function validTypes() {
+	public function validTags() {
 		return [ 'label' ];
 	}
 	

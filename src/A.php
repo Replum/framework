@@ -17,12 +17,13 @@ use \nexxes\widgets\WidgetHasClickEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property string $href The url to use for this link
  */
 class A extends WidgetContainer implements WidgetHasClickEventInterface {
 	use WidgetHasClickEventTrait;
 	
 	
-	protected function validTypes() {
+	protected function validTags() {
 		return ['a'];
 	}
 	

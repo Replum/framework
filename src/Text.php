@@ -59,26 +59,26 @@ class Text implements WidgetInterface, PhrasingContentInterface {
 	 * 
 	 * @var string
 	 */
-	private $type;
+	private $tag;
 	
 	/**
 	 * @return string
 	 */
-	public function getType() {
-		return $this->type;
+	public function getTag() {
+		return $this->tag;
 	}
 	
 	/**
-	 * @param string $newType The tag type to set
+	 * @param string $newTag The tag type to set
 	 * @return \nexxes\widgets\html\Text $this for chaining
 	 */
-	public function setType($newType) {
-		if (!in_array($newType, $this->validTypes())) {
-			throw new \InvalidArgumentException('Invalid type "' . $newType . '" supplied! Allowed values are: "' . \implode('", "', $this->validTypes()) . '"');
+	public function setTag($newTag) {
+		if (!in_array($newTag, $this->validTags())) {
+			throw new \InvalidArgumentException('Invalid type "' . $newTag . '" supplied! Allowed values are: "' . \implode('", "', $this->validTags()) . '"');
 		}
 		
-		if ($newType !== $this->type) {
-			$this->type = $newType;
+		if ($newTag !== $this->tag) {
+			$this->tag = $newTag;
 			$this->setChanged(true);
 		}
 		
@@ -88,7 +88,7 @@ class Text implements WidgetInterface, PhrasingContentInterface {
 	/**
 	 * @return array<string> The list of possible types to set via setType()
 	 */
-	public function validTypes() {
+	public function validTags() {
 		return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'legend', ];
 	}
 	
@@ -99,8 +99,8 @@ class Text implements WidgetInterface, PhrasingContentInterface {
 	public function __toString() {
 		$attributes = $this->renderAttributes();
 		
-		if (!is_null($this->type) || ($attributes != '')) {
-			return '<' . ($this->type ?: 'span') . $attributes . '>' . $this->escape($this->text) . '</' . ($this->type ?: 'span') . '>';
+		if (!is_null($this->tag) || ($attributes != '')) {
+			return '<' . ($this->tag ?: 'span') . $attributes . '>' . $this->escape($this->text) . '</' . ($this->tag ?: 'span') . '>';
 		} else {
 			return $this->escape($this->text);
 		}

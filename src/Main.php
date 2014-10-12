@@ -23,7 +23,7 @@ class Main extends WidgetContainer {
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function validTypes() {
+	protected function validTags() {
 		return [ 'main' ];
 	}
 }

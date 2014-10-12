@@ -20,7 +20,7 @@ class ListElement extends WidgetContainer {
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function validTypes() {
+	protected function validTags() {
 		return [ 'li' ];
 	}
 }
