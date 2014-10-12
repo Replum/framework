@@ -27,7 +27,10 @@ interface FormElementInterface extends WidgetInterface {
 	
 	/**
 	 * Set the form for the FormElement
+	 * Should only be used by handlers that manage form association,
+	 * 
 	 * @param Form $form
+	 * @return FormElementInterface $this for chaining
 	 */
 	function setForm(Form $form);
 }

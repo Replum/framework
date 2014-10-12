@@ -13,6 +13,7 @@ namespace nexxes\widgets\html;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property-read Form $form Formular containing this button (if any)
  */
 trait FormElementTrait {
 	/**
