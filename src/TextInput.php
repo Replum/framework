@@ -18,6 +18,13 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property boolean $autocomplete Allow the browser to provide hints and store submitted values.
+ * @property boolean $autofocus Focus this element on page load
+ * @property int $minlength Minimum number of chars required as input
+ * @property int $maxlength Maxumum number of chars allowed as input
+ * @property string $placeholder Show if no value exists.
+ * @property boolean $readonly Prevent changes.
+ * @property boolean $required Element must be filled.
  */
 class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
 	use WidgetTrait,  WidgetHasChangeEventTrait;
