@@ -39,11 +39,11 @@ class Property {
 			$value = \var_export($this->value, true);
 		}
 		
-		if (\method_exists($parent->class, 'add' . \ucfirst($this->name))) {
+		if (\method_exists($parent->class, 'add' . \ucfirst($this->name)) && \is_callable([$parent->class, 'add' . \ucfirst($this->name)])) {
 			return $r . $parentVar . '->add' . \ucfirst($this->name) . '(' . $value . ');' . PHP_EOL;
 		}
 		
-		elseif (\method_exists($parent->class, 'set' . \ucfirst($this->name))) {
+		elseif (\method_exists($parent->class, 'set' . \ucfirst($this->name)) && \is_callable([$parent->class, 'set' . \ucfirst($this->name)])) {
 			return $r . $parentVar . '->set' . \ucfirst($this->name) . '(' . $value . ');' . PHP_EOL;
 		}
 		
