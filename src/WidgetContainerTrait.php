@@ -9,7 +9,7 @@ namespace nexxes\widgets;
  * The first tag in that list is then used as the default tag (instead of DIV).
  * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
- * @property WidgetCollection $children Access the children array (collection) of this container.
+ * @property-read WidgetCollection $children Access the children array (collection) of this container.
  * @property-read array<WidgetInterface> $descendants All widgets below this widget in the tree.
  * @property string $tag The HTML tag to render this widget as.
  */
@@ -21,15 +21,19 @@ trait WidgetContainerTrait {
 	 */
 	private $WidgetContainerTraitChildren;
 	
-	/**
-	 * @implements WidgetContainerInterface
-	 */
-	public function children() {
+	public function getChildren() {
 		if (is_null($this->WidgetContainerTraitChildren)) {
 			$this->WidgetContainerTraitChildren = new WidgetCollection($this, false);
 		}
 		
 		return $this->WidgetContainerTraitChildren;
+	}
+	
+	/**
+	 * @implements WidgetContainerInterface
+	 */
+	public function children() {
+		return $this->getChildren();
 	}
 	
 	/**
