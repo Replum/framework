@@ -17,6 +17,11 @@ use nexxes\widgets\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * 
+ * @property boolean $ordered List with numbered elements or not
+ * @property int $start If list is ordered, first label to use
+ * @property boolean $reversed Numbering is reversed for ordered list
+ * @property string $type Type of the number to show for ordered lists, one of the TYPE_ constants.
  */
 class Listing implements WidgetContainerInterface {
 	use WidgetContainerTrait;
@@ -208,12 +213,7 @@ class Listing implements WidgetContainerInterface {
 	 * @return string
 	 */
 	public function __toString() {
-		$r = '<' . ($this->isOrdered() ? 'ol' : 'ul')
-			. $this->renderAttributes()
-			. ($this->isReversed() ? ' reversed="reversed"' : '')
-			. ($this->getStart() !== null ? ' start="' . $this->escape($this->getStart()) . '"' : '')
-			. ($this->isOrdered() && ($this->getType() !== null) ? ' type="' . $this->escape($this->getType()) . '"' : '')
-			. '>';
+		$r = '<' . ($this->isOrdered() ? 'ol' : 'ul') . $this->renderAttributes() . '>';
 		
 		foreach ($this->children() AS $child) {
 			$r .= $child;
@@ -221,6 +221,17 @@ class Listing implements WidgetContainerInterface {
 		
 		$r .= '</' . ($this->isOrdered() ? 'ol' : 'ul') . '>';
 		return $r;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function renderAttributes() {
+		return parent::renderAttributes()
+			. ($this->isReversed() ? ' reversed="reversed"' : '') 
+			. ($this->getStart() !== null ? ' start="' . $this->escape($this->getStart()) . '"' : '')
+			. ($this->isOrdered() && ($this->getType() !== null) ? ' type="' . $this->escape($this->getType()) . '"' : '')
+		;
 	}
 	
 	/**
