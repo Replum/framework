@@ -521,7 +521,7 @@ trait WidgetTrait {
 		return $this;
 	}
 	
-	protected function renderDataAttribute() {
+	protected function renderDataAttributes() {
 		$r = '';
 		
 		foreach ($this->WidgetTraitData as $dataName => $dataValue) {
@@ -551,21 +551,32 @@ trait WidgetTrait {
 	
 	
 	/**
-	 * Get a HTML representation of the widget
+	 * Render all common Widget attributes
 	 * 
 	 * @return string
 	 * @codeCoverageIgnore
 	 */
-	protected function renderAttributes() {
+	protected function renderWidgetAttributes() {
 		\sort($this->WidgetTraitClasses);
 		
 		return (\is_null($this->WidgetTraitId) ? '' : ' id="' . $this->escape($this->WidgetTraitId) . '"')
 			. (\count($this->WidgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->WidgetTraitClasses)) . '"' : '')
-			. $this->renderDataAttribute()
+			. $this->renderDataAttributes()
 			. (\is_null($this->WidgetTraitRole) ? '' : ' role="' . $this->escape($this->WidgetTraitRole) . '"')
 			. (\is_null($this->WidgetTraitTitle) ? '' : ' title="' . $this->escape($this->WidgetTraitTitle) . '"')
 			. (\is_null($this->WidgetTraitTabindex) ? '' : ' tabindex="' . $this->WidgetTraitTabindex . '"')
 		;
+	}
+	
+	/**
+	 * Render all attributes of the current widget.
+	 * Default implementation, override in concrete implementations.
+	 * Include renderWidgetAttributes() instead of renaming renderAttributes() when using the trait.
+	 * 
+	 * @return string
+	 */
+	protected function renderAttributes() {
+		return $this->renderWidgetAttributes();
 	}
 	
 	
