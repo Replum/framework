@@ -30,6 +30,14 @@ trait WidgetTrait {
 			$this->{'set' . \ucfirst($propertyName)}($value);
 		}
 		
+		elseif (($value === true) && \method_exists($this, 'enable' . \ucfirst($propertyName))) {
+			$this->{'enable' . \ucfirst($propertyName)}();
+		}
+		
+		elseif (($value === false) && \method_exists($this, 'disable' . \ucfirst($propertyName))) {
+			$this->{'disable' . \ucfirst($propertyName)}();
+		}
+		
 		else {
 			throw new \InvalidArgumentException('Writing unknown property "' . $propertyName . '"');	
 		}
