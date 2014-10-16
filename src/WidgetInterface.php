@@ -31,6 +31,13 @@ interface WidgetInterface {
 	function setParent(WidgetInterface $newParent);
 	
 	/**
+	 * Unset the parent, used to trigger WidgetRemoveEvent handler
+	 * 
+	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 */
+	function clearParent();
+	
+	/**
 	 * Return the complete list of ancestors of this widget up to the root element.
 	 * The first element is the parent and the last element is the root.
 	 * If $filterByType is supplied, only elements that are an instance of this type are returned.

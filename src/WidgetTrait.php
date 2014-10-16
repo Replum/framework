@@ -2,8 +2,21 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\dependency\Container;
+use \nexxes\widgets\events\WidgetEventDispatcher;
+use \nexxes\widgets\events\WidgetAddEvent;
 use \nexxes\widgets\events\WidgetChangeEvent;
+use \nexxes\widgets\events\WidgetRemoveEvent;
 
+/**
+ * @property-read array<WidgetInterface> $ancestors Get all widgets above this widgets in the widget tree
+ * @property-read array<WidgetInterface> $descendants Get all widgets below this widget in the widget tree
+ * @property WidgetInterface $parent Widget directly above this widget
+ * @property string $id Page wide unique identifier
+ * @property string $role HTML role of this element on the page
+ * @property string $title HTML title attribute
+ * @property boolean $changed
+ */
 trait WidgetTrait {
 	public function __construct(WidgetInterface $parent = null) {
 		if (!is_null($parent)) { $this->setParent($parent); }
@@ -110,6 +123,10 @@ trait WidgetTrait {
 			return $this;
 		}
 		
+		// Remove from old parent
+		$this->clearParent();
+		
+		// Add to new parent
 		$this->WidgetTraitParent = $newParent;
 		$this->setChanged(true);
 		
@@ -117,6 +134,26 @@ trait WidgetTrait {
 		if (($newParent instanceof WidgetContainerInterface) && (!$newParent->children()->contains($this))) {
 			$newParent->children()[] = $this;
 		}
+		
+		Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->WidgetTraitParent, $this));
+		
+		return $this;
+	}
+	
+	public function clearParent() {
+		// Prevent recursion
+		if ($this->WidgetTraitParent === null) {
+			return $this;
+		}
+		
+		if (($this->WidgetTraitParent instanceof WidgetContainerInterface) && ($this->WidgetTraitParent->children()->contains($this))) {
+			$this->WidgetTraitParent->children()->remove($this);
+		}
+		
+		Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->WidgetTraitParent, $this));	
+		
+		$this->WidgetTraitParent = null;
+		$this->setChanged();
 		
 		return $this;
 	}
@@ -173,7 +210,7 @@ trait WidgetTrait {
 		}
 		
 		$this->WidgetTraitChanged = $changed;
-		$this->getPage()->getEventDispatcher()->dispatch(WidgetChangeEvent::class, new WidgetChangeEvent($this));
+		Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetChangeEvent::class, new WidgetChangeEvent($this));
 		
 		return $this;
 	}

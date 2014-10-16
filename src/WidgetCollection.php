@@ -217,7 +217,6 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		
 		if (!$this->auxiliary) {
 			$widget->setParent($this->owner);
-			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $widget));
 		}
 		
 		return $this;
@@ -238,7 +237,7 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		unset($this->widgets[$key]);
 		
 		if (!$this->auxiliary) {
-			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $widget));
+			$widget->clearParent();
 		}
 		
 		$this->reindex();
