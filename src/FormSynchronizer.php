@@ -20,32 +20,50 @@ use \nexxes\widgets\events\WidgetRemoveEvent;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class FormSynchronizer implements \Symfony\Component\EventDispatcher\EventSubscriberInterface {
+	/**
+	 * @var array<FormElementInterface>
+	 */
+	private $unassigned = [];
+	
 	public static function getSubscribedEvents() {
 		return [
 			WidgetAddEvent::class => 'handleWidgetAddEvent',
 			WidgetRemoveEvent::class => 'handleWidgetRemoveEvent',
 		];
 	}
-
+	
 	/**
 	 * Event handler that synchronized the elements array of the form.
 	 * 
 	 * @param WidgetAddEvent $event
 	 */
 	public function handleWidgetAddEvent(WidgetAddEvent $event) {
-		if (!($event->widget instanceof FormElementInterface)) { return; }
+		if ($event->widget instanceof FormElementInterface) {
+			//echo "Widget of type " . \get_class($event->widget) . " added\n";
+			
+			$this->unassigned[] = $event->widget;
+		}
 		
-		$ancestors = $event->widget->getAncestors(Form::class);
+		// Work all unassigned forms
+		foreach ($this->unassigned as $key => $widget) {
+			//echo "checking Widget of type " . \get_class($widget) . "\n";
+			
+			$ancestors = $widget->getAncestors(Form::class);
 		
-		// Form element is not inside a form
-		if (count($ancestors) === 0) { return; }
-		// Error
-		if (count($ancestors) > 1) { throw new \RuntimeException('A form element can not exists within nested form elements!'); }
-		
-		$ancestors[0]->elements()->add($event->widget);
-		$event->widget->setForm($ancestors[0]);
+			// Error
+			if (count($ancestors) > 1) { throw new \RuntimeException('A form element can not exists within nested form elements!'); }
+			
+			// Element is not inside a form
+			if (count($ancestors) === 0) { continue; }
+			
+			// Assign form for widget
+			//echo "Assigning form " . $ancestors[0]->getID() . ' to widget ' . $widget->getID() . "<br>\n";
+			$ancestors[0]->elements()->add($widget);
+			$widget->setForm($ancestors[0]);
+			unset($this->unassigned[$key]);
+		}
 	}
-
+	
 	/**
 	 * Event handler that synchronized the elements array of the form.
 	 * 
