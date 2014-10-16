@@ -6,6 +6,7 @@ use \nexxes\widgets\Event;
 
 use \nexxes\widgets\events\WidgetOnChangeEvent;
 use \nexxes\widgets\events\WidgetOnClickEvent;
+use \nexxes\widgets\events\WidgetOnDoubleClickEvent;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
@@ -26,7 +27,7 @@ class JsonHandler {
 		
 		$event = $request->request->get('nexxes_event');
 		
-		if (!\in_array($event, ['click', 'change'])) {
+		if (!\in_array($event, ['click', 'change', 'doubleclick', ])) {
 			throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
 		}
 		
@@ -48,6 +49,8 @@ class JsonHandler {
 			$page->getEventDispatcher()->dispatch(WidgetOnClickEvent::class . ':' . $widget->getID(), new WidgetOnClickEvent($widget));
 		} elseif ($event == 'change') {
 			$page->getEventDispatcher()->dispatch(WidgetOnChangeEvent::class . ':' . $widget->getID(), new WidgetOnChangeEvent($widget));
+		} elseif ($event == 'doubleclick') {
+			$page->getEventDispatcher()->dispatch(WidgetOnDoubleClickEvent::class . ':' . $widget->getID(), new WidgetOnDoubleClickEvent($widget));
 		}
 		
 		$data = $this->handleChangedWidgets($page->getWidgetRegistry());

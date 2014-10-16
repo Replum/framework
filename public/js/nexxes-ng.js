@@ -73,6 +73,26 @@ nexxes.widgets = {
 		this._executeActions();
 	},
 	
+	
+	/**
+	 * 
+	 * @param  elem
+	 * @returns {undefined}
+	 */
+	ondoubleclick: function(elem) {
+		console.log("Click event issued for element:");
+		console.log(elem);
+		
+		this.actionQueue.push(new nexxesWidgetAction(
+		 'doubleclick',
+		 elem,
+		 []
+		));
+		
+		this._executeActions();
+	},
+	
+	
 	_executeActions: function() {
 		// Action pending, do nothing
 		if (this.currentAction !== null) {
