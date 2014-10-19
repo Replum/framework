@@ -24,6 +24,13 @@ class TableDataCell implements WidgetContainerInterface, TableCellInterface, Wid
 	use WidgetContainerTrait, TableCellTrait, WidgetHasDoubleClickEventTrait;
 	
 	public function __toString() {
-		return '<td ' . $this->renderAttributes() . $this->renderTableCell() . $this->renderDoubleClickHandler() . '>' . $this->renderChildren() . '</td>' . PHP_EOL;
+		return '<td ' . $this->renderAttributes() . '>' . $this->renderChildren() . '</td>' . PHP_EOL;
+	}
+	
+	protected function renderAttributes() {
+		return
+			parent::renderAttributes()
+			. $this->renderTableCellAttributes()
+		;
 	}
 }

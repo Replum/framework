@@ -22,6 +22,13 @@ class TableHeaderCell implements WidgetContainerInterface, TableCellInterface {
 	use WidgetContainerTrait, TableCellTrait;
 	
 	public function __toString() {
-		return '<th ' . $this->renderAttributes() . $this->renderTableCell() . '>' . $this->renderChildren() . '</th>' . PHP_EOL;
+		return '<th ' . $this->renderAttributes() . '>' . $this->renderChildren() . '</th>' . PHP_EOL;
+	}
+	
+	protected function renderAttributes() {
+		return
+			parent::renderAttributes()
+			. $this->renderTableCellAttributes()
+		;
 	}
 }

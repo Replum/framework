@@ -39,6 +39,6 @@ class Button implements WidgetContainerInterface, FormElementInterface, WidgetHa
 	protected function renderAttributes() {
 		return $this->renderWidgetAttributes()
 			. $this->renderFormInputAttributes()
-			. $this->renderClickHandler();
+		;
 	}
 }

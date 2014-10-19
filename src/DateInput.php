@@ -63,8 +63,6 @@ class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
 		return '<input'
 			. $this->renderAttributes()
 			. $this->renderFormInputAttributes()
-			
-			. $this->renderChangeHandler()
 			. ' />';
 	}
 }
