@@ -54,18 +54,4 @@ trait WidgetHasClickEventTrait {
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
 		return $dispatcher->removeOnceListener(WidgetOnClickEvent::class . ':' . $this->getID(), $eventHandler);
 	}
-	
-	/**
-	 * Render the click handler registration required for this widget
-	 */
-	protected function renderClickHandler() {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		
-		if ($dispatcher->hasListeners(WidgetOnClickEvent::class . ':' . $this->getID())) {
-			return ' onclick="nexxes.widgets.onclick(this);"';
-		} else {
-			return '';
-		}
-	}
 }

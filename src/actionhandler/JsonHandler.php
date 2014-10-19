@@ -27,7 +27,7 @@ class JsonHandler {
 		
 		$event = $request->request->get('nexxes_event');
 		
-		if (!\in_array($event, ['click', 'change', 'doubleclick', ])) {
+		if (!\in_array($event, ['click', 'change', 'dblclick', ])) {
 			throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
 		}
 		
@@ -49,7 +49,7 @@ class JsonHandler {
 			$page->getEventDispatcher()->dispatch(WidgetOnClickEvent::class . ':' . $widget->getID(), new WidgetOnClickEvent($widget));
 		} elseif ($event == 'change') {
 			$page->getEventDispatcher()->dispatch(WidgetOnChangeEvent::class . ':' . $widget->getID(), new WidgetOnChangeEvent($widget));
-		} elseif ($event == 'doubleclick') {
+		} elseif ($event == 'dblclick') {
 			$page->getEventDispatcher()->dispatch(WidgetOnDoubleClickEvent::class . ':' . $widget->getID(), new WidgetOnDoubleClickEvent($widget));
 		}
 		

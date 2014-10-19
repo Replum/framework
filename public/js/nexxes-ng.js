@@ -26,72 +26,19 @@ nexxes.widgets = {
 	 */
 	currentAction: null,
 	
-	
 	/**
+	 * Default event<->server backend action handler
 	 * 
-	 * @param  elem
-	 * @returns {undefined}
+	 * @param Event event
 	 */
-	onchange: function(elem) {
-		if (
-			!(elem instanceof HTMLInputElement)
-			&& !(elem instanceof HTMLTextAreaElement)
-			&& !(elem instanceof HTMLSelectElement)
-		) {
-			alert("Unknown form element: " + elem.constructor.name);
-			return false;
-		}
+	handler: function(event) {
+		// Ignore events on elements without an id
+		if (event.target.id === "") { return; }
 		
-		console.log("Change event issued for element:");
-		console.log(elem);
-		
-		this.actionQueue.push(new nexxesWidgetAction(
-		 'change',
-		 elem,
-		 []
-		));
-		
-		this._executeActions();
+		nexxes.widgets.actionQueue.push(new nexxesWidgetAction(event.type, event.target, []));
+		nexxes.widgets._executeActions();
+		event.stopPropagation();
 	},
-	
-	
-	/**
-	 * 
-	 * @param  elem
-	 * @returns {undefined}
-	 */
-	onclick: function(elem) {
-		console.log("Click event issued for element:");
-		console.log(elem);
-		
-		this.actionQueue.push(new nexxesWidgetAction(
-		 'click',
-		 elem,
-		 []
-		));
-		
-		this._executeActions();
-	},
-	
-	
-	/**
-	 * 
-	 * @param  elem
-	 * @returns {undefined}
-	 */
-	ondoubleclick: function(elem) {
-		console.log("Click event issued for element:");
-		console.log(elem);
-		
-		this.actionQueue.push(new nexxesWidgetAction(
-		 'doubleclick',
-		 elem,
-		 []
-		));
-		
-		this._executeActions();
-	},
-	
 	
 	_executeActions: function() {
 		// Action pending, do nothing
@@ -132,19 +79,35 @@ nexxes.widgets = {
 			}
 		}
 		
+		nexxes.widgets.refresh();
+		
 		nexxes.widgets.currentAction = null;
 		nexxes.widgets._executeActions();
-	}
+	},
 	
+	refresh: function() {
+		$('[data-toggle~=tooltip]').tooltip();
+		$('[data-toggle~=popover]').popover();
+		// Display forced popovers that are not already visible (avoid flickering)
+		$('[data-toggle~=popover][data-trigger=manual][data-visible=always]').filter(':not([aria-describedby])').popover('show');
+		// Emulate autofocus of input elements
+		$('[autofocus=autofocus]').select().removeAttr('autofocus');
+	},
+	
+	init: function() {
+		nexxes.widgets.refresh();
+		$(document).on('click dblclick change', '*', nexxes.widgets.handler);
+	}
 };
 
 
 $(document).ready(function() {
+	nexxes.widgets.init();
+	
 	timer = $('#logoutCounter');
 	console.log(timer);
 	remaining = 15*60;
 	callback = function() {
-		console.log("Blubb: " + remaining);
 		timer.html("" + Math.floor(remaining / 60) + ':' + ("0" + (remaining % 60)).substr(-2));
 		remaining--;
 	};

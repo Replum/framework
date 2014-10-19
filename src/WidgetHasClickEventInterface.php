@@ -20,11 +20,11 @@ namespace nexxes\widgets;
  * ensure to call setID() in the original page creation so the later assigned handler can work.
  * 
  * You should not implement that methods provided by this interface yourself.
- * Instead, use the implementation in the WidgetHasClickEventTrait and call the
- *  renderClickHandler() method when rendering the start tag.
+ * Instead, use the implementation in the {@see WidgetHasClickEventTrait WidgetHasClickEventTrait}.
  * 
- * NOTE: You must not register closures as event handlers as PHP closures can not be serialized.
- *       This results in errors when any handler is executed and effectively disables handlers.
+ * #### Warning
+ * You must not register closures as event handlers as PHP closures can not be serialized.
+ * This results in errors when any handler is executed and effectively disables handlers.
  */
 interface WidgetHasClickEventInterface extends WidgetInterface {
 	/**

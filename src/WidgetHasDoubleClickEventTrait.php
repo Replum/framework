@@ -54,18 +54,4 @@ trait WidgetHasDoubleClickEventTrait {
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
 		return $dispatcher->removeOnceListener(WidgetOnDoubleClickEvent::class . ':' . $this->getID(), $eventHandler);
 	}
-	
-	/**
-	 * Render the click handler registration required for this widget
-	 */
-	protected function renderDoubleClickHandler() {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		
-		if ($dispatcher->hasListeners(WidgetOnDoubleClickEvent::class . ':' . $this->getID())) {
-			return ' ondblclick="nexxes.widgets.ondoubleclick(this);"';
-		} else {
-			return '';
-		}
-	}
 }

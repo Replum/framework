@@ -57,19 +57,4 @@ trait WidgetHasChangeEventTrait {
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
 		return $dispatcher->removeOnceListener(WidgetOnChangeEvent::class . ':' . $this->getID(), $eventHandler);
 	}
-	
-	/**
-	 * Render the change handler registration required for this widget
-	 * @return string
-	 */
-	protected function renderChangeHandler() {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		
-		if ($dispatcher->hasListeners(WidgetOnChangeEvent::class . ':' . $this->getID())) {
-			return ' onchange="nexxes.widgets.onchange(this);"';
-		} else {
-			return '';
-		}
-	}
 }

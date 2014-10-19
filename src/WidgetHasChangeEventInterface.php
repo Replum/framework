@@ -20,8 +20,7 @@ namespace nexxes\widgets;
  * ensure to call setID() in the original page creation so the later assigned handler can work.
  * 
  * You should not implement that methods provided by this interface yourself.
- * Instead, use the implementation in the {@see WidgetHasChangeEventTrait WidgetHasChangeEventTrait} and call the
- *  {@see WidgetHasChangeEventTrait::renderChangeHandler() renderChangeHandler()} method when rendering the start tag.
+ * Instead, use the implementation in the {@see WidgetHasChangeEventTrait WidgetHasChangeEventTrait}.
  * 
  * #### Warning
  * You must not register closures as event handlers as PHP closures can not be serialized.
