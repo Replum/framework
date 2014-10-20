@@ -27,7 +27,7 @@ class TableHeaderCell implements WidgetContainerInterface, TableCellInterface {
 	
 	protected function renderAttributes() {
 		return
-			parent::renderAttributes()
+			$this->renderWidgetAttributes()
 			. $this->renderTableCellAttributes()
 		;
 	}

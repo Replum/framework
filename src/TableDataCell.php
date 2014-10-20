@@ -29,7 +29,7 @@ class TableDataCell implements WidgetContainerInterface, TableCellInterface, Wid
 	
 	protected function renderAttributes() {
 		return
-			parent::renderAttributes()
+			$this->renderWidgetAttributes()
 			. $this->renderTableCellAttributes()
 		;
 	}
