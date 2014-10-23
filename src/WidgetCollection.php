@@ -103,12 +103,31 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 	}
 	
 	
+	private function getWidgetByIdOrName($name) {
+		foreach ($this->widgets as $widget) {
+			/* @var $widget WidgetInterface */
+			if ($widget->hasID() && ($widget->getID() == $name)) {
+				return $widget;
+			}
+
+			if (\method_exists($widget, 'getName') && ($widget->getName() == $name)) {
+				return $widget;
+			}
+		}
+
+		return false;
+	}
+	
 	/**
 	 * @implements \ArrayAccess
 	 * @return boolean
 	 */
 	public function offsetExists($offset) {
-		return isset($this->widgets[$offset]);
+		if (\is_int($offset)) {
+			return isset($this->widgets[$offset]);
+		}
+		
+		return ($this->getWidgetByIdOrName($offset) !== false);
 	}
 	
 	/**
@@ -124,18 +143,9 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 			return $this->widgets[$offset];
 		}
 		
-		else {
-			foreach ($this->widgets as $widget) {
-				/* @var $widget WidgetInterface */
-				if ($widget->hasID() && ($widget->getID() == $offset)) {
-					return $widget;
-				}
-				
-				if (\method_exists($widget, 'getName') && ($widget->getName() == $offset)) {
-					return $widget;
-				}
-			}
-			
+		if (false !== ($widget = $this->getWidgetByIdOrName($offset))) {
+			return $widget;
+		} else {
 			throw new \InvalidArgumentException('No widget exists with id/name "' . $offset . '"');
 		}
 	}
