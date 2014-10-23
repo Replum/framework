@@ -17,6 +17,7 @@ use \nexxes\widgets\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property-read WidgetCollection $elements 
  */
 class Form extends WidgetContainer {
 	/**
@@ -102,7 +103,7 @@ class Form extends WidgetContainer {
 	 */
 	private $elements;
 	
-	public function elements() {
+	public function getElements() {
 		if (is_null($this->elements)) {
 			$this->elements = new WidgetCollection($this);
 		}

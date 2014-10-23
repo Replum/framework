@@ -58,7 +58,7 @@ class FormSynchronizer implements \Symfony\Component\EventDispatcher\EventSubscr
 			
 			// Assign form for widget
 			//echo "Assigning form " . $ancestors[0]->getID() . ' to widget ' . $widget->getID() . "<br>\n";
-			$ancestors[0]->elements()->add($widget);
+			$ancestors[0]->getElements()->add($widget);
 			$widget->setForm($ancestors[0]);
 			unset($this->unassigned[$key]);
 		}
@@ -75,6 +75,6 @@ class FormSynchronizer implements \Symfony\Component\EventDispatcher\EventSubscr
 		$form = $event->widget->getForm();
 		if (is_null($form)) { return; }
 		
-		$form->elements()->remove($event->widget);
+		$form->getElements()->remove($event->widget);
 	}
 }
