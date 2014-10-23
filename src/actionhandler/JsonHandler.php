@@ -41,7 +41,7 @@ class JsonHandler {
 		}
 
 		$widget = $page->getWidgetRegistry()->getWidget($request->request->get('nexxes_source'));
-		if ($request->request->get('nexxes_value')) {
+		if ($request->request->get('nexxes_value') !== null) {
 			$widget->setValue($request->request->get('nexxes_value'));
 		}
 		
