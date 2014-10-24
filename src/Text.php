@@ -102,7 +102,7 @@ class Text implements WidgetInterface, PhrasingContentInterface {
 		if (!is_null($this->tag) || ($attributes != '')) {
 			return '<' . ($this->tag ?: 'span') . $attributes . '>' . $this->escape($this->text) . '</' . ($this->tag ?: 'span') . '>';
 		} else {
-			return $this->escape($this->text);
+			return \str_replace("\n", '<br />', $this->escape($this->text));
 		}
 	}
 }
