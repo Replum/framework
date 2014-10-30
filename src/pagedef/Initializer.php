@@ -41,8 +41,12 @@ class Initializer {
 	/**
 	 * @param \nexxes\widgets\PageInterface $page
 	 */
-	public function run(\nexxes\widgets\PageInterface $page) {
-		$reflectionClass = new \ReflectionClass($page);
+	public function run(\nexxes\widgets\PageInterface $page, $className = null) {
+		if (is_null($className)) {
+			$className = \get_class($page);
+		}
+		
+		$reflectionClass = new \ReflectionClass($className);
 		
 		// Remove .php from the end
 		$scriptFile = $reflectionClass->getFileName();

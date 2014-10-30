@@ -78,6 +78,11 @@ class XMLImporter extends StructImporter {
 					$widget->ref = $attribute->value;
 				}
 				
+				// 
+				elseif ($attribute->name === 'parent') {
+					$widget->parent = $attribute->value;
+				}
+				
 				elseif (\preg_match('/^(' . \implode('|', $this->propertyTags) . ')\.(.*)$/', $attribute->name, $matches)) {
 					$widget->properties[] = new structure\Property($matches[2], $attribute->value);
 				}

@@ -37,6 +37,14 @@ class Widget {
 	public $ref;
 	
 	/**
+	 * @var string
+	 */
+	public $parent;
+	
+	
+	
+	
+	/**
 	 * @param string $class The class name of the widget
 	 */
 	public function __construct($class) {
@@ -102,7 +110,7 @@ class Widget {
 			return 'return function(\\nexxes\\widgets\\WidgetInterface $root) {' . PHP_EOL . $r . '};' . PHP_EOL;
 		} else {
 			return ($this->ref !== null ? '$root->' . $this->ref . ' = ' : '')
-				. $currentVar . ' = new ' . $this->class . '(' . $parentVar . ');' . PHP_EOL . $r;
+				. $currentVar . ' = new ' . $this->class . '(' . (isset($this->parent) ? '$root->' . $this->parent : $parentVar) . ');' . PHP_EOL . $r;
 		}
 	}
 }
