@@ -273,10 +273,8 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		$this->widgets[$key] = $newWidget;
 		
 		if (!$this->auxiliary) {
-			$newWidget->setParent($this->owner);
 			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetReplaceEvent::class, new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
-
-			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->owner, $newWidget));
+			$newWidget->setParent($this->owner);
 		}
 		
 		return $this;
