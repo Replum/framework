@@ -98,6 +98,9 @@ class XMLImporter extends StructImporter {
 			// Skip whitespace
 			if (($childNode instanceof \DOMText) && ($childNode->isWhitespaceInElementContent())) { continue; }
 			
+			// Ignore comments
+			if ($childNode instanceof \DOMComment) { continue; }
+			
 			/* @var $childNode \DOMNode */
 			$childName = $childNode->nodeName;
 			
