@@ -391,11 +391,15 @@ trait WidgetTrait {
 	 */
 	public function setTabIndex($newTabIndex) {
 		if (!\is_null($newTabIndex) && !\is_int($newTabIndex)) {
-			throw new \InvalidArgumentException('TabIndex can only be set to an integer value!');
+			if (preg_match('/^(0|-?[1-9][0-9]*)$/', $newTabIndex)) {
+				$newTabIndex = (int)$newTabIndex;
+			} else {
+				throw new \InvalidArgumentException('TabIndex can only be set to an integer value!');
+			}
 		}
 		
 		if ($this->WidgetTraitTabindex !== $newTabIndex) {
-			$this->WidgetTraitTabindex = (int)$newTabIndex;
+			$this->WidgetTraitTabindex = $newTabIndex;
 			$this->setChanged(true);
 		}
 		
