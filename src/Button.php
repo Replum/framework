@@ -20,7 +20,10 @@ use \nexxes\widgets\WidgetHasClickEventTrait;
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
 class Button implements WidgetContainerInterface, FormElementInterface, WidgetHasClickEventInterface {
-	use FormInputTrait, WidgetContainerTrait, WidgetHasClickEventTrait;
+	use WidgetContainerTrait, WidgetHasClickEventTrait;
+	use FormInputTrait {
+		setType as public;
+	}
 	
 	public function __toString() {
 		return '<' . $this->getTag() . $this->renderAttributes() . '>' . $this->renderChildren() . '</button>' . PHP_EOL;
