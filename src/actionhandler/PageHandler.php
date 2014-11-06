@@ -50,7 +50,8 @@ class PageHandler {
 		
 		$response = new Response((string)$page);
 		
-		\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
+		//\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
+		\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
 		
 		return $response;
 	}
