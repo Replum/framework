@@ -33,11 +33,11 @@ nexxes.widgets = {
 	 */
 	handler: function(event) {
 		// Ignore events on elements without an id
-		if (event.target.id === "") { return; }
+		if (!event.currentTarget.id || (event.currentTarget.id === "")) { return; }
 		
-		nexxes.widgets.actionQueue.push(new nexxesWidgetAction(event.type, event.target, []));
-		nexxes.widgets._executeActions();
 		event.stopPropagation();
+		nexxes.widgets.actionQueue.push(new nexxesWidgetAction(event.type, event.currentTarget, []));
+		nexxes.widgets._executeActions();
 	},
 	
 	_executeActions: function() {
@@ -96,7 +96,7 @@ nexxes.widgets = {
 	
 	init: function() {
 		nexxes.widgets.refresh();
-		$(document).on('click dblclick change', '*', nexxes.widgets.handler);
+		$(document).on('click dblclick change', '*[id]', nexxes.widgets.handler);
 	}
 };
 
