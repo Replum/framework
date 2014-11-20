@@ -36,7 +36,15 @@ nexxes.widgets = {
 		if (!event.currentTarget.id || (event.currentTarget.id === "")) { return; }
 		
 		event.stopPropagation();
-		nexxes.widgets.actionQueue.push(new nexxesWidgetAction(event.type, event.currentTarget, []));
+		
+		if (event.type === "submit") {
+			data = $(event.currentTarget).serializeArray();
+			event.preventDefault();
+		} else {
+			data = [];
+		}
+		
+		nexxes.widgets.actionQueue.push(new nexxesWidgetAction(event.type, event.currentTarget, data));
 		nexxes.widgets._executeActions();
 	},
 	
@@ -97,6 +105,7 @@ nexxes.widgets = {
 	init: function() {
 		nexxes.widgets.refresh();
 		$(document).on('click dblclick change', '*[id]', nexxes.widgets.handler);
+		$(document).on('submit', '*', nexxes.widgets.handler);
 	}
 };
 
