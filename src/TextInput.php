@@ -26,7 +26,7 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
  * @property boolean $readonly Prevent changes.
  * @property boolean $required Element must be filled.
  */
-class TextInput implements FormElementInterface, WidgetHasChangeEventInterface {
+class TextInput implements WidgetHasChangeEventInterface, FormInputInterface {
 	use WidgetTrait,  WidgetHasChangeEventTrait;
 	use FormInputTrait {
 		hasAutocomplete as public;

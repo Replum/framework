@@ -14,12 +14,16 @@ namespace nexxes\widgets\html;
 use \nexxes\widgets\WidgetContainer;
 use \nexxes\widgets\WidgetCollection;
 use \nexxes\widgets\WidgetInterface;
+use \nexxes\widgets\WidgetHasSubmitEventInterface;
+use \nexxes\widgets\WidgetHasSubmitEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  * @property-read WidgetCollection $elements 
  */
-class Form extends WidgetContainer {
+class Form extends WidgetContainer implements WidgetHasSubmitEventInterface {
+	use WidgetHasSubmitEventTrait;
+	
 	/**
 	 * @var string
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-fs-action

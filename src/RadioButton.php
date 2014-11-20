@@ -21,7 +21,7 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
  * @property boolean $checked Checkbox is activated or not
  * @property boolean $required Element must be filled.
  */
-class Checkbox implements FormInputInterface, WidgetHasChangeEventInterface {
+class RadioButton implements FormInputInterface, WidgetHasChangeEventInterface {
 	use WidgetTrait,  WidgetHasChangeEventTrait;
 	use FormInputTrait {
 		isChecked as public;
@@ -35,7 +35,7 @@ class Checkbox implements FormInputInterface, WidgetHasChangeEventInterface {
 	
 	public function __construct(WidgetInterface $parent = null) {
 		if (!is_null($parent)) { $this->setParent($parent); }
-		$this->setType('checkbox');
+		$this->setType('radio');
 	}
 	
 	
