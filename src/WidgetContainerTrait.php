@@ -57,8 +57,8 @@ trait WidgetContainerTrait {
 	public function getDescendants($filterByType = null) {
 		$descendants = [];
 		
-		foreach ($this->children() AS $child) {
-			if (is_null($filterByType) || ($child instanceof $filterByType)) {
+		foreach ($this->getChildren() AS $child) {
+			if (is_null($filterByType) || is_a($child, $filterByType, true)) {
 				$descendants[] = $child;
 			}
 			
@@ -68,6 +68,22 @@ trait WidgetContainerTrait {
 		return $descendants;
 	}
 	
+		/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function findById($id) {
+		if ($this->hasID() && ($this->getID() === $id)) {
+			return $this;
+		}
+		
+		foreach ($this->getChildren() as $child) {
+			if (null !== ($found = $child->findById($id))) {
+				return $found;
+			}
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * The HTML tag to use for this container, defaults to DIV

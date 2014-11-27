@@ -117,6 +117,17 @@ trait WidgetTrait {
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
+	public function findById($id) {
+		if ($this->hasID() && ($this->getID() === $id)) {
+			return $this;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
 	public function setParent(WidgetInterface $newParent) {
 		// Avoid recursion
 		if ($this->WidgetTraitParent === $newParent) {

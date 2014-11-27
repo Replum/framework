@@ -57,6 +57,13 @@ interface WidgetInterface {
 	 */
 	function getDescendants($filterByType = null);
 	
+	/**
+	 * Search the widget tree for a widget with the supplied ID.
+	 * 
+	 * @param string $id
+	 * @return WidgetInterface|null
+	 */
+	function findById($id);
 	
 	/**
 	 * Get the page this widget belongs to
