@@ -45,6 +45,10 @@ class JsonHandler {
 		if ($request->request->get('nexxes_value') !== null) {
 			$widget->setValue($request->request->get('nexxes_value'));
 		}
+		elseif ($request->request->get('nexxes_checked') !== null) {
+			$widget->setChecked($request->request->get('nexxes_checked'));
+		}
+		
 		
 		if ($event == 'click') {
 			$page->getEventDispatcher()->dispatch(WidgetOnClickEvent::class . ':' . $widget->getID(), new WidgetOnClickEvent($widget));
@@ -72,7 +76,6 @@ class JsonHandler {
 		foreach ($registry AS $widget) {
 			/* @var $widget \nexxes\widgets\WidgetInterface */
 			if ($widget->isChanged()) {
-				/* @var $widget \nexxes\widgets\bootstrap\FormGroup */
 				$data[] = [
 					'nexxes_action' => 'replace',
 					'nexxes_target' => $widget->getID(),
