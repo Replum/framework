@@ -144,11 +144,7 @@ trait FormInputTrait {
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-input-checked
 	 */
 	protected function enableChecked() {
-		if ($this->checked !== true) {
-			$this->checked = true;
-			$this->setChanged();
-		}
-		return $this;
+		return $this->setChecked(true);
 	}
 	
 	/**
@@ -156,10 +152,22 @@ trait FormInputTrait {
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-input-checked
 	 */
 	protected function disableChecked() {
-		if ($this->checked !== false) {
-			$this->checked = false;
-			$this->setChanged();
+		return $this->setChecked(false);
+	}
+	
+	protected function setChecked($newChecked) {
+		if ($newChecked === 'true') { $newChecked = true; }
+		elseif ($newChecked === 'false') { $newChecked = false; }
+		
+		if (!is_bool($newChecked)) {
+			throw new \InvalidArgumentException('Invalid value "' . var_export($newChecked, true) . '", checked must be boolean.');
 		}
+		
+		if ($this->checked != $newChecked) {
+			$this->checked = (bool)$newChecked;
+			$this->setChanged(true);
+		}
+		
 		return $this;
 	}
 	

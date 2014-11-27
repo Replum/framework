@@ -27,6 +27,7 @@ class RadioButton implements FormInputInterface, WidgetHasChangeEventInterface {
 		isChecked as public;
 		enableChecked as public;
 		disableChecked as public;
+		setChecked as protected setCheckedFromTrait;
 		
 		isRequired as public;
 		enableRequired as public;
@@ -44,5 +45,19 @@ class RadioButton implements FormInputInterface, WidgetHasChangeEventInterface {
 			. $this->renderAttributes()
 			. $this->renderFormInputAttributes()
 			. ' />';
+	}
+	
+	public function setChecked($newChecked) {
+		$this->setCheckedFromTrait($newChecked);
+		if ($this->isChecked()) {
+			foreach ($this->getForm()->getDescendants() as $elem) {
+				/* @var $elem RadioButton */
+				if (($elem instanceof RadioButton) && ($elem->name == $this->name) && ($elem !== $this)) {
+					$elem->setChecked(false);
+				}
+			}
+		}
+		
+		return $this;
 	}
 }
