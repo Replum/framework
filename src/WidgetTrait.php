@@ -196,6 +196,17 @@ trait WidgetTrait {
 		return $this->WidgetTraitPage;
 	}
 	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function getRoot() {
+		if ($this->isRoot()) {
+			return $this;
+		} else {
+			return $this->getParent()->getRoot();
+		}
+	}
+	
 	
 	
 	
