@@ -50,9 +50,11 @@ class RadioButton implements FormInputInterface, WidgetHasChangeEventInterface {
 	public function setChecked($newChecked) {
 		$this->setCheckedFromTrait($newChecked);
 		if ($this->isChecked()) {
-			foreach ($this->getForm()->getDescendants() as $elem) {
+			$root = ($this->getForm() !== null ? $this->getForm() : $this->getRoot());
+			
+			foreach ($root->getDescendants(RadioButton::class) as $elem) {
 				/* @var $elem RadioButton */
-				if (($elem instanceof RadioButton) && ($elem->name == $this->name) && ($elem !== $this)) {
+				if (($elem->name == $this->name) && ($elem !== $this)) {
 					$elem->setChecked(false);
 				}
 			}
