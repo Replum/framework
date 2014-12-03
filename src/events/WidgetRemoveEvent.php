@@ -24,29 +24,23 @@
 namespace nexxes\widgets\events;
 
 use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetContainerInterface;
 
 /**
  * Event dispatched when a Widget is removed from its parent.
  * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetRemoveEvent extends \Symfony\Component\EventDispatcher\Event {
+class WidgetRemoveEvent extends WidgetEvent {
 	/**
 	 * @var WidgetInterface
 	 */
 	public $parent;
 	
 	/**
-	 * @var WidgetInterface
-	 */
-	public $widget;
-	
-	/**
 	 * @param WidgetInterface $widget
 	 */
 	public function __construct(WidgetInterface $parent, WidgetInterface $widget) {
+		parent::__construct($widget);
 		$this->parent = $parent;
-		$this->widget = $widget;
 	}
 }

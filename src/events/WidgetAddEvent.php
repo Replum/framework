@@ -24,29 +24,23 @@
 namespace nexxes\widgets\events;
 
 use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetContainerInterface;
 
 /**
  * Event dispatched when a Widget is added to a parent.
  * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetAddEvent extends \Symfony\Component\EventDispatcher\Event {
+class WidgetAddEvent extends WidgetEvent {
 	/**
 	 * @var WidgetInterface
 	 */
 	public $parent;
 	
 	/**
-	 * @var WidgetInterface
-	 */
-	public $widget;
-	
-	/**
 	 * @param WidgetInterface $widget
 	 */
 	public function __construct(WidgetInterface $parent, WidgetInterface $widget) {
+		parent::__construct($widget);
 		$this->parent = $parent;
-		$this->widget = $widget;
 	}
 }

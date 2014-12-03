@@ -24,14 +24,11 @@
 namespace nexxes\widgets\events;
 
 use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetContainerInterface;
 
 /**
- * Event dispatched when a Widget is changed the first time after page creation or after restoring the page in a sub request.
- * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetReplaceEvent extends \Symfony\Component\EventDispatcher\Event {
+class WidgetReplaceEvent extends WidgetEvent {
 	/**
 	 * @var WidgetInterface
 	 */
@@ -40,19 +37,14 @@ class WidgetReplaceEvent extends \Symfony\Component\EventDispatcher\Event {
 	/**
 	 * @var WidgetInterface
 	 */
-	public $old;
-	
-	/**
-	 * @var WidgetInterface
-	 */
-	public $new;
+	public $replacement;
 	
 	/**
 	 * @param WidgetInterface $widget
 	 */
-	public function __construct(WidgetInterface $parent, WidgetInterface $oldWidget, WidgetInterface $newWidget) {
+	public function __construct(WidgetInterface $parent, WidgetInterface $widget, WidgetInterface $replacement) {
+		parent::__construct($widget);
 		$this->parent = $parent;
-		$this->old = $oldWidget;
-		$this->new = $newWidget;
+		$this->replacement = $replacement;
 	}
 }

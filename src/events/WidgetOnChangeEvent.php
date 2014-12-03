@@ -11,22 +11,8 @@
 
 namespace nexxes\widgets\events;
 
-use \nexxes\widgets\WidgetInterface;
-use \Symfony\Component\EventDispatcher\Event;
-
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetOnChangeEvent extends Event {
-	/**
-	 * @var WidgetInterface
-	 */
-	public $widget;
-	
-	/**
-	 * @param WidgetInterface $widget
-	 */
-	public function __construct(WidgetInterface $widget) {
-		$this->widget = $widget;
-	}
+class WidgetOnChangeEvent extends WidgetEvent {
 }

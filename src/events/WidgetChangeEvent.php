@@ -30,16 +30,33 @@ use \nexxes\widgets\WidgetInterface;
  * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetChangeEvent extends \Symfony\Component\EventDispatcher\Event {
+class WidgetChangeEvent extends WidgetEvent {
 	/**
-	 * @var WidgetInterface
+	 * The name of the changed property of the widget
+	 * @var string
 	 */
-	public $widget;
+	public $property;
+	
+	/**
+	 * @var mixed
+	 */
+	public $oldValue;
+	
+	/**
+	 * @var mixed
+	 */
+	public $newValue;
 	
 	/**
 	 * @param WidgetInterface $widget
+	 * @param string $property
+	 * @param mixed $oldValue
+	 * @param mixed $newValue
 	 */
-	public function __construct(WidgetInterface $widget) {
-		$this->widget = $widget;
+	public function __construct(WidgetInterface $widget, $property = null, $oldValue = null, $newValue = null) {
+		parent::__construct($widget);
+		$this->property = $property;
+		$this->oldValue = $oldValue;
+		$this->newValue = $newValue;
 	}
 }

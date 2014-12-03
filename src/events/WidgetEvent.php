@@ -11,8 +11,24 @@
 
 namespace nexxes\widgets\events;
 
+use \Symfony\Component\EventDispatcher\Event;
+use \nexxes\widgets\WidgetInterface;
+
 /**
+ * Base class for all widget events
+ * 
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class WidgetOnDoubleClickEvent extends WidgetEvent {
+abstract class WidgetEvent extends Event {
+		/**
+	 * @var WidgetInterface
+	 */
+	public $widget;
+	
+	/**
+	 * @param WidgetInterface $widget
+	 */
+	public function __construct(WidgetInterface $widget) {
+		$this->widget = $widget;
+	}
 }
