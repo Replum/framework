@@ -65,7 +65,7 @@ nexxes.widgets = {
 		this.currentAction.params.push( { name: "nexxes_pid", value: document.body.id } );
 		this.currentAction.params.push( { name: "nexxes_event", value: this.currentAction.event } );
 		this.currentAction.params.push( { name: "nexxes_source", value: this.currentAction.source.id } );
-		if ((this.currentAction.source.checked !== null) && (this.currentAction.source.checked !== undefined)) {
+		if (this.currentAction.source.type && ((this.currentAction.source.type === "radio") || (this.currentAction.source.type === "checkbox"))) {
 			this.currentAction.params.push( { name: "nexxes_checked", value: this.currentAction.source.checked } );
 		}
 		else if ((this.currentAction.source.value !== null) && (this.currentAction.source.value !== undefined)) {
