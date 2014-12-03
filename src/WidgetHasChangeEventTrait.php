@@ -28,7 +28,7 @@ trait WidgetHasChangeEventTrait {
 	public function onChange(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener(WidgetOnChangeEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnChangeEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -39,7 +39,7 @@ trait WidgetHasChangeEventTrait {
 	public function onChangeOnce(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener(WidgetOnChangeEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnChangeEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -50,7 +50,7 @@ trait WidgetHasChangeEventTrait {
 	public function removeOnChange(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener(WidgetOnChangeEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnChangeEvent::class), $eventHandler);
 		
 		return $this;
 	}
@@ -61,7 +61,7 @@ trait WidgetHasChangeEventTrait {
 	public function removeOnChangeOnce(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener(WidgetOnChangeEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnChangeEvent::class), $eventHandler);
 		
 		return $this;
 	}

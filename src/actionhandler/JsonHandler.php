@@ -51,13 +51,13 @@ class JsonHandler {
 		
 		
 		if ($event == 'click') {
-			$page->getEventDispatcher()->dispatch(WidgetOnClickEvent::class . ':' . $widget->getID(), new WidgetOnClickEvent($widget));
+			$page->getEventDispatcher()->dispatch(WidgetOnClickEvent::class, new WidgetOnClickEvent($widget));
 		} elseif ($event == 'change') {
-			$page->getEventDispatcher()->dispatch(WidgetOnChangeEvent::class . ':' . $widget->getID(), new WidgetOnChangeEvent($widget));
+			$page->getEventDispatcher()->dispatch(WidgetOnChangeEvent::class, new WidgetOnChangeEvent($widget));
 		} elseif ($event == 'dblclick') {
-			$page->getEventDispatcher()->dispatch(WidgetOnDoubleClickEvent::class . ':' . $widget->getID(), new WidgetOnDoubleClickEvent($widget));
+			$page->getEventDispatcher()->dispatch(WidgetOnDoubleClickEvent::class, new WidgetOnDoubleClickEvent($widget));
 		} elseif ($event == 'submit') {
-			$page->getEventDispatcher()->dispatch(WidgetOnSubmitEvent::class . ':' . $widget->getID(), new WidgetOnSubmitEvent($widget));
+			$page->getEventDispatcher()->dispatch(WidgetOnSubmitEvent::class, new WidgetOnSubmitEvent($widget));
 		}
 		
 		$data = $this->handleChangedWidgets($page->getWidgetRegistry());

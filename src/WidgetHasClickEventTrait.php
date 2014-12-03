@@ -25,7 +25,7 @@ trait WidgetHasClickEventTrait {
 	public function onClick(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener(WidgetOnClickEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -36,7 +36,7 @@ trait WidgetHasClickEventTrait {
 	public function onClickOnce(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener(WidgetOnClickEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -47,7 +47,7 @@ trait WidgetHasClickEventTrait {
 	public function removeOnClick(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener(WidgetOnClickEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler);
 		
 		return $this;
 	}
@@ -58,7 +58,7 @@ trait WidgetHasClickEventTrait {
 	public function removeOnClickOnce(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener(WidgetOnClickEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler);
 		
 		return $this;
 	}

@@ -11,8 +11,13 @@
 
 namespace nexxes\widgets\events;
 
+use \nexxes\dependency\Container;
+use \Psr\Log\LoggerInterface;
+
 use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
+use \Symfony\Component\EventDispatcher\Event;
+use \nexxes\widgets\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
@@ -47,5 +52,34 @@ class WidgetEventDispatcher extends EventDispatcher {
 				return;
 			}
 		}
+	}
+	
+	public function dispatch($eventName, Event $event = null) {
+		Container::get()[LoggerInterface::class]->addDebug(sprintf('Dispatching event %s', $eventName));
+		
+		if ($event instanceof WidgetEvent) {
+			$listenersAllWidgetsAllEvents = $this->getListeners(self::eventName(null, '*'));
+			$listenersAllWidgetsCurrentEvent = $this->getListeners(self::eventName(null, $eventName));
+			
+			if ($event->widget->hasID()) {
+				$listenersCurrentWidgetAllEvents = $this->getListeners(self::eventName($event->widget, '*'));
+				$listenersCurrentWidgetCurrentEvent = $this->getListeners(self::eventName($event->widget, $eventName));
+			} else {
+				$listenersCurrentWidgetAllEvents = [];
+				$listenersCurrentWidgetCurrentEvent = [];
+			}
+			
+			$listeners = \array_merge($listenersAllWidgetsAllEvents, $listenersAllWidgetsCurrentEvent, $listenersCurrentWidgetAllEvents, $listenersCurrentWidgetCurrentEvent);
+			$this->doDispatch($listeners, $eventName, $event);
+			return $this;
+		}
+		
+		else {
+			return parent::dispatch($eventName, $event);
+		}
+	}
+	
+	public static function eventName(WidgetInterface $widget = null, $eventName) {
+		return ($widget === null ? '*' : $widget->getID()) . '|' . $eventName;
 	}
 }

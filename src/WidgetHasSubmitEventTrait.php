@@ -28,7 +28,7 @@ trait WidgetHasSubmitEventTrait {
 	public function onSubmit(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener(WidgetOnSubmitEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -39,7 +39,7 @@ trait WidgetHasSubmitEventTrait {
 	public function onSubmitOnce(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener(WidgetOnSubmitEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -50,7 +50,7 @@ trait WidgetHasSubmitEventTrait {
 	public function removeOnSubmit(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener(WidgetOnSubmitEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler);
 		
 		return $this;
 	}
@@ -61,7 +61,7 @@ trait WidgetHasSubmitEventTrait {
 	public function removeOnSubmitOnce(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener(WidgetOnSubmitEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler);
 		
 		return $this;
 	}

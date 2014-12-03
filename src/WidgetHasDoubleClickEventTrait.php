@@ -25,7 +25,7 @@ trait WidgetHasDoubleClickEventTrait {
 	public function onDoubleClick(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener(WidgetOnDoubleClickEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -36,7 +36,7 @@ trait WidgetHasDoubleClickEventTrait {
 	public function onDoubleClickOnce(callable $eventHandler, $prio = 5) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener(WidgetOnDoubleClickEvent::class . ':' . $this->getID(), $eventHandler, $prio);
+		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler, $prio);
 		
 		return $this;
 	}
@@ -47,7 +47,7 @@ trait WidgetHasDoubleClickEventTrait {
 	public function removeOnDoubleClick(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener(WidgetOnDoubleClickEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler);
 		
 		return $this;
 	}
@@ -58,7 +58,7 @@ trait WidgetHasDoubleClickEventTrait {
 	public function removeOnDoubleClickOnce(callable $eventHandler) {
 		/* @var $dispatcher WidgetEventDispatcher */
 		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener(WidgetOnDoubleClickEvent::class . ':' . $this->getID(), $eventHandler);
+		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler);
 		
 		return $this;
 	}
