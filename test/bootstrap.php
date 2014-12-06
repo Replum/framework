@@ -12,6 +12,7 @@ if (false !== ($autoloaders = \spl_autoload_functions())) {
 			break;
 		}
 	}
+	unset($autoloaders, $a);
 }
 
 if (!isset($autoloader) && !defined('VENDOR_DIR')) {
