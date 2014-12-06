@@ -33,19 +33,6 @@ interface PageInterface extends WidgetContainerInterface {
 	function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null);
 	
 	/**
-	 * Get the event dispatcher that handles ajax events
-	 * @return \nexxes\widgets\events\WidgetEventDispatcher
-	 */
-	function getEventDispatcher();
-	
-	/**
-	 * Initialize the event dispatcher with the supplied event dispatcher object or create a new object
-	 * @param \nexxes\widgets\events\WidgetEventDispatcher $eventDispatcher
-	 * @return \nexxes\widgets\PageInterface $this for chaining
-	 */
-	function initEventDispatcher(\nexxes\widgets\events\WidgetEventDispatcher $eventDispatcher = null);
-	
-	/**
 	 * Get the document title
 	 * @return string
 	 */

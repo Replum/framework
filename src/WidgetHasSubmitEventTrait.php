@@ -11,8 +11,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\dependency\Container;
-use \nexxes\widgets\events\WidgetEventDispatcher;
 use \nexxes\widgets\events\WidgetOnSubmitEvent;
 
 /**
@@ -26,43 +24,27 @@ trait WidgetHasSubmitEventTrait {
 	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::onSubmit() WidgetHasSubmitEventInterface::onSubmit()
 	 */
 	public function onSubmit(callable $eventHandler, $prio = 5) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler, $prio);
-		
-		return $this;
+		return $this->on(WidgetOnSubmitEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::onSubmitOnce() WidgetHasSubmitEventInterface::onSubmitOnce()
 	 */
 	public function onSubmitOnce(callable $eventHandler, $prio = 5) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler, $prio);
-		
-		return $this;
+		return $this->one(WidgetOnSubmitEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::removeOnSubmit() WidgetHasSubmitEventInterface::removeOnSubmit()
 	 */
 	public function removeOnSubmit(callable $eventHandler) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler);
-		
-		return $this;
+		return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
 	}
 	
 	/**
 	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::removeOnSubmitOnce() WidgetHasSubmitEventInterface::removeOnSubmitOnce()
 	 */
 	public function removeOnSubmitOnce(callable $eventHandler) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnSubmitEvent::class), $eventHandler);
-		
-		return $this;
+		return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
 	}
 }

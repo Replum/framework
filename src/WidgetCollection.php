@@ -23,13 +23,8 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\widgets\events\WidgetEventDispatcher;
-use \nexxes\widgets\events\WidgetAddEvent;
 use \nexxes\widgets\events\WidgetReplaceEvent;
 use \nexxes\widgets\events\WidgetRemoveEvent;
-
-use \nexxes\dependency\Container;
-
 
 /**
  * The WidgetCollection represents a set of widgets.
@@ -267,13 +262,13 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 		}
 		
 		if (!$this->auxiliary) {
-			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->owner, $oldWidget));
+			$this->owner->dispatch(new WidgetRemoveEvent($this->owner, $oldWidget));
 		}
 		
 		$this->widgets[$key] = $newWidget;
 		
 		if (!$this->auxiliary) {
-			Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetReplaceEvent::class, new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
+			$this->owner->dispatch(new WidgetReplaceEvent($this->owner, $oldWidget, $newWidget));
 			$newWidget->setParent($this->owner);
 		}
 		

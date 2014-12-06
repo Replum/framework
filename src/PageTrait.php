@@ -2,8 +2,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\widgets\events\WidgetEventDispatcher;
-
 trait PageTrait {
 	/**
 	 * @var array<\nexxes\widgets\StyleSheetInterface>
@@ -122,53 +120,7 @@ trait PageTrait {
 		return $this;
 	}
 	
-	
-	
-	
-	/**
-	 * @var WidgetEventDispatcher
-	 */
-	private $PageTraitEventDispatcher;
-	
-	/**
-	 * Silently initializes the event dispatcher with a default implementation on first access
-	 * @implements \nexxes\widgets\PageInterface
-	 */
-	public function getEventDispatcher() {
-		if (is_null($this->PageTraitEventDispatcher)) {
-			$this->initEventDispatcher();
-		}
-		
-		return $this->PageTraitEventDispatcher;
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\PageInterface
-	 */
-	public function initEventDispatcher(WidgetEventDispatcher $newEventDispatcher = null) {
-		if (!is_null($this->PageTraitEventDispatcher)) {
-			throw new \RuntimeException("Can not replace existing event dispatcher!");
-		}
-		
-		if (is_null($newEventDispatcher)) {
-			$this->PageTraitEventDispatcher = new WidgetEventDispatcher();
-		} else {
-			$this->PageTraitEventDispatcher = $newEventDispatcher;
-		}
-		
-		$container = \nexxes\dependency\Container::get();
-		$container[WidgetEventDispatcher::class] = function() {
-			return $this->getEventDispatcher();
-		};
-		
-		return $this;
-	}
-	
 	public function __wakeup() {
-		$container = \nexxes\dependency\Container::get();
-		$container[WidgetEventDispatcher::class] = function() {
-			return $this->getEventDispatcher();
-		};
 	}
 	
 	public $remoteActions = [];

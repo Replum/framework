@@ -11,8 +11,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\dependency\Container;
-use \nexxes\widgets\events\WidgetEventDispatcher;
 use \nexxes\widgets\events\WidgetOnClickEvent;
 
 /**
@@ -23,43 +21,27 @@ trait WidgetHasClickEventTrait {
 	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
 	 */
 	public function onClick(callable $eventHandler, $prio = 5) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler, $prio);
-		
-		return $this;
+		return $this->on(WidgetOnClickEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
 	 */
 	public function onClickOnce(callable $eventHandler, $prio = 5) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler, $prio);
-		
-		return $this;
+		return $this->one(WidgetOnClickEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
 	 */
 	public function removeOnClick(callable $eventHandler) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler);
-		
-		return $this;
+		return $this->off(WidgetOnClickEvent::class, $eventHandler);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
 	 */
 	public function removeOnClickOnce(callable $eventHandler) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnClickEvent::class), $eventHandler);
-		
-		return $this;
+		return $this->off(WidgetOnClickEvent::class, $eventHandler);
 	}
 }

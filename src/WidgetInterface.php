@@ -2,6 +2,8 @@
 
 namespace nexxes\widgets;
 
+use \nexxes\widgets\events\WidgetEvent;
+
 /**
  * Base interface for all widgets
  */
@@ -252,4 +254,12 @@ interface WidgetInterface {
 	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
 	 */
 	function setData($name, $newValue);
+	
+	function on($eventName, callable $listener, $priority = 50);
+	
+	function one($eventName, callable $listener, $priority = 50);
+	
+	function off($eventName = null, callable $listener = null);
+	
+	function dispatch(WidgetEvent $event, $eventName = null);
 }

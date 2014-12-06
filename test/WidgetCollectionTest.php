@@ -23,9 +23,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\dependency\Container;
-use \nexxes\widgets\events\WidgetEventDispatcher;
-
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
@@ -36,16 +33,13 @@ class WidgetCollectionTest extends \PHPUnit_Framework_TestCase {
 	 * @return PageTraitMock
 	 */
 	protected function createPage() {
-		unset(Container::get()[WidgetEventDispatcher::class]);
-		
 		$instance = $this;
 		$this->events = [];
 		
 		$page = new PageTraitMock();
-		$eventDispatcher = $page->getEventDispatcher();
-		$eventDispatcher->addListener(events\WidgetAddEvent::class, function ($event, $eventName, $dispatcher) use ($instance) { $instance->events[] = $event; });
-		$eventDispatcher->addListener(events\WidgetRemoveEvent::class, function ($event, $eventName, $dispatcher) use ($instance) { $instance->events[] = $event; });
-		$eventDispatcher->addListener(events\WidgetReplaceEvent::class, function ($event, $eventName, $dispatcher) use ($instance) { $instance->events[] = $event; });
+		$page->on(events\WidgetAddEvent::class, function ($event, $eventName, $dispatcher) use ($instance) { $instance->events[] = $event; });
+		$page->on(events\WidgetRemoveEvent::class, function ($event, $eventName, $dispatcher) use ($instance) { $instance->events[] = $event; });
+		$page->on(events\WidgetReplaceEvent::class, function ($event, $eventName, $dispatcher) use ($instance) { $instance->events[] = $event; });
 		
 		return $page;
 	}
@@ -166,8 +160,8 @@ class WidgetCollectionTest extends \PHPUnit_Framework_TestCase {
 		$event = \array_shift($this->events);
 		$this->assertInstanceOf(events\WidgetReplaceEvent::class, $event);
 		$this->assertSame($event->parent, $container1);
-		$this->assertSame($event->old, $widget1);
-		$this->assertSame($event->new, $widget2);
+		$this->assertSame($event->widget, $widget1);
+		$this->assertSame($event->replacement, $widget2);
 		
 		$event = \array_shift($this->events);
 		$this->assertInstanceOf(events\WidgetAddEvent::class, $event);

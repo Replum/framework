@@ -3,10 +3,14 @@
 namespace nexxes\widgets;
 
 use \nexxes\dependency\Container;
-use \nexxes\widgets\events\WidgetEventDispatcher;
+use \nexxes\widgets\events\EventHandlerCallOnceWrapper;
+use \nexxes\widgets\events\WidgetEvent;
 use \nexxes\widgets\events\WidgetAddEvent;
 use \nexxes\widgets\events\WidgetChangeEvent;
 use \nexxes\widgets\events\WidgetRemoveEvent;
+
+use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use \Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * @property-read array<WidgetInterface> $ancestors Get all widgets above this widgets in the widget tree
@@ -146,7 +150,7 @@ trait WidgetTrait {
 			$newParent->children()[] = $this;
 		}
 		
-		Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetAddEvent::class, new WidgetAddEvent($this->WidgetTraitParent, $this));
+		$this->getParent()->dispatch(new WidgetAddEvent($this->getParent(), $this));
 		
 		return $this;
 	}
@@ -161,7 +165,7 @@ trait WidgetTrait {
 			$this->WidgetTraitParent->children()->remove($this);
 		}
 		
-		Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetRemoveEvent::class, new WidgetRemoveEvent($this->WidgetTraitParent, $this));	
+		$this->getParent()->dispatch(new WidgetRemoveEvent($this->getParent(), $this));
 		
 		$this->WidgetTraitParent = null;
 		$this->setChanged();
@@ -187,6 +191,8 @@ trait WidgetTrait {
 		
 		if ($this instanceof PageInterface) {
 			$this->WidgetTraitPage = $this;
+		} elseif ($this->isRoot()) {
+			return null;
 		} elseif ($this->getParent() instanceof PageInterface) {
 			$this->WidgetTraitPage = $this->getParent();
 		} else {
@@ -232,7 +238,7 @@ trait WidgetTrait {
 		}
 		
 		$this->WidgetTraitChanged = $changed;
-		Container::get()[WidgetEventDispatcher::class]->dispatch(WidgetChangeEvent::class, new WidgetChangeEvent($this));
+		$this->dispatch(new WidgetChangeEvent($this));
 		
 		return $this;
 	}
@@ -630,6 +636,10 @@ trait WidgetTrait {
 	protected function renderWidgetAttributes() {
 		\sort($this->WidgetTraitClasses);
 		
+		if ($this->eventDispatcher !== null) {
+			$this->getID();
+		}
+		
 		return (\is_null($this->WidgetTraitId) ? '' : ' id="' . $this->escape($this->WidgetTraitId) . '"')
 			. (\count($this->WidgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->WidgetTraitClasses)) . '"' : '')
 			. $this->renderDataAttributes()
@@ -662,5 +672,82 @@ trait WidgetTrait {
 	 */
 	protected function escape($string) {
 		return \htmlspecialchars($string, ENT_HTML5|ENT_COMPAT, 'UTF-8');
+	}
+	
+	/**
+	 * @var EventDispatcherInterface
+	 */
+	private $eventDispatcher;
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function on($eventName, callable $listener, $priority = 50) {
+		if (is_null($this->eventDispatcher)) {
+			$this->eventDispatcher = new EventDispatcher();
+		}
+		
+		$this->eventDispatcher->addListener($eventName, $listener, $priority);
+		return $this;
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function one($eventName, callable $listener, $priority = 50) {
+		return $this->on($eventName, new EventHandlerCallOnceWrapper($listener), $priority);
+	}
+	
+	public function off($eventName = null, callable $listener = null) {
+		if (is_null($this->eventDispatcher)) {
+			return $this;
+		}
+		
+		// Cleanup all handlers
+		if (($this->eventName === null) && ($this->listener === null)) {
+			$this->eventDispatcher = null;
+		}
+		
+		elseif ($this->eventName === null) {
+			foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
+				$this->removeListenerIfExists($eventName, $listeners, $listener);
+			}
+		}
+		
+		else {
+			$this->removeListenerIfExists($eventName, $this->eventDispatcher->getListeners($eventName), $listener);
+		}
+		
+		return $this;
+	}
+	
+	private function removeListenerIfExists($eventName, $listeners, $listener) {
+		foreach ($listeners as $existingListener) {
+			if (
+				($listener === null)
+				|| ($existingListener === $listener)
+				|| (($existingListener instanceof EventHandlerCallOnceWrapper) && ($existingListener->wraps($listener)))
+			) {
+				$this->eventDispatcher->removeListener($eventName, $listener);
+			}
+		}
+	}
+	
+	public function dispatch(WidgetEvent $event, $eventName = null) {
+		if ($eventName === null) {
+			$eventName = \get_class($event);
+		}
+		
+		if (!$this->isRoot() && ($this->getPage() !== null)) {
+			$this->getPage()->dispatch($event, '*');
+			$this->getPage()->dispatch($event);
+		}
+		
+		if ($this->eventDispatcher !== null) {
+			$this->eventDispatcher->dispatch('*', $event);
+			$this->eventDispatcher->dispatch($eventName, $event);
+		}
+		
+		return $this;
 	}
 }

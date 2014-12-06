@@ -11,8 +11,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\dependency\Container;
-use \nexxes\widgets\events\WidgetEventDispatcher;
 use \nexxes\widgets\events\WidgetOnDoubleClickEvent;
 
 /**
@@ -23,43 +21,27 @@ trait WidgetHasDoubleClickEventTrait {
 	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
 	 */
 	public function onDoubleClick(callable $eventHandler, $prio = 5) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler, $prio);
-		
-		return $this;
+		return $this->on(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
 	 */
 	public function onDoubleClickOnce(callable $eventHandler, $prio = 5) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->addOnceListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler, $prio);
-		
-		return $this;
+		return $this->one(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
 	 */
 	public function removeOnDoubleClick(callable $eventHandler) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler);
-		
-		return $this;
+		return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
 	 */
 	public function removeOnDoubleClickOnce(callable $eventHandler) {
-		/* @var $dispatcher WidgetEventDispatcher */
-		$dispatcher = Container::get()[WidgetEventDispatcher::class];
-		$dispatcher->removeOnceListener($dispatcher->eventName($this, WidgetOnDoubleClickEvent::class), $eventHandler);
-		
-		return $this;
+		return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
 	}
 }
