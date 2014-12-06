@@ -89,4 +89,12 @@ interface PageInterface extends WidgetContainerInterface {
 	 * @return string
 	 */
 	function escape($unquoted);
+	
+	/**
+	 * Execute the supplied action on the remote side (in the browser).
+	 * 
+	 * @param string $action
+	 * @param array $parameters
+	 */
+	function executeRemote($action, $parameters = []);
 }

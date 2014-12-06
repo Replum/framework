@@ -60,7 +60,7 @@ class JsonHandler {
 			$page->getEventDispatcher()->dispatch(WidgetOnSubmitEvent::class, new WidgetOnSubmitEvent($widget));
 		}
 		
-		$data = $this->handleChangedWidgets($page->getWidgetRegistry());
+		$data = $this->handleChangedWidgets($page);
 
 		header('Content-Type: text/json');
 		echo json_encode($data);
@@ -70,10 +70,10 @@ class JsonHandler {
 		exit;
 	}
 	
-	protected function handleChangedWidgets(\nexxes\widgets\WidgetRegistry $registry) {
+	protected function handleChangedWidgets($page) {
 		$data = [];
 		
-		foreach ($registry AS $widget) {
+		foreach ($page->getWidgetRegistry() AS $widget) {
 			/* @var $widget \nexxes\widgets\WidgetInterface */
 			if ($widget->isChanged()) {
 				$data[] = [
@@ -83,6 +83,15 @@ class JsonHandler {
 				];
 			}
 		}
+		
+		foreach ($page->remoteActions as list($action, $parameters)) {
+			$data[] = [
+				'nexxes_action' => $action,
+				'nexxes_params' => $parameters,
+			];
+		}
+		
+		$page->remoteActions = [];
 		
 		return $data;
 	}

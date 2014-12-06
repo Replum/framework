@@ -170,4 +170,10 @@ trait PageTrait {
 			return $this->getEventDispatcher();
 		};
 	}
+	
+	public $remoteActions = [];
+	
+	public function executeRemote($action, $parameters = []) {
+		$this->remoteActions[] = [$action, $parameters];
+	}
 }

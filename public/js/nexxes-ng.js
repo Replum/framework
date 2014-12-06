@@ -35,9 +35,10 @@ nexxes.widgets = {
 		// Ignore events on elements without an id
 		if (!event.currentTarget.id || (event.currentTarget.id === "")) { return; }
 		
-		event.stopPropagation();
+		//event.stopPropagation();
 		
 		if (event.type === "submit") {
+			console.log('Submit event: ', event.currentTarget);
 			data = $(event.currentTarget).serializeArray();
 			event.preventDefault();
 		} else {
@@ -88,6 +89,16 @@ nexxes.widgets = {
 				//console.log($("#" + data[i].nexxes_target).replaceWith("<p>Test html</p>"));
 				$("#" + data[i].nexxes_target).replaceWith(data[i].nexxes_data);
 			}
+			
+			else {
+				var fn = nexxes.methods[data[i].nexxes_action];
+				if (typeof fn === 'function') {
+					console.log('Executing method "' + data[i].nexxes_action + '" with ', data[i].nexxes_params);
+					fn.apply(null, data[i].nexxes_params);
+				} else {
+					console.log('Invalid method "' + data[i].nexxes_action + '"');
+				}
+			}
 		}
 		
 		nexxes.widgets.refresh();
@@ -108,7 +119,16 @@ nexxes.widgets = {
 	init: function() {
 		nexxes.widgets.refresh();
 		$(document).on('click dblclick change', '*[id]', nexxes.widgets.handler);
-		$(document).on('submit', '*', nexxes.widgets.handler);
+		$(document).on('submit', 'form', nexxes.widgets.handler);
+	}
+};
+
+nexxes.methods = {
+	modalShow: function(selector) {
+		$(selector).modal('show');
+	},
+	modalHide: function(selector) {
+		$(selector).modal('hide');
 	}
 };
 
