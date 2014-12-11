@@ -739,13 +739,13 @@ trait WidgetTrait {
 		}
 		
 		if (!$this->isRoot() && ($this->getPage() !== null)) {
-			$this->getPage()->dispatch($event, '*');
-			$this->getPage()->dispatch($event);
+			if (!$event->isPropagationStopped()) { $this->getPage()->dispatch($event, '*'); }
+			if (!$event->isPropagationStopped()) { $this->getPage()->dispatch($event); }
 		}
 		
 		if ($this->eventDispatcher !== null) {
-			$this->eventDispatcher->dispatch('*', $event);
-			$this->eventDispatcher->dispatch($eventName, $event);
+			if (!$event->isPropagationStopped()) { $this->eventDispatcher->dispatch('*', $event); }
+			if (!$event->isPropagationStopped()) { $this->eventDispatcher->dispatch($eventName, $event); }
 		}
 		
 		return $this;
