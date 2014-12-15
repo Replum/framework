@@ -26,21 +26,32 @@ class PageHandler {
 	
 	public function execute() {
 		$path = \rawurldecode($this->executer->getRequest()->getPathInfo());
+		// Access to root index document
 		if ($path == '/') {
 			$pagename = 'Index';
 		} else {
 			// Strip trailing /
 			$pagename = \substr($path, 1);
+			
+			// Access to namespace index document
+			if ($pagename[\strlen($pagename)-1] === '/') {
+				$pagename .= 'Index';
+			}
 		}
 		
 		$pagename = \str_replace('/', '\\', $pagename);
 		
 		// Get the name and class of the current page
 		$class = $this->executer->getPageNamespace() . '\\' . $pagename;
-
+		
 		if (!\class_exists($class)) {
-			phpinfo();
-			throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
+			// Try to append Index to
+			$class .= '\\' . 'Index';
+			
+			if (!\class_exists($class)) {
+				phpinfo();
+				throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
+			}
 		}
 		
 		/* @var $page \nexxes\widgets\PageInterface */
