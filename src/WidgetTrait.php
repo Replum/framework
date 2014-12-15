@@ -674,13 +674,20 @@ trait WidgetTrait {
 		return \htmlspecialchars($string, ENT_HTML5|ENT_COMPAT, 'UTF-8');
 	}
 	
+	######################################################################
+	#
+	# Event handling
+	#
+	######################################################################
+	
 	/**
 	 * @var EventDispatcherInterface
 	 */
 	private $eventDispatcher;
 	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * @implements WidgetInterface
+	 * @see WidgetInterface::on() WidgetInterface::on()
 	 */
 	public function on($eventName, callable $listener, $priority = 50) {
 		if (is_null($this->eventDispatcher)) {
@@ -692,12 +699,17 @@ trait WidgetTrait {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * @implements WidgetInterface
+	 * @see WidgetInterface::one() WidgetInterface::one()
 	 */
 	public function one($eventName, callable $listener, $priority = 50) {
 		return $this->on($eventName, new EventHandlerCallOnceWrapper($listener), $priority);
 	}
 	
+	/**
+	 * @implements WidgetInterface
+	 * @see WidgetInterface::off() WidgetInterface::off()
+	 */
 	public function off($eventName = null, callable $listener = null) {
 		if (is_null($this->eventDispatcher)) {
 			return $this;
@@ -721,6 +733,13 @@ trait WidgetTrait {
 		return $this;
 	}
 	
+	/**
+	 * Helper function to remove all listeners for a specific event.
+	 * 
+	 * @param string $eventName
+	 * @param array $listeners List of available listeners
+	 * @param callable $listener
+	 */
 	private function removeListenerIfExists($eventName, $listeners, $listener) {
 		foreach ($listeners as $existingListener) {
 			if (
@@ -733,6 +752,10 @@ trait WidgetTrait {
 		}
 	}
 	
+	/**
+	 * @implements WidgetInterface
+	 * @see WidgetInterface::dispatch() WidgetInterface::dispatch()
+	 */
 	public function dispatch(WidgetEvent $event, $eventName = null) {
 		if ($eventName === null) {
 			$eventName = \get_class($event);
@@ -749,5 +772,27 @@ trait WidgetTrait {
 		}
 		
 		return $this;
+	}
+	
+	######################################################################
+	#
+	# Bag key/value store
+	#
+	######################################################################
+	
+	/**
+	 * @var \ArrayObject
+	 */
+	private $bag;
+	
+	/**
+	 * @implements WidgetInterface::getBag()
+	 * @see WidgetInterface::getBag() WidgetInterface::getBag()
+	 */
+	public function getBag() {
+		if (!isset($this->bag)) {
+			$this->bag = new \ArrayObject();
+		}
+		return $this->bag;
 	}
 }

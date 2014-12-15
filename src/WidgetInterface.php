@@ -255,11 +255,57 @@ interface WidgetInterface {
 	 */
 	function setData($name, $newValue);
 	
+	/**
+	 * Add an event handler to this widget.
+	 * 
+	 * @param string $eventName
+	 * @param callable $listener
+	 * @param int $priority
+	 */
 	function on($eventName, callable $listener, $priority = 50);
 	
+	/**
+	 * Add an event handler to this widget that is executed only once.
+	 * 
+	 * @param string $eventName
+	 * @param callable $listener
+	 * @param int $priority
+	 */
 	function one($eventName, callable $listener, $priority = 50);
 	
+	/**
+	 * Remove event handler(s) from the widget.
+	 * If $eventName and $listener are null, all event handlers are removed.
+	 * If only $listener is null, all handlers for event $eventName are removed.
+	 * 
+	 * @param string $eventName
+	 * @param callable $listener
+	 */
 	function off($eventName = null, callable $listener = null);
 	
+	/**
+	 * Dispatch an event.
+	 * 
+	 * The event is dispatched to several event listeners if registered:
+	 * * The listener of the '*' event of the page
+	 * * The listener of the get_class($event) event of the page
+	 * * The listener of the '*' event of the widget
+	 * * The listener of the get_class($event) event of the widget
+	 * 
+	 * 
+	 * @param WidgetEvent $event
+	 * @param string $eventName Defaults to the class name of the supplied WidgetEvent
+	 */
 	function dispatch(WidgetEvent $event, $eventName = null);
+	
+	/**
+	 * Access the bag (key/value store) assigned with this widget.
+	 * The bag can contain any (serializable) data that has no client side representation
+	 *  and must survive successive page calls.
+	 * 
+	 * Warning: Do not store closures in the bag as they are not serializable!
+	 * 
+	 * @return \ArrayObject
+	 */
+	function getBag();
 }
