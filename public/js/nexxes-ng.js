@@ -118,7 +118,7 @@ nexxes.widgets = {
 	
 	init: function() {
 		nexxes.widgets.refresh();
-		$(document).on('click dblclick', 'a[id], button[id]', nexxes.widgets.handler);
+		$(document).on('click dblclick', 'a[id], button[id], td[id]', nexxes.widgets.handler);
 		$(document).on('change', 'input, textarea, select', nexxes.widgets.handler);
 		$(document).on('submit', 'form', nexxes.widgets.handler);
 	}
