@@ -864,7 +864,7 @@ trait WidgetTrait {
 		if (\func_num_args() > 1) {
 			$args = \func_get_args();
 			\array_shift($args);
-			\call_user_method_array('apply', $widget, $args);
+			\call_user_func_array([$widget, 'apply'], $args);
 		}
 		
 		return $widget;
