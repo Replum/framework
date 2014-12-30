@@ -850,4 +850,55 @@ trait WidgetTrait {
 		}
 		return $this->bag;
 	}
+	
+	/**
+	 * Detault factory method to create a new instance
+	 * 
+	 * @param WidgetInterface $parent The new parent
+	 * @param mixed ...$args Pairs of property names and values to apply to the new instance
+	 * @return static New instance
+	 */
+	public static function create(WidgetInterface $parent = null) {
+		$widget = new static($parent);
+		
+		if (\func_num_args() > 1) {
+			$args = \func_get_args();
+			\array_shift($args);
+			\call_user_method_array('apply', $widget, $args);
+		}
+		
+		return $widget;
+	}
+	
+	/**
+	 * @param string ...$args Pairs of property names and values
+	 * @return static $this for chaining
+	 * @throws \InvalidArgumentException
+	 */
+	public function apply($arg1 = null, $arg2 = null) {
+		$args = \func_get_args();
+		
+		if (\count($args) % 2) {
+			throw new \InvalidArgumentException('Require pairs of attribute names and values!');
+		}
+		
+		for ($i=0; $i<\count($args); $i+=2) {
+			$propertyName = $args[$i];
+			$propertyValue = $args[$i+1];
+
+			if ($propertyName === 'class') {
+				$this->addClass($propertyValue);
+			}
+
+			elseif (\substr($propertyName, 0, 4) === 'data') {
+				$this->setData(\lcfirst(\substr($propertyName, 4)), $propertyValue);
+			}
+
+			else {
+				$this->$propertyName = $propertyValue;
+			}
+		}
+		
+		return $this;
+	}
 }

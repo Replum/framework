@@ -319,4 +319,13 @@ interface WidgetInterface {
 	 * @return \ArrayObject
 	 */
 	function getBag();
+	
+	
+	/**
+	 * Apply several properties at once by supplying name/value pairs.
+	 * 
+	 * @param string ...$args Pairs of property names and values
+	 * @return static $this for chaining
+	 */
+	function apply($arg1 = null, $arg2 = null);
 }
