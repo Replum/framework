@@ -453,7 +453,10 @@ trait WidgetTrait {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * @param string $newTitle
+	 * @return static $this for chaining
+	 * 
+	 * @see \nexxes\widgets\WidgetInterface::setTitle()
 	 */
 	public function setTitle($newTitle) {
 		if (!\is_null($newTitle) && !\is_string($newTitle)) {
@@ -488,7 +491,10 @@ trait WidgetTrait {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * @param string $newRole
+	 * @return static $this for chaining
+	 * 
+	 * @see \nexxes\widgets\WidgetInterface::setRole()
 	 */
 	public function setRole($newRole) {
 		if (!\is_null($newRole) && !\is_string($newRole)) {
@@ -556,7 +562,11 @@ trait WidgetTrait {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * @param string $name
+	 * @param string $newValue
+	 * @return static $this for chaining
+	 * 
+	 * @see \nexxes\widgets\WidgetInterface
 	 */
 	public function setData($name, $newValue) {
 		if (\is_null($name) || !\is_string($name)) {
@@ -686,6 +696,7 @@ trait WidgetTrait {
 	private $eventDispatcher;
 	
 	/**
+	 * @return static $this for chaining
 	 * @implements WidgetInterface
 	 * @see WidgetInterface::on() WidgetInterface::on()
 	 */
@@ -699,6 +710,7 @@ trait WidgetTrait {
 	}
 	
 	/**
+	 * @return static $this for chaining
 	 * @implements WidgetInterface
 	 * @see WidgetInterface::one() WidgetInterface::one()
 	 */
@@ -707,6 +719,7 @@ trait WidgetTrait {
 	}
 	
 	/**
+	 * @return static $this for chaining
 	 * @implements WidgetInterface
 	 * @see WidgetInterface::off() WidgetInterface::off()
 	 */
