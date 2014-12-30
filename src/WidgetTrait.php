@@ -306,6 +306,18 @@ trait WidgetTrait {
 		return $this;
 	}
 	
+	private $widgetTraitNeedId = false;
+	
+	/**
+	 * @return static $this for chaining
+	 * @see \nexxes\widgets\WidgetInterface::needID()
+	 * @implements \nexxes\widgets\WidgetInterface
+	 */
+	public function needID() {
+		$this->widgetTraitNeedId = true;
+		return $this;
+	}
+	
 	
 	
 	
@@ -646,7 +658,7 @@ trait WidgetTrait {
 	protected function renderWidgetAttributes() {
 		\sort($this->widgetTraitClasses);
 		
-		if ($this->eventDispatcher !== null) {
+		if (($this->eventDispatcher !== null) || $this->widgetTraitNeedId) {
 			$this->getID();
 		}
 		

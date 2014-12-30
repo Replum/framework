@@ -140,6 +140,13 @@ interface WidgetInterface {
 	 */
 	function setID($newID = null);
 	
+	/**
+	 * Indicate this widget needs an ID, defer the ID creation until widget is connected to the page.
+	 * 
+	 * @return static $this for chaining
+	 */
+	function needID();
+	
 	
 	/**
 	 * Add the class to the list of classes if not already contained.
