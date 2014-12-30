@@ -24,12 +24,6 @@ abstract class Page implements PageInterface {
 	
 	
 	
-	public function __construct() {
-		$formSyncher = new FormSynchronizer();
-		$this->on(\nexxes\widgets\events\WidgetAddEvent::class, [$formSyncher, 'handleWidgetAddEvent']);
-		$this->on(\nexxes\widgets\events\WidgetRemoveEvent::class, [$formSyncher, 'handleWidgetRemoveEvent']);
-	}
-	
 	/**
 	 * {@inheritdoc}
 	 */

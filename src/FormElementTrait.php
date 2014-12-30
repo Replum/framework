@@ -26,7 +26,11 @@ trait FormElementTrait {
 	 * {@inheritdoc}
 	 */
 	public function getForm() {
-		return $this->FormElementTraitForm;
+		if ($this->FormElementTraitForm !== null) {
+			return $this->FormElementTraitForm;
+		}
+		
+		return $this->getNearestAncestor(Form::class);
 	}
 	
 	/**

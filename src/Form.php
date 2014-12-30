@@ -89,12 +89,8 @@ class Form extends WidgetContainer implements WidgetHasSubmitEventInterface {
 		parent::setParent($newParent);
 		
 		if ($this->isChanged()) {
-			$ancestors = \array_reverse($this->getAncestors());
-			
-			foreach ($ancestors AS $ancestor) {
-				if ($ancestor instanceof Form) {
-					throw new \InvalidArgumentException('A form element can not contain another form element, see: http://www.w3.org/TR/html5/forms.html#the-form-element');
-				}
+			foreach ($this->getAncestors(Form::class) as $ancestor) {
+				throw new \InvalidArgumentException('A form element can not contain another form element, see: http://www.w3.org/TR/html5/forms.html#the-form-element');
 			}
 		}
 		
@@ -113,6 +109,23 @@ class Form extends WidgetContainer implements WidgetHasSubmitEventInterface {
 		}
 		
 		return $this->elements;
+	}
+	
+	
+	/**
+	 * Get a form field (that can has input) by name (or ID)
+	 * 
+	 * @param string $nameOrId
+	 * @return FormInputInterface
+	 */
+	public function getField($nameOrId) {
+		foreach ($this->getDescendants(FormInputInterface::class) as $field) {
+			if (($field->name === $nameOrId) || ($field->id === $nameOrId)) {
+				return $field;
+			}
+		}
+		
+		return null;
 	}
 	
 	
