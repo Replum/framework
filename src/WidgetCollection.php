@@ -283,4 +283,13 @@ class WidgetCollection implements \ArrayAccess, \Countable, \IteratorAggregate {
 			$this->remove($widget);
 		}
 	}
+	
+	/**
+	 * Return the raw array contained in this collection
+	 * 
+	 * @return array<WidgetInterface>
+	 */
+	public function toArray() {
+		return $this->widgets;
+	}
 }
