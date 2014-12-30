@@ -22,6 +22,10 @@ use \nexxes\widgets\WidgetCollection;
 class Table implements WidgetInterface {
 	use WidgetTrait;
 	
+	protected function getUnfilteredChildren() {
+		return \array_merge([$this->header], ($this->bodies ? $this->bodies->toArray() : []), [$this->footer]);
+	}
+	
 	/**
 	 * @var TableHeader
 	 */
