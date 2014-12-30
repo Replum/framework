@@ -2,7 +2,6 @@
 
 namespace nexxes\widgets;
 
-use \nexxes\dependency\Container;
 use \nexxes\widgets\events\EventHandlerCallOnceWrapper;
 use \nexxes\widgets\events\WidgetEvent;
 use \nexxes\widgets\events\WidgetAddEvent;
@@ -74,24 +73,24 @@ trait WidgetTrait {
 	/**
 	 * @var \nexxes\widgets\WidgetInterface
 	 */
-	private $WidgetTraitParent = null;
+	private $widgetTraitParent = null;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function isRoot() {
-		return (($this instanceof PageInterface) || is_null($this->WidgetTraitParent));
+		return (($this instanceof PageInterface) || is_null($this->widgetTraitParent));
 	}
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getParent() {
-		if (is_null($this->WidgetTraitParent)) {
+		if (is_null($this->widgetTraitParent)) {
 			throw new \InvalidArgumentException('No parent exists for this widget!');
 		}
 		
-		return $this->WidgetTraitParent;
+		return $this->widgetTraitParent;
 	}
 	
 	/**
@@ -134,7 +133,7 @@ trait WidgetTrait {
 	 */
 	public function setParent(WidgetInterface $newParent) {
 		// Avoid recursion
-		if ($this->WidgetTraitParent === $newParent) {
+		if ($this->widgetTraitParent === $newParent) {
 			return $this;
 		}
 		
@@ -142,7 +141,7 @@ trait WidgetTrait {
 		$this->clearParent();
 		
 		// Add to new parent
-		$this->WidgetTraitParent = $newParent;
+		$this->widgetTraitParent = $newParent;
 		$this->setChanged(true);
 		
 		// Add to parent if it is a widget container (not for composites!)
@@ -157,12 +156,12 @@ trait WidgetTrait {
 	
 	public function clearParent() {
 		// Prevent recursion
-		if ($this->WidgetTraitParent === null) {
+		if ($this->widgetTraitParent === null) {
 			return $this;
 		}
 		
-		$oldParent = $this->WidgetTraitParent;
-		$this->WidgetTraitParent = null;
+		$oldParent = $this->widgetTraitParent;
+		$this->widgetTraitParent = null;
 		
 		if (($oldParent instanceof WidgetContainerInterface) && ($oldParent->children()->contains($this))) {
 			$oldParent->children()->remove($this);
@@ -180,27 +179,27 @@ trait WidgetTrait {
 	/**
 	 * @var \nexxes\widgets\PageInterface
 	 */
-	private $WidgetTraitPage = null;
+	private $widgetTraitPage = null;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getPage() {
-		if (!is_null($this->WidgetTraitPage)) {
-			return $this->WidgetTraitPage;
+		if (!is_null($this->widgetTraitPage)) {
+			return $this->widgetTraitPage;
 		}
 		
 		if ($this instanceof PageInterface) {
-			$this->WidgetTraitPage = $this;
+			$this->widgetTraitPage = $this;
 		} elseif ($this->isRoot()) {
 			return null;
 		} elseif ($this->getParent() instanceof PageInterface) {
-			$this->WidgetTraitPage = $this->getParent();
+			$this->widgetTraitPage = $this->getParent();
 		} else {
-			$this->WidgetTraitPage = $this->getParent()->getPage();
+			$this->widgetTraitPage = $this->getParent()->getPage();
 		}
 		
-		return $this->WidgetTraitPage;
+		return $this->widgetTraitPage;
 	}
 	
 	/**
@@ -220,13 +219,13 @@ trait WidgetTrait {
 	/**
 	 * @var boolean
 	 */
-	private $WidgetTraitChanged = true;
+	private $widgetTraitChanged = true;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function isChanged() {
-		return $this->WidgetTraitChanged;
+		return $this->widgetTraitChanged;
 	}
 	
 	/**
@@ -234,11 +233,11 @@ trait WidgetTrait {
 	 */
 	public function setChanged($changed = true) {
 		// Nothing new here
-		if ($changed === $this->WidgetTraitChanged) {
+		if ($changed === $this->widgetTraitChanged) {
 			return $this;
 		}
 		
-		$this->WidgetTraitChanged = $changed;
+		$this->widgetTraitChanged = $changed;
 		$this->dispatch(new WidgetChangeEvent($this));
 		
 		return $this;
@@ -248,7 +247,7 @@ trait WidgetTrait {
 	 * On restoring the widget on a successive call, mark it as unchanged
 	 */
 	public function __wakeup() {
-		$this->WidgetTraitChanged = false;
+		$this->widgetTraitChanged = false;
 	}
 	
 	
@@ -259,14 +258,14 @@ trait WidgetTrait {
 	 * 
 	 * @var string
 	 */
-	private $WidgetTraitId;
+	private $widgetTraitId;
 	
 	/**
 	 * {@inheritdoc}
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function hasID() {
-		return ($this->WidgetTraitId !== null);
+		return ($this->widgetTraitId !== null);
 	}
 	
 	/**
@@ -277,7 +276,7 @@ trait WidgetTrait {
 		if (!$this->hasID()) {
 			$this->setID();
 		}
-		return $this->WidgetTraitId;
+		return $this->widgetTraitId;
 	}
 	
 	/**
@@ -290,8 +289,8 @@ trait WidgetTrait {
 			return $this;
 		}
 		
-		$oldID = $this->WidgetTraitId;
-		$this->WidgetTraitId = $newID;
+		$oldID = $this->widgetTraitId;
+		$this->widgetTraitId = $newID;
 		
 		// Prevent recursion
 		if ($skipNotify || (($newID !== null) && ($oldID === $newID))) {
@@ -316,14 +315,14 @@ trait WidgetTrait {
 	 * @var array<string>
 	 * @see http://www.w3.org/TR/html5/dom.html#classes
 	 */
-	private $WidgetTraitClasses = [];
+	private $widgetTraitClasses = [];
 	
 	/**
 	 *  @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function addClass($newClass) {
-		if (!\in_array($newClass, $this->WidgetTraitClasses, true)) {
-			$this->WidgetTraitClasses[] = $newClass;
+		if (!\in_array($newClass, $this->widgetTraitClasses, true)) {
+			$this->widgetTraitClasses[] = $newClass;
 			$this->setChanged(true);
 		}
 		
@@ -336,17 +335,17 @@ trait WidgetTrait {
 	public function delClass($class, $isRegex = false) {
 		// Regex matching
 		if ($isRegex) {
-			foreach ($this->WidgetTraitClasses AS $index => $checkClass) {
+			foreach ($this->widgetTraitClasses AS $index => $checkClass) {
 				if (\preg_match($class, $checkClass)) {
-					unset($this->WidgetTraitClasses[$index]);
+					unset($this->widgetTraitClasses[$index]);
 					$this->setChanged(true);
 				}
 			}
 		}
 		
 		// Literal class name matching
-		elseif (($key = \array_search($class, $this->WidgetTraitClasses)) !== false) {
-			unset($this->WidgetTraitClasses[$key]);
+		elseif (($key = \array_search($class, $this->widgetTraitClasses)) !== false) {
+			unset($this->widgetTraitClasses[$key]);
 			$this->setChanged(true);
 		}
 		
@@ -359,7 +358,7 @@ trait WidgetTrait {
 	public function hasClass($class, $isRegex = false) {
 		// Regex matching
 		if ($isRegex) {
-			foreach ($this->WidgetTraitClasses AS $checkClass) {
+			foreach ($this->widgetTraitClasses AS $checkClass) {
 				if (\preg_match($class, $checkClass)) {
 					return true;
 				}
@@ -370,7 +369,7 @@ trait WidgetTrait {
 		
 		// Literal class name matching
 		else {
-			return \in_array($class, $this->WidgetTraitClasses);
+			return \in_array($class, $this->widgetTraitClasses);
 		}
 	}
 	
@@ -378,12 +377,12 @@ trait WidgetTrait {
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getClasses($regex = null) {
-		\sort($this->WidgetTraitClasses);
+		\sort($this->widgetTraitClasses);
 		
 		// Get only classes matching the supplied regex
 		if (!is_null($regex)) {
 			$found = [];
-			foreach ($this->WidgetTraitClasses AS $class) {
+			foreach ($this->widgetTraitClasses AS $class) {
 				if (\preg_match($regex, $class)) {
 					$found[] = $class;
 				}
@@ -393,7 +392,7 @@ trait WidgetTrait {
 		
 		// Get all classes
 		else {
-			return $this->WidgetTraitClasses;
+			return $this->widgetTraitClasses;
 		}
 	}
 	
@@ -406,13 +405,13 @@ trait WidgetTrait {
 	 * @var int
 	 * @see http://www.w3.org/TR/html5/editing.html#attr-tabindex
 	 */
-	private $WidgetTraitTabindex;
+	private $widgetTraitTabindex;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getTabIndex() {
-		return $this->WidgetTraitTabindex;
+		return $this->widgetTraitTabindex;
 	}
 	
 	/**
@@ -427,8 +426,8 @@ trait WidgetTrait {
 			}
 		}
 		
-		if ($this->WidgetTraitTabindex !== $newTabIndex) {
-			$this->WidgetTraitTabindex = $newTabIndex;
+		if ($this->widgetTraitTabindex !== $newTabIndex) {
+			$this->widgetTraitTabindex = $newTabIndex;
 			$this->setChanged(true);
 		}
 		
@@ -444,13 +443,13 @@ trait WidgetTrait {
 	 * @var string
 	 * @see http://www.w3.org/TR/html5/dom.html#attr-title
 	 */
-	private $WidgetTraitTitle;
+	private $widgetTraitTitle;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getTitle() {
-		return $this->WidgetTraitTitle;
+		return $this->widgetTraitTitle;
 	}
 	
 	/**
@@ -464,8 +463,8 @@ trait WidgetTrait {
 			throw new \InvalidArgumentException('Title can only be set to a string value!');
 		}
 		
-		if ($this->WidgetTraitTitle !== $newTitle) {
-			$this->WidgetTraitTitle = $newTitle;
+		if ($this->widgetTraitTitle !== $newTitle) {
+			$this->widgetTraitTitle = $newTitle;
 			$this->setChanged(true);
 		}
 		
@@ -482,13 +481,13 @@ trait WidgetTrait {
 	 * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
 	 * @link http://www.w3.org/TR/wai-aria/roles
 	 */
-	private $WidgetTraitRole;
+	private $widgetTraitRole;
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getRole() {
-		return $this->WidgetTraitRole;
+		return $this->widgetTraitRole;
 	}
 	
 	/**
@@ -502,8 +501,8 @@ trait WidgetTrait {
 			throw new \InvalidArgumentException('Role can only be set to a string value!');
 		}
 		
-		if ($this->WidgetTraitRole !== $newRole) {
-			$this->WidgetTraitRole = $newRole;
+		if ($this->widgetTraitRole !== $newRole) {
+			$this->widgetTraitRole = $newRole;
 			$this->setChanged(true);
 		}
 		
@@ -543,18 +542,18 @@ trait WidgetTrait {
 	 * @var array<string>
 	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
 	 */
-	private $WidgetTraitData = [];
+	private $widgetTraitData = [];
 	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getData($name = null) {
 		if (is_null($name)) {
-			return $this->WidgetTraitData;
+			return $this->widgetTraitData;
 		}
 		
-		elseif (isset($this->WidgetTraitData[$name])) {
-			return $this->WidgetTraitData[$name];
+		elseif (isset($this->widgetTraitData[$name])) {
+			return $this->widgetTraitData[$name];
 		}
 		
 		else {
@@ -591,8 +590,8 @@ trait WidgetTrait {
 		}
 		
 		if (\is_null($newValue)) {
-			if (isset($this->WidgetTraitData[$name])) {
-				unset($this->WidgetTraitData[$name]);
+			if (isset($this->widgetTraitData[$name])) {
+				unset($this->widgetTraitData[$name]);
 				$this->setChanged(true);
 			}
 		}
@@ -601,8 +600,8 @@ trait WidgetTrait {
 			throw new \InvalidArgumentException('Can not set data attribute "' . $name . '" to a non-string value.');
 		}
 		
-		elseif (!isset($this->WidgetTraitData[$name]) || ($this->WidgetTraitData[$name] !== $newValue)) {
-			$this->WidgetTraitData[$name] = $newValue;
+		elseif (!isset($this->widgetTraitData[$name]) || ($this->widgetTraitData[$name] !== $newValue)) {
+			$this->widgetTraitData[$name] = $newValue;
 			$this->setChanged(true);
 		}
 		
@@ -612,7 +611,7 @@ trait WidgetTrait {
 	protected function renderDataAttributes() {
 		$r = '';
 		
-		foreach ($this->WidgetTraitData as $dataName => $dataValue) {
+		foreach ($this->widgetTraitData as $dataName => $dataValue) {
 			$dataName = \preg_replace_callback('/[A-Z]/', function($matches) { return '-' . \strtolower($matches[0]); }, $dataName);
 			$r .= ' data-' . $dataName . '="' . $this->escape($dataValue) . '"';
 		}
@@ -645,18 +644,18 @@ trait WidgetTrait {
 	 * @codeCoverageIgnore
 	 */
 	protected function renderWidgetAttributes() {
-		\sort($this->WidgetTraitClasses);
+		\sort($this->widgetTraitClasses);
 		
 		if ($this->eventDispatcher !== null) {
 			$this->getID();
 		}
 		
-		return (\is_null($this->WidgetTraitId) ? '' : ' id="' . $this->escape($this->WidgetTraitId) . '"')
-			. (\count($this->WidgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->WidgetTraitClasses)) . '"' : '')
+		return (\is_null($this->widgetTraitId) ? '' : ' id="' . $this->escape($this->widgetTraitId) . '"')
+			. (\count($this->widgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->widgetTraitClasses)) . '"' : '')
 			. $this->renderDataAttributes()
-			. (\is_null($this->WidgetTraitRole) ? '' : ' role="' . $this->escape($this->WidgetTraitRole) . '"')
-			. (\is_null($this->WidgetTraitTitle) ? '' : ' title="' . $this->escape($this->WidgetTraitTitle) . '"')
-			. (\is_null($this->WidgetTraitTabindex) ? '' : ' tabindex="' . $this->WidgetTraitTabindex . '"')
+			. (\is_null($this->widgetTraitRole) ? '' : ' role="' . $this->escape($this->widgetTraitRole) . '"')
+			. (\is_null($this->widgetTraitTitle) ? '' : ' title="' . $this->escape($this->widgetTraitTitle) . '"')
+			. (\is_null($this->widgetTraitTabindex) ? '' : ' tabindex="' . $this->widgetTraitTabindex . '"')
 		;
 	}
 	
