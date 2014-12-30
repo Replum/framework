@@ -111,10 +111,30 @@ trait WidgetTrait {
 	}
 	
 	/**
+	 * Get an unfiltered list of all direct children.
+	 * Overwrite in composite widgets to reuse descendant filtering
+	 * 
+	 * @return \Traversable<WidgetInterface>
+	 */
+	protected function getUnfilteredChildren() {
+		return [];	
+	}
+	
+	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */
 	public function getDescendants($filterByType = null) {
-		return [];
+		$descendants = [];
+		
+		foreach ($this->getUnfilteredChildren() AS $child) {
+			if (is_null($filterByType) || is_a($child, $filterByType, true)) {
+				$descendants[] = $child;
+			}
+			
+			$descendants = \array_merge($descendants, $child->getDescendants($filterByType));
+		}
+		
+		return $descendants;
 	}
 	
 	/**
@@ -123,6 +143,12 @@ trait WidgetTrait {
 	public function findById($id) {
 		if ($this->hasID() && ($this->getID() === $id)) {
 			return $this;
+		}
+		
+		foreach ($this->getUnfilteredChildren() as $child) {
+			if (null !== ($found = $child->findById($id))) {
+				return $found;
+			}
 		}
 		
 		return null;

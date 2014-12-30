@@ -50,39 +50,11 @@ trait WidgetContainerTrait {
 		return $r;
 	}
 	
-	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * @return \Traversable<WidgetInterface>
 	 */
-	public function getDescendants($filterByType = null) {
-		$descendants = [];
-		
-		foreach ($this->getChildren() AS $child) {
-			if (is_null($filterByType) || is_a($child, $filterByType, true)) {
-				$descendants[] = $child;
-			}
-			
-			$descendants = \array_merge($descendants, $child->getDescendants($filterByType));
-		}
-		
-		return $descendants;
-	}
-	
-		/**
-	 * @implements \nexxes\widgets\WidgetInterface
-	 */
-	public function findById($id) {
-		if ($this->hasID() && ($this->getID() === $id)) {
-			return $this;
-		}
-		
-		foreach ($this->getChildren() as $child) {
-			if (null !== ($found = $child->findById($id))) {
-				return $found;
-			}
-		}
-		
-		return null;
+	protected function getUnfilteredChildren() {
+		return $this->getChildren();
 	}
 	
 	/**
