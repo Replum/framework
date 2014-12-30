@@ -297,6 +297,10 @@ trait WidgetTrait {
 			return $this;
 		}
 		
+		if ($this->getPage() === null) {
+			throw new \RuntimeException('Can not set ID without page.');
+		}
+		
 		/* @var $registry WidgetRegistry */
 		$registry = $this->getPage()->getWidgetRegistry();
 		$registry->register($this);
