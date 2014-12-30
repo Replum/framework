@@ -94,20 +94,33 @@ trait WidgetTrait {
 	}
 	
 	/**
-	 * @implements \nexxes\widgets\WidgetInterface
+	 * Get the nearest anchestor of the supplied type
+	 * 
+	 * @param string $type
+	 * @return null|object
+	 */
+	public function getNearestAncestor($type) {
+		foreach ($this->getAncestors($type) as $ancestor) {
+			return $ancestor;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @implements \nexxes\widgets\WidgetInterface+
+	 * @returns \Traversable<WidgetInterface>
 	 */
 	public function getAncestors($filterByType = null) {
-		if ($this->isRoot()) {
-			return [];
-		}
-		
-		$ancestors = $this->getParent()->getAncestors($filterByType);
+		if ($this->isRoot()) { return; }
 		
 		if (is_null($filterByType) || ($this->getParent() instanceof $filterByType)) {
-			\array_unshift($ancestors, $this->getParent());
+			yield $this->getParent();
 		}
 		
-		return $ancestors;
+		foreach ($this->getParent()->getAncestors($filterByType) as $ancestor) {
+			yield $ancestor;
+		}
 	}
 	
 	/**
