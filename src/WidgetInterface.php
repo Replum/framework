@@ -18,7 +18,7 @@ interface WidgetInterface {
 	/**
 	 * Get the parent of this widget, used to navigate to the top of the widget tree.
 	 * 
-	 * @return \nexxes\widgets\WidgetInterface
+	 * @return self
 	 */
 	function getParent();
 	
@@ -27,15 +27,15 @@ interface WidgetInterface {
 	 * Should not called directly to avoid creating corrupt widget hierarchies.
 	 * Instead this method should be called from a container when a widget is added to that container.
 	 * 
-	 * @param \nexxes\widgets\WidgetInterface
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @param self
+	 * @return static $this for chaining
 	 */
 	function setParent(WidgetInterface $newParent);
 	
 	/**
 	 * Unset the parent, used to trigger WidgetRemoveEvent handler
 	 * 
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 */
 	function clearParent();
 	
@@ -45,7 +45,7 @@ interface WidgetInterface {
 	 * If $filterByType is supplied, only elements that are an instance of this type are returned.
 	 * 
 	 * @param string $filterByType
-	 * @return array<\nexxes\widgets\WidgetInterface>
+	 * @return array<self>
 	 */
 	function getAncestors($filterByType = null);
 	
@@ -55,7 +55,7 @@ interface WidgetInterface {
 	 * If $filterByType is supplied, only elements that are an instance of this type are returned.
 	 * 
 	 * @param string $filterByType
-	 * @return array<\nexxes\widgets\WidgetInterface>
+	 * @return array<self>
 	 */
 	function getDescendants($filterByType = null);
 	
@@ -63,7 +63,7 @@ interface WidgetInterface {
 	 * Search the widget tree for a widget with the supplied ID.
 	 * 
 	 * @param string $id
-	 * @return WidgetInterface|null
+	 * @return self|null
 	 */
 	function findById($id);
 	
@@ -86,7 +86,7 @@ interface WidgetInterface {
 	 * Set/unset the changed status of the widget
 	 * 
 	 * @param boolean
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 */
 	function setChanged($changed = true);
 	
@@ -134,6 +134,7 @@ interface WidgetInterface {
 	 * If the identifier is already used an exception is thrown.
 	 * 
 	 * @param string
+	 * @return static $this for chaining
 	 * @throws \InvalidArgumentException
 	 * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
 	 */
@@ -144,7 +145,7 @@ interface WidgetInterface {
 	 * Add the class to the list of classes if not already contained.
 	 * 
 	 * @param string $class Class to add
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 * @link http://www.w3.org/TR/html5/dom.html#classes
 	 */
 	function addClass($class);
@@ -155,7 +156,7 @@ interface WidgetInterface {
 	 * 
 	 * @param string $class The class name or regex to remove by
 	 * @param boolean $isRegex Indicates if $class specifies the literal class name or a (perl compatible) regex to match classes against
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 * @link http://www.w3.org/TR/html5/dom.html#classes
 	 */
 	function delClass($class, $isRegex = false);
@@ -192,7 +193,7 @@ interface WidgetInterface {
 	 * Set the tabindex attribute.
 	 * 
 	 * @param int $newTabIndex
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 * @link http://www.w3.org/TR/html5/editing.html#attr-tabindex
 	 */
 	function setTabIndex($newTabIndex);
@@ -210,7 +211,7 @@ interface WidgetInterface {
 	 * Set the title attribute of this element
 	 * 
 	 * @param string $newTitle
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 * @link http://www.w3.org/TR/html5/dom.html#attr-title
 	 */
 	function setTitle($newTitle);
@@ -229,7 +230,7 @@ interface WidgetInterface {
 	 * Set the ARIA role of the element.
 	 * 
 	 * @param string $newRole
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
 	 * @link http://www.w3.org/TR/wai-aria/roles
 	 */
@@ -250,7 +251,7 @@ interface WidgetInterface {
 	 * 
 	 * @param string $name
 	 * @param string $newValue
-	 * @return \nexxes\widgets\WidgetInterface $this for chaining
+	 * @return static $this for chaining
 	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
 	 */
 	function setData($name, $newValue);
@@ -261,6 +262,7 @@ interface WidgetInterface {
 	 * @param string $eventName
 	 * @param callable $listener
 	 * @param int $priority
+	 * @return static $this for chaining
 	 */
 	function on($eventName, callable $listener, $priority = 50);
 	
@@ -270,6 +272,7 @@ interface WidgetInterface {
 	 * @param string $eventName
 	 * @param callable $listener
 	 * @param int $priority
+	 * @return static $this for chaining
 	 */
 	function one($eventName, callable $listener, $priority = 50);
 	
@@ -280,6 +283,7 @@ interface WidgetInterface {
 	 * 
 	 * @param string $eventName
 	 * @param callable $listener
+	 * @return static $this for chaining
 	 */
 	function off($eventName = null, callable $listener = null);
 	
