@@ -27,6 +27,11 @@ nexxes.widgets = {
 	currentAction: null,
 	
 	/**
+	 * The last action executed, to prevent duplicates
+	 */
+	lastAction: null,
+	
+	/**
 	 * Default event<->server backend action handler
 	 * 
 	 * @param Event event
@@ -45,7 +50,16 @@ nexxes.widgets = {
 			data = [];
 		}
 		
-		nexxes.widgets.actionQueue.push(new nexxesWidgetAction(event.type, event.currentTarget, data));
+		action = new nexxesWidgetAction(event.type, event.currentTarget, data);
+		
+		if (nexxes.widgets.lastAction && (nexxes.widgets.lastAction.event === action.event) && (nexxes.widgets.lastAction.source === action.source)) {
+			console.log('Skipping duplicate event: ', action.event, action.source);
+			event.stopPropagation();
+			return;
+		}
+		
+		nexxes.widgets.lastAction = action;
+		nexxes.widgets.actionQueue.push(action);
 		nexxes.widgets._executeActions();
 	},
 	
