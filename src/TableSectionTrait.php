@@ -12,12 +12,22 @@
 namespace nexxes\widgets\html;
 
 use \nexxes\widgets\WidgetCollection;
+use \nexxes\widgets\WidgetTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  * @link http://www.w3.org/TR/html5/tabular-data.html#htmltablesectionelement
  */
 trait TableSectionTrait {
+	use WidgetTrait;
+	
+	/**
+	 * @return array<\nexxes\widgets\WidgetInterface>
+	 */
+	protected function getUnfilteredChildren() {
+		return ($this->TableSectionTraitRows ? $this->TableSectionTraitRows->toArray() : []);
+	}
+	
 	/**
 	 * @var WidgetCollection
 	 */

@@ -22,6 +22,10 @@ use \nexxes\widgets\WidgetCollection;
 class TableRow implements WidgetInterface {
 	use WidgetTrait;
 	
+	protected function getUnfilteredChildren() {
+		return ($this->cells ? $this->cells->toArray() : []);
+	}
+	
 	/**
 	 * @var WidgetCollection
 	 */

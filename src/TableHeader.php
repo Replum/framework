@@ -12,14 +12,13 @@
 namespace nexxes\widgets\html;
 
 use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  * @link http://www.w3.org/TR/html5/tabular-data.html#the-thead-element
  */
 class TableHeader implements WidgetInterface, TableSectionInterface {
-	use WidgetTrait, TableSectionTrait;
+	use TableSectionTrait;
 	
 	public function __toString() {
 		return $this->renderTableSection('thead');
