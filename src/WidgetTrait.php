@@ -161,13 +161,14 @@ trait WidgetTrait {
 			return $this;
 		}
 		
-		if (($this->WidgetTraitParent instanceof WidgetContainerInterface) && ($this->WidgetTraitParent->children()->contains($this))) {
-			$this->WidgetTraitParent->children()->remove($this);
+		$oldParent = $this->WidgetTraitParent;
+		$this->WidgetTraitParent = null;
+		
+		if (($oldParent instanceof WidgetContainerInterface) && ($oldParent->children()->contains($this))) {
+			$oldParent->children()->remove($this);
 		}
 		
-		$this->getParent()->dispatch(new WidgetRemoveEvent($this->getParent(), $this));
-		
-		$this->WidgetTraitParent = null;
+		$oldParent->dispatch(new WidgetRemoveEvent($oldParent, $this));
 		$this->setChanged();
 		
 		return $this;
