@@ -130,6 +130,9 @@ nexxes.methods = {
 	},
 	modalHide: function(selector) {
 		$(selector).modal('hide');
+	},
+	log: function(data) {
+		console.log(data);
 	}
 };
 
