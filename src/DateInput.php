@@ -19,7 +19,7 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
  */
-class DateInput implements FormElementInterface, WidgetHasChangeEventInterface {
+class DateInput implements FormInputInterface, WidgetHasChangeEventInterface {
 	use WidgetTrait, WidgetHasChangeEventTrait;
 	use FormInputTrait {
 		hasAutocomplete as public;
