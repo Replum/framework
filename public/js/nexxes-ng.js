@@ -1,96 +1,115 @@
 var nexxes = nexxes || {};
 
-/**
- * Simple container to hold action information
- * 
- * @param {string} event Name of the action to perform
- * @param {HTMLElement} source Element that caused the action
- * @param {array} params Key=>Value pairs with current element values
- */
-function nexxesWidgetAction(event, source, params) {
-	this.event = event;
-	this.source = source;
-	this.params = params;
-}
-
 nexxes.widgets = {
 	/**
 	 * Contains a list of actions to perform
-	 * @type Array
+	 * @type {Event[]}
 	 */
-	actionQueue: [],
+	eventQueue: [],
 	
 	/**
-	 * If an action is executed and has not returned yet, it is stored here
-	 * @type type
+	 * If an event is executed and has not returned yet, it is stored here
+	 * 
+	 * @type {Event}
 	 */
-	currentAction: null,
+	currentEvent: null,
 	
 	/**
 	 * The last action executed, to prevent duplicates
+	 * 
+	 * @type {Event}
 	 */
-	lastAction: null,
+	lastEvent: null,
 	
 	/**
 	 * Default event<->server backend action handler
-	 * 
-	 * @param Event event
+	 * @param {Event} event
 	 */
-	handler: function(event) {
+	defaultHandler: function(event) {
 		// Ignore events on elements without an id
 		if (!event.currentTarget.id || (event.currentTarget.id === "")) { return; }
 		
-		//event.stopPropagation();
-		
-		if (event.type === "submit") {
-			console.log('Submit event: ', event.currentTarget);
-			data = $(event.currentTarget).serializeArray();
-			event.preventDefault();
-		} else {
-			data = [];
+		nexxes.widgets.lastEvent = event;
+		nexxes.widgets.eventQueue.push(event);
+		nexxes.widgets._executeActions();
+	},
+	
+	/**
+	 * Handler for form element change events
+	 * @param {Event} event
+	 */
+	changeHandler: function(event) {
+		// Ignore duplicates
+		if (nexxes.widgets.lastEvent && (nexxes.widgets.lastEvent === event)) {
+			//console.log('Skipping duplicate, ', event.type);
+			return;
 		}
 		
-		action = new nexxesWidgetAction(event.type, event.currentTarget, data);
-		
-		if (nexxes.widgets.lastAction && (nexxes.widgets.lastAction.event === action.event) && (nexxes.widgets.lastAction.source === action.source)) {
-			console.log('Skipping duplicate event: ', action.event, action.source);
+		// Fix for datepicker which fires onchange 3x
+		if (
+			nexxes.widgets.lastEvent
+			&& (nexxes.widgets.lastEvent.type === event.type)
+			&& (event.type === 'change')
+			&& (nexxes.widgets.lastEvent.target === event.target)
+			&& ($(event.target).data('provide') === 'datepicker')
+			&& ((nexxes.widgets.lastEvent.timeStamp+300) > event.timeStamp)
+		) {
+			//console.log('Skipping duplicate datepicker event: ', event.type, event.timeStamp, nexxes.widgets.lastEvent.timeStamp);
 			event.stopPropagation();
 			return;
 		}
 		
-		nexxes.widgets.lastAction = action;
-		nexxes.widgets.actionQueue.push(action);
+		nexxes.widgets.lastEvent = event;
+		nexxes.widgets.eventQueue.push(event);
+		nexxes.widgets._executeActions();
+	},
+	
+	/**
+	 * Handle submit events
+	 * @param {Event} event
+	 */
+	submitHandler: function(event) {
+		event.preventDefault();
+		
+		nexxes.widgets.lastEvent = event;
+		nexxes.widgets.eventQueue.push(event);
 		nexxes.widgets._executeActions();
 	},
 	
 	_executeActions: function() {
 		// Action pending, do nothing
-		if (this.currentAction !== null) {
-			console.log("A current action is pending, doing nothing.");
+		if (nexxes.widgets.currentEvent !== null) {
+			//console.log("A current action is pending, doing nothing.");
 			return;
 		}
 		
 		// No action queued, nothing to do
-		if (this.actionQueue.length === 0) {
-			console.log("Queue is empty, doing nothing.");
+		if (nexxes.widgets.eventQueue.length === 0) {
+			//console.log("Queue is empty, doing nothing.");
 			return;
 		}
 		
-		this.currentAction = this.actionQueue.shift();
-		this.currentAction.params.push( { name: "nexxes_pid", value: document.body.id } );
-		this.currentAction.params.push( { name: "nexxes_event", value: this.currentAction.event } );
-		this.currentAction.params.push( { name: "nexxes_source", value: this.currentAction.source.id } );
-		if (this.currentAction.source.type && ((this.currentAction.source.type === "radio") || (this.currentAction.source.type === "checkbox"))) {
-			this.currentAction.params.push( { name: "nexxes_checked", value: this.currentAction.source.checked } );
-		}
-		else if ((this.currentAction.source.value !== null) && (this.currentAction.source.value !== undefined)) {
-			this.currentAction.params.push( { name: "nexxes_value", value: this.currentAction.source.value } );
+		nexxes.widgets.currentEvent = nexxes.widgets.eventQueue.shift();
+		
+		if (nexxes.widgets.currentEvent.type === "submit") {
+			params = $(nexxes.widgets.currentEvent.target).serializeArray();
+		} else {
+			params = [];
 		}
 		
-		console.log("Executing action with parameters: ");
-		console.log(this.currentAction.params);
+		params.push( { name: "nexxes_pid", value: document.body.id } );
+		params.push( { name: "nexxes_event", value: nexxes.widgets.currentEvent.type } );
+		params.push( { name: "nexxes_source", value: nexxes.widgets.currentEvent.currentTarget.id } );
+		if (nexxes.widgets.currentEvent.target.type && ((nexxes.widgets.currentEvent.target.type === "radio") || (nexxes.widgets.currentEvent.target.type === "checkbox"))) {
+			params.push( { name: "nexxes_checked", value: nexxes.widgets.currentEvent.target.checked } );
+		}
+		else if ((nexxes.widgets.currentEvent.target.value !== null) && (nexxes.widgets.currentEvent.target.value !== undefined)) {
+			params.push( { name: "nexxes_value", value: nexxes.widgets.currentEvent.target.value } );
+		}
 		
-		$.post(document.URL, this.currentAction.params, this._handleResponse);
+		//console.log("Executing action with parameters: ", params);
+		
+		$.post(document.URL, params, nexxes.widgets._handleResponse);
 	},
 	
 	_handleResponse: function(data) {
@@ -98,9 +117,7 @@ nexxes.widgets = {
 		
 		for (var i=0; i<data.length; i++) {
 			if (data[i].nexxes_action === "replace") {
-				console.log("Issuing replace action");
-				console.log($("#" + data[i].nexxes_target));
-				//console.log($("#" + data[i].nexxes_target).replaceWith("<p>Test html</p>"));
+				console.log("Issuing replace action", $("#" + data[i].nexxes_target));
 				$("#" + data[i].nexxes_target).replaceWith(data[i].nexxes_data);
 			}
 			
@@ -117,7 +134,7 @@ nexxes.widgets = {
 		
 		nexxes.widgets.refresh();
 		
-		nexxes.widgets.currentAction = null;
+		nexxes.widgets.currentEvent = null;
 		nexxes.widgets._executeActions();
 	},
 	
@@ -132,9 +149,9 @@ nexxes.widgets = {
 	
 	init: function() {
 		nexxes.widgets.refresh();
-		$(document).on('click dblclick', 'a[id], button[id], td[id]', nexxes.widgets.handler);
-		$(document).on('change', 'input, textarea, select', nexxes.widgets.handler);
-		$(document).on('submit', 'form', nexxes.widgets.handler);
+		$(document).on('click dblclick', 'a[id], button[id], td[id]', nexxes.widgets.defaultHandler);
+		$(document).on('change', 'input, textarea, select', nexxes.widgets.changeHandler);
+		$(document).on('submit', 'form', nexxes.widgets.submitHandler);
 	}
 };
 
@@ -161,8 +178,6 @@ $(document).ready(function() {
 		timer.html("" + Math.floor(remaining / 60) + ':' + ("0" + (remaining % 60)).substr(-2));
 		remaining--;
 	};
-	
-	console.log("Foobar");
 	
 	window.setInterval(callback, 1000);
 });
