@@ -599,6 +599,11 @@ trait WidgetTrait {
 	 */
 	private $widgetTraitData = [];
 	
+	public function addData($name, $value) {
+		$oldValue = $this->getData($name);
+		return $this->setData($name, ($oldValue ? $oldValue . ' ' . $value : $value));
+	}
+	
 	/**
 	 * @implements \nexxes\widgets\WidgetInterface
 	 */

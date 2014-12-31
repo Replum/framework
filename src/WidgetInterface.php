@@ -254,6 +254,18 @@ interface WidgetInterface {
 	function getData($name = null);
 	
 	/**
+	 * Append the supplied value to the data value.
+	 * If the value was empty, equal to setData.
+	 * Otherwise the $additionalValue is appended with a single space to separate it from previous values.
+	 * 
+	 * @param string $name
+	 * @param string $additionalValue
+	 * @return static $this for chaining
+	 * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
+	 */
+	function addData($name, $additionalValue);
+	
+	/**
 	 * Set a data attribute for the widget.
 	 * 
 	 * @param string $name
