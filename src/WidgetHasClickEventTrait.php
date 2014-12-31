@@ -21,6 +21,7 @@ trait WidgetHasClickEventTrait {
 	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
 	 */
 	public function onClick(callable $eventHandler, $prio = 5) {
+		$this->addData('handler', 'click');
 		return $this->on(WidgetOnClickEvent::class, $eventHandler, $prio);
 	}
 	
@@ -28,6 +29,7 @@ trait WidgetHasClickEventTrait {
 	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
 	 */
 	public function onClickOnce(callable $eventHandler, $prio = 5) {
+		$this->addData('handler', 'click');
 		return $this->one(WidgetOnClickEvent::class, $eventHandler, $prio);
 	}
 	

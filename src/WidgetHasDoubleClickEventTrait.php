@@ -21,6 +21,7 @@ trait WidgetHasDoubleClickEventTrait {
 	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
 	 */
 	public function onDoubleClick(callable $eventHandler, $prio = 5) {
+		$this->addData('handler', 'dblclick');
 		return $this->on(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
 	}
 	
@@ -28,6 +29,7 @@ trait WidgetHasDoubleClickEventTrait {
 	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
 	 */
 	public function onDoubleClickOnce(callable $eventHandler, $prio = 5) {
+		$this->addData('handler', 'dblclick');
 		return $this->one(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
 	}
 	

@@ -29,6 +29,9 @@ nexxes.widgets = {
 		// Ignore events on elements without an id
 		if (!event.currentTarget.id || (event.currentTarget.id === "")) { return; }
 		
+		// Do not issue action click action, only remote action
+		event.preventDefault();
+		
 		nexxes.widgets.lastEvent = event;
 		nexxes.widgets.eventQueue.push(event);
 		nexxes.widgets._executeActions();
@@ -149,9 +152,10 @@ nexxes.widgets = {
 	
 	init: function() {
 		nexxes.widgets.refresh();
-		$(document).on('click dblclick', 'a[id], button[id], td[id]', nexxes.widgets.defaultHandler);
-		$(document).on('change', 'input, textarea, select', nexxes.widgets.changeHandler);
-		$(document).on('submit', 'form', nexxes.widgets.submitHandler);
+		$(document).on('click',    '*[data-handler~="click"]', nexxes.widgets.defaultHandler);
+		$(document).on('dblclick', '*[data-handler~="dblclick"]', nexxes.widgets.defaultHandler);
+		$(document).on('change',   'input, textarea, select', nexxes.widgets.changeHandler);
+		$(document).on('submit',   'form', nexxes.widgets.submitHandler);
 	}
 };
 
