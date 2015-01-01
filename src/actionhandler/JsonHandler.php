@@ -36,6 +36,7 @@ class JsonHandler {
 			$page_id = $request->request->get('nexxes_pid');
 
 			/* @var $page \nexxes\widgets\PageInterface */
+			//$page = \apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id);
 			$page = \unserialize(\gzinflate(\apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id)));
 
 			if (!($page instanceof \nexxes\widgets\PageInterface)) {
@@ -62,6 +63,9 @@ class JsonHandler {
 			}
 
 			$data = $this->handleChangedWidgets($page);
+			
+			//\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
+			\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
 		} catch (\Exception $e) {
 			$data = [[
 				'nexxes_action' => 'log',
@@ -72,8 +76,6 @@ class JsonHandler {
 		header('Content-Type: text/json');
 		echo json_encode($data);
 		
-		//\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
-		\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
 		exit;
 	}
 	
