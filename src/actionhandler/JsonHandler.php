@@ -68,8 +68,8 @@ class JsonHandler {
 			\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
 		} catch (\Exception $e) {
 			$data = [[
-				'nexxes_action' => 'log',
-				'nexxes_params' => [(string)$e],
+				'nexxes_action' => 'error',
+				'nexxes_params' => [$this->dumpException($e)],
 			]];
 		}
 		
@@ -103,5 +103,65 @@ class JsonHandler {
 		$page->remoteActions = [];
 		
 		return $data;
+	}
+	
+	private function dumpException(\Exception $e) {
+		$r = 'Exception "' . \get_class($e) . '" with message "' . $e->getMessage() . '" in ' . $e->getFile() . ':' . $e->getLine() . PHP_EOL . PHP_EOL;
+		
+		$trace = $e->getTrace();
+		if ($e instanceof \ErrorException) { \array_shift($trace); }
+		
+		foreach ($trace as $i => $traceline) {
+			$r .= '#' . $i . ( isset($traceline['file']) ? ' ' . $traceline['file'] . '(' . $traceline['line'] . ')' : '' ) . ':' . PHP_EOL;
+			
+			if (isset($traceline['function'])) {
+				$r .= '    ';
+				if (isset($traceline['class'])) {
+					$r .= $traceline['class'] . ($traceline['type'] ?: '');
+				}
+				$r .= $traceline['function'];
+				$r .= '(';
+				
+				foreach ($traceline['args'] as $argNum => $arg) {
+					if ($argNum) { $r .= ','; }
+					$r .= PHP_EOL . '        ';
+					
+					if (\is_object($arg)) {
+						$r .= \get_class($arg);
+					} elseif (\is_array($arg)) {
+						$r .= 'Array(';
+						
+						$first = true;
+						foreach ($arg as $arrayKey => $arrayValue) {
+							if ($first) {
+								$first = false;
+							} else {
+								$r .= ',';
+							}
+							
+							$r .= PHP_EOL . '            ';
+							$r .= $arrayKey . ' => ';
+							
+							if (\is_object($arrayValue)) {
+								$r .= \get_class($arrayValue);
+							} elseif (\is_array($arrayValue)) {
+								$r .= 'Array(' . \count($arrayValue) . ')';
+							} else {
+								$r .= \gettype($arrayValue) . ' "' . $arrayValue . '"';
+							}
+						}
+						if (!$first) { $r .= PHP_EOL . '        '; }
+						$r .= ')';
+					} else {
+						$r .= \gettype($arg) . ' "' . $arg . '"';
+					}
+				}
+				
+				if (\count($traceline['args'])) { $r .= PHP_EOL . '    '; }
+				$r .= ')' . PHP_EOL . PHP_EOL;
+			}
+		}
+		
+		return $r;
 	}
 }

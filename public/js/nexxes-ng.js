@@ -166,7 +166,8 @@ nexxes.methods = {
 	modalHide: function(selector) {
 		$(selector).modal('hide');
 	},
-	log: function(data) {
+	error: function(data) {
+		alert('Ein Fehler ist aufgetreten, bitte laden Sie die Seite neu.');
 		console.log(data);
 	}
 };
