@@ -103,12 +103,17 @@ class Form extends WidgetContainer implements WidgetHasSubmitEventInterface {
 	 */
 	private $elements;
 	
+	/**
+	 * @return \Traversable<FormInputInterface>
+	 */
 	public function getElements() {
-		if (is_null($this->elements)) {
-			$this->elements = new WidgetCollection($this);
+		/* @var $element FormInputInterface */
+		foreach ($this->getDescendants(FormInputInterface::class) as $element) {
+			// For nested input, use only the topmost
+			if (null !== $element->getNearestAncestor(FormInputInterface::class)) { continue; }
+			
+			yield $element;
 		}
-		
-		return $this->elements;
 	}
 	
 	
