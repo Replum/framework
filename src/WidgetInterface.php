@@ -50,6 +50,14 @@ interface WidgetInterface {
 	function getAncestors($filterByType = null);
 	
 	/**
+	 * Get the nearest anchestor of the supplied type
+	 * 
+	 * @param string $type
+	 * @return null|object
+	 */
+	function getNearestAncestor($type);
+	
+	/**
 	 * Return the list of all widgets below this widget in the tree.
 	 * The returned list is not ordnered in a specific way.
 	 * If $filterByType is supplied, only elements that are an instance of this type are returned.
