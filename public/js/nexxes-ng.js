@@ -169,6 +169,9 @@ nexxes.methods = {
 	error: function(data) {
 		alert('Ein Fehler ist aufgetreten, bitte laden Sie die Seite neu.');
 		console.log(data);
+	},
+	redirect: function(url) {
+		window.location = url;
 	}
 };
 
