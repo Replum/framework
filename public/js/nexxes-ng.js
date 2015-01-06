@@ -93,22 +93,21 @@ nexxes.widgets = {
 		}
 		
 		nexxes.widgets.currentEvent = nexxes.widgets.eventQueue.shift();
+		console.log(nexxes.widgets.currentEvent);
+		
+		params = [];
 		
 		if (nexxes.widgets.currentEvent.type === "submit") {
 			params = $(nexxes.widgets.currentEvent.target).serializeArray();
-		} else {
-			params = [];
+		} else if (nexxes.widgets.currentEvent.target.type && ((nexxes.widgets.currentEvent.target.type === "radio") || (nexxes.widgets.currentEvent.target.type === "checkbox"))) {
+			params.push( { name: "nexxes_checked", value: nexxes.widgets.currentEvent.target.checked } );
+		} else if ((nexxes.widgets.currentEvent.target.value !== null) && (nexxes.widgets.currentEvent.target.value !== undefined)) {
+			params.push( { name: "nexxes_value", value: nexxes.widgets.currentEvent.target.value } );
 		}
 		
 		params.push( { name: "nexxes_pid", value: document.body.id } );
 		params.push( { name: "nexxes_event", value: nexxes.widgets.currentEvent.type } );
 		params.push( { name: "nexxes_source", value: nexxes.widgets.currentEvent.currentTarget.id } );
-		if (nexxes.widgets.currentEvent.target.type && ((nexxes.widgets.currentEvent.target.type === "radio") || (nexxes.widgets.currentEvent.target.type === "checkbox"))) {
-			params.push( { name: "nexxes_checked", value: nexxes.widgets.currentEvent.target.checked } );
-		}
-		else if ((nexxes.widgets.currentEvent.target.value !== null) && (nexxes.widgets.currentEvent.target.value !== undefined)) {
-			params.push( { name: "nexxes_value", value: nexxes.widgets.currentEvent.target.value } );
-		}
 		
 		//console.log("Executing action with parameters: ", params);
 		
