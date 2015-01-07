@@ -11,21 +11,24 @@
 
 namespace nexxes\widgets\html;
 
-use \nexxes\widgets\WidgetTrait;
+use \nexxes\widgets\WidgetContainer;
 use \nexxes\widgets\WidgetHasChangeEventInterface;
 use \nexxes\widgets\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @property string $name   Name this element is identified with in its form
+ * @property array  $values The possible values in this select
+ * @property string $value  The currently selected value
  */
-class Select implements WidgetHasChangeEventInterface, FormInputInterface {
-	use WidgetTrait, WidgetHasChangeEventTrait, FormElementTrait;
+class Select extends WidgetContainer implements WidgetHasChangeEventInterface, FormInputInterface {
+	use WidgetHasChangeEventTrait, FormElementTrait;
 	
 	/**
 	 * @var string
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
 	 */
-	private $name;
+	protected $name;
 	
 	/**
 	 * @return string
@@ -41,73 +44,100 @@ class Select implements WidgetHasChangeEventInterface, FormInputInterface {
 	 * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
 	 */
 	public function setName($newName) {
-		if ($this->name !== $newName) {
-			$this->name = $newName;
-			$this->setChanged();
-		}
-		return $this;
+		return $this->setStringProperty('name', $newName);
 	}
+	
 	
 	/**
-	 * Helper function to render the the name attribute
-	 * @return string
+	 * @var array
 	 */
-	protected function renderNameAttribute() {
-		return (\is_null($this->name) ? '' : ' name="' . $this->escape($this->name) . '"');
-	}
+	protected $values;
 	
-	private $values;
+	/**
+	 * @var boolean
+	 */
+	protected $isAssoc;
 	
+	/**
+	 * @return array
+	 */
 	public function getValues() {
 		return $this->values;
 	}
 	
 	/**
 	 * @param array $values
-	 * @return \nexxes\widgets\html\Select
+	 * @param boolean $hasKeys $values contains separate values and labels
+	 * @return static $this for chaining
 	 */
-	public function setValues($values) {
-		if ($this->values !== $values) {
+	public function setValues($values, $hasKeys = true) {
+		if (($this->values !== $values) && ($this->isAssoc !== $hasKeys)) {
 			$this->values = $values;
+			$this->isAssoc = (bool)$hasKeys;
 			$this->setChanged(true);
 		}
 		return $this;
 	}
 	
-	private $value;
 	
+	/**
+	 * @var string
+	 */
+	protected $value;
+	
+	/**
+	 * @return string
+	 */
 	public function getValue() {
 		return $this->value;
 	}
 	
+	/**
+	 * 
+	 * @param type $newValue
+	 * @return \nexxes\widgets\html\Select
+	 */
 	public function setValue($newValue) {
-		if ($this->value !== $newValue) {
-			$this->value = $newValue;
-			$this->setChanged(true);
-		}
-		return $this;
+		return $this->setStringProperty('value', $newValue);
 	}
 	
+	
+	protected function renderAttributes() {
+		return parent::renderAttributes()
+			. $this->renderHtmlAttribute('name', $this->name)
+		;
+	}
+	
+	
 	public function __toString() {
-		$r = '<select'
-			. $this->renderAttributes()
-			. $this->renderNameAttribute()
-			. '>';
+		try {
+		$this->getChildren()->blank();
+		$this->createOptions($this, $this->values);
 		
-		$assoc = (\array_keys($this->values) !== \range(0, \count($this->values) - 1));
+		return '<select' . $this->renderAttributes() . '>'
+			. $this->renderChildren()
+			. '</select>'
+		;
 		
-		foreach ($this->values as $key => $value) {
-			$r .= '<option'
-				. ($assoc ? ' value="' . $this->escape($key) . '"' : '')
-				. ($assoc && ($this->value === $key) ? ' selected=selected' : '')
-				. (!$assoc && ($this->value === $value) ? ' selected=selected' : '')
-				. '>'
-				. $this->escape($value)
-				. '</option>';
+		} catch (\Exception $e) {
+			echo '<pre>' . $e;
+			exit;
 		}
-		
-		$r .= '</select>';
-		
-		return $r;
+	}
+	
+	protected function createOptions($parent, $values) {
+		foreach ($values as $value => $label) {
+			if (\is_array($label)) {
+				$optgroup = OptionGroup::create($parent, 'label', $value);
+				$this->{__FUNCTION__}($optgroup, $label);
+			}
+			
+			else {
+				$option = Option::create($parent, 'label', $label, 'value', ($this->isAssoc ? $value : $label));
+				if (($this->value !== null) && ($option->value === $this->value)) {
+					$option->selected = true;
+				}
+			}
+		}
 	}
 }
