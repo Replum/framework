@@ -919,4 +919,67 @@ trait WidgetTrait {
 		
 		return $this;
 	}
+	
+	
+	
+	
+	######################################################################
+	#
+	# Helper methods to set values
+	#
+	######################################################################
+	
+	/**
+	 * @param string $property
+	 * @param mixed $value
+	 * @return static $this for chaining
+	 */
+	protected function setStringProperty($property, $value) {
+		if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
+			$realValue = (string)$value;
+		} elseif (\is_null($value)) {
+			$realValue = $value;
+		}	else {
+			throw new \InvalidArgumentException('Can not set property "' . $property . '" to something not convertable to a string.');
+		}
+		
+		return $this->setPropertyValue($property, $realValue);
+	}
+	
+	protected function setBooleanProperty($property, $value) {
+		if (\is_bool($value)) {
+			$realValue = $value;
+		} elseif (\is_string($value) && \in_array(\strtolower($value), ['1', 'true', 'yes', 'on',])) {
+			$realValue = true;
+		} elseif (\is_string($value) && \in_array(\strtolower($value), ['0', 'false', 'no', 'off',])) {
+			$realValue = true;
+		} else {
+			throw new \InvalidArgumentException('Can not set property "' . $property . '" to something not convertable to a boolean.');
+		}
+		
+		return $this->setPropertyValue($property, $realValue);
+	}
+	
+	protected function setPropertyValue($property, $value) {
+		if ($this->$property !== $value) {
+			$this->setChanged();
+			$this->$property = $value;
+		}
+		
+		return $this;
+	}
+	
+	protected function renderHtmlAttribute($name, $value) {
+		if (\is_null($value)) { return ''; }
+		
+		if (\is_array($value)) {
+			$escaped = \array_reduce($value, function ($carry, $value) {
+				return ($carry !== null ? $carry . ' ' : '') . $this->escape($value);
+			});
+		} else {
+			$escaped = $this->escape($value);
+		}
+		
+		return ' ' . $name . '="' . $escaped . '"';
+	}
 }
