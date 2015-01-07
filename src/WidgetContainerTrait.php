@@ -21,6 +21,9 @@ trait WidgetContainerTrait {
 	 */
 	private $WidgetContainerTraitChildren;
 	
+	/**
+	 * @return WidgetCollection
+	 */
 	public function getChildren() {
 		if (is_null($this->WidgetContainerTraitChildren)) {
 			$this->WidgetContainerTraitChildren = new WidgetCollection($this, false);
