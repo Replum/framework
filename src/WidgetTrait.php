@@ -514,16 +514,7 @@ trait WidgetTrait {
 	 * @see \nexxes\widgets\WidgetInterface::setTitle()
 	 */
 	public function setTitle($newTitle) {
-		if (!\is_null($newTitle) && !\is_string($newTitle)) {
-			throw new \InvalidArgumentException('Title can only be set to a string value!');
-		}
-		
-		if ($this->widgetTraitTitle !== $newTitle) {
-			$this->widgetTraitTitle = $newTitle;
-			$this->setChanged(true);
-		}
-		
-		return $this;
+		return $this->setStringProperty('title', $newTitle);
 	}
 	
 	
@@ -552,16 +543,11 @@ trait WidgetTrait {
 	 * @see \nexxes\widgets\WidgetInterface::setRole()
 	 */
 	public function setRole($newRole) {
-		if (!\is_null($newRole) && !\is_string($newRole)) {
-			throw new \InvalidArgumentException('Role can only be set to a string value!');
+		if (!\in_array($newRole, $this->validRoles())) {
+			throw new \InvalidArgumentException('Invalid role value!');
 		}
 		
-		if ($this->widgetTraitRole !== $newRole) {
-			$this->widgetTraitRole = $newRole;
-			$this->setChanged(true);
-		}
-		
-		return $this;
+		return $this->setStringProperty('role', $newRole);
 	}
 	
 	/**
@@ -710,12 +696,12 @@ trait WidgetTrait {
 			$this->getID();
 		}
 		
-		return (\is_null($this->widgetTraitId) ? '' : ' id="' . $this->escape($this->widgetTraitId) . '"')
-			. (\count($this->widgetTraitClasses) ? ' class="' . \join(' ', \array_map([$this, 'escape'], $this->widgetTraitClasses)) . '"' : '')
+		return $this->renderHtmlAttribute('id', $this->widgetTraitId)
+			. $this->renderHtmlAttribute('class', $this->widgetTraitClasses)
 			. $this->renderDataAttributes()
-			. (\is_null($this->widgetTraitRole) ? '' : ' role="' . $this->escape($this->widgetTraitRole) . '"')
-			. (\is_null($this->widgetTraitTitle) ? '' : ' title="' . $this->escape($this->widgetTraitTitle) . '"')
-			. (\is_null($this->widgetTraitTabindex) ? '' : ' tabindex="' . $this->widgetTraitTabindex . '"')
+			. $this->renderHtmlAttribute('role', $this->widgetTraitRole)
+			.	$this->renderHtmlAttribute('title', $this->widgetTraitTitle)
+			. $this->renderHtmlAttribute('tabindex', $this->widgetTraitTabindex)
 		;
 	}
 	
