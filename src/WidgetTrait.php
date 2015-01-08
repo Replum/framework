@@ -964,8 +964,10 @@ trait WidgetTrait {
 		if (\is_null($value)) { return ''; }
 		
 		if (\is_array($value)) {
+			if (!\count($value)) { return ''; }
+			
 			$escaped = \array_reduce($value, function ($carry, $value) {
-				return ($carry !== null ? $carry . ' ' : '') . $this->escape($value);
+				return ($carry ? $carry . ' ' : '') . $this->escape($value);
 			});
 		} else {
 			$escaped = $this->escape($value);
