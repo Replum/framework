@@ -775,11 +775,11 @@ trait WidgetTrait {
 		}
 		
 		// Cleanup all handlers
-		if (($this->eventName === null) && ($this->listener === null)) {
+		if (($eventName === null) && ($listener === null)) {
 			$this->eventDispatcher = null;
 		}
 		
-		elseif ($this->eventName === null) {
+		elseif ($eventName === null) {
 			foreach ($this->eventDispatcher->getListeners() as $eventName => $listeners) {
 				$this->removeListenerIfExists($eventName, $listeners, $listener);
 			}
