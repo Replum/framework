@@ -886,6 +886,8 @@ trait WidgetTrait {
 	 * @return static $this for chaining
 	 */
 	protected function applyArguments($stripArgs, array $args) {
+		if (\count($args) <= $stripArgs) { return; }
+		
 		if ((\count($args)-$stripArgs) % 2) {
 			throw new \InvalidArgumentException('Require pairs of attribute names and values!');
 		}
