@@ -864,13 +864,7 @@ trait WidgetTrait {
 	 */
 	public static function create(WidgetInterface $parent = null) {
 		$widget = new static($parent);
-		
-		if (\func_num_args() > 1) {
-			$args = \func_get_args();
-			\array_shift($args);
-			\call_user_func_array([$widget, 'apply'], $args);
-		}
-		
+		$widget->applyArguments(1, \func_get_args());
 		return $widget;
 	}
 	
@@ -880,13 +874,23 @@ trait WidgetTrait {
 	 * @throws \InvalidArgumentException
 	 */
 	public function apply($arg1 = null, $arg2 = null) {
-		$args = \func_get_args();
-		
-		if (\count($args) % 2) {
+		return $this->applyArguments(0, \func_get_args());
+	}
+	
+	/**
+	 * Read value pairs from the list of arguments and treat them as property name and property value.
+	 * Ignore the first $stripArgs as they may contain e.g. constructor specific parameters.
+	 * 
+	 * @param integer $stripArgs
+	 * @param array $args
+	 * @return static $this for chaining
+	 */
+	protected function applyArguments($stripArgs, array $args) {
+		if ((\count($args)-$stripArgs) % 2) {
 			throw new \InvalidArgumentException('Require pairs of attribute names and values!');
 		}
 		
-		for ($i=0; $i<\count($args); $i+=2) {
+		for ($i=$stripArgs; $i<\count($args); $i+=2) {
 			$propertyName = $args[$i];
 			$propertyValue = $args[$i+1];
 
@@ -899,7 +903,8 @@ trait WidgetTrait {
 			}
 
 			else {
-				$this->$propertyName = $propertyValue;
+				// Force setter method to be called
+				$this->__set($propertyName,  $propertyValue);
 			}
 		}
 		
