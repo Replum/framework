@@ -216,7 +216,7 @@ trait WidgetTrait
 
     public function clearParent()
     {
-        // Prevent recursion
+// Prevent recursion
         if ($this->widgetTraitParent === null) {
             return $this;
         }
@@ -291,7 +291,7 @@ trait WidgetTrait
      */
     public function setChanged($changed = true)
     {
-        // Nothing new here
+// Nothing new here
         if ($changed === $this->widgetTraitChanged) {
             return $this;
         }
@@ -310,12 +310,16 @@ trait WidgetTrait
         $this->widgetTraitChanged = false;
     }
 
+    ######################################################################
+    # ID handling
+    ######################################################################
+
     /**
      * The page unique identifier for this widget
      *
      * @var string
      */
-    private $widgetTraitId;
+    protected $widgetTraitId;
 
     /**
      * {@inheritdoc}
@@ -333,7 +337,8 @@ trait WidgetTrait
     public function getID()
     {
         if (!$this->hasID()) {
-            $this->setID();
+            $this->widgetTraitId = $this->getPage()->generateID();
+            $this->setChanged();
         }
         return $this->widgetTraitId;
     }
@@ -342,18 +347,10 @@ trait WidgetTrait
      * {@inheritdoc}
      * @implements \nexxes\widgets\WidgetInterface
      */
-    public function setID($newID = null, $skipNotify = false)
+    public function setID($newID)
     {
-        // Do not recalculate IDs
-        if (($newID === null) && $this->hasID()) {
-            return $this;
-        }
-
-        $oldID = $this->widgetTraitId;
-        $this->widgetTraitId = $newID;
-
-        // Prevent recursion
-        if ($skipNotify || (($newID !== null) && ($oldID === $newID))) {
+        // Ignore resettings same ID
+        if ($this->widgetTraitId === $newID) {
             return $this;
         }
 
@@ -361,15 +358,21 @@ trait WidgetTrait
             throw new \RuntimeException('Can not set ID without page.');
         }
 
-        /* @var $registry WidgetRegistry */
-        $registry = $this->getPage()->getWidgetRegistry();
-        $registry->register($this);
-
-        $this->setChanged(true);
-
-        return $this;
+        if ($this->getPage()->registerID($newID)) {
+            $this->widgetTraitId = $newID;
+            $this->setChanged(true);
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    /**
+     * Flag to indicate that the widget must be rendered with an ID.
+     * IDs are generated directly before rendering when the page tree should be complete.
+     *
+     * @var boolean
+     */
     private $widgetTraitNeedId = false;
 
     /**
@@ -382,6 +385,10 @@ trait WidgetTrait
         $this->widgetTraitNeedId = true;
         return $this;
     }
+
+    ######################################################################
+    # HTML classes handling
+    ######################################################################
 
     /**
      * The list of classes this html widgets has
@@ -409,7 +416,7 @@ trait WidgetTrait
      */
     public function delClass($class, $isRegex = false)
     {
-        // Regex matching
+// Regex matching
         if ($isRegex) {
             foreach ($this->widgetTraitClasses AS $index => $checkClass) {
                 if (\preg_match($class, $checkClass)) {
@@ -419,7 +426,7 @@ trait WidgetTrait
             }
         }
 
-        // Literal class name matching
+// Literal class name matching
         elseif (($key = \array_search($class, $this->widgetTraitClasses)) !== false) {
             unset($this->widgetTraitClasses[$key]);
             $this->setChanged(true);
@@ -433,7 +440,7 @@ trait WidgetTrait
      */
     public function hasClass($class, $isRegex = false)
     {
-        // Regex matching
+// Regex matching
         if ($isRegex) {
             foreach ($this->widgetTraitClasses AS $checkClass) {
                 if (\preg_match($class, $checkClass)) {
@@ -444,7 +451,7 @@ trait WidgetTrait
             return false;
         }
 
-        // Literal class name matching
+// Literal class name matching
         else {
             return \in_array($class, $this->widgetTraitClasses);
         }
@@ -457,7 +464,7 @@ trait WidgetTrait
     {
         \sort($this->widgetTraitClasses);
 
-        // Get only classes matching the supplied regex
+// Get only classes matching the supplied regex
         if (!is_null($regex)) {
             $found = [];
             foreach ($this->widgetTraitClasses AS $class) {
@@ -468,7 +475,7 @@ trait WidgetTrait
             return $found;
         }
 
-        // Get all classes
+// Get all classes
         else {
             return $this->widgetTraitClasses;
         }
@@ -689,7 +696,7 @@ trait WidgetTrait
     protected function validateAttributeName($name)
     {
         $nameStartChar = ':|[A-Z]|_|[a-z]|[\xC0-\xD6]|[\xD8-\xF6]|[\xF8-\x{2FF}]|[\x{370}-\x{37D}]|[\x{37F}-\x{1FFF}]|[\x{200C}-\x{200D}]|[\x{2070}-\x{218F}]|[\x{2C00}-\x{2FEF}]|[\x{3001}-\x{D7FF}]|[\x{F900}-\x{FDCF}]|[\x{FDF0}-\x{FFFD}]';
-        // |[\x{10000}-\x{EFFFF}] must be appended according to the ref but is invalid in PHP/PCRE
+// |[\x{10000}-\x{EFFFF}] must be appended according to the ref but is invalid in PHP/PCRE
         $nameChar = $nameStartChar . '|-|.|[0-9]|\xB7|[\x{0300}-\x{036F}]|[\x{203F}-\x{2040}]';
 
         return \preg_match('/^(' . $nameStartChar . ')(' . $nameChar . ')*$/u', $name);
@@ -742,11 +749,11 @@ trait WidgetTrait
         return \htmlspecialchars($string, ENT_HTML5 | ENT_COMPAT, 'UTF-8');
     }
 
-    ######################################################################
-    #
-	# Event handling
-    #
-	######################################################################
+######################################################################
+#
+# Event handling
+#
+######################################################################
 
     /**
      * @var EventDispatcherInterface
@@ -789,7 +796,7 @@ trait WidgetTrait
             return $this;
         }
 
-        // Cleanup all handlers
+// Cleanup all handlers
         if (($eventName === null) && ($listener === null)) {
             $this->eventDispatcher = null;
         } elseif ($eventName === null) {
@@ -844,11 +851,11 @@ trait WidgetTrait
         return $this;
     }
 
-    ######################################################################
-    #
-	# Bag key/value store
-    #
-	######################################################################
+######################################################################
+#
+# Bag key/value store
+#
+######################################################################
 
     /**
      * @var \ArrayObject
@@ -916,7 +923,7 @@ trait WidgetTrait
             } elseif (\substr($propertyName, 0, 4) === 'data') {
                 $this->setData(\lcfirst(\substr($propertyName, 4)), $propertyValue);
             } else {
-                // Force setter method to be called
+// Force setter method to be called
                 $this->__set($propertyName, $propertyValue);
             }
         }
@@ -924,11 +931,11 @@ trait WidgetTrait
         return $this;
     }
 
-    ######################################################################
-    #
-	# Helper methods to set values
-    #
-	######################################################################
+######################################################################
+#
+# Helper methods to set values
+#
+######################################################################
 
     /**
      * @param string $property
