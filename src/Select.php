@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the nexxes/widgets-html package.
- * 
+ *
  * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -21,123 +21,128 @@ use \nexxes\widgets\WidgetHasChangeEventTrait;
  * @property array  $values The possible values in this select
  * @property string $value  The currently selected value
  */
-class Select extends WidgetContainer implements WidgetHasChangeEventInterface, FormInputInterface {
-	use WidgetHasChangeEventTrait, FormElementTrait;
-	
-	/**
-	 * @var string
-	 * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
-	 */
-	protected $name;
-	
-	/**
-	 * @return string
-	 * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
-	 */
-	public function getName() {
-		return $this->name;
-	}
-	
-	/**
-	 * @param string $newName
-	 * @return \nexxes\widgets\html\Input $this for chaining
-	 * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
-	 */
-	public function setName($newName) {
-		return $this->setStringProperty('name', $newName);
-	}
-	
-	
-	/**
-	 * @var array
-	 */
-	protected $values;
-	
-	/**
-	 * @var boolean
-	 */
-	protected $isAssoc;
-	
-	/**
-	 * @return array
-	 */
-	public function getValues() {
-		return $this->values;
-	}
-	
-	/**
-	 * @param array $values
-	 * @param boolean $hasKeys $values contains separate values and labels
-	 * @return static $this for chaining
-	 */
-	public function setValues($values, $hasKeys = true) {
-		if (($this->values !== $values) && ($this->isAssoc !== $hasKeys)) {
-			$this->values = $values;
-			$this->isAssoc = (bool)$hasKeys;
-			$this->setChanged(true);
-		}
-		return $this;
-	}
-	
-	
-	/**
-	 * @var string
-	 */
-	protected $value;
-	
-	/**
-	 * @return string
-	 */
-	public function getValue() {
-		return $this->value;
-	}
-	
-	/**
-	 * 
-	 * @param type $newValue
-	 * @return \nexxes\widgets\html\Select
-	 */
-	public function setValue($newValue) {
-		return $this->setStringProperty('value', $newValue);
-	}
-	
-	
-	protected function renderAttributes() {
-		return parent::renderAttributes()
-			. $this->renderHtmlAttribute('name', $this->name)
-		;
-	}
-	
-	
-	public function __toString() {
-		try {
-		$this->getChildren()->blank();
-		$this->createOptions($this, $this->values);
-		
-		return '<select' . $this->renderAttributes() . '>'
-			. $this->renderChildren()
-			. '</select>'
-		;
-		
-		} catch (\Exception $e) {
-			echo '<pre>' . $e;
-			exit;
-		}
-	}
-	
-	protected function createOptions($parent, $values) {
-		foreach ($values as $value => $label) {
-			if (\is_array($label)) {
-				$optgroup = OptionGroup::create($parent, 'label', $value);
-				$this->{__FUNCTION__}($optgroup, $label);
-			}
-			
-			else {
-				$option = Option::create($parent, 'label', $label, 'value', ($this->isAssoc ? $value : $label));
-				if (($this->value !== null) && ($option->value === $this->value)) {
-					$option->selected = true;
-				}
-			}
-		}
-	}
+class Select extends WidgetContainer implements WidgetHasChangeEventInterface, FormInputInterface
+{
+    use WidgetHasChangeEventTrait,
+        FormElementTrait;
+
+    /**
+     * @var string
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    protected $name;
+
+    /**
+     * @return string
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $newName
+     * @return \nexxes\widgets\html\Input $this for chaining
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    public function setName($newName)
+    {
+        return $this->setStringProperty('name', $newName);
+    }
+
+    /**
+     * @var array
+     */
+    protected $values;
+
+    /**
+     * @var boolean
+     */
+    protected $isAssoc;
+
+    /**
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
+     * @param array $values
+     * @param boolean $hasKeys $values contains separate values and labels
+     * @return static $this for chaining
+     */
+    public function setValues($values, $hasKeys = true)
+    {
+        if (($this->values !== $values) && ($this->isAssoc !== $hasKeys)) {
+            $this->values = $values;
+            $this->isAssoc = (bool) $hasKeys;
+            $this->setChanged(true);
+        }
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    protected $value;
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     *
+     * @param type $newValue
+     * @return \nexxes\widgets\html\Select
+     */
+    public function setValue($newValue)
+    {
+        return $this->setStringProperty('value', $newValue);
+    }
+
+    protected function renderAttributes()
+    {
+        return parent::renderAttributes()
+        . $this->renderHtmlAttribute('name', $this->name)
+        ;
+    }
+
+    public function __toString()
+    {
+        try {
+            $this->getChildren()->blank();
+            $this->createOptions($this, $this->values);
+
+            return '<select' . $this->renderAttributes() . '>'
+            . $this->renderChildren()
+            . '</select>'
+            ;
+        } catch (\Exception $e) {
+            echo '<pre>' . $e;
+            exit;
+        }
+    }
+
+    protected function createOptions($parent, $values)
+    {
+        foreach ($values as $value => $label) {
+            if (\is_array($label)) {
+                $optgroup = OptionGroup::create($parent, 'label', $value);
+                $this->{__FUNCTION__}($optgroup, $label);
+            } else {
+                $option = Option::create($parent, 'label', $label, 'value', ($this->isAssoc ? $value : $label));
+                if (($this->value !== null) && ($option->value === $this->value)) {
+                    $option->selected = true;
+                }
+            }
+        }
+    }
+
 }
