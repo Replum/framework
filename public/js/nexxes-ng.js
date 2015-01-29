@@ -117,24 +117,26 @@ nexxes.widgets = {
 	_handleResponse: function(data) {
 		console.log(data);
 		
-		for (var i=0; i<data.length; i++) {
-			if (data[i].nexxes_action === "replace") {
-				console.log("Issuing replace action", $("#" + data[i].nexxes_target));
-				$("#" + data[i].nexxes_target).replaceWith(data[i].nexxes_data);
-			}
-			
-			else {
-				var fn = nexxes.methods[data[i].nexxes_action];
-				if (typeof fn === 'function') {
-					console.log('Executing method "' + data[i].nexxes_action + '" with ', data[i].nexxes_params);
-					fn.apply(null, data[i].nexxes_params);
-				} else {
-					console.log('Invalid method "' + data[i].nexxes_action + '"');
+		if (data.constructor === Array) {
+			for (var i=0; i<data.length; i++) {
+				if (data[i].nexxes_action === "replace") {
+					console.log("Issuing replace action", $("#" + data[i].nexxes_target));
+					$("#" + data[i].nexxes_target).replaceWith(data[i].nexxes_data);
+				}
+
+				else {
+					var fn = nexxes.methods[data[i].nexxes_action];
+					if (typeof fn === 'function') {
+						console.log('Executing method "' + data[i].nexxes_action + '" with ', data[i].nexxes_params);
+						fn.apply(null, data[i].nexxes_params);
+					} else {
+						console.log('Invalid method "' + data[i].nexxes_action + '"');
+					}
 				}
 			}
+
+			nexxes.widgets.refresh();
 		}
-		
-		nexxes.widgets.refresh();
 		
 		nexxes.widgets.currentEvent = null;
 		nexxes.widgets._executeActions();
