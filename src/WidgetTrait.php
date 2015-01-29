@@ -144,6 +144,8 @@ trait WidgetTrait
         $descendants = [];
 
         foreach ($this->getUnfilteredChildren() AS $child) {
+            if ($child === null) { continue; }
+
             if (is_null($filterByType) || is_a($child, $filterByType, true)) {
                 $descendants[] = $child;
             }
@@ -179,6 +181,8 @@ trait WidgetTrait
         }
 
         foreach ($this->getUnfilteredChildren() as $child) {
+            if ($child === null) { continue; }
+
             if (null !== ($found = $child->findById($id))) {
                 return $found;
             }
@@ -524,7 +528,7 @@ trait WidgetTrait
      * @var string
      * @see http://www.w3.org/TR/html5/dom.html#attr-title
      */
-    private $widgetTraitTitle;
+    protected $widgetTraitTitle;
 
     /**
      * @implements \nexxes\widgets\WidgetInterface
@@ -542,7 +546,7 @@ trait WidgetTrait
      */
     public function setTitle($newTitle)
     {
-        return $this->setStringProperty('title', $newTitle);
+        return $this->setStringProperty('widgetTraitTitle', $newTitle);
     }
 
     /**
@@ -574,7 +578,7 @@ trait WidgetTrait
             throw new \InvalidArgumentException('Invalid role value!');
         }
 
-        return $this->setStringProperty('role', $newRole);
+        return $this->setStringProperty('widgetTraitRole', $newRole);
     }
 
     /**
