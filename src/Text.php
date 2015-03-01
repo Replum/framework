@@ -95,7 +95,7 @@ class Text implements WidgetInterface, PhrasingContentInterface
      */
     public function validTags()
     {
-        return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'legend',];
+        return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'legend', 'b', 'i', 'strike'];
     }
 
     public function __construct(WidgetInterface $parent = null)
