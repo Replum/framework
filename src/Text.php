@@ -42,7 +42,7 @@ class Text implements WidgetInterface, PhrasingContentInterface
      */
     public function setText($newText)
     {
-        if (!is_string($newText)) {
+        if (!is_string($newText) && !is_scalar($newText)) {
             throw new \InvalidArgumentException('Supplied text value must be a string.');
         }
 
