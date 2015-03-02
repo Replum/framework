@@ -107,10 +107,31 @@ class Select extends WidgetContainer implements WidgetHasChangeEventInterface, F
         return $this->setStringProperty('value', $newValue);
     }
 
+    /**
+     * @var int
+     */
+    protected $size;
+
+    /**
+     * @return int
+     */
+    public function getSize() {
+        return $this->size;
+    }
+
+    /**
+     * @param int $newSize
+     * @return \nexxes\widgets\html\Select
+     */
+    public function setSize($newSize) {
+        return $this->setPropertyValue('size', (int)$newSize);
+    }
+
     protected function renderAttributes()
     {
         return parent::renderAttributes()
         . $this->renderHtmlAttribute('name', $this->name)
+        . $this->renderHtmlAttribute('size', $this->size)
         ;
     }
 
