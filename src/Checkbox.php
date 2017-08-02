@@ -1,52 +1,52 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
+use \Replum\WidgetContainerInterface;
+use \Replum\WidgetContainerTrait;
+use \Replum\WidgetHasClickEventInterface;
+use \Replum\WidgetHasClickEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
- * @property boolean $checked Checkbox is activated or not
- * @property boolean $required Element must be filled.
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class Checkbox implements FormInputInterface, WidgetHasChangeEventInterface
+class Button implements WidgetContainerInterface, FormElementInterface, WidgetHasClickEventInterface
 {
-    use WidgetTrait,
-        WidgetHasChangeEventTrait,
+    use WidgetContainerTrait,
+        WidgetHasClickEventTrait,
         FormInputTrait {
-        isChecked as public;
-        enableChecked as public;
-        disableChecked as public;
-
-        isRequired as public;
-        enableRequired as public;
-        disableRequired as public;
-    }
-
-    public function __construct(WidgetInterface $parent = null)
-    {
-        if (!is_null($parent)) { $this->setParent($parent); }
-        $this->setType('checkbox');
+        setType as public;
     }
 
     public function __toString()
     {
-        return '<input'
-        . $this->renderAttributes()
-        . $this->renderFormInputAttributes()
-        . ' />';
+        return '<' . $this->getTag() . $this->renderAttributes() . '>' . $this->renderChildren() . '</button>' . PHP_EOL;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function validTags()
+    {
+        return [ 'button'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function renderAttributes()
+    {
+        return $this->renderWidgetAttributes()
+        . $this->renderFormInputAttributes()
+        ;
+    }
 }

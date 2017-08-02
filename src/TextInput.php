@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
+use \Replum\WidgetInterface;
+use \Replum\WidgetTrait;
+use \Replum\WidgetHasChangeEventInterface;
+use \Replum\WidgetHasChangeEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @property boolean $autocomplete Allow the browser to provide hints and store submitted values.
  * @property boolean $autofocus Focus this element on page load
  * @property int $minlength Minimum number of chars required as input
@@ -30,7 +30,7 @@ class TextInput implements WidgetHasChangeEventInterface, FormInputInterface
 {
     use WidgetTrait,
         WidgetHasChangeEventTrait;
-use FormInputTrait {
+    use FormInputTrait {
         hasAutocomplete as public;
         enableAutocomplete as public;
         disableAutocomplete as public;
@@ -71,5 +71,4 @@ use FormInputTrait {
         . $this->renderFormInputAttributes()
         . ' />';
     }
-
 }

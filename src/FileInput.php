@@ -1,29 +1,29 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
+use \Replum\WidgetInterface;
+use \Replum\WidgetTrait;
+use \Replum\WidgetHasChangeEventInterface;
+use \Replum\WidgetHasChangeEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
 class FileInput implements FormElementInterface, WidgetHasChangeEventInterface
 {
     use WidgetTrait,
         WidgetHasChangeEventTrait;
-use FormInputTrait {
+    use FormInputTrait {
         hasAutocomplete as public;
         enableAutocomplete as public;
         disableAutocomplete as public;
@@ -68,7 +68,7 @@ use FormInputTrait {
 
     /**
      * @param string $newAccept
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
      */
     public function setAccept($newAccept)
@@ -98,5 +98,4 @@ use FormInputTrait {
         . $this->renderFormInputAttributes()
         . ' />';
     }
-
 }

@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
+use \Replum\WidgetInterface;
+use \Replum\WidgetTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
 class Text implements WidgetInterface, PhrasingContentInterface
 {
@@ -38,7 +38,7 @@ class Text implements WidgetInterface, PhrasingContentInterface
 
     /**
      * @param type $newText
-     * @return \nexxes\widgets\html\Text $this for chaining
+     * @return \Replum\Html\Text $this for chaining
      */
     public function setText($newText)
     {
@@ -74,7 +74,7 @@ class Text implements WidgetInterface, PhrasingContentInterface
 
     /**
      * @param string $newTag The tag type to set
-     * @return \nexxes\widgets\html\Text $this for chaining
+     * @return \Replum\Html\Text $this for chaining
      */
     public function setTag($newTag)
     {
@@ -113,5 +113,4 @@ class Text implements WidgetInterface, PhrasingContentInterface
             return \str_replace("\n", '<br />', $this->escape($this->text));
         }
     }
-
 }

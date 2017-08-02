@@ -1,19 +1,21 @@
 {
-	"name": "nexxes/widgets-html",
-	"description": "nexxes web widget framework: html widgets",
-	"authors": [
-		{ "name": "Dennis Birkholz", "email": "dennis.birkholz@nexxes.net" }
-	],
-	"license": "LGPL-3.0+",
-	
-	"autoload": {
-		"psr-4": {
-			"nexxes\\widgets\\html\\": "src/"
-		}
-	},
-	
-	"require": {
-		"nexxes/widgets-base": "*@dev",
-		"nexxes/dependency": "*@dev"
-	}
+    "name": "replum/replum-widgets-html",
+    "description": "replum web widget framework: basic html widgets",
+    "authors": [
+        { "name": "Dennis Birkholz", "email": "dennis@birkholz.org" }
+    ],
+    "license": "LGPL-3.0+",
+    "autoload": {
+        "psr-4": {
+            "Replum\\Html\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Replum\\Html\\": "tests/"
+        }
+    },
+    "require": {
+        "replum/replum-base": "*@dev"
+    }
 }

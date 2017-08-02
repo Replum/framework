@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
+use \Replum\WidgetInterface;
+use \Replum\WidgetTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @property string  $label    User-visible label
  * @property string  $value    Value to be used for form submission
  * @property boolean $selected Whether the option is selected by default
@@ -118,5 +118,4 @@ class Option implements WidgetInterface
     {
         return '<option' . $this->renderAttributes() . '>' . $this->escape($this->label) . '</option>';
     }
-
 }

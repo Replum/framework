@@ -1,24 +1,23 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
 /**
  * Default implementation of the TableCellInterface
  *
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
 trait TableCellTrait
 {
-
     /**
      * @var int
      */
@@ -90,5 +89,4 @@ trait TableCellTrait
         . ($this->getRowSpan() > 1 ? ' rowspan=' . $this->getRowSpan() : '')
         ;
     }
-
 }

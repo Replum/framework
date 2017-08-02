@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainer;
-use \nexxes\widgets\WidgetHasClickEventInterface;
-use \nexxes\widgets\WidgetHasClickEventTrait;
+use \Replum\WidgetContainer;
+use \Replum\WidgetHasClickEventInterface;
+use \Replum\WidgetHasClickEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @property string $href The url to use for this link
  */
 class A extends WidgetContainer implements WidgetHasClickEventInterface
@@ -43,7 +43,7 @@ class A extends WidgetContainer implements WidgetHasClickEventInterface
 
     /**
      * @param string $newHref
-     * @return \nexxes\widgets\html\A $this for chaining
+     * @return \Replum\Html\A $this for chaining
      */
     public function setHref($newHref)
     {
@@ -61,5 +61,4 @@ class A extends WidgetContainer implements WidgetHasClickEventInterface
         . (!\is_null($this->href) ? ' href="' . $this->escape($this->href) . '"' : '')
         ;
     }
-
 }

@@ -1,25 +1,24 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainer;
+use \Replum\WidgetContainer;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/forms.html#the-label-element
  */
 class Label extends WidgetContainer
 {
-
     /**
      * {@inheritdoc}
      */
@@ -54,8 +53,8 @@ class Label extends WidgetContainer
     }
 
     /**
-     * @param \nexxes\widgets\html\FormElementInterface $element
-     * @return \nexxes\widgets\html\Label $this for chaining
+     * @param \Replum\Html\FormElementInterface $element
+     * @return \Replum\Html\Label $this for chaining
      */
     public function setFor(FormElementInterface $element)
     {
@@ -76,5 +75,4 @@ class Label extends WidgetContainer
         return ($this->getFor() !== null ? ' for="' . $this->escape($this->getFor()->getID()) . '"' : '')
         . parent::renderAttributes();
     }
-
 }

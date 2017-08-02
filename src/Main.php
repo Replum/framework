@@ -1,27 +1,26 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainer;
+use \Replum\WidgetContainer;
 
 /**
  * The main element represents the main content of the body of a document or application. The main content area consists of content that is directly related to or expands upon the central topic of a document or central functionality of an application.
  *
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/grouping-content.html#the-main-element
  */
 class Main extends WidgetContainer
 {
-
     /**
      * {@inheritdoc}
      */
@@ -29,5 +28,4 @@ class Main extends WidgetContainer
     {
         return [ 'main'];
     }
-
 }

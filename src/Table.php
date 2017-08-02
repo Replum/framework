@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
-use \nexxes\widgets\WidgetCollection;
+use \Replum\WidgetInterface;
+use \Replum\WidgetTrait;
+use \Replum\WidgetCollection;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/tabular-data.html#the-table-element
  */
 class Table implements WidgetInterface
@@ -61,7 +61,7 @@ class Table implements WidgetInterface
     }
 
     /**
-     * @var \nexxes\widgets\WidgetCollection
+     * @var \Replum\WidgetCollection
      */
     private $bodies;
 
@@ -94,5 +94,4 @@ class Table implements WidgetInterface
 
         return $r;
     }
-
 }

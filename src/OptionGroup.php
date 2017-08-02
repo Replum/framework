@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainer;
-use \nexxes\widgets\WidgetInterface;
+use \Replum\WidgetContainer;
+use \Replum\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.biz>
@@ -21,7 +21,6 @@ use \nexxes\widgets\WidgetInterface;
  */
 class OptionGroup extends WidgetContainer
 {
-
     /**
      * @var string
      * @link http://www.w3.org/TR/html5/forms.html#attr-optgroup-label
@@ -58,5 +57,4 @@ class OptionGroup extends WidgetContainer
         parent::__construct($parent);
         $this->setTag('optgroup');
     }
-
 }

@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetTrait;
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
+use \Replum\WidgetInterface;
+use \Replum\WidgetTrait;
+use \Replum\WidgetHasChangeEventInterface;
+use \Replum\WidgetHasChangeEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
 class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
 {
@@ -180,7 +180,7 @@ class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
     }
 
     /**
-     * @param \nexxes\widgets\WidgetInterface $parent
+     * @param \Replum\WidgetInterface $parent
      * @param string $name
      */
     public function __construct(WidgetInterface $parent = null)
@@ -198,5 +198,4 @@ class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
         . $this->renderMax()
         . ' />';
     }
-
 }

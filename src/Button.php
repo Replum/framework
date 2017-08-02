@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainerInterface;
-use \nexxes\widgets\WidgetContainerTrait;
-use \nexxes\widgets\WidgetHasClickEventInterface;
-use \nexxes\widgets\WidgetHasClickEventTrait;
+use \Replum\WidgetContainerInterface;
+use \Replum\WidgetContainerTrait;
+use \Replum\WidgetHasClickEventInterface;
+use \Replum\WidgetHasClickEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
 class Button implements WidgetContainerInterface, FormElementInterface, WidgetHasClickEventInterface
 {
@@ -49,5 +49,4 @@ class Button implements WidgetContainerInterface, FormElementInterface, WidgetHa
         . $this->renderFormInputAttributes()
         ;
     }
-
 }

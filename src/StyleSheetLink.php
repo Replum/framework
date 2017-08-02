@@ -1,24 +1,23 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\StyleSheetInterface;
+use \Replum\StyleSheetInterface;
 
 /**
  * Represents a <link rel="stylesheet"> element in the head of an html page
  */
 class StyleSheetLink implements StyleSheetInterface
 {
-
     /**
      * Stylesheet is prefered or alternate style sheet
      * @var boolean
@@ -27,7 +26,7 @@ class StyleSheetLink implements StyleSheetInterface
 
     /**
      * @param boolean $alternate
-     * @return \nexxes\widgets\html\StyleSheetLink $this for chaining
+     * @return \Replum\Html\StyleSheetLink $this for chaining
      */
     public function setAlternate($alternate = true)
     {
@@ -43,7 +42,7 @@ class StyleSheetLink implements StyleSheetInterface
 
     /**
      * @param string $title
-     * @return \nexxes\widgets\html\StyleSheetLink $this for chaining
+     * @return \Replum\Html\StyleSheetLink $this for chaining
      */
     public function setTitle($title)
     {
@@ -59,7 +58,7 @@ class StyleSheetLink implements StyleSheetInterface
 
     /**
      * @param string $type
-     * @return \nexxes\widgets\html\StyleSheetLink $this for chaining
+     * @return \Replum\Html\StyleSheetLink $this for chaining
      */
     public function setType($type)
     {
@@ -75,7 +74,7 @@ class StyleSheetLink implements StyleSheetInterface
 
     /**
      * @param string $url
-     * @return \nexxes\widgets\html\StyleSheetLink $this for chaining
+     * @return \Replum\Html\StyleSheetLink $this for chaining
      */
     public function setUrl($url)
     {
@@ -92,5 +91,4 @@ class StyleSheetLink implements StyleSheetInterface
         . ($this->type ? ' type="' . \htmlentities($this->type, null, 'UTF-8') . '"' : '')
         . ' />';
     }
-
 }

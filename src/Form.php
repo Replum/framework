@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainer;
-use \nexxes\widgets\WidgetCollection;
-use \nexxes\widgets\WidgetInterface;
-use \nexxes\widgets\WidgetHasSubmitEventInterface;
-use \nexxes\widgets\WidgetHasSubmitEventTrait;
+use \Replum\WidgetContainer;
+use \Replum\WidgetCollection;
+use \Replum\WidgetInterface;
+use \Replum\WidgetHasSubmitEventInterface;
+use \Replum\WidgetHasSubmitEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @property-read WidgetCollection $elements
  */
 class Form extends WidgetContainer implements WidgetHasSubmitEventInterface
@@ -42,7 +42,7 @@ class Form extends WidgetContainer implements WidgetHasSubmitEventInterface
 
     /**
      * @param string $newAction
-     * @return \nexxes\widgets\html\Form $this for chaining
+     * @return \Replum\Html\Form $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fs-action
      */
     public function setAction($newAction)
@@ -72,7 +72,7 @@ class Form extends WidgetContainer implements WidgetHasSubmitEventInterface
 
     /**
      * @param string $newName
-     * @return \nexxes\widgets\html\Form $this for chaining
+     * @return \Replum\Html\Form $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-form-name
      */
     public function setName($newName)
@@ -151,5 +151,4 @@ class Form extends WidgetContainer implements WidgetHasSubmitEventInterface
 
         return $r;
     }
-
 }

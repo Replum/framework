@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @property boolean $disabled Enable/disable status of the form element
  * @property string $name Name of this button
  * @property string $type Type of the input
@@ -38,7 +38,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete
      */
     protected function enableAutocomplete()
@@ -51,7 +51,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete
      */
     protected function disableAutocomplete()
@@ -64,7 +64,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete
      */
     protected function unsetAutocomplete()
@@ -100,7 +100,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
      */
     protected function enableAutofocus()
@@ -113,7 +113,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
      */
     protected function disableAutofocus()
@@ -149,7 +149,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-checked
      */
     protected function enableChecked()
@@ -158,7 +158,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-checked
      */
     protected function disableChecked()
@@ -215,7 +215,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
      */
     public function enable()
@@ -228,7 +228,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
      */
     public function disable()
@@ -265,7 +265,7 @@ trait FormInputTrait
 
     /**
      * @param int $newMinlength
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-minlength
      */
     protected function setMinlength($newMinlength)
@@ -311,7 +311,7 @@ trait FormInputTrait
 
     /**
      * @param int $newMaxlength
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-maxlength
      */
     protected function setMaxlength($newMaxlength)
@@ -356,7 +356,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-multiple
      */
     protected function enableMultiple()
@@ -369,7 +369,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-multiple
      */
     protected function disableMultiple()
@@ -406,7 +406,7 @@ trait FormInputTrait
 
     /**
      * @param string $newName
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
      */
     public function setName($newName)
@@ -444,7 +444,7 @@ trait FormInputTrait
 
     /**
      * @param string $newPlaceholder
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-placeholder
      */
     protected function setPlaceholder($newPlaceholder)
@@ -481,7 +481,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-readonly
      */
     protected function enableReadonly()
@@ -494,7 +494,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-readonly
      */
     protected function disableReadonly()
@@ -530,7 +530,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-required
      */
     protected function enableRequired()
@@ -543,7 +543,7 @@ trait FormInputTrait
     }
 
     /**
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-required
      */
     protected function disableRequired()
@@ -625,7 +625,7 @@ trait FormInputTrait
 
     /**
      * @param string $newValue
-     * @return \nexxes\widgets\html\TextInput $this for chaining
+     * @return \Replum\Html\TextInput $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
      */
     public function setValue($newValue)
@@ -671,5 +671,4 @@ trait FormInputTrait
         . $this->renderTypeAttribute()
         . $this->renderValueAttribute();
     }
-
 }

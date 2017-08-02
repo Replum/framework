@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-html package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets\html;
+namespace Replum\Html;
 
-use \nexxes\widgets\WidgetContainer;
-use \nexxes\widgets\WidgetHasChangeEventInterface;
-use \nexxes\widgets\WidgetHasChangeEventTrait;
+use \Replum\WidgetContainer;
+use \Replum\WidgetHasChangeEventInterface;
+use \Replum\WidgetHasChangeEventTrait;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  * @property string $name   Name this element is identified with in its form
  * @property array  $values The possible values in this select
  * @property string $value  The currently selected value
@@ -43,7 +43,7 @@ class Select extends WidgetContainer implements WidgetHasChangeEventInterface, F
 
     /**
      * @param string $newName
-     * @return \nexxes\widgets\html\Input $this for chaining
+     * @return \Replum\Html\Input $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
      */
     public function setName($newName)
@@ -100,7 +100,7 @@ class Select extends WidgetContainer implements WidgetHasChangeEventInterface, F
     /**
      *
      * @param type $newValue
-     * @return \nexxes\widgets\html\Select
+     * @return \Replum\Html\Select
      */
     public function setValue($newValue)
     {
@@ -121,7 +121,7 @@ class Select extends WidgetContainer implements WidgetHasChangeEventInterface, F
 
     /**
      * @param int $newSize
-     * @return \nexxes\widgets\html\Select
+     * @return \Replum\Html\Select
      */
     public function setSize($newSize) {
         return $this->setPropertyValue('size', (int)$newSize);
@@ -165,5 +165,4 @@ class Select extends WidgetContainer implements WidgetHasChangeEventInterface, F
             }
         }
     }
-
 }
