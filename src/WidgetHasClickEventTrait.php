@@ -1,49 +1,54 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-base package.
- * 
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
- * 
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets;
+namespace Replum;
 
-use \nexxes\widgets\events\WidgetOnClickEvent;
+use \Replum\Events\WidgetOnClickEvent;
 
 /**
- * Provides the methods required to implement the \nexxes\widgets\WidgetHasClickEventInterface
+ * Provides the methods required to implement the \Replum\WidgetHasClickEventInterface
  */
-trait WidgetHasClickEventTrait {
-	/**
-	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
-	 */
-	public function onClick(callable $eventHandler, $prio = 5) {
-		$this->addData('handler', 'click');
-		return $this->on(WidgetOnClickEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
-	 */
-	public function onClickOnce(callable $eventHandler, $prio = 5) {
-		$this->addData('handler', 'click');
-		return $this->one(WidgetOnClickEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
-	 */
-	public function removeOnClick(callable $eventHandler) {
-		return $this->off(WidgetOnClickEvent::class, $eventHandler);
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\WidgetHasClickEventInterface
-	 */
-	public function removeOnClickOnce(callable $eventHandler) {
-		return $this->off(WidgetOnClickEvent::class, $eventHandler);
-	}
+trait WidgetHasClickEventTrait
+{
+    /**
+     * @see \Replum\WidgetHasClickEventInterface::onClick()
+     */
+    public function onClick(callable $eventHandler, $prio = 5)
+    {
+        $this->addData('handler', 'click');
+        return $this->on(WidgetOnClickEvent::class, $eventHandler, $prio);
+    }
+
+    /**
+     * @see \Replum\WidgetHasClickEventInterface::onClickOnce()
+     */
+    public function onClickOnce(callable $eventHandler, $prio = 5)
+    {
+        $this->addData('handler', 'click');
+        return $this->one(WidgetOnClickEvent::class, $eventHandler, $prio);
+    }
+
+    /**
+     * @see \Replum\WidgetHasClickEventInterface::removeOnClick()
+     */
+    public function removeOnClick(callable $eventHandler)
+    {
+        return $this->off(WidgetOnClickEvent::class, $eventHandler);
+    }
+
+    /**
+     * @see \Replum\WidgetHasClickEventInterface::removeOnClickOnce()
+     */
+    public function removeOnClickOnce(callable $eventHandler)
+    {
+        return $this->off(WidgetOnClickEvent::class, $eventHandler);
+    }
 }

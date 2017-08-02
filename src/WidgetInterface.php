@@ -1,15 +1,23 @@
 <?php
 
-namespace nexxes\widgets;
+/*
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use \nexxes\widgets\events\WidgetEvent;
+namespace Replum;
+
+use \Replum\Events\WidgetEvent;
 
 /**
  * Base interface for all widgets
  */
 interface WidgetInterface
 {
-
     /**
      * Check if the selected widget is the topmost widget aka the page
      *
@@ -80,7 +88,7 @@ interface WidgetInterface
     /**
      * Get the page this widget belongs to
      *
-     * @return \nexxes\widgets\PageInterface
+     * @return \Replum\PageInterface
      */
     function getPage();
 

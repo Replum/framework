@@ -1,7 +1,0 @@
-<root>
-	<property name="testprop1">
-		<Text class="\nexxes\widgets\html\Text">
-			<property name="class" value="class1" />
-		</Text>
-	</property>
-</root>

@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-base package.
+ * This file is part of Replum: the web widget framework.
  *
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets;
+namespace Replum;
 
 /**
  * This interface indicates that the client-side (HTML) representation of this widget can fire the "submit" event.
@@ -29,7 +29,6 @@ namespace nexxes\widgets;
  */
 interface WidgetHasSubmitEventInterface extends WidgetInterface
 {
-
     /**
      * Register a handler for the submit event.
      * Multiple handler methods can be registered with this method.

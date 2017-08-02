@@ -1,12 +1,21 @@
 <?php
 
-namespace nexxes\widgets;
+/*
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use \nexxes\widgets\events\EventHandlerCallOnceWrapper;
-use \nexxes\widgets\events\WidgetEvent;
-use \nexxes\widgets\events\WidgetAddEvent;
-use \nexxes\widgets\events\WidgetChangeEvent;
-use \nexxes\widgets\events\WidgetRemoveEvent;
+namespace Replum;
+
+use \Replum\Events\EventHandlerCallOnceWrapper;
+use \Replum\Events\WidgetEvent;
+use \Replum\Events\WidgetAddEvent;
+use \Replum\Events\WidgetChangeEvent;
+use \Replum\Events\WidgetRemoveEvent;
 use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -21,7 +30,6 @@ use \Symfony\Component\EventDispatcher\EventDispatcher;
  */
 trait WidgetTrait
 {
-
     public function __construct(WidgetInterface $parent = null)
     {
         if (!is_null($parent)) { $this->setParent($parent); }
@@ -69,12 +77,12 @@ trait WidgetTrait
     }
 
     /**
-     * @var \nexxes\widgets\WidgetInterface
+     * @var \Replum\WidgetInterface
      */
     private $widgetTraitParent = null;
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::isRoot()
      */
     public function isRoot()
     {
@@ -82,7 +90,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getParent()
      */
     public function getParent()
     {
@@ -109,7 +117,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface+
+     * @see \Replum\WidgetInterface::getAncestors()
      * @returns \Traversable<WidgetInterface>
      */
     public function getAncestors($filterByType = null)
@@ -137,7 +145,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getDescendants()
      */
     public function getDescendants($filterByType = null)
     {
@@ -172,7 +180,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::findById()
      */
     public function findById($id)
     {
@@ -192,7 +200,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::setParent()
      */
     public function setParent(WidgetInterface $newParent)
     {
@@ -220,7 +228,7 @@ trait WidgetTrait
 
     public function clearParent()
     {
-// Prevent recursion
+        // Prevent recursion
         if ($this->widgetTraitParent === null) {
             return $this;
         }
@@ -239,12 +247,12 @@ trait WidgetTrait
     }
 
     /**
-     * @var \nexxes\widgets\PageInterface
+     * @var \Replum\PageInterface
      */
     private $widgetTraitPage = null;
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getPage()
      */
     public function getPage()
     {
@@ -266,7 +274,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getRoot()
      */
     public function getRoot()
     {
@@ -283,7 +291,7 @@ trait WidgetTrait
     private $widgetTraitChanged = true;
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::isChanged()
      */
     public function isChanged()
     {
@@ -291,7 +299,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::setChanged()
      */
     public function setChanged($changed = true)
     {
@@ -326,8 +334,7 @@ trait WidgetTrait
     protected $widgetTraitId;
 
     /**
-     * {@inheritdoc}
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::hasID()
      */
     public function hasID()
     {
@@ -335,8 +342,7 @@ trait WidgetTrait
     }
 
     /**
-     * {@inheritdoc}
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getID()
      */
     public function getID()
     {
@@ -348,8 +354,7 @@ trait WidgetTrait
     }
 
     /**
-     * {@inheritdoc}
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::setID()
      */
     public function setID($newID)
     {
@@ -381,8 +386,7 @@ trait WidgetTrait
 
     /**
      * @return static $this for chaining
-     * @see \nexxes\widgets\WidgetInterface::needID()
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::needID()
      */
     public function needID()
     {
@@ -403,7 +407,7 @@ trait WidgetTrait
     private $widgetTraitClasses = [];
 
     /**
-     *  @implements \nexxes\widgets\WidgetInterface
+     *  @see \Replum\WidgetInterface::addClass()
      */
     public function addClass($newClass)
     {
@@ -416,11 +420,11 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::delClass()
      */
     public function delClass($class, $isRegex = false)
     {
-// Regex matching
+        // Regex matching
         if ($isRegex) {
             foreach ($this->widgetTraitClasses AS $index => $checkClass) {
                 if (\preg_match($class, $checkClass)) {
@@ -430,7 +434,7 @@ trait WidgetTrait
             }
         }
 
-// Literal class name matching
+        // Literal class name matching
         elseif (($key = \array_search($class, $this->widgetTraitClasses)) !== false) {
             unset($this->widgetTraitClasses[$key]);
             $this->setChanged(true);
@@ -440,11 +444,11 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::hasClass()
      */
     public function hasClass($class, $isRegex = false)
     {
-// Regex matching
+        // Regex matching
         if ($isRegex) {
             foreach ($this->widgetTraitClasses AS $checkClass) {
                 if (\preg_match($class, $checkClass)) {
@@ -455,20 +459,20 @@ trait WidgetTrait
             return false;
         }
 
-// Literal class name matching
+        // Literal class name matching
         else {
             return \in_array($class, $this->widgetTraitClasses);
         }
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getClasses()
      */
     public function getClasses($regex = null)
     {
         \sort($this->widgetTraitClasses);
-
-// Get only classes matching the supplied regex
+        
+        // Get only classes matching the supplied regex
         if (!is_null($regex)) {
             $found = [];
             foreach ($this->widgetTraitClasses AS $class) {
@@ -479,7 +483,7 @@ trait WidgetTrait
             return $found;
         }
 
-// Get all classes
+        // Get all classes
         else {
             return $this->widgetTraitClasses;
         }
@@ -494,7 +498,7 @@ trait WidgetTrait
     private $widgetTraitTabindex;
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getTabIndex()
      */
     public function getTabIndex()
     {
@@ -502,7 +506,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::setTabIndex()
      */
     public function setTabIndex($newTabIndex)
     {
@@ -531,7 +535,7 @@ trait WidgetTrait
     protected $widgetTraitTitle;
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getTitle()
      */
     public function getTitle()
     {
@@ -542,7 +546,7 @@ trait WidgetTrait
      * @param string $newTitle
      * @return static $this for chaining
      *
-     * @see \nexxes\widgets\WidgetInterface::setTitle()
+     * @see \Replum\WidgetInterface::setTitle()
      */
     public function setTitle($newTitle)
     {
@@ -559,7 +563,7 @@ trait WidgetTrait
     private $widgetTraitRole;
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getRole()
      */
     public function getRole()
     {
@@ -570,7 +574,7 @@ trait WidgetTrait
      * @param string $newRole
      * @return static $this for chaining
      *
-     * @see \nexxes\widgets\WidgetInterface::setRole()
+     * @see \Replum\WidgetInterface::setRole()
      */
     public function setRole($newRole)
     {
@@ -621,7 +625,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::getData()
      */
     public function getData($name = null)
     {
@@ -639,7 +643,7 @@ trait WidgetTrait
      * @param string $newValue
      * @return static $this for chaining
      *
-     * @see \nexxes\widgets\WidgetInterface
+     * @see \Replum\WidgetInterface::setData()
      */
     public function setData($name, $newValue)
     {
@@ -700,7 +704,7 @@ trait WidgetTrait
     protected function validateAttributeName($name)
     {
         $nameStartChar = ':|[A-Z]|_|[a-z]|[\xC0-\xD6]|[\xD8-\xF6]|[\xF8-\x{2FF}]|[\x{370}-\x{37D}]|[\x{37F}-\x{1FFF}]|[\x{200C}-\x{200D}]|[\x{2070}-\x{218F}]|[\x{2C00}-\x{2FEF}]|[\x{3001}-\x{D7FF}]|[\x{F900}-\x{FDCF}]|[\x{FDF0}-\x{FFFD}]';
-// |[\x{10000}-\x{EFFFF}] must be appended according to the ref but is invalid in PHP/PCRE
+        // |[\x{10000}-\x{EFFFF}] must be appended according to the ref but is invalid in PHP/PCRE
         $nameChar = $nameStartChar . '|-|.|[0-9]|\xB7|[\x{0300}-\x{036F}]|[\x{203F}-\x{2040}]';
 
         return \preg_match('/^(' . $nameStartChar . ')(' . $nameChar . ')*$/u', $name);
@@ -753,11 +757,11 @@ trait WidgetTrait
         return \htmlspecialchars($string, ENT_HTML5 | ENT_COMPAT, 'UTF-8');
     }
 
-######################################################################
-#
-# Event handling
-#
-######################################################################
+    ######################################################################
+    #
+    # Event handling
+    #
+    ######################################################################
 
     /**
      * @var EventDispatcherInterface
@@ -766,8 +770,7 @@ trait WidgetTrait
 
     /**
      * @return static $this for chaining
-     * @implements WidgetInterface
-     * @see WidgetInterface::on() WidgetInterface::on()
+     * @see \Replum\WidgetInterface::on()
      */
     public function on($eventName, callable $listener, $priority = 50)
     {
@@ -781,8 +784,7 @@ trait WidgetTrait
 
     /**
      * @return static $this for chaining
-     * @implements WidgetInterface
-     * @see WidgetInterface::one() WidgetInterface::one()
+     * @see \Replum\WidgetInterface::one()
      */
     public function one($eventName, callable $listener, $priority = 50)
     {
@@ -791,8 +793,7 @@ trait WidgetTrait
 
     /**
      * @return static $this for chaining
-     * @implements WidgetInterface
-     * @see WidgetInterface::off() WidgetInterface::off()
+     * @see \Replum\WidgetInterface::off()
      */
     public function off($eventName = null, callable $listener = null)
     {
@@ -800,7 +801,7 @@ trait WidgetTrait
             return $this;
         }
 
-// Cleanup all handlers
+        // Cleanup all handlers
         if (($eventName === null) && ($listener === null)) {
             $this->eventDispatcher = null;
         } elseif ($eventName === null) {
@@ -833,8 +834,7 @@ trait WidgetTrait
     }
 
     /**
-     * @implements WidgetInterface
-     * @see WidgetInterface::dispatch() WidgetInterface::dispatch()
+     * @see \Replum\WidgetInterface::dispatch()
      */
     public function dispatch(WidgetEvent $event, $eventName = null)
     {
@@ -855,11 +855,11 @@ trait WidgetTrait
         return $this;
     }
 
-######################################################################
-#
-# Bag key/value store
-#
-######################################################################
+    ######################################################################
+    #
+    # Bag key/value store
+    #
+    ######################################################################
 
     /**
      * @var \ArrayObject
@@ -867,8 +867,7 @@ trait WidgetTrait
     private $bag;
 
     /**
-     * @implements WidgetInterface::getBag()
-     * @see WidgetInterface::getBag() WidgetInterface::getBag()
+     * @see \Replum\WidgetInterface::getBag()
      */
     public function getBag()
     {
@@ -927,7 +926,7 @@ trait WidgetTrait
             } elseif (\substr($propertyName, 0, 4) === 'data') {
                 $this->setData(\lcfirst(\substr($propertyName, 4)), $propertyValue);
             } else {
-// Force setter method to be called
+                // Force setter method to be called
                 $this->__set($propertyName, $propertyValue);
             }
         }
@@ -935,11 +934,11 @@ trait WidgetTrait
         return $this;
     }
 
-######################################################################
-#
-# Helper methods to set values
-#
-######################################################################
+    ######################################################################
+    #
+    # Helper methods to set values
+    #
+    ######################################################################
 
     /**
      * @param string $property
@@ -1000,5 +999,4 @@ trait WidgetTrait
 
         return ' ' . $name . '="' . $escaped . '"';
     }
-
 }

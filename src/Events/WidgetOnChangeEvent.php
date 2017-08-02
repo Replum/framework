@@ -9,15 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Replum;
+namespace Replum\Events;
 
 /**
- * Represents a style sheet definition to embedd in the HEAD of an html document.
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
-interface StyleSheetInterface
+class WidgetOnChangeEvent extends WidgetEvent
 {
-    /**
-     * Create an html string to put into the HEAD of a document
-     */
-    function __toString();
 }

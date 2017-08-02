@@ -1,25 +1,33 @@
 <?php
 
-namespace nexxes\widgets;
+/*
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Replum;
 
 /**
  * A page represents the main entity to visualize
  */
 interface PageInterface extends WidgetContainerInterface
 {
-
     /**
      * Get the parameter registry that holds all callbacks to fill widget properties from request variables
-     * @return \nexxes\widgets\ParameterRegistry
+     * @return \Replum\ParameterRegistry
      */
     function getParameterRegistry();
 
     /**
      * Initialize the parameter registry with the supplied parameter registry object or create a new object
-     * @param \nexxes\widgets\ParameterRegistry $newParameterRegistry
-     * @return \nexxes\widgets\PageInterface $this for chaining
+     * @param \Replum\ParameterRegistry $newParameterRegistry
+     * @return \Replum\PageInterface $this for chaining
      */
-    function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null);
+    function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null);
 
     /**
      * Get the document title
@@ -30,31 +38,31 @@ interface PageInterface extends WidgetContainerInterface
     /**
      * Set the document title
      * @param string $newTitle
-     * @return \nexxes\widgets\PageInterface $this for chaining
+     * @return \Replum\PageInterface $this for chaining
      */
     function setTitle($newTitle);
 
     /**
      * Add a style sheet to the document
-     * @param \nexxes\widgets\StyleSheetInterface $style
-     * @return \nexxes\widgets\PageInterface $this for chaining
+     * @param \Replum\StyleSheetInterface $style
+     * @return \Replum\PageInterface $this for chaining
      */
     function addStyleSheet(StyleSheetInterface $style);
 
     /**
-     * @return array<\nexxes\widgets\StyleSheetInterface>
+     * @return array<\Replum\StyleSheetInterface>
      */
     function getStyleSheets();
 
     /**
      * Add a script to the document
-     * @param \nexxes\widgets\ScriptInterface $script
-     * @return \nexxes\widgets\PageInterface $this for chaining
+     * @param \Replum\ScriptInterface $script
+     * @return \Replum\PageInterface $this for chaining
      */
     function addScript(ScriptInterface $script);
 
     /**
-     * @return array<\nexxes\widgets\ScriptInterface>
+     * @return array<\Replum\ScriptInterface>
      */
     function getScripts();
 

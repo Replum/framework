@@ -1,25 +1,43 @@
 <?php
 
-namespace nexxes\widgets\actionhandler;
+/*
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use \nexxes\widgets\Event;
-use \nexxes\widgets\events\WidgetOnChangeEvent;
-use \nexxes\widgets\events\WidgetOnClickEvent;
-use \nexxes\widgets\events\WidgetOnDoubleClickEvent;
-use \nexxes\widgets\events\WidgetOnSubmitEvent;
+namespace Replum\ActionHandler;
+
+use \Replum\Event;
+use \Replum\Events\WidgetOnChangeEvent;
+use \Replum\Events\WidgetOnClickEvent;
+use \Replum\Events\WidgetOnDoubleClickEvent;
+use \Replum\Events\WidgetOnSubmitEvent;
 
 /**
- * @author Dennis Birkholz <dennis.birkholz@nexxes.net>
+ * @author Dennis Birkholz <dennis@birkholz.org>
  */
 class JsonHandler
 {
-
+    const EVENT_PARAMETER_NAME = 'replum_event';
+    const PAGE_ID_PARAMETER_NAME = 'replum_pid';
+    const SOURCE_PARAMETER_NAME = 'replum_source';
+    const VALUE_PARAMETER_NAME = 'replum_value';
+    const CHECKED_PARAMETER_NAME = 'replum_checked';
+    const ACTION_PARAMETER_NAME = 'replum_action';
+    const PARAMS_PARAMETER_NAME = 'replum_params';
+    const TARGET_PARAMETER_NAME = 'replum_target';
+    const DATA_PARAMETER_NAME = 'replum_data';
+    
     /**
-     * @var \nexxes\widgets\Executer
+     * @var \Replum\Executer
      */
     private $executer;
 
-    public function __construct(\nexxes\widgets\Executer $executer)
+    public function __construct(\Replum\Executer $executer)
     {
         $this->executer = $executer;
     }
@@ -30,27 +48,27 @@ class JsonHandler
             /* $var $request \Symfony\Component\HttpFoundation\Request */
             $request = $this->executer->getRequest();
 
-            $event = $request->request->get('nexxes_event');
+            $event = $request->request->get(self::EVENT_PARAMETER_NAME);
 
             if (!\in_array($event, ['click', 'change', 'dblclick', 'submit',])) {
                 throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
             }
 
-            $page_id = $request->request->get('nexxes_pid');
+            $page_id = $request->request->get(self::PAGE_ID_PARAMETER_NAME);
 
-            /* @var $page \nexxes\widgets\PageInterface */
+            /* @var $page \Replum\PageInterface */
             //$page = \apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id);
             $page = \unserialize(\gzinflate(\apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id)));
 
-            if (!($page instanceof \nexxes\widgets\PageInterface)) {
+            if (!($page instanceof \Replum\PageInterface)) {
                 throw new \RuntimeException('Can not restore page!');
             }
 
-            $widget = $page->findById($request->request->get('nexxes_source'));
-            if ($request->request->get('nexxes_value') !== null) {
-                $widget->setValue($request->request->get('nexxes_value'));
-            } elseif ($request->request->get('nexxes_checked') !== null) {
-                $widget->setChecked($request->request->get('nexxes_checked'));
+            $widget = $page->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
+            if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {
+                $widget->setValue($request->request->get(self::VALUE_PARAMETER_NAME));
+            } elseif ($request->request->get(self::CHECKED_PARAMETER_NAME) !== null) {
+                $widget->setChecked($request->request->get(self::CHECKED_PARAMETER_NAME));
             }
 
 
@@ -70,8 +88,8 @@ class JsonHandler
             \apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
         } catch (\Exception $e) {
             $data = [[
-                    'nexxes_action' => 'error',
-                    'nexxes_params' => [$this->dumpException($e)],
+                self::ACTION_PARAMETER_NAME => 'error',
+                self::PARAMS_PARAMETER_NAME => [$this->dumpException($e)],
             ]];
         }
 
@@ -81,25 +99,25 @@ class JsonHandler
         exit;
     }
 
-    protected function handleChangedWidgets(\nexxes\widgets\PageInterface $page)
+    protected function handleChangedWidgets(\Replum\PageInterface $page)
     {
         $data = [];
 
         foreach ($page->getDescendants() as $widget) {
-            /* @var $widget \nexxes\widgets\WidgetInterface */
+            /* @var $widget \Replum\WidgetInterface */
             if ($widget->isChanged() && $widget->hasID()) {
                 $data[] = [
-                    'nexxes_action' => 'replace',
-                    'nexxes_target' => $widget->getID(),
-                    'nexxes_data' => (string) $widget,
+                    self::ACTION_PARAMETER_NAME => 'replace',
+                    self::TARGET_PARAMETER_NAME => $widget->getID(),
+                    self::DATA_PARAMETER_NAME => (string) $widget,
                 ];
             }
         }
 
         foreach ($page->remoteActions as list($action, $parameters)) {
             $data[] = [
-                'nexxes_action' => $action,
-                'nexxes_params' => $parameters,
+                self::ACTION_PARAMETER_NAME => $action,
+                self::PARAMS_PARAMETER_NAME => $parameters,
             ];
         }
 
@@ -168,5 +186,4 @@ class JsonHandler
 
         return $r;
     }
-
 }

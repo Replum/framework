@@ -1,26 +1,34 @@
 <?php
 
-namespace nexxes\widgets;
+/*
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Replum;
 
 trait PageTrait
 {
-
     /**
-     * @var array<\nexxes\widgets\StyleSheetInterface>
+     * @var array<\Replum\StyleSheetInterface>
      */
     private $PageTraitStyles = [];
 
     /**
-     * @implements \nexxes\widgets\PageInterface
+     * @see \Replum\PageInterface::addStyleSheet()
      */
-    public function addStyleSheet(\nexxes\widgets\StyleSheetInterface $style)
+    public function addStyleSheet(\Replum\StyleSheetInterface $style)
     {
         $this->PageTraitStyles[] = $style;
         return $this;
     }
 
     /**
-     * @implements \nexxes\widgets\PageInterface
+     * @see \Replum\PageInterface::getStyleSheets()
      */
     public function getStyleSheets()
     {
@@ -28,21 +36,21 @@ trait PageTrait
     }
 
     /**
-     * @var array<\nexxes\widgets\ScriptInterface>
+     * @var array<\Replum\ScriptInterface>
      */
     private $PageTraitScripts = [];
 
     /**
-     * @implements \nexxes\widgets\PageInterface
+     * @see \Replum\PageInterface::addScript()
      */
-    public function addScript(\nexxes\widgets\ScriptInterface $script)
+    public function addScript(\Replum\ScriptInterface $script)
     {
         $this->PageTraitScripts[] = $script;
         return $this;
     }
 
     /**
-     * @implements \nexxes\widgets\PageInterface
+     * @see \Replum\PageInterface::getScripts()
      */
     public function getScripts()
     {
@@ -50,13 +58,13 @@ trait PageTrait
     }
 
     /**
-     * @var \nexxes\widgets\ParameterRegistry
+     * @var \Replum\ParameterRegistry
      */
     private $PageTraitParameterRegistry;
 
     /**
      * Silently initializes the parameter registry with the provided default implementation on first access
-     * @implements \nexxes\widgets\PageInterface
+     * @see \Replum\PageInterface::getParameterRegistry()
      */
     public function getParameterRegistry()
     {
@@ -68,16 +76,16 @@ trait PageTrait
     }
 
     /**
-     * @implements \nexxes\widgets\PageInterface
+     * @see \Replum\PageInterface::initParameterRegistry()
      */
-    public function initParameterRegistry(\nexxes\widgets\ParameterRegistry $newParameterRegistry = null)
+    public function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null)
     {
         if (!is_null($this->PageTraitParameterRegistry)) {
             throw new \RuntimeException("Can not replace existing parameter registry!");
         }
 
         if (is_null($newParameterRegistry)) {
-            $this->PageTraitParameterRegistry = new \nexxes\widgets\ParameterRegistry();
+            $this->PageTraitParameterRegistry = new \Replum\ParameterRegistry();
         } else {
             $this->PageTraitParameterRegistry = $newParameterRegistry;
         }
@@ -87,7 +95,6 @@ trait PageTrait
 
     public function __wakeup()
     {
-
     }
 
     public $remoteActions = [];
@@ -117,15 +124,13 @@ trait PageTrait
      */
     public function generateID($length = 5)
     {
-        $newID = 'w_' . (new \nexxes\common\RandomString($length));
-
-        if (!\in_array($newID, $this->takenWidgetIdList)) {
-            $this->takenWidgetIdList[] = $newID;
-            return $newID;
-        }
-
-        // If new ID is not unique, create a new one that is one char longer
-        return $this->generateId($length + 1);
+        do {
+            $newID = 'w_' . \str_replace(['/', '+'], ['_', '-'], \substr(\base64_encode(random_bytes($length)), 0, $length));
+            $length++;
+        } while (\in_array($newID, $this->takenWidgetIdList));
+        
+        $this->takenWidgetIdList[] = $newID;
+        return $newID;
     }
 
     /**
@@ -144,5 +149,4 @@ trait PageTrait
             return false;
         }
     }
-
 }

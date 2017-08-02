@@ -1,49 +1,54 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-base package.
- * 
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
- * 
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets;
+namespace Replum;
 
-use \nexxes\widgets\events\WidgetOnDoubleClickEvent;
+use \Replum\Events\WidgetOnDoubleClickEvent;
 
 /**
- * Provides the methods required to implement the \nexxes\widgets\WidgetHasDoubleClickEventInterface
+ * Provides the methods required to implement the \Replum\WidgetHasDoubleClickEventInterface
  */
-trait WidgetHasDoubleClickEventTrait {
-	/**
-	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
-	 */
-	public function onDoubleClick(callable $eventHandler, $prio = 5) {
-		$this->addData('handler', 'dblclick');
-		return $this->on(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
-	 */
-	public function onDoubleClickOnce(callable $eventHandler, $prio = 5) {
-		$this->addData('handler', 'dblclick');
-		return $this->one(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
-	 */
-	public function removeOnDoubleClick(callable $eventHandler) {
-		return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @implements \nexxes\widgets\WidgetHasDoubleClickEventInterface
-	 */
-	public function removeOnDoubleClickOnce(callable $eventHandler) {
-		return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
-	}
+trait WidgetHasDoubleClickEventTrait
+{
+    /**
+     * @see \Replum\WidgetHasDoubleClickEventInterface::onDoubleClick()
+     */
+    public function onDoubleClick(callable $eventHandler, $prio = 5)
+    {
+        $this->addData('handler', 'dblclick');
+        return $this->on(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
+    }
+
+    /**
+     * @see \Replum\WidgetHasDoubleClickEventInterface::onDoubleClickOnce()
+     */
+    public function onDoubleClickOnce(callable $eventHandler, $prio = 5)
+    {
+        $this->addData('handler', 'dblclick');
+        return $this->one(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
+    }
+
+    /**
+     * @see \Replum\WidgetHasDoubleClickEventInterface::removeOnDoubleClick()
+     */
+    public function removeOnDoubleClick(callable $eventHandler)
+    {
+        return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler);
+    }
+
+    /**
+     * @see \Replum\WidgetHasDoubleClickEventInterface::removeOnDoubleClickOnce()
+     */
+    public function removeOnDoubleClickOnce(callable $eventHandler)
+    {
+        return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler);
+    }
 }

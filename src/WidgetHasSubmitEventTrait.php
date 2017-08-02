@@ -1,50 +1,54 @@
 <?php
 
 /*
- * This file is part of the nexxes/widgets-base package.
- * 
- * Copyright (c) Dennis Birkholz, nexxes Informationstechnik GmbH <dennis.birkholz@nexxes.net>
- * 
+ * This file is part of Replum: the web widget framework.
+ *
+ * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace nexxes\widgets;
+namespace Replum;
 
-use \nexxes\widgets\events\WidgetOnSubmitEvent;
+use \Replum\Events\WidgetOnSubmitEvent;
 
 /**
- * Provides the methods required to implement the \nexxes\widgets\WidgetHasSubmitEventInterface.
- * 
- * @uses \nexxes\dependency\Container Container
- * @uses \nexxes\widgets\events\WidgetOnSubmitEvent WidgetOnSubmitEvent
+ * Provides the methods required to implement the \Replum\WidgetHasSubmitEventInterface.
+ *
+ * @uses \Replum\Events\WidgetOnSubmitEvent WidgetOnSubmitEvent
  */
-trait WidgetHasSubmitEventTrait {
-	/**
-	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::onSubmit() WidgetHasSubmitEventInterface::onSubmit()
-	 */
-	public function onSubmit(callable $eventHandler, $prio = 5) {
-		return $this->on(WidgetOnSubmitEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::onSubmitOnce() WidgetHasSubmitEventInterface::onSubmitOnce()
-	 */
-	public function onSubmitOnce(callable $eventHandler, $prio = 5) {
-		return $this->one(WidgetOnSubmitEvent::class, $eventHandler, $prio);
-	}
-	
-	/**
-	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::removeOnSubmit() WidgetHasSubmitEventInterface::removeOnSubmit()
-	 */
-	public function removeOnSubmit(callable $eventHandler) {
-		return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
-	}
-	
-	/**
-	 * @see \nexxes\widgets\WidgetHasSubmitEventInterface::removeOnSubmitOnce() WidgetHasSubmitEventInterface::removeOnSubmitOnce()
-	 */
-	public function removeOnSubmitOnce(callable $eventHandler) {
-		return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
-	}
+trait WidgetHasSubmitEventTrait
+{
+    /**
+     * @see \Replum\WidgetHasSubmitEventInterface::onSubmit()
+     */
+    public function onSubmit(callable $eventHandler, $prio = 5)
+    {
+        return $this->on(WidgetOnSubmitEvent::class, $eventHandler, $prio);
+    }
+
+    /**
+     * @see \Replum\WidgetHasSubmitEventInterface::onSubmitOnce()
+     */
+    public function onSubmitOnce(callable $eventHandler, $prio = 5)
+    {
+        return $this->one(WidgetOnSubmitEvent::class, $eventHandler, $prio);
+    }
+
+    /**
+     * @see \Replum\WidgetHasSubmitEventInterface::removeOnSubmit()
+     */
+    public function removeOnSubmit(callable $eventHandler)
+    {
+        return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
+    }
+
+    /**
+     * @see \Replum\WidgetHasSubmitEventInterface::removeOnSubmitOnce()
+     */
+    public function removeOnSubmitOnce(callable $eventHandler)
+    {
+        return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
+    }
 }

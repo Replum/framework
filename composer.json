@@ -1,25 +1,26 @@
 {
-	"name": "nexxes/widgets-base",
-	"description": "nexxes web widget framework: basic interfaces and main functionality",
-	"authors": [
-		{
-			"name": "Dennis Birkholz",
-			"email": "dennis.birkholz@nexxes.net"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"nexxes\\widgets\\": "src/"
-		}
-	},
-	
-	"require": {
-		"nexxes/common": "*@dev",
-		"nexxes/dependency": "*@dev",
-		
-		"symfony/event-dispatcher": "2.5.*",
-		"symfony/http-foundation": "2.5.*",
-		
-		"components/jquery": "1.*"
-	}
+    "name": "replum/replum-base",
+    "description": "replum web widget framework: basic interfaces and main functionality",
+    "authors": [
+        {
+            "name": "Dennis Birkholz",
+            "email": "dennis@birkholz.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Replum\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Replum\\": "tests/"
+        }
+    },
+    "require": {
+        "symfony/event-dispatcher": "2.5.*",
+        "symfony/http-foundation": "2.5.*",
+        
+        "components/jquery": "1.*"
+    }
 }
