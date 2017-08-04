@@ -11,50 +11,10 @@
 
 namespace Replum;
 
-trait PageTrait
+abstract class Page implements PageInterface
 {
-    /**
-     * @var array<\Replum\StyleSheetInterface>
-     */
-    private $PageTraitStyles = [];
-
-    /**
-     * @see \Replum\PageInterface::addStyleSheet()
-     */
-    public function addStyleSheet(\Replum\StyleSheetInterface $style)
-    {
-        $this->PageTraitStyles[] = $style;
-        return $this;
-    }
-
-    /**
-     * @see \Replum\PageInterface::getStyleSheets()
-     */
-    public function getStyleSheets()
-    {
-        return $this->PageTraitStyles;
-    }
-
-    /**
-     * @var array<\Replum\ScriptInterface>
-     */
-    private $PageTraitScripts = [];
-
-    /**
-     * @see \Replum\PageInterface::addScript()
-     */
-    public function addScript(\Replum\ScriptInterface $script)
-    {
-        $this->PageTraitScripts[] = $script;
-        return $this;
-    }
-
-    /**
-     * @see \Replum\PageInterface::getScripts()
-     */
-    public function getScripts()
-    {
-        return $this->PageTraitScripts;
+    use WidgetContainerTrait {
+        WidgetContainerTrait::__wakeup as private WidgetContainerTraitWakeup;
     }
 
     /**
@@ -125,7 +85,7 @@ trait PageTrait
     public function generateID($length = 5)
     {
         do {
-            $newID = 'w_' . \str_replace(['/', '+'], ['_', '-'], \substr(\base64_encode(random_bytes($length)), 0, $length));
+            $newID = 'w_' . Util::randomString($length);
             $length++;
         } while (\in_array($newID, $this->takenWidgetIdList));
         
