@@ -1,6 +1,6 @@
 {
-    "name": "replum/replum-base",
-    "description": "replum web widget framework: basic interfaces and main functionality",
+    "name": "replum/framework",
+    "description": "Replum web widget framework: basic interfaces and main functionality",
     "authors": [
         {
             "name": "Dennis Birkholz",
@@ -21,6 +21,6 @@
         "symfony/event-dispatcher": "2.5.*",
         "symfony/http-foundation": "2.5.*",
         
-        "components/jquery": "1.*"
+        "components/jquery": "3.*"
     }
 }
