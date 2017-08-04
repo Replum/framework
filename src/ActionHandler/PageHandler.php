@@ -11,7 +11,8 @@
 
 namespace Replum\ActionHandler;
 
-use \nexxes\dependency\Gateway as dep;
+use \Replum\PageInterface;
+use \Replum\Util;
 use \Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -31,11 +32,15 @@ class PageHandler
 
     public function execute()
     {
-        $path = \rawurldecode($this->executer->getRequest()->getPathInfo());
+        $context = $this->executer->getContext();
+        
+        $path = \rawurldecode($context->getRequest()->getPathInfo());
         // Access to root index document
-        if ($path == '/') {
+        if ($path === '/' || $path === '') {
             $pagename = 'Index';
-        } else {
+        }
+        
+        else {
             // Strip trailing /
             $pagename = \substr($path, 1);
 
@@ -43,27 +48,27 @@ class PageHandler
             if ($pagename[\strlen($pagename)-1] === '/') {
                 $pagename .= 'Index';
             }
+            
+            $pagename = \str_replace('/', '\\', $pagename);
         }
-
-        $pagename = \str_replace('/', '\\', $pagename);
 
         // Get the name and class of the current page
-        $class = $this->executer->getPageNamespace() . '\\' . $pagename;
-
-        if (!\class_exists($class)) {
-            // Try to append Index to
-            $class .= '\\' . 'Index';
-
-            if (!\class_exists($class)) {
-                phpinfo();
-                throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
+        foreach ($context->getPageNamespaces() as $pageNamespace) {
+            $tryclass = $pageNamespace . '\\' . $pagename;
+            
+            if (\class_exists($tryclass) && \is_a($tryclass, PageInterface::class, true)) {
+                $class = $tryclass;
+                break;
             }
         }
-
+        
+        if (empty($class)) {
+            throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
+        }
+        
         /* @var $page \Replum\PageInterface */
-        $page = new $class();
-        $page->id = $this->generatePageID();
-        dep::registerObject(\Replum\PageInterface::class, $page);
+        $page = new $class($context);
+        $page->setID($this->generatePageID());
 
         $response = new Response((string)$page);
 
@@ -79,7 +84,7 @@ class PageHandler
         $length = 8;
 
         do {
-            $r = \str_replace(['/', '+'], ['_', '-'], \substr(\base64_encode(random_bytes($length)), 0, $length));
+            $r = Util::randomString($length);
             $length++;
         } while (\apc_exists($this->executer->getCacheNamespace() . '.' . $r));
 

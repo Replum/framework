@@ -11,8 +11,9 @@
 
 namespace Replum;
 
-use \nexxes\dependency\Gateway as dep;
-use \nexxes\common\RelativePath;
+use \Replum\ActionHandler\JsonHandler;
+use \Replum\ActionHandler\PageHandler;
+use \Replum\ActionHandler\VendorHandler;
 
 /**
  * The Executer creates or restores the current page and the associated widget registry
@@ -20,18 +21,16 @@ use \nexxes\common\RelativePath;
 class Executer
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var ContextInterface
      */
-    private $request = null;
-
+    private $context;
+    
     /**
-     * Get the request object of the current request
-     *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * Get the current pae context
      */
-    public function getRequest()
+    public function getContext() : ContextInterface
     {
-        return $this->request;
+        return $this->context;
     }
 
 
@@ -48,18 +47,6 @@ class Executer
     public function getSession()
     {
         return $this->session;
-    }
-
-
-    /**
-     * The namespace each page class must exist in
-     * @var string
-     */
-    private $pageNamespace;
-
-    public function getPageNamespace()
-    {
-        return $this->pageNamespace;
     }
 
 
@@ -83,18 +70,15 @@ class Executer
     }
 
 
-    public function __construct($pageNamespace)
+    public function __construct(ContextInterface $context = null)
     {
-        $this->pageNamespace = $pageNamespace;
+        $this->context = ($context !== null ? $context : new Context());
 
-        // Handle request and session
-        $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-
-        if ($this->request->hasPreviousSession() || $this->request->hasSession()) {
-            $this->session = $this->request->getSession();
+        if ($this->getContext()->getRequest()->hasPreviousSession() || $this->getContext()->getRequest()->hasSession()) {
+            $this->session = $this->getContext()->getRequest()->getSession();
         } else {
             $this->session = new \Symfony\Component\HttpFoundation\Session\Session();
-            $this->request->setSession($this->session);
+            $this->getContext()->getRequest()->setSession($this->session);
         }
 
         if (!$this->session->isStarted()) {
@@ -104,17 +88,21 @@ class Executer
         // Security measure: regenerate session id to avoid session fixation
         //$this->session->migrate();
 
-        $this->registerAction('page', function(Executer $exec) { return [new \Replum\ActionHandler\PageHandler($exec), 'execute']; });
-        $this->registerAction('json', function(Executer $exec) { return [new \Replum\ActionHandler\JsonHandler($exec), 'execute']; });
-        $this->registerAction('vendor', function(Executer $exec) { return [new \Replum\ActionHandler\VendorHandler($exec), 'execute']; });
+        $this->registerAction('page', function(Executer $exec) { return [new PageHandler($exec), 'execute']; });
+        $this->registerAction('json', function(Executer $exec) { return [new JsonHandler($exec), 'execute']; });
+        $this->registerAction('vendor', function(Executer $exec) { return [new VendorHandler($exec), 'execute']; });
     }
 
     
     public function execute()
     {
-        $action = $this->request->query->get('nexxes_action', 'page');
-        if (($action == 'page') && $this->request->isXmlHttpRequest()) {
+        $action = $this->getContext()->getRequest()->query->get(JsonHandler::ACTION_PARAMETER_NAME, 'page');
+        if (($action === 'page') && $this->getContext()->getRequest()->isXmlHttpRequest()) {
             $action = 'json';
+        }
+        
+        elseif (($action === 'page') && ('/vendor/' === \substr($this->getContext()->getRequest()->getPathInfo(), 0, 8))) {
+            $action = 'vendor';
         }
 
         if (!isset($this->ActionHandler[$action])) {
@@ -128,6 +116,7 @@ class Executer
             $response = $handler();
             $response->send();
         } catch (\Exception $e) {
+            header($_SERVER['SERVER_PROTOCOL'] .' 500 Internal server error', true, 500);
             echo '<pre>' . $e . '</pre>';
             exit;
         }

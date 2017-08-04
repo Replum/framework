@@ -46,7 +46,7 @@ class JsonHandler
     {
         try {
             /* $var $request \Symfony\Component\HttpFoundation\Request */
-            $request = $this->executer->getRequest();
+            $request = $this->executer->getContext()->getRequest();
 
             $event = $request->request->get(self::EVENT_PARAMETER_NAME);
 
