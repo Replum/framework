@@ -11,18 +11,8 @@
 
 namespace Replum\Html;
 
-use \Replum\PageInterface;
-use \Replum\PageTrait;
-use \Replum\WidgetContainerTrait;
-
-abstract class Page implements PageInterface
+abstract class Page extends \Replum\Page
 {
-    use PageTrait,
-        WidgetContainerTrait {
-        PageTrait::__wakeup as private PageTraitWakeup;
-        WidgetContainerTrait::__wakeup as private WidgetContainerTraitWakeup;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -44,10 +34,6 @@ abstract class Page implements PageInterface
         $r .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
         $r .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
-        foreach ($this->getScripts() AS $script) {
-            $r .= $script;
-        }
-
         foreach ($this->getStyleSheets() AS $style) {
             $r .= $style;
         }
@@ -60,15 +46,61 @@ abstract class Page implements PageInterface
             $r .= $child;
         }
 
+        foreach ($this->getScripts() AS $script) {
+            $r .= $script;
+        }
+
         $r .= '</body>';
         $r .= '</html>';
 
         return $r;
     }
+    
+    ######################################################################
+    # StyleSheet management                                              #
+    ######################################################################
+    
+    /**
+     * @var array<StyleSheetInterface>
+     */
+    private $stylesheets = [];
 
-    public function __wakeup()
+    /**
+     */
+    public function addStyleSheet(StyleSheetInterface $style)
     {
-        $this->WidgetContainerTraitWakeup();
-        $this->PageTraitWakeup();
+        $this->stylesheets[] = $style;
+        return $this;
+    }
+
+    /**
+     */
+    public function getStyleSheets()
+    {
+        return $this->stylesheets;
+    }
+
+    ######################################################################
+    # JavaScript management                                              #
+    ######################################################################
+
+    /**
+     * @var array<ScriptInterface>
+     */
+    private $javascripts = [];
+
+    /**
+     */
+    public function addScript(ScriptInterface $script)
+    {
+        $this->javascripts[] = $script;
+        return $this;
+    }
+
+    /**
+     */
+    public function getScripts()
+    {
+        return $this->javascripts;
     }
 }

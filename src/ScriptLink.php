@@ -11,8 +11,6 @@
 
 namespace Replum\Html;
 
-use \Replum\ScriptInterface;
-
 /**
  * Description of ScriptLink
  *

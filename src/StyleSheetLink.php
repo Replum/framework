@@ -11,8 +11,6 @@
 
 namespace Replum\Html;
 
-use \Replum\StyleSheetInterface;
-
 /**
  * Represents a <link rel="stylesheet"> element in the head of an html page
  */
