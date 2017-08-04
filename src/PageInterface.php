@@ -43,30 +43,6 @@ interface PageInterface extends WidgetContainerInterface
     function setTitle($newTitle);
 
     /**
-     * Add a style sheet to the document
-     * @param \Replum\StyleSheetInterface $style
-     * @return \Replum\PageInterface $this for chaining
-     */
-    function addStyleSheet(StyleSheetInterface $style);
-
-    /**
-     * @return array<\Replum\StyleSheetInterface>
-     */
-    function getStyleSheets();
-
-    /**
-     * Add a script to the document
-     * @param \Replum\ScriptInterface $script
-     * @return \Replum\PageInterface $this for chaining
-     */
-    function addScript(ScriptInterface $script);
-
-    /**
-     * @return array<\Replum\ScriptInterface>
-     */
-    function getScripts();
-
-    /**
      * Escape the supplied string according to the current HTML escaping rules
      *
      * @param string The raw string
