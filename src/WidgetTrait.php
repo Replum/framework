@@ -752,7 +752,7 @@ trait WidgetTrait
      * @return string
      * @codeCoverageIgnore
      */
-    protected function escape($string)
+    public function escape($string)
     {
         return \htmlspecialchars($string, ENT_HTML5 | ENT_COMPAT, 'UTF-8');
     }
