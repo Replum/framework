@@ -161,4 +161,34 @@ class Context implements ContextInterface
     {
         return $this->vendorDir;
     }
+    
+    ######################################################################
+    # Namespace handling                                                 #
+    ######################################################################
+    
+    private $pageNamespaces = [];
+    
+    /**
+     * @see ContextInterface::appendPageNamespace()
+     */
+    public function appendPageNamespace(string $namespace)
+    {
+        $this->pageNamespaces[] = $namespace;
+    }
+
+    /**
+     * @see ContextInterface::getPageNamespaces()
+     */
+    public function getPageNamespaces(): array
+    {
+        return $this->pageNamespaces;
+    }
+
+    /**
+     * @see ContextInterface::prependPageNamespace()
+     */
+    public function prependPageNamespace(string $namespace)
+    {
+        \array_unshift($this->pageNamespaces, $namespace);
+    }
 }

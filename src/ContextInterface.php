@@ -25,6 +25,18 @@ use \Symfony\Component\HttpFoundation\Request;
 interface ContextInterface
 {
     /**
+     * Append a namespace to the list of page namespaces.
+     * This namespace will be searched after all currently registered namespaces.
+     */
+    function appendPageNamespace(string $namespace);
+    
+    /**
+     * Prepend a namespace to the list of page namespaces.
+     * This namespace will be searched before all currently registered namespaces.
+     */
+    function prependPageNamespace(string $namespace);
+    
+    /**
      * Get the currently used Composer autoloader
      */
     function getAutoloader() : ClassLoader;
@@ -41,14 +53,14 @@ interface ContextInterface
     function getDocumentRoot() : string;
     
     /**
+     * Get a list of all namespaces pages can be in
+     */
+    function getPageNamespaces() : array;
+    
+    /**
      * Get a Request object representing the current request
      */
     function getRequest() : Request;
-    
-    /**
-     * Whether SSL is used or not
-     */
-    function hasTls() : bool;
     
     /**
      * Get the URL prefix requires to make an URL absolute on this server.
@@ -59,4 +71,9 @@ interface ContextInterface
      * Get the base directory that contains the Composer installed dependencies.
      */
     function getVendorDir() : string;
+    
+    /**
+     * Whether SSL is used or not
+     */
+    function hasTls() : bool;
 }
