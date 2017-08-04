@@ -9,8 +9,6 @@ $(function() {
     const TARGET_PARAMETER_NAME = 'replum_target';
     const DATA_PARAMETER_NAME = 'replum_data';
 
-    var that = this;
-
     /*
      * Contains a list of actions to perform
      * @type {Event[]}
@@ -58,9 +56,9 @@ $(function() {
         // Do not issue action click action, only remote action
         event.preventDefault();
 
-        that.lastEvent = event;
-        that.eventQueue.push(event);
-        that.executeActions();
+        lastEvent = event;
+        eventQueue.push(event);
+        executeActions();
     };
 
     /**
@@ -69,28 +67,28 @@ $(function() {
      */
     var changeHandler = function(event) {
         // Ignore duplicates
-        if (that.lastEvent && (that.lastEvent === event)) {
+        if (lastEvent && (lastEvent === event)) {
             //console.log('Skipping duplicate, ', event.type);
             return;
         }
 
         // Fix for datepicker which fires onchange 3x
         if (
-            that.lastEvent
-            && (that.lastEvent.type === event.type)
+            lastEvent
+            && (lastEvent.type === event.type)
             && (event.type === 'change')
-            && (that.lastEvent.target === event.target)
+            && (lastEvent.target === event.target)
             && ($(event.target).data('provide') === 'datepicker')
-            && ((that.lastEvent.timeStamp+300) > event.timeStamp)
+            && ((lastEvent.timeStamp+300) > event.timeStamp)
         ) {
-            //console.log('Skipping duplicate datepicker event: ', event.type, event.timeStamp, that.lastEvent.timeStamp);
+            //console.log('Skipping duplicate datepicker event: ', event.type, event.timeStamp, lastEvent.timeStamp);
             event.stopPropagation();
             return;
         }
 
-        that.lastEvent = event;
-        that.eventQueue.push(event);
-        that.executeActions();
+        lastEvent = event;
+        eventQueue.push(event);
+        executeActions();
     };
 
     /**
@@ -100,43 +98,43 @@ $(function() {
     var submitHandler = function(event) {
         event.preventDefault();
 
-        that.lastEvent = event;
-        that.eventQueue.push(event);
-        that.executeActions();
+        lastEvent = event;
+        eventQueue.push(event);
+        executeActions();
     };
 
     var executeActions = function() {
         // Action pending, do nothing
-        if (that.currentEvent !== null) {
+        if (currentEvent !== null) {
             //console.log("A current action is pending, doing nothing.");
             return;
         }
 
         // No action queued, nothing to do
-        if (that.eventQueue.length === 0) {
+        if (eventQueue.length === 0) {
             //console.log("Queue is empty, doing nothing.");
             return;
         }
 
-        that.currentEvent = that.eventQueue.shift();
-        console.log(that.currentEvent);
+        currentEvent = eventQueue.shift();
+        console.log(currentEvent);
 
         params = [];
 
-        if (that.currentEvent.type === "submit") {
-            params = $(that.currentEvent.target).serializeArray();
-        } else if (that.currentEvent.target.type && ((that.currentEvent.target.type === "radio") || (that.currentEvent.target.type === "checkbox"))) {
-            params.push( { name: CHECKED_PARAMETER_NAME, value: that.currentEvent.target.checked } );
-        } else if ((that.currentEvent.target.value !== null) && (that.currentEvent.target.value !== undefined)) {
-            params.push( { name: VALUE_PARAMETER_NAME, value: that.currentEvent.target.value } );
+        if (currentEvent.type === "submit") {
+            params = $(currentEvent.target).serializeArray();
+        } else if (currentEvent.target.type && ((currentEvent.target.type === "radio") || (currentEvent.target.type === "checkbox"))) {
+            params.push( { name: CHECKED_PARAMETER_NAME, value: currentEvent.target.checked } );
+        } else if ((currentEvent.target.value !== null) && (currentEvent.target.value !== undefined)) {
+            params.push( { name: VALUE_PARAMETER_NAME, value: currentEvent.target.value } );
         }
 
         params.push( { name: PAGE_ID_PARAMETER_NAME, value: document.body.id } );
-        params.push( { name: EVENT_PARAMETER_NAME, value: that.currentEvent.type } );
-        params.push( { name: SOURCE_PARAMETER_NAME, value: that.currentEvent.currentTarget.id } );
+        params.push( { name: EVENT_PARAMETER_NAME, value: currentEvent.type } );
+        params.push( { name: SOURCE_PARAMETER_NAME, value: currentEvent.currentTarget.id } );
 
         //console.log("Executing action with parameters: ", params);
-        $.post(document.URL, params, that.handleResponse);
+        $.post(document.URL, params, handleResponse);
     };
 
     var handleResponse = function(data) {
@@ -150,7 +148,7 @@ $(function() {
                 }
 
                 else {
-                    var fn = that.methods[data[i][ACTION_PARAMETER_NAME]];
+                    var fn = methods[data[i][ACTION_PARAMETER_NAME]];
                     if (typeof fn === 'function') {
                         console.log('Executing method "' + data[i][ACTION_PARAMETER_NAME] + '" with ', data[i][PARAMS_PARAMETER_NAME]);
                         fn.apply(null, data[i][PARAMS_PARAMETER_NAME]);
@@ -160,25 +158,25 @@ $(function() {
                 }
             }
 
-            that.refresh();
+            refresh();
         }
 
-        that.currentEvent = null;
-        that.executeActions();
+        currentEvent = null;
+        executeActions();
     };
 
     var refresh = function() {
-        $('[data-toggle~=tooltip]').tooltip();
-        $('[data-toggle~=popover]').popover();
+        //$('[data-toggle~=tooltip]').tooltip();
+        //$('[data-toggle~=popover]').popover();
         // Display forced popovers that are not already visible (avoid flickering)
-        $('[data-toggle~=popover][data-trigger=manual][data-visible=always]').filter(':not([aria-describedby])').popover('show');
+        //$('[data-toggle~=popover][data-trigger=manual][data-visible=always]').filter(':not([aria-describedby])').popover('show');
         // Emulate autofocus of input elements
-        $('[autofocus=autofocus]').select().removeAttr('autofocus');
+        //$('[autofocus=autofocus]').select().removeAttr('autofocus');
     };
 
-    that.refresh();
-    $(document).on('click',    '*[data-handler~="click"]', that.defaultHandler);
-    $(document).on('dblclick', '*[data-handler~="dblclick"]', that.defaultHandler);
-    $(document).on('change',   'input, textarea, select', that.changeHandler);
-    $(document).on('submit',   'form', that.submitHandler);
+    refresh();
+    $(document).on('click',    '*[data-handler~="click"]', defaultHandler);
+    $(document).on('dblclick', '*[data-handler~="dblclick"]', defaultHandler);
+    $(document).on('change',   'input, textarea, select', changeHandler);
+    $(document).on('submit',   'form', submitHandler);
 });
