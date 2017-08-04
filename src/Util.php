@@ -27,8 +27,13 @@ abstract class Util
     }
 
     /**
-     * Create a relative path for the $sourceFile reachable from $targetFile.
-     * If $canonicalize is true, resolve all symlinks/./.. from both paths. 
+     * Create a relative path so a symlink with name $sourceFile points to file or directory $targetFile
+     * If $canonicalize is true, resolve all symlinks/./.. from both paths.
+     * 
+     * Example:
+     * $sourceFile = /foo/bar/baz.txt
+     * $targetFile = /foo/bla/blubb.txt
+     * Returns: ../bla/blubb.txt
      */
     public static final function getRelativePath($sourceFile, $targetFile, $canonicalize = true)
     {
