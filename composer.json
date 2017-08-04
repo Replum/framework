@@ -1,6 +1,6 @@
 {
-    "name": "replum/replum-widgets-html",
-    "description": "replum web widget framework: basic html widgets",
+    "name": "replum/html-widgets",
+    "description": "Replum web widget framework: basic html widgets",
     "authors": [
         { "name": "Dennis Birkholz", "email": "dennis@birkholz.org" }
     ],
@@ -16,6 +16,6 @@
         }
     },
     "require": {
-        "replum/replum-base": "*@dev"
+        "replum/framework": "*@dev"
     }
 }
