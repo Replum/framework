@@ -11,7 +11,7 @@
 
 namespace Replum\ActionHandler;
 
-use \nexxes\common\RelativePath;
+use \Replum\Util;
 use \Symfony\Component\HttpFoundation\Response;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -32,64 +32,58 @@ class VendorHandler
 
     public function execute()
     {
-        $resourceName = \rawurldecode($this->executer->getRequest()->getPathInfo());
+        $context = $this->executer->getContext();
+        
+        $resourceName = \rawurldecode($context->getRequest()->getPathInfo());
+        $documentRoot = $context->getDocumentRoot();
+        $vendorDir = $context->getVendorDir();
 
         try {
-            $this->createVendorResourceSymlink($resourceName, VENDOR_DIR, $this->executer->getRequest()->server->get('DOCUMENT_ROOT'));
-        } catch (\Exception $e) {
+            @list(, $prefix, $vendor, $package, $path) = \explode('/', $resourceName, 5);
+
+            if ($prefix !== 'vendor') {
+                throw new \InvalidArgumentException('Invalid resource selection!', 1);
+            }
+
+            if (($vendor === '.') || ($vendor === '..')) {
+                throw new \InvalidArgumentException('Invalid resource selection!', 2);
+            }
+
+            if (!\is_dir($vendorDir . '/' . $vendor)) {
+                throw new \InvalidArgumentException('Invalid resource selection!', 3);
+            }
+
+            if (($package === '.') || ($package === '..')) {
+                throw new \InvalidArgumentException('Invalid resource selection!', 4);
+            }
+
+            if (!\is_dir($vendorDir . '/' . $vendor . '/' . $package)) {
+                throw new \InvalidArgumentException('Invalid resource selection!', 5);
+            }
+
+            if (\strpos($path, '..') !== false) {
+                throw new \InvalidArgumentException('Invalid resource selection!', 6);
+            }
+
+            $symlinkName = $documentRoot . '/vendor/' . $vendor . '/' . $package . '/' . $path;
+            $fullResourcePath = $vendorDir . '/' . $vendor . '/' . $package . '/' . ($vendor !== 'components' ? 'public/' : '') . $path;
+
+            if (!\file_exists($fullResourcePath)) {
+                throw new \InvalidArgumentException('Invalid resource selection!', 7);
+            }
+
+            if (!is_dir(\dirname($symlinkName)) && !\mkdir(\dirname($symlinkName), 0755, true)) {
+                throw new \RuntimeException("Failed to create symlink", 8);
+            }
+            if (!\symlink(Util::getRelativePath($symlinkName, $fullResourcePath), $symlinkName)) {
+                throw new \RuntimeException("Failed to create symlink", 9);
+            }
+
+            return new RedirectResponse($context->getUrlPrefix() . '/' . $resourceName, Response::HTTP_PERMANENTLY_REDIRECT);
+        }
+
+        catch (\Exception $e) {
             return new Response('<pre>' . $e . '</pre>', Response::HTTP_NOT_FOUND, ['content-type' => 'text/html']);
         }
-
-        return new RedirectResponse($resourceName, Response::HTTP_PERMANENTLY_REDIRECT);
-    }
-
-    /**
-     * @param string $resourceName The resource name = path below the document root
-     * @param string $vendor_dir Vendor dir used by composer to install dependencies into
-     * @param string $document_root Directory that is accessible thru the web server
-     * @throws \InvalidArgumentException
-     * @see self::handleVendorResource
-     */
-    protected function createVendorResourceSymlink($resourceName, $vendor_dir, $document_root)
-    {
-        @list(, $prefix, $vendor, $package, $path) = \explode('/', $resourceName, 5);
-
-        if ($prefix != 'vendor') {
-            throw new \InvalidArgumentException('Invalid resource selection!', 1);
-        }
-
-        if (($vendor == '.') || ($vendor == '..')) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 2);
-        }
-
-        if (!\is_dir($vendor_dir . '/' . $vendor)) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 3);
-        }
-
-        if (($package == '.') || ($package == '..')) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 4);
-        }
-
-        if (!\is_dir($vendor_dir . '/' . $vendor . '/' . $package)) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 5);
-        }
-
-        if (!\is_dir($vendor_dir . '/' . $vendor . '/' . $package . '/public')) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 6);
-        }
-
-        if (\strpos($path, '..') !== false) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 7);
-        }
-
-        if (!\file_exists($vendor_dir . '/' . $vendor . '/' . $package . '/public/' . $path)) {
-            throw new \InvalidArgumentException('Invalid resource selection!', 8);
-        }
-
-        $linkname = $document_root . '/vendor/' . $vendor . '/' . $package . '/' . $path;
-        $fulltarget = $vendor_dir . '/' . $vendor . '/' . $package . '/public/' . $path;
-
-        \mkdir(\dirname($linkname), 0755, true);
-        \symlink((string)new RelativePath($linkname, $fulltarget), $linkname);
     }
 }
