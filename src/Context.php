@@ -53,6 +53,11 @@ class Context implements ContextInterface
      */
     private $vendorDir;
     
+    /**
+     * @var bool
+     */
+    private $rewriteEnabled;
+    
     
     public function __construct(ClassLoader $autoloader = null)
     {
@@ -86,9 +91,18 @@ class Context implements ContextInterface
         $this->request = Request::createFromGlobals();
         $this->documentRoot = \dirname($_SERVER['SCRIPT_FILENAME']);
         $this->domain = $this->request->getHost();
-        $this->urlPrefix = $this->request->getBasePath();
         $this->tls = $this->request->isSecure();
         $this->vendorDir = \dirname(\dirname((new \ReflectionClass($this->autoloader))->getFileName()));
+        
+        if (\substr($_SERVER['REQUEST_URI'], 0, \strlen($_SERVER['SCRIPT_NAME'])) === $_SERVER['SCRIPT_NAME']) {
+            $this->rewriteEnabled = false;
+            $this->urlPrefix = $this->request->getScriptName();
+        } elseif (\substr($_SERVER['REQUEST_URI'], 0, \strlen(\dirname($_SERVER['SCRIPT_NAME']))) === \dirname($_SERVER['SCRIPT_NAME'])) {
+            $this->rewriteEnabled = true;
+            $this->urlPrefix = $this->request->getBasePath();
+        } else {
+            throw new \RuntimeException('Can not determine base url and rewrite status from current server config!');
+        }
     }
     
     private final function findAutoloader() : ClassLoader
