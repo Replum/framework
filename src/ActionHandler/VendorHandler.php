@@ -67,7 +67,7 @@ class VendorHandler
 
             $symlinkName = $documentRoot . '/vendor/' . $vendor . '/' . $package . '/' . $path;
             $fullResourcePath = $vendorDir . '/' . $vendor . '/' . $package . '/' . ($vendor !== 'components' ? 'public/' : '') . $path;
-
+            
             if (!\file_exists($fullResourcePath)) {
                 throw new \InvalidArgumentException('Invalid resource selection!', 7);
             }
@@ -79,7 +79,7 @@ class VendorHandler
                 throw new \RuntimeException("Failed to create symlink", 9);
             }
 
-            return new RedirectResponse($context->getUrlPrefix() . '/' . $resourceName, Response::HTTP_PERMANENTLY_REDIRECT);
+            return new RedirectResponse($context->getUrlPrefix() . $resourceName, Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
         catch (\Exception $e) {
