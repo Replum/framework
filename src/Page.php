@@ -17,6 +17,11 @@ abstract class Page implements PageInterface
         WidgetContainerTrait::__wakeup as private WidgetContainerTraitWakeup;
     }
 
+    public function __construct(ContextInterface $context)
+    {
+        $this->context = $context;
+    }
+
     /**
      * @var \Replum\ParameterRegistry
      */
@@ -26,7 +31,7 @@ abstract class Page implements PageInterface
      * Silently initializes the parameter registry with the provided default implementation on first access
      * @see \Replum\PageInterface::getParameterRegistry()
      */
-    public function getParameterRegistry()
+    public function getParameterRegistry() : ParameterRegistry
     {
         if (is_null($this->PageTraitParameterRegistry)) {
             $this->initParameterRegistry();
@@ -38,7 +43,7 @@ abstract class Page implements PageInterface
     /**
      * @see \Replum\PageInterface::initParameterRegistry()
      */
-    public function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null)
+    public function initParameterRegistry(ParameterRegistry $newParameterRegistry = null) : PageInterface
     {
         if (!is_null($this->PageTraitParameterRegistry)) {
             throw new \RuntimeException("Can not replace existing parameter registry!");
@@ -88,7 +93,7 @@ abstract class Page implements PageInterface
             $newID = 'w_' . Util::randomString($length);
             $length++;
         } while (\in_array($newID, $this->takenWidgetIdList));
-        
+
         $this->takenWidgetIdList[] = $newID;
         return $newID;
     }
@@ -108,5 +113,28 @@ abstract class Page implements PageInterface
         } else {
             return false;
         }
+    }
+
+    ######################################################################
+    # Context handling
+    ######################################################################
+
+    private $context;
+
+    /**
+     * @see \Replum\PageInterface::getContext()
+     */
+    public function getContext() : ContextInterface
+    {
+        return $this->context;
+    }
+
+    /**
+     * @see \Replum\PageInterface::setContext()
+     */
+    public function setContext(ContextInterface $context) : PageInterface
+    {
+        $this->context = $context;
+        return $this;
     }
 }

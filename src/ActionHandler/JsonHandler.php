@@ -31,7 +31,7 @@ class JsonHandler
     const PARAMS_PARAMETER_NAME = 'replum_params';
     const TARGET_PARAMETER_NAME = 'replum_target';
     const DATA_PARAMETER_NAME = 'replum_data';
-    
+
     /**
      * @var \Replum\Executer
      */
@@ -63,6 +63,8 @@ class JsonHandler
             if (!($page instanceof \Replum\PageInterface)) {
                 throw new \RuntimeException('Can not restore page!');
             }
+
+            $page->setContext($this->executer->getContext());
 
             $widget = $page->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
             if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {

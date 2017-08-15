@@ -17,17 +17,34 @@ namespace Replum;
 interface PageInterface extends WidgetContainerInterface
 {
     /**
-     * Get the parameter registry that holds all callbacks to fill widget properties from request variables
-     * @return \Replum\ParameterRegistry
+     * Constructor requires the context as parameter
      */
-    function getParameterRegistry();
+    function __construct(ContextInterface $context);
+
+    /**
+     * Get the current page Context.
+     * The Context holds runtime configuration, execution context (like current URL) and services.
+     */
+    function getContext() : ContextInterface;
+
+    /**
+     * Replace the current context of the page with another one.
+     *
+     * @internal Used after unserialization of the page
+     * @return $this
+     */
+    function setContext(ContextInterface $context) : self;
+
+    /**
+     * Get the parameter registry that holds all callbacks to fill widget properties from request variables
+     */
+    function getParameterRegistry() : ParameterRegistry;
 
     /**
      * Initialize the parameter registry with the supplied parameter registry object or create a new object
-     * @param \Replum\ParameterRegistry $newParameterRegistry
-     * @return \Replum\PageInterface $this for chaining
+     * @return $this
      */
-    function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null);
+    function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null) : self;
 
     /**
      * Get the document title

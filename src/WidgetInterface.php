@@ -140,10 +140,10 @@ interface WidgetInterface
 
     /**
      * Set the identifier for the widget.
-     * If the identifier is already used, false is returned.
+     * An exception is thrown if the ID is already in use.
      *
      * @param string
-     * @return boolean
+     * @return static $this
      * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
      */
     function setID($newID);

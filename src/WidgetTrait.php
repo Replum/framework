@@ -370,9 +370,9 @@ trait WidgetTrait
         if ($this->getPage()->registerID($newID)) {
             $this->widgetTraitId = $newID;
             $this->setChanged(true);
-            return true;
+            return $this;
         } else {
-            return false;
+            return $this;
         }
     }
 
@@ -471,7 +471,7 @@ trait WidgetTrait
     public function getClasses($regex = null)
     {
         \sort($this->widgetTraitClasses);
-        
+
         // Get only classes matching the supplied regex
         if (!is_null($regex)) {
             $found = [];
