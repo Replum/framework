@@ -40,7 +40,7 @@ abstract class Page extends \Replum\Page
 
         $r .= '</head>';
 
-        $r .= '<body id="' . $this->escape($this->id) . '">';
+        $r .= '<body ' . $this->renderAttributes() . '>';
 
         foreach ($this->children() AS $child) {
             $r .= $child;
@@ -55,11 +55,11 @@ abstract class Page extends \Replum\Page
 
         return $r;
     }
-    
+
     ######################################################################
     # StyleSheet management                                              #
     ######################################################################
-    
+
     /**
      * @var array<StyleSheetInterface>
      */
