@@ -11,13 +11,11 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetContainer;
-
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/forms.html#the-label-element
  */
-class Label extends WidgetContainer
+class Label extends HtmlElement
 {
     /**
      * {@inheritdoc}
@@ -34,7 +32,7 @@ class Label extends WidgetContainer
     protected function validateWidget($widget)
     {
         if (!($widget instanceof PhrasingContentInterface)) {
-            throw new \InvalidArgumentException(\get_class($this) . ' can only contain elements implementing the ' . PhrasingContentInterface::class . ' interface');
+            throw new \InvalidArgumentException(\get_class($this) . ' can only contain elements implementing the ' . PhrasingElementInterface::class . ' interface');
         }
     }
 

@@ -21,12 +21,8 @@ use \Replum\WidgetTrait;
  * @property boolean $selected Whether the option is selected by default
  * @link http://www.w3.org/TR/html5/forms.html#the-option-element
  */
-class Option implements WidgetInterface
+class Option extends HtmlElement
 {
-    use WidgetTrait {
-        renderAttributes as renderTraitAttributes;
-    }
-
     /**
      * The text value to show for this element
      *
@@ -108,7 +104,7 @@ class Option implements WidgetInterface
 
     protected function renderAttributes()
     {
-        return $this->renderTraitAttributes()
+        return parent::renderAttributes()
         . $this->renderHtmlAttribute('value', $this->value)
         . $this->renderHtmlAttribute('selected', ($this->selected ? 'selected' : null))
         ;

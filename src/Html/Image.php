@@ -17,10 +17,8 @@ use \Replum\WidgetTrait;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class Image implements WidgetInterface
+class Image extends HtmlElement
 {
-    use WidgetTrait;
-
     /**
      * The src URL of this image
      * @var string

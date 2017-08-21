@@ -67,11 +67,58 @@ trait WidgetContainerTrait
     }
 
     /**
-     * @return \Traversable<WidgetInterface>
+     * @see \Replum\WidgetInterface::getDescendants()
      */
-    protected function getUnfilteredChildren()
+    public function getDescendants($filterByType = null)
     {
-        return $this->getChildren();
+        $descendants = [];
+
+        foreach ($this->getChildren() AS $child) {
+            if ($child === null) { continue; }
+
+            if (is_null($filterByType) || is_a($child, $filterByType, true)) {
+                $descendants[] = $child;
+            }
+
+            $descendants = \array_merge($descendants, $child->getDescendants($filterByType));
+        }
+
+        return $descendants;
+    }
+
+    /**
+     * Get the nearest descendant of the supplied type
+     *
+     * @param string $type
+     * @return null|object
+     */
+    public function getNearestDescendant($type)
+    {
+        foreach ($this->getDescendants($type) as $descendant) {
+            return $descendant;
+        }
+
+        return null;
+    }
+
+    /**
+     * @see \Replum\WidgetInterface::findById()
+     */
+    public function findById($id)
+    {
+        if ($this->hasID() && ($this->getID() === $id)) {
+            return $this;
+        }
+
+        foreach ($this->getUnfilteredChildren() as $child) {
+            if ($child === null) { continue; }
+
+            if (null !== ($found = $child->findById($id))) {
+                return $found;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -124,5 +171,10 @@ trait WidgetContainerTrait
     protected function validTags()
     {
         return null;
+    }
+
+    public function __toString()
+    {
+        return '<' . $this->escape($this->getTag()) . $this->renderAttributes() . '>' . PHP_EOL . $this->renderChildren() . '</' . $this->escape($this->getTag()) . '>';
     }
 }

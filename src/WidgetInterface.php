@@ -19,6 +19,18 @@ use \Replum\Events\WidgetEvent;
 interface WidgetInterface
 {
     /**
+     * Get the internal identifier for the widget, preserved after page restore
+     */
+    //function getWidgetId() : int;
+
+    /**
+     * Get the page this widget belongs to
+     *
+     * @return \Replum\PageInterface
+     */
+    function getPage();
+
+    /**
      * Check if the selected widget is the topmost widget aka the page
      *
      * @return boolean
@@ -50,6 +62,21 @@ interface WidgetInterface
     function clearParent();
 
     /**
+     * Get the owner of this widget.
+     * In most cases, the parent of the widget is also the owner.
+     * For child widgets of compound widgets this allows to directly access the compound widget itself
+     *  instead of some structural container widget in between them.
+     */
+    //function getOwner() : WidgetContainerInterface;
+
+    /**
+     * Change the owner
+     *
+     * @return $this
+     */
+    //function setOwner(WidgetContainerInterface $owner) : self;
+
+    /**
      * Return the complete list of ancestors of this widget up to the root element.
      * The first element is the parent and the last element is the root.
      * If $filterByType is supplied, only elements that are an instance of this type are returned.
@@ -66,31 +93,6 @@ interface WidgetInterface
      * @return null|object
      */
     function getNearestAncestor($type);
-
-    /**
-     * Return the list of all widgets below this widget in the tree.
-     * The returned list is not ordnered in a specific way.
-     * If $filterByType is supplied, only elements that are an instance of this type are returned.
-     *
-     * @param string $filterByType
-     * @return array<self>
-     */
-    function getDescendants($filterByType = null);
-
-    /**
-     * Search the widget tree for a widget with the supplied ID.
-     *
-     * @param string $id
-     * @return self|null
-     */
-    function findById($id);
-
-    /**
-     * Get the page this widget belongs to
-     *
-     * @return \Replum\PageInterface
-     */
-    function getPage();
 
     /**
      * Check if the widget is marked as changed
@@ -113,170 +115,6 @@ interface WidgetInterface
      * @return string The HTML code of the widget
      */
     function __toString();
-
-    /**
-     * Every widget can have an ID.
-     * The ID is required to directly access/modify the widget in a subsequent JSON call.
-     * If the element has no ID and is modified, the nearest ancestor with an ID must be
-     * completely rerendered.
-     *
-     * An ID is generated upon the first access to the ID (getID) or explicitly using the
-     * setID() method. Before an ID can be generated, a parent (with a path to the page)
-     * must be set.
-     *
-     * @return boolean
-     * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
-     */
-    function hasID();
-
-    /**
-     * Get the identifier of the widget.
-     * The identifier is unique for all widgets within a page.
-     *
-     * @return string
-     * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
-     */
-    function getID();
-
-    /**
-     * Set the identifier for the widget.
-     * An exception is thrown if the ID is already in use.
-     *
-     * @param string
-     * @return static $this
-     * @link http://www.w3.org/TR/html5/dom.html#the-id-attribute
-     */
-    function setID($newID);
-
-    /**
-     * Indicate this widget needs an ID, defer the ID creation until widget is connected to the page.
-     *
-     * @return static $this for chaining
-     */
-    function needID();
-
-    /**
-     * Add the class to the list of classes if not already contained.
-     *
-     * @param string $class Class to add
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/dom.html#classes
-     */
-    function addClass($class);
-
-    /**
-     * Remove the supplied class if it exists in the list of classes.
-     * If the class was not previously set, no error is raised.
-     *
-     * @param string $class The class name or regex to remove by
-     * @param boolean $isRegex Indicates if $class specifies the literal class name or a (perl compatible) regex to match classes against
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/dom.html#classes
-     */
-    function delClass($class, $isRegex = false);
-
-    /**
-     * Checks if the supplied class is set for this widget
-     *
-     * @param string $class The class name or regex to check against
-     * @param boolean $isRegex Indicates if $removeClass specifies the literal class name or a (perl compatible) regex to match classes against
-     * @return boolean
-     * @link http://www.w3.org/TR/html5/dom.html#classes
-     */
-    function hasClass($class, $isRegex = false);
-
-    /**
-     * Get the list of classes set
-     *
-     * @param string $regex The regex to filter awailable classes with.
-     * @return array<string>
-     * @link http://www.w3.org/TR/html5/dom.html#classes
-     */
-    function getClasses($regex = null);
-
-    /**
-     * Get the tabindex attribute.
-     *
-     * @return int
-     * @link http://www.w3.org/TR/html5/editing.html#attr-tabindex
-     */
-    function getTabIndex();
-
-    /**
-     * Set the tabindex attribute.
-     *
-     * @param int $newTabIndex
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/editing.html#attr-tabindex
-     */
-    function setTabIndex($newTabIndex);
-
-    /**
-     * Get the title attribute of the element
-     *
-     * @return string
-     * @link http://www.w3.org/TR/html5/dom.html#attr-title
-     */
-    function getTitle();
-
-    /**
-     * Set the title attribute of this element
-     *
-     * @param string $newTitle
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/dom.html#attr-title
-     */
-    function setTitle($newTitle);
-
-    /**
-     * Get the ARIA role of the element if defined.
-     *
-     * @return string
-     * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
-     * @link http://www.w3.org/TR/wai-aria/roles
-     */
-    function getRole();
-
-    /**
-     * Set the ARIA role of the element.
-     *
-     * @param string $newRole
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
-     * @link http://www.w3.org/TR/wai-aria/roles
-     */
-    function setRole($newRole);
-
-    /**
-     * Get the data attribute for the supplied name or all data attributes set for the object.
-     *
-     * @param string $name
-     * @return array<string>|string
-     * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
-     */
-    function getData($name = null);
-
-    /**
-     * Append the supplied value to the data value.
-     * If the value was empty, equal to setData.
-     * Otherwise the $additionalValue is appended with a single space to separate it from previous values.
-     *
-     * @param string $name
-     * @param string $additionalValue
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
-     */
-    function addData($name, $additionalValue);
-
-    /**
-     * Set a data attribute for the widget.
-     *
-     * @param string $name
-     * @param string $newValue
-     * @return static $this for chaining
-     * @link http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes
-     */
-    function setData($name, $newValue);
 
     /**
      * Add an event handler to this widget.

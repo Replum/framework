@@ -11,7 +11,6 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetContainer;
 use \Replum\WidgetHasClickEventInterface;
 use \Replum\WidgetHasClickEventTrait;
 
@@ -19,7 +18,7 @@ use \Replum\WidgetHasClickEventTrait;
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @property string $href The url to use for this link
  */
-class A extends WidgetContainer implements WidgetHasClickEventInterface
+class A extends HtmlElement implements WidgetHasClickEventInterface
 {
     use WidgetHasClickEventTrait;
 
@@ -57,8 +56,6 @@ class A extends WidgetContainer implements WidgetHasClickEventInterface
 
     protected function renderAttributes()
     {
-        return parent::renderAttributes()
-        . (!\is_null($this->href) ? ' href="' . $this->escape($this->href) . '"' : '')
-        ;
+        return parent::renderAttributes() . \Replum\Util::renderHtmlAttribute('href', $this->href);
     }
 }

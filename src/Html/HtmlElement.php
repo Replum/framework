@@ -14,13 +14,9 @@ namespace Replum\Html;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class ListElement extends HtmlElement
+class HtmlElement implements WidgetInterface, AriaAttributesInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function validTags()
-    {
-        return [ 'li'];
-    }
+    use \Replum\WidgetContainerTrait;
+    use WidgetTrait;
+    use AriaAttributesTrait;
 }

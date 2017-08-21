@@ -17,10 +17,8 @@ use \Replum\WidgetTrait;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class Text implements WidgetInterface, PhrasingContentInterface
+class Text extends HtmlElement implements PhrasingElementInterface
 {
-    use WidgetTrait;
-
     /**
      * The text value of this Text widget
      *

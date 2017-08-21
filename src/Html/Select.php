@@ -21,7 +21,7 @@ use \Replum\WidgetHasChangeEventTrait;
  * @property array  $values The possible values in this select
  * @property string $value  The currently selected value
  */
-class Select extends WidgetContainer implements WidgetHasChangeEventInterface, FormInputInterface
+class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormInputInterface
 {
     use WidgetHasChangeEventTrait,
         FormElementTrait;

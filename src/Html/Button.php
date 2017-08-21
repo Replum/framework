@@ -11,18 +11,15 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetContainerInterface;
-use \Replum\WidgetContainerTrait;
 use \Replum\WidgetHasClickEventInterface;
 use \Replum\WidgetHasClickEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class Button implements WidgetContainerInterface, FormElementInterface, WidgetHasClickEventInterface
+class Button extends HtmlElement implements FormElementInterface, WidgetHasClickEventInterface
 {
-    use WidgetContainerTrait,
-        WidgetHasClickEventTrait,
+    use WidgetHasClickEventTrait,
         FormInputTrait {
         setType as public;
     }

@@ -20,6 +20,24 @@ namespace Replum;
 interface WidgetContainerInterface extends WidgetInterface
 {
     /**
+     * Return the list of all widgets below this widget in the tree.
+     * The returned list is not ordnered in a specific way.
+     * If $filterByType is supplied, only elements that are an instance of this type are returned.
+     *
+     * @param string $filterByType
+     * @return array<self>
+     */
+    function getDescendants($filterByType = null);
+
+    /**
+     * Search the widget tree for a widget with the supplied ID.
+     *
+     * @param string $id
+     * @return self|null
+     */
+    function findById($id);
+
+    /**
      * Get the list of children of this container.
      * @return WidgetCollection
      */

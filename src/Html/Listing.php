@@ -11,9 +11,8 @@
 
 namespace Replum\Html;
 
-use Replum\WidgetContainerInterface;
-use Replum\WidgetContainerTrait;
-use Replum\WidgetInterface;
+use \Replum\Util;
+use \Replum\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
@@ -23,10 +22,8 @@ use Replum\WidgetInterface;
  * @property boolean $reversed Numbering is reversed for ordered list
  * @property string $type Type of the number to show for ordered lists, one of the TYPE_ constants.
  */
-class Listing implements WidgetContainerInterface
+class Listing extends HtmlElement
 {
-    use WidgetContainerTrait;
-
     /**
      * Default constructor
      *
@@ -235,9 +232,9 @@ class Listing implements WidgetContainerInterface
     protected function renderAttributes()
     {
         return $this->renderWidgetAttributes()
-        . ($this->isReversed() ? ' reversed="reversed"' : '')
-        . ($this->getStart() !== null ? ' start="' . $this->escape($this->getStart()) . '"' : '')
-        . ($this->isOrdered() && ($this->getType() !== null) ? ' type="' . $this->escape($this->getType()) . '"' : '')
+            . Util::renderHtmlAttribute('reversed', ($this->isReversed() ? 'reversed' : null))
+            . Util::renderHtmlAttribute('start', $this->start)
+            . Util::renderHtmlAttribute('type', $this->isOrdered() && ($this->type !== null) ? $this->type : null)
         ;
     }
 

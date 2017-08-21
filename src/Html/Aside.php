@@ -11,8 +11,6 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetContainer;
-
 /**
  * The aside element represents a section of a page that consists of content that is tangentially related to the content around the aside element, and which could be considered separate from that content. Such sections are often represented as sidebars in printed typography.
  *
@@ -21,7 +19,7 @@ use \Replum\WidgetContainer;
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/sections.html#the-aside-element
  */
-class Aside extends WidgetContainer
+class Aside extends HtmlElement
 {
     /**
      * {@inheritdoc}

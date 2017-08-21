@@ -14,13 +14,6 @@ namespace Replum\Html;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class ListElement extends HtmlElement
+interface PhrasingElementInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function validTags()
-    {
-        return [ 'li'];
-    }
 }
