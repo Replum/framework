@@ -2,9 +2,9 @@
 
 /*
  * This file is part of Replum: the web widget framework.
- * 
+ *
  * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -29,7 +29,7 @@ abstract class Util
     /**
      * Create a relative path so a symlink with name $sourceFile points to file or directory $targetFile
      * If $canonicalize is true, resolve all symlinks/./.. from both paths.
-     * 
+     *
      * Example:
      * $sourceFile = /foo/bar/baz.txt
      * $targetFile = /foo/bla/blubb.txt
@@ -60,9 +60,9 @@ abstract class Util
         if ((\count($from_parts) === 1) && ($from_parts[0] === "")) {
                 $from_parts = [];
         }
-        
+
         $path = '.';
-        
+
         // Walk up to the common base directory
         foreach ($from_parts AS $f) {
                 $path .= '/..';
@@ -77,7 +77,29 @@ abstract class Util
         if (\strlen($path) > 2) {
             $path = \substr($path, 2);
         }
-        
+
         return $path;
+    }
+
+    public static function escapeHtmlAttributeValue($value)
+    {
+        return \htmlentities($value, null, 'UTF-8');
+    }
+
+    public static function renderHtmlAttribute(string $name, $value) : string
+    {
+        if (\is_null($value)) { return ''; }
+
+        if (\is_array($value)) {
+            if (!\count($value)) { return ''; }
+
+            $escaped = \array_reduce($value, function ($carry, $value) {
+                return ($carry ? $carry . ' ' : '') . self::escapeHtmlAttributeValue($value);
+            });
+        } else {
+            $escaped = self::escapeHtmlAttributeValue($value);
+        }
+
+        return ' ' . $name . '="' . $escaped . '"';
     }
 }
