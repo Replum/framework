@@ -1,12 +1,13 @@
 {
     "name": "replum/framework",
-    "description": "Replum web widget framework: basic interfaces and main functionality",
+    "description": "Replum: the PHP web widget framework",
     "authors": [
         {
             "name": "Dennis Birkholz",
             "email": "dennis@birkholz.org"
         }
     ],
+    "license": "LGPL-3",
     "autoload": {
         "psr-4": {
             "Replum\\": "src/"
@@ -20,7 +21,7 @@
     "require": {
         "symfony/event-dispatcher": "2.5.*",
         "symfony/http-foundation": "2.5.*",
-        
+
         "components/jquery": "3.*"
     }
 }
