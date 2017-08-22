@@ -129,7 +129,7 @@ $(function() {
             params.push( { name: VALUE_PARAMETER_NAME, value: currentEvent.target.value } );
         }
 
-        params.push( { name: PAGE_ID_PARAMETER_NAME, value: document.body.id } );
+        params.push( { name: PAGE_ID_PARAMETER_NAME, value: document.documentElement.id } );
         params.push( { name: EVENT_PARAMETER_NAME, value: currentEvent.type } );
         params.push( { name: SOURCE_PARAMETER_NAME, value: currentEvent.currentTarget.id } );
 
