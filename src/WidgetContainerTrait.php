@@ -27,20 +27,40 @@ trait WidgetContainerTrait
     use WidgetTrait;
 
     /**
-     * @var WidgetCollection
+     * @var WidgetInterface[]
      */
-    private $WidgetContainerTraitChildren;
+    private $widgetContainerTraitChildren = [];
 
     /**
-     * @return WidgetCollection
+     * @see WidgetContainerInterface::add()
+     */
+    final public function add(WidgetInterface $widget) : WidgetContainerInterface
+    {
+        if (!isset($this->widgetContainerTraitChildren[$widget->getWidgetId()])) {
+            $this->widgetContainerTraitChildren[$widget->getWidgetId()] = $widget;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @see WidgetContainerInterface::del()
+     */
+    final public function del(WidgetInterface $widget) : WidgetContainerInterface
+    {
+        if (!isset($this->widgetContainerTraitChildren[$widget->getWidgetId()])) {
+            throw new \InvalidArgumentException('Can not delete non-existing child widget "' . $widget->getWidgetId() . '"!');
+        }
+
+        unset($this->widgetContainerTraitChildren[$widget->getWidgetId()]);
+    }
+
+    /**
+     * @return WidgetInterface[]
      */
     public function getChildren()
     {
-        if (is_null($this->WidgetContainerTraitChildren)) {
-            $this->WidgetContainerTraitChildren = new WidgetCollection($this, false);
-        }
-
-        return $this->WidgetContainerTraitChildren;
+        return $this->widgetContainerTraitChildren;
     }
 
     /**
@@ -110,7 +130,7 @@ trait WidgetContainerTrait
             return $this;
         }
 
-        foreach ($this->getUnfilteredChildren() as $child) {
+        foreach ($this->getChildren() as $child) {
             if ($child === null) { continue; }
 
             if (null !== ($found = $child->findById($id))) {

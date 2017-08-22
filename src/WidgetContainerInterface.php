@@ -20,6 +20,21 @@ namespace Replum;
 interface WidgetContainerInterface extends WidgetInterface
 {
     /**
+     * Add a widget to this container, making this container the parent of the widget.
+     * If the widget already exists, no error is raised.
+     *
+     * @return $this
+     */
+    function add(WidgetInterface $widget) : self;
+
+    /**
+     * Remove the supplied widget from the container. If the widget does not exists, an exception is thrown.
+     *
+     * @return $this
+     */
+    function del(WidgetInterface $widget) : self;
+    
+    /**
      * Return the list of all widgets below this widget in the tree.
      * The returned list is not ordnered in a specific way.
      * If $filterByType is supplied, only elements that are an instance of this type are returned.
@@ -41,5 +56,5 @@ interface WidgetContainerInterface extends WidgetInterface
      * Get the list of children of this container.
      * @return WidgetCollection
      */
-    public function children();
+    function children();
 }
