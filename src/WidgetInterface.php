@@ -21,7 +21,7 @@ interface WidgetInterface
     /**
      * Get the internal identifier for the widget, preserved after page restore
      */
-    //function getWidgetId() : int;
+    function getWidgetId() : int;
 
     /**
      * Get the page this widget belongs to
@@ -114,7 +114,7 @@ interface WidgetInterface
      *
      * @return string The HTML code of the widget
      */
-    function __toString();
+    function render() : string;
 
     /**
      * Add an event handler to this widget.

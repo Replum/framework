@@ -30,10 +30,64 @@ use \Symfony\Component\EventDispatcher\EventDispatcher;
  */
 trait WidgetTrait
 {
-    public function __construct(WidgetInterface $parent = null)
+    public function __construct(PageInterface $page)
     {
-        if (!is_null($parent)) { $this->setParent($parent); }
+        $this->setPage($page);
+
+        $widgetId = $this->getPage()->registerWidget($this);
+        $this->setWidgetId($widgetId);
     }
+
+    ######################################################################
+    # Page handling                                                      #
+    ######################################################################
+
+    /**
+     * @var \Replum\PageInterface
+     */
+    private $widgetTraitPage = null;
+
+    /**
+     * @see \Replum\WidgetInterface::getPage()
+     */
+    final public function getPage() : PageInterface
+    {
+        return $this->widgetTraitPage;
+    }
+
+    /**
+     * Set the page if the constructor template can not be used
+     */
+    final protected function setPage(PageInterface $page)
+    {
+        $this->widgetTraitPage = $page;
+    }
+
+    ######################################################################
+    # Widget ID handling                                                 #
+    ######################################################################
+
+    /**
+     * @var int
+     */
+    private $widgetId;
+
+    /**
+     * @see WidgetInterface::getWidgetId()
+     */
+    final public function getWidgetId() : int
+    {
+        return $this->widgetId;
+    }
+
+    /**
+     * Set the widget id if the constructor template can not be used
+     */
+    final protected function setWidgetId(int $widgetId)
+    {
+        $this->widgetId = $widgetId;
+    }
+
 
     public function __get($propertyName)
     {
@@ -181,38 +235,6 @@ trait WidgetTrait
     }
 
     /**
-     * @var \Replum\PageInterface
-     */
-    private $widgetTraitPage = null;
-
-    /**
-     * @see \Replum\WidgetInterface::getPage()
-     */
-    public function getPage()
-    {
-        if (!is_null($this->widgetTraitPage)) {
-            return $this->widgetTraitPage;
-        }
-
-        if ($this instanceof PageInterface) {
-            $this->widgetTraitPage = $this;
-        } elseif ($this->isRoot()) {
-            return null;
-        } elseif ($this->getParent() instanceof PageInterface) {
-            $this->widgetTraitPage = $this->getParent();
-        } else {
-            $this->widgetTraitPage = $this->getParent()->getPage();
-        }
-
-        return $this->widgetTraitPage;
-    }
-
-    protected function setPage(PageInterface $page)
-    {
-        $this->widgetTraitPage = $page;
-    }
-
-    /**
      * @see \Replum\WidgetInterface::getRoot()
      */
     public function getRoot()
@@ -259,18 +281,6 @@ trait WidgetTrait
     public function __wakeup()
     {
         $this->widgetTraitChanged = false;
-    }
-
-    protected function renderDataAttributes()
-    {
-        $r = '';
-
-        foreach ($this->widgetTraitData as $dataName => $dataValue) {
-            $dataName = \preg_replace_callback('/[A-Z]/', function($matches) { return '-' . \strtolower($matches[0]); }, $dataName);
-            $r .= ' data-' . $dataName . '="' . $this->escape($dataValue) . '"';
-        }
-
-        return $r;
     }
 
     /**
@@ -464,12 +474,12 @@ trait WidgetTrait
      * @param mixed ...$args Pairs of property names and values to apply to the new instance
      * @return static New instance
      */
-    public static function create(WidgetInterface $parent = null)
+    /*public static function create(WidgetInterface $parent = null)
     {
         $widget = new static($parent);
         $widget->applyArguments(1, \func_get_args());
         return $widget;
-    }
+    }*/
 
     /**
      * @param string ...$args Pairs of property names and values
