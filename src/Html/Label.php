@@ -11,19 +11,16 @@
 
 namespace Replum\Html;
 
+use \Replum\PageInterface;
+use \Replum\Util;
+
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/forms.html#the-label-element
  */
-class Label extends HtmlElement
+final class Label extends HtmlElement
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function validTags()
-    {
-        return [ 'label'];
-    }
+    const TAG = 'label';
 
     /**
      * Restrict allowed children for label elements
@@ -45,22 +42,28 @@ class Label extends HtmlElement
     /**
      * @return FormElementInterface
      */
-    public function getFor()
+    public function getFor() : FormElementInterface
     {
         return $this->htmlFor;
     }
 
     /**
-     * @param \Replum\Html\FormElementInterface $element
-     * @return \Replum\Html\Label $this for chaining
      */
-    public function setFor(FormElementInterface $element)
+    public function hasFor() : bool
+    {
+        return ($this->htmlFor !== null);
+    }
+
+    /**
+     * @return $this
+     */
+    public function setFor(FormElementInterface $element) : self
     {
         if ($element !== $this->htmlFor) {
+            $this->htmlFor = $element;
             $this->setChanged(true);
         }
 
-        $this->htmlFor = $element;
         return $this;
     }
 
@@ -68,9 +71,19 @@ class Label extends HtmlElement
      * Add for attribute when printing
      * @return string
      */
-    protected function renderAttributes()
+    protected function renderAttributes() : string
     {
-        return ($this->getFor() !== null ? ' for="' . $this->escape($this->getFor()->getID()) . '"' : '')
-        . parent::renderAttributes();
+        return parent::renderAttributes()
+            . ($this->hasFor() ? Util::renderHtmlAttribute('for', $this->getFor()->getId()) : '')
+        ;
+    }
+
+    public static function create(PageInterface $page, FormElementInterface $for = null) : self
+    {
+        $element = new self($page);
+        if ($for !== null) {
+            $element->setFor($for);
+        }
+        return $element;
     }
 }

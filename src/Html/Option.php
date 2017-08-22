@@ -11,8 +11,8 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetInterface;
-use \Replum\WidgetTrait;
+use \Replum\PageInterface;
+use \Replum\Util;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
@@ -102,7 +102,7 @@ class Option extends HtmlElement
         return $this->setBooleanProperty('selected', $newSelected);
     }
 
-    protected function renderAttributes()
+    protected function renderAttributes() : string
     {
         return parent::renderAttributes()
         . $this->renderHtmlAttribute('value', $this->value)
@@ -110,8 +110,13 @@ class Option extends HtmlElement
         ;
     }
 
-    public function __toString()
+    public function render() : string
     {
-        return '<option' . $this->renderAttributes() . '>' . $this->escape($this->label) . '</option>';
+        return '<option' . $this->renderAttributes() . '>' . Util::escapeHtml($this->label) . '</option>';
+    }
+
+    public static function create(PageInterface $page) : self
+    {
+        return new self($page);
     }
 }

@@ -11,7 +11,7 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetContainer;
+use \Replum\PageInterface;
 use \Replum\WidgetHasChangeEventInterface;
 use \Replum\WidgetHasChangeEventTrait;
 
@@ -127,7 +127,7 @@ class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormI
         return $this->setPropertyValue('size', (int)$newSize);
     }
 
-    protected function renderAttributes()
+    protected function renderAttributes() : string
     {
         return parent::renderAttributes()
         . $this->renderHtmlAttribute('name', $this->name)
@@ -135,10 +135,10 @@ class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormI
         ;
     }
 
-    public function __toString()
+    public function render() : string
     {
         try {
-            $this->getChildren()->blank();
+            //$this->children = [];
             $this->createOptions($this, $this->values);
 
             return '<select' . $this->renderAttributes() . '>'
@@ -155,14 +155,23 @@ class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormI
     {
         foreach ($values as $value => $label) {
             if (\is_array($label)) {
-                $optgroup = OptionGroup::create($parent, 'label', $value);
+                $optgroup = OptionGroup::create($this->getPage(), 'label', $value);
+                $parent->add($optgroup);
                 $this->{__FUNCTION__}($optgroup, $label);
-            } else {
-                $option = Option::create($parent, 'label', $label, 'value', ($this->isAssoc ? $value : $label));
-                if (($this->value !== null) && ($option->value === $this->value)) {
-                    $option->selected = true;
+            }
+
+            else {
+                $option = Option::create($this->getPage())->setLabel($label)->setValue($this->isAssoc ? $value : $label);
+                if (($this->value !== null) && ($value === $this->value)) {
+                    $option->setSelected(true);
                 }
+                $parent->add($option);
             }
         }
+    }
+
+    public static function create(PageInterface $page) : self
+    {
+        return new self($page);
     }
 }
