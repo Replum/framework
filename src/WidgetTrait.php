@@ -581,10 +581,16 @@ trait WidgetTrait
             if (!\count($value)) { return ''; }
 
             $escaped = \array_reduce($value, function ($carry, $value) {
-                return ($carry ? $carry . ' ' : '') . $this->escape($value);
+                return ($carry ? $carry . ' ' : '') . Util::escapeHtmlAttributeValue($value);
             });
-        } else {
-            $escaped = $this->escape($value);
+        }
+
+        elseif (\is_bool($value) && $value) {
+            return ' ' . $name;
+        }
+
+        else {
+            $escaped = Util::escapeHtmlAttributeValue($value);
         }
 
         return ' ' . $name . '="' . $escaped . '"';

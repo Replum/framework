@@ -90,14 +90,6 @@ interface PageInterface
     //function setTitle($newTitle);
 
     /**
-     * Escape the supplied string according to the current HTML escaping rules
-     *
-     * @param string The raw string
-     * @return string
-     */
-    function escape($unquoted);
-
-    /**
      * Execute the supplied action on the remote side (in the browser).
      *
      * @param string $action

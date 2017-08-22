@@ -25,17 +25,9 @@ abstract class Page extends \Replum\Page
      */
     private $body;
 
-    public function getBody() : Body
+    final public function getBody() : Body
     {
         return $this->body;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function escape($unquoted)
-    {
-        return \htmlentities($unquoted, null, 'UTF-8');
     }
 
     /**
@@ -47,7 +39,7 @@ abstract class Page extends \Replum\Page
         $r .= '<html id="' . $this->getPageID() . '">';
 
         $r .= '<head>';
-        //$r .= '<title>' . $this->escape($this->getTitle()) . '</title>';
+//        $r .= '<title>' . \Replum\Util::escapeHtml($this->getTitle()) . '</title>';
         $r .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
         $r .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
