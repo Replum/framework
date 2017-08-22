@@ -75,12 +75,12 @@ trait WidgetContainerTrait
      * Simple helper to iterate over all children and render them.
      * @return string
      */
-    protected function renderChildren()
+    protected function renderChildren() : string
     {
         $r = '';
 
         foreach ($this->children() AS $child) {
-            $r .= $child . PHP_EOL;
+            $r .= $child->render() . PHP_EOL;
         }
 
         return $r;
@@ -191,10 +191,5 @@ trait WidgetContainerTrait
     protected function validTags()
     {
         return null;
-    }
-
-    public function __toString()
-    {
-        return '<' . $this->escape($this->getTag()) . $this->renderAttributes() . '>' . PHP_EOL . $this->renderChildren() . '</' . $this->escape($this->getTag()) . '>';
     }
 }
