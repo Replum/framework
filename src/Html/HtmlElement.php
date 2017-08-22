@@ -14,9 +14,30 @@ namespace Replum\Html;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class HtmlElement implements WidgetInterface, AriaAttributesInterface
+abstract class HtmlElement implements WidgetInterface, AriaAttributesInterface
 {
     use \Replum\WidgetContainerTrait;
     use WidgetTrait;
     use AriaAttributesTrait;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function renderAttributes() : string
+    {
+        return $this->renderWidgetAttributes()
+            . $this->renderHtmlWidgetAttributes()
+            . $this->renderAriaAttributes()
+        ;
+    }
+
+    public function render() : string
+    {
+        return '<'
+            . static::TAG
+            . $this->renderAttributes()
+            . '>' . PHP_EOL
+            . $this->renderChildren() . PHP_EOL
+            . '</' . static::TAG . '>' . PHP_EOL;
+    }
 }

@@ -11,14 +11,16 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetInterface;
-use \Replum\WidgetTrait;
+use \Replum\PageInterface;
+use \Replum\Util;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class Image extends HtmlElement
+final class Image extends HtmlElement
 {
+    const TAG = 'img';
+
     /**
      * The src URL of this image
      * @var string
@@ -26,18 +28,23 @@ class Image extends HtmlElement
     private $source;
 
     /**
-     * @return string
      */
-    public function getSource()
+    public function getSource() : string
     {
         return $this->source;
     }
 
     /**
-     * @param string $newSource
-     * @return \Replum\Html\Image $this for chaining
      */
-    public function setSource($newSource)
+    public function hasSource() : bool
+    {
+        return ($this->source !== null);
+    }
+
+    /**
+     * @return $this
+     */
+    public function setSource(string $newSource) : self
     {
         if ($this->source !== $newSource) {
             $this->source = $newSource;
@@ -47,8 +54,20 @@ class Image extends HtmlElement
         return $this;
     }
 
-    public function __toString()
+    public function render() : string
     {
-        return '<img src="' . $this->escape($this->getSource()) . '"' . $this->renderAttributes() . ' />';
+        return '<' . self::TAG
+            . Util::renderHtmlAttribute('src', $this->source)
+            . $this->renderAttributes()
+            . ' />';
+    }
+
+    public static function create(PageInterface $page, string $source = null) : self
+    {
+        $image = new self($page);
+        if ($source !== null) {
+            $image->setSource($source);
+        }
+        return $image;
     }
 }

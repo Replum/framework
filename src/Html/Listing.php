@@ -11,8 +11,8 @@
 
 namespace Replum\Html;
 
+use \Replum\PageInterface;
 use \Replum\Util;
-use \Replum\WidgetInterface;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
@@ -24,16 +24,6 @@ use \Replum\WidgetInterface;
  */
 class Listing extends HtmlElement
 {
-    /**
-     * Default constructor
-     *
-     * @param \Replum\WidgetInterface $parent
-     */
-    public function __construct(WidgetInterface $parent)
-    {
-        $this->setParent($parent);
-    }
-
     /**
      * @var bool
      */
@@ -214,12 +204,12 @@ class Listing extends HtmlElement
      *
      * @return string
      */
-    public function __toString()
+    public function render() : string
     {
         $r = '<' . ($this->isOrdered() ? 'ol' : 'ul') . $this->renderAttributes() . '>';
 
         foreach ($this->children() AS $child) {
-            $r .= $child;
+            $r .= $child->render();
         }
 
         $r .= '</' . ($this->isOrdered() ? 'ol' : 'ul') . '>';
@@ -229,9 +219,9 @@ class Listing extends HtmlElement
     /**
      * {@inheritdoc}
      */
-    protected function renderAttributes()
+    protected function renderAttributes() : string
     {
-        return $this->renderWidgetAttributes()
+        return parent::renderAttributes()
             . Util::renderHtmlAttribute('reversed', ($this->isReversed() ? 'reversed' : null))
             . Util::renderHtmlAttribute('start', $this->start)
             . Util::renderHtmlAttribute('type', $this->isOrdered() && ($this->type !== null) ? $this->type : null)
@@ -246,5 +236,10 @@ class Listing extends HtmlElement
         if (!($widget instanceof Listing) && (!($widget instanceof ListElement))) {
             throw new \InvalidArgumentException('A list can only contain ' . ListElement::class . ' elements.');
         }
+    }
+
+    public static function create(PageInterface $page) : self
+    {
+        return new self($page);
     }
 }

@@ -11,14 +11,20 @@
 
 namespace Replum\Html;
 
+use \Replum\PageInterface;
+use \Replum\Util;
 use \Replum\WidgetInterface;
 use \Replum\WidgetTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/infrastructure.html#text-0
+ * @link https://www.w3.org/TR/dom/#interface-text
  */
-class Text extends HtmlElement implements PhrasingElementInterface
+final class Text implements WidgetInterface, PhrasingElementInterface
 {
+    use WidgetTrait;
+
     /**
      * The text value of this Text widget
      *
@@ -29,21 +35,16 @@ class Text extends HtmlElement implements PhrasingElementInterface
     /**
      * @return string
      */
-    public function getText()
+    public function getText() : string
     {
         return $this->text;
     }
 
     /**
-     * @param type $newText
-     * @return \Replum\Html\Text $this for chaining
+     * @return $this
      */
-    public function setText($newText)
+    public function setText(string $newText) : self
     {
-        if (!is_string($newText) && !is_scalar($newText)) {
-            throw new \InvalidArgumentException('Supplied text value must be a string.');
-        }
-
         if ($newText !== $this->text) {
             $this->text = $newText;
             $this->setChanged(true);
@@ -53,62 +54,18 @@ class Text extends HtmlElement implements PhrasingElementInterface
     }
 
     /**
-     * The tag this text is rendered with.
-     * If the type is not explicitly set and not attribute needs rendering, no tag is rendered.
-     * If the type is set, a tag will render regarless of the attribute values.
-     * If the attribute values require a tag to be rendered, '<span>' is used if no type is specified.
-     *
-     * @var string
+     * @see WidgetInterface::render()
      */
-    private $tag;
-
-    /**
-     * @return string
-     */
-    public function getTag()
+    public function render(): string
     {
-        return $this->tag;
+        return Util::escapeHtml($this->text);
     }
 
     /**
-     * @param string $newTag The tag type to set
-     * @return \Replum\Html\Text $this for chaining
+     * Factory method
      */
-    public function setTag($newTag)
+    public static function create(PageInterface $page, string $text)
     {
-        if (!in_array($newTag, $this->validTags())) {
-            throw new \InvalidArgumentException('Invalid type "' . $newTag . '" supplied! Allowed values are: "' . \implode('", "', $this->validTags()) . '"');
-        }
-
-        if ($newTag !== $this->tag) {
-            $this->tag = $newTag;
-            $this->setChanged(true);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return array<string> The list of possible types to set via setType()
-     */
-    public function validTags()
-    {
-        return [ 'span', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'legend', 'b', 'i', 'strike', 'sup'];
-    }
-
-    public function __construct(WidgetInterface $parent = null)
-    {
-        if ($parent !== null) { $this->setParent($parent); }
-    }
-
-    public function __toString()
-    {
-        $attributes = $this->renderAttributes();
-
-        if (!is_null($this->tag) || ($attributes != '')) {
-            return '<' . ($this->tag ? : 'span') . $attributes . '>' . $this->escape($this->text) . '</' . ($this->tag ? : 'span') . '>';
-        } else {
-            return \str_replace("\n", '<br />', $this->escape($this->text));
-        }
+        return (new self($page))->setText($text);
     }
 }

@@ -11,16 +11,19 @@
 
 namespace Replum\Html;
 
+use \Replum\PageInterface;
+
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/grouping-content.html#the-li-element
  */
 class ListElement extends HtmlElement
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function validTags()
+    const TAG = 'li';
+
+    public static function create(PageInterface $page) : self
     {
-        return [ 'li'];
+        return new self($page);
     }
+
 }

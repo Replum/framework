@@ -11,6 +11,8 @@
 
 namespace Replum\Html;
 
+use \Replum\PageInterface;
+
 /**
  * The aside element represents a section of a page that consists of content that is tangentially related to the content around the aside element, and which could be considered separate from that content. Such sections are often represented as sidebars in printed typography.
  *
@@ -19,13 +21,12 @@ namespace Replum\Html;
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/sections.html#the-aside-element
  */
-class Aside extends HtmlElement
+final class Aside extends HtmlElement
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function validTags()
+    const TAG = 'aside';
+
+    public static function create(PageInterface $page) : self
     {
-        return [ 'aside'];
+        return new self($page);
     }
 }

@@ -14,14 +14,16 @@ namespace Replum\Html;
 use \Replum\PageInterface;
 
 /**
- * The main element represents the main content of the body of a document or application. The main content area consists of content that is directly related to or expands upon the central topic of a document or central functionality of an application.
+ * The body element represents the content of the document.
+ *
+ * In conforming documents, there is only one body element. The document.body IDL attribute provides scripts with easy access to a document's body element.
  *
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link http://www.w3.org/TR/html5/grouping-content.html#the-main-element
+ * @link https://www.w3.org/TR/html5/sections.html#the-body-element
  */
-final class Main extends HtmlElement
+final class Body extends HtmlElement
 {
-    const TAG = 'main';
+    const TAG = 'body';
 
     public static function create(PageInterface $page) : self
     {
