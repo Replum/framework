@@ -13,14 +13,42 @@ namespace Replum;
 
 abstract class Page implements PageInterface
 {
-    use WidgetContainerTrait {
-        WidgetContainerTrait::__wakeup as private WidgetContainerTraitWakeup;
-    }
-
-    public function __construct(ContextInterface $context)
+    /**
+     * Default constructor
+     */
+    public function __construct(ContextInterface $context, string $pageId = null)
     {
         $this->context = $context;
+        $this->pageId = ($pageId ? $pageId : Util::randomString());
     }
+
+    /**
+     * Empty default method so a parent::__wakeup() call will work
+     */
+    public function __wakeup()
+    {
+    }
+
+    ######################################################################
+    # Page ID                                                            #
+    ######################################################################
+
+    /**
+     * @var string
+     */
+    private $pageId;
+
+        /**
+     * Get the unique ID of this page
+     */
+    final public function getPageID() : string
+    {
+        return $this->pageId;
+    }
+
+    ######################################################################
+    # Parameter registry                                                 #
+    ######################################################################
 
     /**
      * @var \Replum\ParameterRegistry
@@ -56,10 +84,6 @@ abstract class Page implements PageInterface
         }
 
         return $this;
-    }
-
-    public function __wakeup()
-    {
     }
 
     public $remoteActions = [];
@@ -116,7 +140,7 @@ abstract class Page implements PageInterface
     }
 
     ######################################################################
-    # Context handling
+    # Context handling                                                   #
     ######################################################################
 
     private $context;
@@ -136,5 +160,26 @@ abstract class Page implements PageInterface
     {
         $this->context = $context;
         return $this;
+    }
+
+    ######################################################################
+    # Widget management                                                  #
+    ######################################################################
+
+    private $nextWidgetId = 1;
+
+    /**
+     * @var string[]
+     */
+    private $widgetIdList = [];
+
+    /**
+     * @see PageInterface::registerWidget()
+     */
+    final public function registerWidget(WidgetInterface $widget) : int
+    {
+        $widgetId = $this->nextWidgetId++;
+        $this->widgetIdList[$widgetId] = true;
+        return $widgetId;
     }
 }

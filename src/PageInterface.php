@@ -14,12 +14,25 @@ namespace Replum;
 /**
  * A page represents the main entity to visualize
  */
-interface PageInterface extends WidgetContainerInterface
+interface PageInterface
 {
     /**
      * Constructor requires the context as parameter
      */
-    function __construct(ContextInterface $context);
+    function __construct(ContextInterface $context, string $pageId = null);
+
+    ######################################################################
+    # Page ID                                                            #
+    ######################################################################
+
+    /**
+     * Get the unique ID of this page
+     */
+    function getPageID() : string;
+
+    ######################################################################
+    # Context handling                                                   #
+    ######################################################################
 
     /**
      * Get the current page Context.
@@ -35,6 +48,10 @@ interface PageInterface extends WidgetContainerInterface
      */
     function setContext(ContextInterface $context) : self;
 
+    ######################################################################
+    # Parameter registry                                                 #
+    ######################################################################
+
     /**
      * Get the parameter registry that holds all callbacks to fill widget properties from request variables
      */
@@ -42,22 +59,35 @@ interface PageInterface extends WidgetContainerInterface
 
     /**
      * Initialize the parameter registry with the supplied parameter registry object or create a new object
+     *
      * @return $this
      */
     function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null) : self;
+
+    ######################################################################
+    # Widget management                                                  #
+    ######################################################################
+
+    /**
+     * Make the widget known to the page.
+     * This is required so events, etc. can work.
+     *
+     * This method returns the unique internal ID this widget is identified by within this page.
+     */
+    function registerWidget(WidgetInterface $widget) : int;
 
     /**
      * Get the document title
      * @return string
      */
-    function getTitle();
+    //function getTitle();
 
     /**
      * Set the document title
      * @param string $newTitle
      * @return \Replum\PageInterface $this for chaining
      */
-    function setTitle($newTitle);
+    //function setTitle($newTitle);
 
     /**
      * Escape the supplied string according to the current HTML escaping rules
@@ -74,4 +104,9 @@ interface PageInterface extends WidgetContainerInterface
      * @param array $parameters
      */
     function executeRemote($action, $parameters = []);
+
+    /**
+     * Generate the HTML string representation of the page.
+     */
+    function render() : string;
 }

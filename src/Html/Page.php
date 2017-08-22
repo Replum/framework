@@ -13,6 +13,23 @@ namespace Replum\Html;
 
 abstract class Page extends \Replum\Page
 {
+    public function __construct(\Replum\ContextInterface $context, string $pageId = null)
+    {
+        parent::__construct($context, $pageId);
+
+        $this->body = (new Body($this))->needID();
+    }
+
+    /**
+     * @var Body
+     */
+    private $body;
+
+    public function getBody() : Body
+    {
+        return $this->body;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -24,13 +41,13 @@ abstract class Page extends \Replum\Page
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function render() : string
     {
         $r = '<!DOCTYPE html>';
-        $r .= '<html>';
+        $r .= '<html id="' . $this->getPageID() . '">';
 
         $r .= '<head>';
-        $r .= '<title>' . $this->escape($this->getTitle()) . '</title>';
+        //$r .= '<title>' . $this->escape($this->getTitle()) . '</title>';
         $r .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
         $r .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
@@ -40,17 +57,12 @@ abstract class Page extends \Replum\Page
 
         $r .= '</head>';
 
-        $r .= '<body ' . $this->renderAttributes() . '>';
-
-        foreach ($this->children() AS $child) {
-            $r .= $child;
-        }
+        $r .= $this->body->render();
 
         foreach ($this->getScripts() AS $script) {
             $r .= $script;
         }
 
-        $r .= '</body>';
         $r .= '</html>';
 
         return $r;
