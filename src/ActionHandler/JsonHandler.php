@@ -66,7 +66,7 @@ class JsonHandler
 
             $page->setContext($this->executer->getContext());
 
-            $widget = $page->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
+            $widget = $page->getBody()->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
             if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {
                 $widget->setValue($request->request->get(self::VALUE_PARAMETER_NAME));
             } elseif ($request->request->get(self::CHECKED_PARAMETER_NAME) !== null) {
@@ -86,8 +86,8 @@ class JsonHandler
 
             $data = $this->handleChangedWidgets($page);
 
-            //\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
-            \apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
+            //\apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), $page, 0);
+            \apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), \gzdeflate(\serialize($page)), 0);
         } catch (\Exception $e) {
             $data = [[
                 self::ACTION_PARAMETER_NAME => 'error',

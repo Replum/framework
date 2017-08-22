@@ -33,13 +33,13 @@ class PageHandler
     public function execute()
     {
         $context = $this->executer->getContext();
-        
+
         $path = \rawurldecode($context->getRequest()->getPathInfo());
         // Access to root index document
         if ($path === '/' || $path === '') {
             $pagename = 'Index';
         }
-        
+
         else {
             // Strip trailing /
             $pagename = \substr($path, 1);
@@ -48,37 +48,35 @@ class PageHandler
             if ($pagename[\strlen($pagename)-1] === '/') {
                 $pagename .= 'Index';
             }
-            
+
             $pagename = \str_replace('/', '\\', $pagename);
         }
 
         // Get the name and class of the current page
         foreach ($context->getPageNamespaces() as $pageNamespace) {
             $tryclass = $pageNamespace . '\\' . $pagename;
-            
+
             if (\class_exists($tryclass) && \is_a($tryclass, PageInterface::class, true)) {
                 $class = $tryclass;
                 break;
             }
         }
-        
+
         if (empty($class)) {
             throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
         }
-        
+
         /* @var $page \Replum\PageInterface */
         $page = new $class($context);
-        $page->setID($this->generatePageID());
-
-        $response = new Response((string)$page);
+        $response = new Response($page->render());
 
         //\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
-        \apc_store($this->executer->getCacheNamespace() . '.' . $page->id, \gzdeflate(\serialize($page)), 0);
+        \apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), \gzdeflate(\serialize($page)), 0);
 
         return $response;
     }
 
-    
+
     protected function generatePageID()
     {
         $length = 8;
