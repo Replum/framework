@@ -2,9 +2,9 @@
 
 /*
  * This file is part of Replum: the web widget framework.
- * 
+ *
  * Copyright (c) Dennis Birkholz <dennis@birkholz.org>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -22,48 +22,48 @@ class Context implements ContextInterface
      * @var ClassLoader
      */
     private $autoloader;
-    
+
     /**
      * @var string
      */
     private $documentRoot;
-    
+
     /**
      * @var string
      */
     private $domain;
-    
+
     /**
      * @var Request
      */
     private $request;
-    
+
     /**
      * @var bool
      */
     private $tls;
-    
+
     /**
      * @var string
      */
     private $urlPrefix;
-    
+
     /**
      * @var string
      */
     private $vendorDir;
-    
+
     /**
      * @var bool
      */
     private $rewriteEnabled;
-    
-    
+
+
     public function __construct(ClassLoader $autoloader = null)
     {
         $this->initialize();
     }
-    
+
     /**
      * Nothing is serialized, re-initialize on restore
      */
@@ -71,7 +71,7 @@ class Context implements ContextInterface
     {
         return [];
     }
-    
+
     /**
      * Re-initialize after serializiation
      */
@@ -79,21 +79,21 @@ class Context implements ContextInterface
     {
         $this->initialize();
     }
-    
-    private final function initialize(ClassLoader $autoloader = null)
+
+    final private function initialize(ClassLoader $autoloader = null)
     {
         if ($autoloader !== null) {
             $this->autoloader = $autoloader;
         } else {
             $this->autoloader = $this->findAutoloader();
         }
-        
+
         $this->request = Request::createFromGlobals();
         $this->documentRoot = \dirname($_SERVER['SCRIPT_FILENAME']);
         $this->domain = $this->request->getHost();
         $this->tls = $this->request->isSecure();
         $this->vendorDir = \dirname(\dirname((new \ReflectionClass($this->autoloader))->getFileName()));
-        
+
         if (\substr($_SERVER['REQUEST_URI'], 0, \strlen($_SERVER['SCRIPT_NAME'])) === $_SERVER['SCRIPT_NAME']) {
             $this->rewriteEnabled = false;
             $this->urlPrefix = $this->request->getScriptName();
@@ -104,22 +104,22 @@ class Context implements ContextInterface
             throw new \RuntimeException('Can not determine base url and rewrite status from current server config!');
         }
     }
-    
-    private final function findAutoloader() : ClassLoader
+
+    final private function findAutoloader() : ClassLoader
     {
         if (!$loaders = \spl_autoload_functions()) {
             throw new \RuntimeException("No autoloader registered! Replum is designed to be installed by Composer and depends havily on class autoloading. Please use Composer's autoloader.");
         }
-        
+
         foreach ($loaders as $loader) {
             if (\is_array($loader) && isset($loader[0]) && ($loader[0] instanceof ClassLoader)) {
                 return $loader[0];
             }
         }
-        
+
         throw new \RuntimeException("Composer's autoloader not found! Replum is designed to be installed by Composer and depends havily on class autoloading. Please use Composer's autoloader.");
     }
-    
+
     /**
      * @see ContextInterface::getAutoloader()
      */
@@ -127,7 +127,7 @@ class Context implements ContextInterface
     {
         return $this->autoloader;
     }
-    
+
     /**
      * @see ContextInterface::getDocumentRoot()
      */
@@ -175,13 +175,13 @@ class Context implements ContextInterface
     {
         return $this->vendorDir;
     }
-    
+
     ######################################################################
     # Namespace handling                                                 #
     ######################################################################
-    
+
     private $pageNamespaces = [];
-    
+
     /**
      * @see ContextInterface::appendPageNamespace()
      */
