@@ -35,7 +35,7 @@ trait WidgetTrait
     /**
      *  @see \Replum\Html\WidgetInterface::addClass()
      */
-    public function addClass(string $newClass) : WidgetInterface
+    final public function addClass(string $newClass) : WidgetInterface
     {
         if (!\in_array($newClass, $this->htmlWidgetTraitClasses, true)) {
             $this->htmlWidgetTraitClasses[] = $newClass;
@@ -48,7 +48,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::delClass()
      */
-    public function delClass(string $class, bool $isRegex = false) : WidgetInterface
+    final public function delClass(string $class, bool $isRegex = false) : WidgetInterface
     {
         // Regex matching
         if ($isRegex) {
@@ -72,7 +72,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::hasClass()
      */
-    public function hasClass(string $class, bool $isRegex = false) : bool
+    final public function hasClass(string $class, bool $isRegex = false) : bool
     {
         // Regex matching
         if ($isRegex) {
@@ -94,7 +94,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getClasses()
      */
-    public function getClasses(bool $regex = null) : array
+    final public function getClasses(bool $regex = null) : array
     {
         \sort($this->htmlWidgetTraitClasses);
 
@@ -129,7 +129,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::hasID()
      */
-    public function hasID() : bool
+    final public function hasID() : bool
     {
         return ($this->htmlWidgetTraitId !== null);
     }
@@ -137,7 +137,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getID()
      */
-    public function getID() : string
+    final public function getID() : string
     {
         if (!$this->hasID()) {
             $this->needID();
@@ -148,7 +148,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::setID()
      */
-    public function setID(string $newID) : WidgetInterface
+    final public function setID(string $newID) : WidgetInterface
     {
         // Ignore resettings same ID
         if ($this->htmlWidgetTraitId === $newID) {
@@ -167,7 +167,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::needID()
      */
-    public function needID() : WidgetInterface
+    final public function needID() : WidgetInterface
     {
         $this->htmlWidgetTraitId = $this->getPage()->generateID();
         $this->setChanged(true);
@@ -187,7 +187,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getStyle()
      */
-    public function getStyle() : string
+    final public function getStyle() : string
     {
         return $this->htmlWidgetTraitStyle;
     }
@@ -195,7 +195,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::hasStyle()
      */
-    public function hasStyle() : bool
+    final public function hasStyle() : bool
     {
         return ($this->htmlWidgetTraitStyle !== null);
     }
@@ -203,7 +203,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::setStyle()
      */
-    public function setStyle(string $newStyle = null) : WidgetInterface
+    final public function setStyle(string $newStyle = null) : WidgetInterface
     {
         if ($newStyle !== $this->htmlWidgetTraitStyle) {
             $this->htmlWidgetTraitStyle = $newStyle;
@@ -228,7 +228,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getTabIndex()
      */
-    public function getTabIndex() : int
+    final public function getTabIndex() : int
     {
         return $this->htmlWidgetTraitTabindex;
     }
@@ -236,7 +236,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::hasTabIndex()
      */
-    public function hasTabIndex() : bool
+    final public function hasTabIndex() : bool
     {
         return ($this->htmlWidgetTraitTabindex !== null);
     }
@@ -244,7 +244,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::setTabIndex()
      */
-    public function setTabIndex(int $newTabIndex = null) : WidgetInterface
+    final public function setTabIndex(int $newTabIndex = null) : WidgetInterface
     {
         if ($this->htmlWidgetTraitTabindex !== $newTabIndex) {
             $this->htmlWidgetTraitTabindex = $newTabIndex;
@@ -269,7 +269,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getTitle()
      */
-    public function getTitle() : string
+    final public function getTitle() : string
     {
         return $this->htmlWidgetTraitTitle;
     }
@@ -277,7 +277,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::hasTitle()
      */
-    public function hasTitle() : bool
+    final public function hasTitle() : bool
     {
         return ($this->htmlWidgetTraitTitle !== null);
     }
@@ -285,7 +285,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::setTitle()
      */
-    public function setTitle(string $newTitle = null) : WidgetInterface
+    final public function setTitle(string $newTitle = null) : WidgetInterface
     {
         if ($this->htmlWidgetTraitTitle !== $newTitle) {
             $this->htmlWidgetTraitTitle = $newTitle;
@@ -310,7 +310,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::addData()
      */
-    public function addData(string $name, string $value) : WidgetInterface
+    final public function addData(string $name, string $value) : WidgetInterface
     {
         return $this->setData($name, ($this->hasData($name) ? $this->getData($name) . ' ' : '') . $value);
     }
@@ -318,7 +318,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getData()
      */
-    public function getData(string $name) : string
+    final public function getData(string $name) : string
     {
         if (!$this->hasData($name)) {
             throw new \InvalidArgumentException("No data set for data attribute '$name'!");
@@ -330,7 +330,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::getDataset()
      */
-    public function getDataset() : array
+    final public function getDataset() : array
     {
         return $this->htmlWidgetTraitData;
     }
@@ -338,7 +338,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::hasData()
      */
-    public function hasData(string $name) : bool
+    final public function hasData(string $name) : bool
     {
         return isset($this->htmlWidgetTraitData[$name]);
     }
@@ -346,7 +346,7 @@ trait WidgetTrait
     /**
      * @see \Replum\Html\WidgetInterface::setData()
      */
-    public function setData(string $name, string $newValue = null) : WidgetInterface
+    final public function setData(string $name, string $newValue = null) : WidgetInterface
     {
         if (!\strlen($name)) {
             throw new \InvalidArgumentException('Data attribute requires a name!');
@@ -383,5 +383,36 @@ trait WidgetTrait
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    private final function renderHtmlWidgetDataAttributes() : string
+    {
+        $r = '';
+
+        foreach ($this->htmlWidgetTraitData as $dataName => $dataValue) {
+            $dataName = \preg_replace_callback('/[A-Z]/', function($matches) { return '-' . \strtolower($matches[0]); }, $dataName);
+            $r .= Util::renderHtmlAttribute('data-' . $dataName, $dataValue);
+        }
+
+        return $r;
+    }
+
+    ######################################################################
+    # Attributes handling                                                #
+    ######################################################################
+
+    protected final function renderHtmlWidgetAttributes() : string
+    {
+        return
+            Util::renderHtmlAttribute('class', $this->htmlWidgetTraitClasses)
+            . Util::renderHtmlAttribute('id', $this->htmlWidgetTraitId)
+            . Util::renderHtmlAttribute('style', $this->htmlWidgetTraitStyle)
+            . Util::renderHtmlAttribute('tabindex', $this->htmlWidgetTraitTabindex)
+            . Util::renderHtmlAttribute('title', $this->htmlWidgetTraitTitle)
+            . $this->renderHtmlWidgetDataAttributes()
+        ;
     }
 }

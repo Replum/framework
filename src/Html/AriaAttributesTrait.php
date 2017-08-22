@@ -11,6 +11,8 @@
 
 namespace Replum\Html;
 
+use \Replum\Util;
+
 /**
  * Implements AriaAttributesInterface
  *
@@ -34,7 +36,7 @@ trait AriaAttributesTrait
     /**
      * @see \Replum\Html\AriaAttributesInterface::getRole()
      */
-    public function getRole() : string
+    final public function getRole() : string
     {
         return $this->ariaAttributesTraitRole;
     }
@@ -42,7 +44,7 @@ trait AriaAttributesTrait
     /**
      * @see \Replum\Html\AriaAttributesInterface::hasRole()
      */
-    public function hasRole() : bool
+    final public function hasRole() : bool
     {
         return !\is_null($this->ariaAttributesTraitRole);
     }
@@ -50,7 +52,7 @@ trait AriaAttributesTrait
     /**
      * @see \Replum\Html\AriaAttributesInterface::setRole()
      */
-    public function setRole(string $newRole = null) : AriaAttributesInterface
+    final public function setRole(string $newRole = null) : AriaAttributesInterface
     {
         if (!\in_array($newRole, $this->validRoles())) {
             throw new \InvalidArgumentException('Invalid ARIA role "' . $newRole . '"!');
@@ -87,5 +89,14 @@ trait AriaAttributesTrait
             'timer', 'toolbar', 'tooltip', 'tree', 'treegrid',
             'treeitem',
         ];
+    }
+
+    ######################################################################
+    # Attribute handling                                                 #
+    ######################################################################
+
+    final protected function renderAriaAttributes() : string
+    {
+        return Util::renderHtmlAttribute('role', $this->ariaAttributesTraitRole);
     }
 }
