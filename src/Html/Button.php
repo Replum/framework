@@ -11,39 +11,41 @@
 
 namespace Replum\Html;
 
+use \Replum\PageInterface;
 use \Replum\WidgetHasClickEventInterface;
 use \Replum\WidgetHasClickEventTrait;
 
 /**
+ * The button element represents a button labeled by its contents.
+ *
+ * The element is a button.
+ *
+ * The type attribute controls the behavior of the button when it is activated. It is an enumerated attribute. The following table lists the keywords and states for the attribute — the keywords in the left column map to the states in the cell in the second column on the same row as the keyword.
+ *
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/forms.html#the-button-element
  */
-class Button extends HtmlElement implements FormElementInterface, WidgetHasClickEventInterface
+final class Button extends HtmlElement implements FormElementInterface, WidgetHasClickEventInterface
 {
-    use WidgetHasClickEventTrait,
-        FormInputTrait {
+    const TAG = 'button';
+
+    use WidgetHasClickEventTrait;
+    use FormInputTrait {
         setType as public;
     }
 
-    public function __toString()
-    {
-        return '<' . $this->getTag() . $this->renderAttributes() . '>' . $this->renderChildren() . '</button>' . PHP_EOL;
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function validTags()
+    protected function renderAttributes() : string
     {
-        return [ 'button'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function renderAttributes()
-    {
-        return $this->renderWidgetAttributes()
-        . $this->renderFormInputAttributes()
+        return parent::renderAttributes()
+            . $this->renderFormInputAttributes()
         ;
+    }
+
+    public static function create(PageInterface $page) : self
+    {
+        return new self($page);
     }
 }
