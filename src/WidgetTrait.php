@@ -68,14 +68,14 @@ trait WidgetTrait
     ######################################################################
 
     /**
-     * @var int
+     * @var string
      */
     private $widgetId;
 
     /**
      * @see WidgetInterface::getWidgetId()
      */
-    final public function getWidgetId() : int
+    final public function getWidgetId() : string
     {
         return $this->widgetId;
     }
@@ -83,9 +83,13 @@ trait WidgetTrait
     /**
      * Set the widget id if the constructor template can not be used
      */
-    final protected function setWidgetId(int $widgetId)
+    final protected function setWidgetId(string $widgetId)
     {
+        if ($this->widgetId !== null && $this->widgetId !== $widgetId) {
+            $this->getPage()->changeWidgetId($this, $this->widgetId, $widgetId);
+        }
         $this->widgetId = $widgetId;
+        return $this;
     }
 
 

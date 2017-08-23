@@ -120,18 +120,18 @@ trait WidgetTrait
     ######################################################################
 
     /**
-     * The page unique identifier for this widget
+     * This widget requires that the ID attribute is rendered
      *
-     * @var string
+     * @var bool
      */
-    private $htmlWidgetTraitId;
+    private $htmlWidgetTraitRequiresId = false;
 
     /**
      * @see \Replum\Html\WidgetInterface::hasID()
      */
     final public function hasID() : bool
     {
-        return ($this->htmlWidgetTraitId !== null);
+        return $this->htmlWidgetTraitRequiresId;
     }
 
     /**
@@ -139,10 +139,8 @@ trait WidgetTrait
      */
     final public function getID() : string
     {
-        if (!$this->hasID()) {
-            $this->needID();
-        }
-        return $this->htmlWidgetTraitId;
+        $this->needID();
+        return $this->getWidgetId();
     }
 
     /**
@@ -151,17 +149,13 @@ trait WidgetTrait
     final public function setID(string $newID) : WidgetInterface
     {
         // Ignore resettings same ID
-        if ($this->htmlWidgetTraitId === $newID) {
+        if ($this->getWidgetId() === $newID) {
             return $this;
         }
 
-        if ($this->getPage()->registerID($newID)) {
-            $this->htmlWidgetTraitId = $newID;
-            $this->setChanged(true);
-            return $this;
-        } else {
-            return $this;
-        }
+        $this->setWidgetId($newID);
+        $this->needId();
+        return $this;
     }
 
     /**
@@ -169,7 +163,7 @@ trait WidgetTrait
      */
     final public function needID() : WidgetInterface
     {
-        $this->htmlWidgetTraitId = $this->getPage()->generateID();
+        $this->htmlWidgetTraitRequiresId = true;
         $this->setChanged(true);
 
         return $this;
@@ -408,7 +402,7 @@ trait WidgetTrait
     {
         return
             Util::renderHtmlAttribute('class', $this->htmlWidgetTraitClasses)
-            . Util::renderHtmlAttribute('id', $this->htmlWidgetTraitId)
+            . ($this->hasID() ? Util::renderHtmlAttribute('id', $this->getID()) : '')
             . Util::renderHtmlAttribute('style', $this->htmlWidgetTraitStyle)
             . Util::renderHtmlAttribute('tabindex', $this->htmlWidgetTraitTabindex)
             . Util::renderHtmlAttribute('title', $this->htmlWidgetTraitTitle)
