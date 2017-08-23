@@ -34,6 +34,11 @@ class Context implements ContextInterface
     private $domain;
 
     /**
+     * @var string
+     */
+    private $pagename;
+
+    /**
      * @var Request
      */
     private $request;
@@ -103,6 +108,8 @@ class Context implements ContextInterface
         } else {
             throw new \RuntimeException('Can not determine base url and rewrite status from current server config!');
         }
+
+        $this->pagename = $this->findPageName($this->request);
     }
 
     final private function findAutoloader() : ClassLoader
@@ -118,6 +125,26 @@ class Context implements ContextInterface
         }
 
         throw new \RuntimeException("Composer's autoloader not found! Replum is designed to be installed by Composer and depends havily on class autoloading. Please use Composer's autoloader.");
+    }
+
+    final private function findPageName(Request $request) : string
+    {
+        $path = \rawurldecode($request->getPathInfo());
+
+        // Access to root index document
+        if ($path === '/' || $path === '') {
+            return 'Index';
+        }
+
+        // Strip trailing /
+        $pagename = \substr($path, 1);
+
+        // Access to namespace index document
+        if ($pagename[\strlen($pagename)-1] === '/') {
+            $pagename .= 'Index';
+        }
+
+        return $pagename;
     }
 
     /**
@@ -142,6 +169,14 @@ class Context implements ContextInterface
     public function getDomain(): string
     {
         return $this->domain;
+    }
+
+    /**
+     * @see ContextInterface::getPageName()()
+     */
+    public function getPageName(): string
+    {
+        return $this->pagename;
     }
 
     /**

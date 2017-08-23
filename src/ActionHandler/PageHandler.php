@@ -33,28 +33,11 @@ class PageHandler
     public function execute()
     {
         $context = $this->executer->getContext();
-
-        $path = \rawurldecode($context->getRequest()->getPathInfo());
-        // Access to root index document
-        if ($path === '/' || $path === '') {
-            $pagename = 'Index';
-        }
-
-        else {
-            // Strip trailing /
-            $pagename = \substr($path, 1);
-
-            // Access to namespace index document
-            if ($pagename[\strlen($pagename)-1] === '/') {
-                $pagename .= 'Index';
-            }
-
-            $pagename = \str_replace('/', '\\', $pagename);
-        }
+        $pageClass = \str_replace('/', '\\', $context->getPageName());
 
         // Get the name and class of the current page
         foreach ($context->getPageNamespaces() as $pageNamespace) {
-            $tryclass = $pageNamespace . '\\' . $pagename;
+            $tryclass = $pageNamespace . '\\' . $pageClass;
 
             if (\class_exists($tryclass) && \is_a($tryclass, PageInterface::class, true)) {
                 $class = $tryclass;
@@ -63,7 +46,7 @@ class PageHandler
         }
 
         if (empty($class)) {
-            throw new \InvalidArgumentException('Invalid page "' . $path . '"!');
+            return new Response('404: page "' . $context->getPageName() . '" not found!', 404);
         }
 
         /* @var $page \Replum\PageInterface */
