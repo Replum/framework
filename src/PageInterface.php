@@ -14,21 +14,12 @@ namespace Replum;
 /**
  * A page represents the main entity to visualize
  */
-interface PageInterface
+interface PageInterface extends WidgetInterface
 {
     /**
      * Constructor requires the context as parameter
      */
     function __construct(ContextInterface $context, string $pageId = null);
-
-    ######################################################################
-    # Page ID                                                            #
-    ######################################################################
-
-    /**
-     * Get the unique ID of this page
-     */
-    function getPageID() : string;
 
     ######################################################################
     # Context handling                                                   #
@@ -109,9 +100,4 @@ interface PageInterface
      * @param array $parameters
      */
     function executeRemote($action, $parameters = []);
-
-    /**
-     * Generate the HTML string representation of the page.
-     */
-    function render() : string;
 }

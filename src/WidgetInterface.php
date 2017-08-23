@@ -23,10 +23,18 @@ interface WidgetInterface
      */
     function getWidgetId() : string;
 
+    ######################################################################
+    # Page handling                                                      #
+    ######################################################################
+
     /**
      * Get the page this widget belongs to
      */
     function getPage() : PageInterface;
+
+    ######################################################################
+    # Hierarchy handling                                                 #
+    ######################################################################
 
     /**
      * Check if the selected widget is the topmost widget aka the page
@@ -37,6 +45,12 @@ interface WidgetInterface
      * Get the parent of this widget, used to navigate to the top of the widget tree.
      */
     function getParent() : self;
+
+    /**
+     * Whether the widget has a parent.
+     * Root widgets and detached widgets have no parent.
+     */
+    function hasParent() : bool;
 
     /**
      * Set the current parent widget for the current widget.
@@ -104,6 +118,10 @@ interface WidgetInterface
      */
     function render() : string;
 
+    ######################################################################
+    # Event handling                                                     #
+    ######################################################################
+
     /**
      * Add an event handler to this widget.
      *
@@ -112,7 +130,7 @@ interface WidgetInterface
      * @param int $priority
      * @return static $this for chaining
      */
-    function on($eventName, callable $listener, $priority = 50);
+    function on(string $eventName, callable $listener, int $priority = 50) : self;
 
     /**
      * Add an event handler to this widget that is executed only once.
@@ -122,7 +140,7 @@ interface WidgetInterface
      * @param int $priority
      * @return static $this for chaining
      */
-    function one($eventName, callable $listener, $priority = 50);
+    function one(string $eventName, callable $listener, int $priority = 50) : self;
 
     /**
      * Remove event handler(s) from the widget.
@@ -133,22 +151,20 @@ interface WidgetInterface
      * @param callable $listener
      * @return static $this for chaining
      */
-    function off($eventName = null, callable $listener = null);
+    function off(string $eventName = null, callable $listener = null) : self;
 
     /**
      * Dispatch an event.
      *
      * The event is dispatched to several event listeners if registered:
-     * * The listener of the '*' event of the page
-     * * The listener of the get_class($event) event of the page
-     * * The listener of the '*' event of the widget
      * * The listener of the get_class($event) event of the widget
-     *
+     * * The listener of the '*' event of the widget
+     * * The same for all anchestors
      *
      * @param WidgetEvent $event
      * @param string $eventName Defaults to the class name of the supplied WidgetEvent
      */
-    function dispatch(WidgetEvent $event, $eventName = null);
+    function dispatch(WidgetEvent $event, string $eventName = null) : self;
 
     /**
      * Access the bag (key/value store) assigned with this widget.
@@ -160,12 +176,4 @@ interface WidgetInterface
      * @return \ArrayObject
      */
     function getBag();
-
-    /**
-     * Apply several properties at once by supplying name/value pairs.
-     *
-     * @param string ...$args Pairs of property names and values
-     * @return static $this for chaining
-     */
-    function apply($arg1 = null, $arg2 = null);
 }

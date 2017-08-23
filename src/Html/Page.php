@@ -17,7 +17,7 @@ abstract class Page extends \Replum\Page
     {
         parent::__construct($context, $pageId);
 
-        $this->body = (new Body($this))->needID();
+        $this->body = (new Body($this))->needID()->setParent($this);
     }
 
     /**
@@ -36,7 +36,7 @@ abstract class Page extends \Replum\Page
     public function render() : string
     {
         $r = '<!DOCTYPE html>';
-        $r .= '<html id="' . $this->getPageID() . '">';
+        $r .= '<html id="' . $this->getWidgetId() . '">';
 
         $r .= '<head>';
 //        $r .= '<title>' . \Replum\Util::escapeHtml($this->getTitle()) . '</title>';

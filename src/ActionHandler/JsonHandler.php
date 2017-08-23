@@ -11,11 +11,14 @@
 
 namespace Replum\ActionHandler;
 
-use \Replum\Event;
+use \Replum\PageInterface;
+use \Replum\Events\WidgetChangeEvent;
 use \Replum\Events\WidgetOnChangeEvent;
 use \Replum\Events\WidgetOnClickEvent;
 use \Replum\Events\WidgetOnDoubleClickEvent;
 use \Replum\Events\WidgetOnSubmitEvent;
+use \Replum\Html\WidgetInterface as HtmlWidgetInterface;
+use \Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
@@ -47,13 +50,7 @@ class JsonHandler
         try {
             /* $var $request \Symfony\Component\HttpFoundation\Request */
             $request = $this->executer->getContext()->getRequest();
-
             $event = $request->request->get(self::EVENT_PARAMETER_NAME);
-
-            if (!\in_array($event, ['click', 'change', 'dblclick', 'submit',])) {
-                throw new \InvalidArgumentException('Invalid event with name "' . $event . '"');
-            }
-
             $page_id = $request->request->get(self::PAGE_ID_PARAMETER_NAME);
 
             /* @var $page \Replum\PageInterface */
@@ -66,54 +63,86 @@ class JsonHandler
 
             $page->setContext($this->executer->getContext());
 
-            $widget = $page->getBody()->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
+            // Handler to monitor changes
+            $changedWidgets = new \SplObjectStorage();
+            $changeHandler = function(WidgetChangeEvent $event) use ($changedWidgets) {
+                $changedWidgets->attach($event->widget);
+            };
+            $page->on(WidgetChangeEvent::class, $changeHandler);
+
+            $widget = $page->getWidgetById($request->request->get(self::SOURCE_PARAMETER_NAME));
             if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {
                 $widget->setValue($request->request->get(self::VALUE_PARAMETER_NAME));
             } elseif ($request->request->get(self::CHECKED_PARAMETER_NAME) !== null) {
                 $widget->setChecked($request->request->get(self::CHECKED_PARAMETER_NAME));
             }
 
+            switch ($event) {
+                case WidgetOnClickEvent::NAME:
+                    $widget->dispatch(new WidgetOnClickEvent($widget));
+                    break;
 
-            if ($event == 'click') {
-                $widget->dispatch(new WidgetOnClickEvent($widget));
-            } elseif ($event == 'change') {
-                $widget->dispatch(new WidgetOnChangeEvent($widget));
-            } elseif ($event == 'dblclick') {
-                $widget->dispatch(new WidgetOnDoubleClickEvent($widget));
-            } elseif ($event == 'submit') {
-                $widget->dispatch(new WidgetOnSubmitEvent($widget));
+                case WidgetOnChangeEvent::NAME:
+                    $widget->dispatch(new WidgetOnChangeEvent($widget));
+                    break;
+
+                case WidgetOnDoubleClickEvent::NAME:
+                    $widget->dispatch(new WidgetOnDoubleClickEvent($widget));
+                    break;
+
+                case WidgetOnSubmitEvent::NAME:
+                    $widget->dispatch(new WidgetOnSubmitEvent($widget));
+                    break;
+
+                default:
+                    throw new \InvalidArgumentException('Invalid event "' . $event . '"!');
             }
 
-            $data = $this->handleChangedWidgets($page);
+            $page->off(WidgetChangeEvent::class, $changeHandler);
+            $data = $this->handleChangedWidgets($page, $changedWidgets);
 
             //\apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), $page, 0);
-            \apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), \gzdeflate(\serialize($page)), 0);
-        } catch (\Exception $e) {
+            \apc_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
+
+            $response = new JsonResponse($data);
+        } catch (\Throwable $e) {
             $data = [[
                 self::ACTION_PARAMETER_NAME => 'error',
                 self::PARAMS_PARAMETER_NAME => [$this->dumpException($e)],
             ]];
+
+            $response = new JsonResponse($data, 500);
         }
 
-        header('Content-Type: text/json');
-        echo json_encode($data);
-
+        $response->send();
         exit;
     }
 
-    protected function handleChangedWidgets(\Replum\PageInterface $page)
+    protected function handleChangedWidgets(PageInterface $page, \SplObjectStorage $widgets)
     {
         $data = [];
+        $updatedWidgets = new \SplObjectStorage();
 
-        foreach ($page->getDescendants() as $widget) {
-            /* @var $widget \Replum\WidgetInterface */
-            if ($widget->isChanged() && $widget->hasID()) {
-                $data[] = [
-                    self::ACTION_PARAMETER_NAME => 'replace',
-                    self::TARGET_PARAMETER_NAME => $widget->getID(),
-                    self::DATA_PARAMETER_NAME => (string) $widget,
-                ];
+        foreach ($widgets as $widget) {
+            while (!($widget instanceof HtmlWidgetInterface) || !$widget->hasID()) {
+                if (!$widget->hasParent()) {
+                    throw new \RuntimeException('Can not update detached widget without updatable parent!');
+                }
+
+                $widget = $widget->getParent();
             }
+
+            // Render each widget only once
+            if (isset($updatedWidgets[$widget])) {
+                continue;
+            }
+
+            $updatedWidgets[$widget] = true;
+            $data[] = [
+                self::ACTION_PARAMETER_NAME => 'replace',
+                self::TARGET_PARAMETER_NAME => $widget->getID(),
+                self::DATA_PARAMETER_NAME => $widget->render(),
+            ];
         }
 
         foreach ($page->remoteActions as list($action, $parameters)) {
@@ -128,7 +157,7 @@ class JsonHandler
         return $data;
     }
 
-    private function dumpException(\Exception $e)
+    private function dumpException(\Throwable $e)
     {
         $r = 'Exception "' . \get_class($e) . '" with message "' . $e->getMessage() . '" in ' . $e->getFile() . ':' . $e->getLine() . PHP_EOL . PHP_EOL;
 

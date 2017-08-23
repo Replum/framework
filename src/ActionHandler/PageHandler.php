@@ -71,7 +71,7 @@ class PageHandler
         $response = new Response($page->render());
 
         //\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
-        \apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), \gzdeflate(\serialize($page)), 0);
+        \apc_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
 
         return $response;
     }

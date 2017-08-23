@@ -88,25 +88,44 @@ trait WidgetTrait
         return $this;
     }
 
+    ######################################################################
+    # Hierarchy handling                                                 #
+    ######################################################################
+
     /**
      * @var \Replum\WidgetInterface
      */
     private $widgetTraitParent = null;
 
     /**
-     * @see \Replum\WidgetInterface::isRoot()
+     * @see \Replum\WidgetInterface::clearParent()
      */
-    public function isRoot() : bool
+    public function clearParent() : WidgetInterface
     {
-        return (($this instanceof PageInterface) || is_null($this->widgetTraitParent));
+        // Prevent recursion
+        if ($this->widgetTraitParent === null) {
+            return $this;
+        }
+
+        $oldParent = $this->widgetTraitParent;
+        $this->widgetTraitParent = null;
+
+        if (($oldParent instanceof WidgetContainerInterface) && ($oldParent->children()->contains($this))) {
+            $oldParent->children()->remove($this);
+        }
+
+        $oldParent->dispatch(new WidgetRemoveEvent($oldParent, $this));
+        $this->setChanged();
+
+        return $this;
     }
 
     /**
      * @see \Replum\WidgetInterface::getParent()
      */
-    public function getParent() : WidgetInterface
+    final public function getParent() : WidgetInterface
     {
-        if (is_null($this->widgetTraitParent)) {
+        if ($this->widgetTraitParent === null) {
             throw new \InvalidArgumentException('No parent exists for this widget!');
         }
 
@@ -114,9 +133,51 @@ trait WidgetTrait
     }
 
     /**
+     * @see \Replum\WidgetInterface::hasParent()
+     */
+    final public function hasParent() : bool
+    {
+        return ($this->widgetTraitParent !== null);
+    }
+
+    /**
+     * @see \Replum\WidgetInterface::isRoot()
+     */
+    final public function isRoot() : bool
+    {
+        return ($this instanceof PageInterface);
+    }
+
+    /**
+     * @see \Replum\WidgetInterface::setParent()
+     */
+    final public function setParent(WidgetInterface $newParent = null) : WidgetInterface
+    {
+        // Avoid recursion
+        if ($this->widgetTraitParent === $newParent) {
+            return $this;
+        }
+
+        // Remove from old parent
+        $this->clearParent();
+
+        // Add to new parent
+        $this->widgetTraitParent = $newParent;
+
+        if ($newParent instanceof WidgetContainerInterface) {
+            $newParent->add($this);
+        }
+
+        $this->setChanged(true);
+
+        $this->getParent()->dispatch(new WidgetAddEvent($this->getParent(), $this));
+
+        return $this;
+    }
+
+    /**
      * Get the nearest anchestor of the supplied type
      *
-     * @param string $type
      * @return null|object
      */
     public function getNearestAncestor(string $type)
@@ -146,65 +207,6 @@ trait WidgetTrait
     }
 
     /**
-     * @see \Replum\WidgetInterface::setParent()
-     */
-    public function setParent(WidgetInterface $newParent) : WidgetInterface
-    {
-        // Avoid recursion
-        if ($this->widgetTraitParent === $newParent) {
-            return $this;
-        }
-
-        // Remove from old parent
-        $this->clearParent();
-
-        // Add to new parent
-        $this->widgetTraitParent = $newParent;
-        $this->setChanged(true);
-
-        // Add to parent if it is a widget container (not for composites!)
-        if (($newParent instanceof WidgetContainerInterface) && (!$newParent->children()->contains($this))) {
-            $newParent->children()[] = $this;
-        }
-
-        $this->getParent()->dispatch(new WidgetAddEvent($this->getParent(), $this));
-
-        return $this;
-    }
-
-    public function clearParent() : WidgetInterface
-    {
-        // Prevent recursion
-        if ($this->widgetTraitParent === null) {
-            return $this;
-        }
-
-        $oldParent = $this->widgetTraitParent;
-        $this->widgetTraitParent = null;
-
-        if (($oldParent instanceof WidgetContainerInterface) && ($oldParent->children()->contains($this))) {
-            $oldParent->children()->remove($this);
-        }
-
-        $oldParent->dispatch(new WidgetRemoveEvent($oldParent, $this));
-        $this->setChanged();
-
-        return $this;
-    }
-
-    /**
-     * @see \Replum\WidgetInterface::getRoot()
-     */
-    public function getRoot() : bool
-    {
-        if ($this->isRoot()) {
-            return $this;
-        } else {
-            return $this->getParent()->getRoot();
-        }
-    }
-
-    /**
      * @var boolean
      */
     private $widgetTraitChanged = true;
@@ -222,7 +224,7 @@ trait WidgetTrait
      */
     public function setChanged(bool $changed = true) : WidgetInterface
     {
-// Nothing new here
+        // Nothing new here
         if ($changed === $this->widgetTraitChanged) {
             return $this;
         }
@@ -305,10 +307,9 @@ trait WidgetTrait
     private $eventDispatcher;
 
     /**
-     * @return static $this for chaining
      * @see \Replum\WidgetInterface::on()
      */
-    public function on($eventName, callable $listener, $priority = 50)
+    final public function on(string $eventName, callable $listener, int $priority = 50) : WidgetInterface
     {
         if (is_null($this->eventDispatcher)) {
             $this->eventDispatcher = new EventDispatcher();
@@ -319,19 +320,17 @@ trait WidgetTrait
     }
 
     /**
-     * @return static $this for chaining
      * @see \Replum\WidgetInterface::one()
      */
-    public function one($eventName, callable $listener, $priority = 50)
+    final public function one(string $eventName, callable $listener, int $priority = 50) : WidgetInterface
     {
         return $this->on($eventName, new EventHandlerCallOnceWrapper($listener), $priority);
     }
 
     /**
-     * @return static $this for chaining
      * @see \Replum\WidgetInterface::off()
      */
-    public function off($eventName = null, callable $listener = null)
+    final public function off(string $eventName = null, callable $listener = null) : WidgetInterface
     {
         if (is_null($this->eventDispatcher)) {
             return $this;
@@ -353,16 +352,17 @@ trait WidgetTrait
 
     /**
      * Helper function to remove all listeners for a specific event.
-     *
      * @param string $eventName
-     * @param array $listeners List of available listeners
+     * @param array $registeredListeners List of available listeners
      * @param callable $listener
      */
-    private function removeListenerIfExists($eventName, $listeners, $listener)
+    final private function removeListenerIfExists(string $eventName, $registeredListeners, callable $listener)
     {
-        foreach ($listeners as $existingListener) {
+        foreach ($registeredListeners as $existingListener) {
             if (
-            ($listener === null) || ($existingListener === $listener) || (($existingListener instanceof EventHandlerCallOnceWrapper) && ($existingListener->wraps($listener)))
+                ($listener === null)
+                || ($existingListener === $listener)
+                || (($existingListener instanceof EventHandlerCallOnceWrapper) && ($existingListener->wraps($listener)))
             ) {
                 $this->eventDispatcher->removeListener($eventName, $listener);
             }
@@ -372,20 +372,21 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::dispatch()
      */
-    public function dispatch(WidgetEvent $event, $eventName = null)
+    final public function dispatch(WidgetEvent $event, string $eventName = null) : WidgetInterface
     {
         if ($eventName === null) {
             $eventName = \get_class($event);
         }
 
-        if (!$this->isRoot() && ($this->getPage() !== null)) {
-            if (!$event->isPropagationStopped()) { $this->getPage()->dispatch($event, '*'); }
-            if (!$event->isPropagationStopped()) { $this->getPage()->dispatch($event); }
-        }
+        //echo "Dispatching event $eventName at object #" . $this->getWidgetId() . " (" . \get_class($this) . ")<br>\n";
 
         if ($this->eventDispatcher !== null) {
-            if (!$event->isPropagationStopped()) { $this->eventDispatcher->dispatch('*', $event); }
             if (!$event->isPropagationStopped()) { $this->eventDispatcher->dispatch($eventName, $event); }
+            if (!$event->isPropagationStopped()) { $this->eventDispatcher->dispatch('*', $event); }
+        }
+
+        if ($this->hasParent() && !$event->isPropagationStopped()) {
+            $this->getParent()->dispatch($event, $eventName);
         }
 
         return $this;
@@ -411,134 +412,5 @@ trait WidgetTrait
             $this->bag = new \ArrayObject();
         }
         return $this->bag;
-    }
-
-    /**
-     * Detault factory method to create a new instance
-     *
-     * @param WidgetInterface $parent The new parent
-     * @param mixed ...$args Pairs of property names and values to apply to the new instance
-     * @return static New instance
-     */
-    /*public static function create(WidgetInterface $parent = null)
-    {
-        $widget = new static($parent);
-        $widget->applyArguments(1, \func_get_args());
-        return $widget;
-    }*/
-
-    /**
-     * @param string ...$args Pairs of property names and values
-     * @return static $this for chaining
-     * @throws \InvalidArgumentException
-     */
-    public function apply($arg1 = null, $arg2 = null)
-    {
-        return $this->applyArguments(0, \func_get_args());
-    }
-
-    /**
-     * Read value pairs from the list of arguments and treat them as property name and property value.
-     * Ignore the first $stripArgs as they may contain e.g. constructor specific parameters.
-     *
-     * @param integer $stripArgs
-     * @param array $args
-     * @return static $this for chaining
-     */
-    protected function applyArguments($stripArgs, array $args)
-    {
-        if (\count($args) <= $stripArgs) { return; }
-
-        if ((\count($args) - $stripArgs) % 2) {
-            throw new \InvalidArgumentException('Require pairs of attribute names and values!');
-        }
-
-        for ($i = $stripArgs; $i < \count($args); $i+=2) {
-            $propertyName = $args[$i];
-            $propertyValue = $args[$i + 1];
-
-            if ($propertyName === 'class') {
-                $this->addClass($propertyValue);
-            } elseif (\substr($propertyName, 0, 4) === 'data') {
-                $this->setData(\lcfirst(\substr($propertyName, 4)), $propertyValue);
-            } else {
-                // Force setter method to be called
-                $this->__set($propertyName, $propertyValue);
-            }
-        }
-
-        return $this;
-    }
-
-    ######################################################################
-    #
-    # Helper methods to set values
-    #
-    ######################################################################
-
-    /**
-     * @param string $property
-     * @param mixed $value
-     * @return static $this for chaining
-     */
-    protected function setStringProperty($property, $value)
-    {
-        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
-            $realValue = (string) $value;
-        } elseif (\is_null($value)) {
-            $realValue = $value;
-        } else {
-            throw new \InvalidArgumentException('Can not set property "' . $property . '" to something not convertable to a string.');
-        }
-
-        return $this->setPropertyValue($property, $realValue);
-    }
-
-    protected function setBooleanProperty($property, $value)
-    {
-        if (\is_bool($value)) {
-            $realValue = $value;
-        } elseif (\is_string($value) && \in_array(\strtolower($value), ['1', 'true', 'yes', 'on',])) {
-            $realValue = true;
-        } elseif (\is_string($value) && \in_array(\strtolower($value), ['0', 'false', 'no', 'off',])) {
-            $realValue = true;
-        } else {
-            throw new \InvalidArgumentException('Can not set property "' . $property . '" to something not convertable to a boolean.');
-        }
-
-        return $this->setPropertyValue($property, $realValue);
-    }
-
-    protected function setPropertyValue($property, $value)
-    {
-        if ($this->$property !== $value) {
-            $this->setChanged();
-            $this->$property = $value;
-        }
-
-        return $this;
-    }
-
-    protected function renderHtmlAttribute($name, $value)
-    {
-        if (\is_null($value)) { return ''; }
-
-        if (\is_array($value)) {
-            if (!\count($value)) { return ''; }
-
-            $escaped = \array_reduce($value, function ($carry, $value) {
-                return ($carry ? $carry . ' ' : '') . Util::escapeHtmlAttributeValue($value);
-            });
-        }
-
-        elseif (\is_bool($value) && $value) {
-            return ' ' . $name;
-        }
-
-        else {
-            $escaped = Util::escapeHtmlAttributeValue($value);
-        }
-
-        return ' ' . $name . '="' . $escaped . '"';
     }
 }

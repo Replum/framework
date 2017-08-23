@@ -13,13 +13,15 @@ namespace Replum;
 
 abstract class Page implements PageInterface
 {
+    use WidgetTrait;
+
     /**
      * Default constructor
      */
     public function __construct(ContextInterface $context, string $pageId = null)
     {
         $this->context = $context;
-        $this->pageId = ($pageId ? $pageId : Util::randomString());
+        $this->setWidgetId($pageId ? $pageId : Util::randomString());
     }
 
     /**
@@ -27,23 +29,6 @@ abstract class Page implements PageInterface
      */
     public function __wakeup()
     {
-    }
-
-    ######################################################################
-    # Page ID                                                            #
-    ######################################################################
-
-    /**
-     * @var string
-     */
-    private $pageId;
-
-        /**
-     * Get the unique ID of this page
-     */
-    final public function getPageID() : string
-    {
-        return $this->pageId;
     }
 
     ######################################################################
@@ -209,4 +194,32 @@ abstract class Page implements PageInterface
 
         return $this->widgetByIdMapping[$id];
     }
+
+    ######################################################################
+    # Page handling                                                      #
+    ######################################################################
+
+    /**
+     * @see WidgetInterface::getPage()
+     */
+    final public function getPage() : PageInterface
+    {
+        return $this;
+    }
+
+    /**
+     * @see WidgetInterface::getPage()
+     */
+    final public function setPage(PageInterface $page) : PageInterface
+    {
+        if ($page !== $this) {
+            throw new \RuntimeException('Can not change the page of a page!');
+        }
+
+        return $this;
+    }
+
+    ######################################################################
+    # Hierarchy handling                                                 #
+    ######################################################################
 }

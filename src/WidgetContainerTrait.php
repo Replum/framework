@@ -38,6 +38,7 @@ trait WidgetContainerTrait
     {
         if (!isset($this->widgetContainerTraitChildren[$widget->getWidgetId()])) {
             $this->widgetContainerTraitChildren[$widget->getWidgetId()] = $widget;
+            $widget->setParent($this);
         }
 
         return $this;
@@ -100,7 +101,9 @@ trait WidgetContainerTrait
                 $descendants[] = $child;
             }
 
-            $descendants = \array_merge($descendants, $child->getDescendants($filterByType));
+            if ($child instanceof WidgetContainerInterface) {
+                $descendants = \array_merge($descendants, $child->getDescendants($filterByType));
+            }
         }
 
         return $descendants;
