@@ -32,22 +32,33 @@ class Option extends HtmlElement
     protected $label;
 
     /**
-     * @return string
      * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
      */
-    public function getLabel()
+    final public function getLabel() : string
     {
         return $this->label;
     }
 
     /**
-     * @param type $newLabel
-     * @return static $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
      */
-    public function setLabel($newLabel)
+    final public function hasLabel() : bool
     {
-        return $this->setStringProperty('label', $newLabel);
+        return $this->label !== null;
+    }
+
+    /**
+     * @return $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
+     */
+    final public function setLabel(string $newLabel = null) : self
+    {
+        if ($this->label !== $newLabel) {
+            $this->label = $newLabel;
+            $this->setChanged(true);
+        }
+
+        return $this;
     }
 
     /**
@@ -59,22 +70,33 @@ class Option extends HtmlElement
     protected $value;
 
     /**
-     * @return string
      * @link http://www.w3.org/TR/html5/forms.html#attr-option-value
      */
-    public function getValue()
+    final public function getValue() : string
     {
         return $this->value;
     }
 
     /**
-     * @param type $newValue
-     * @return static $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-option-value
      */
-    public function setValue($newValue)
+    final public function hasValue() : bool
     {
-        return $this->setStringProperty('value', $newValue);
+        return ($this->value !== null);
+    }
+
+    /**
+     * @return $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-value
+     */
+    final public function setValue(string $newValue) : self
+    {
+        if ($this->value !== $newValue) {
+            $this->value = $newValue;
+            $this->setChanged(true);
+        }
+
+        return $this;
     }
 
     /**
@@ -84,29 +106,40 @@ class Option extends HtmlElement
     protected $selected;
 
     /**
-     * @return boolean
      * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
      */
-    public function getSelected()
+    final public function getSelected() : bool
     {
         return $this->selected;
     }
 
     /**
-     * @param boolean $newSelected
-     * @return static
      * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
      */
-    public function setSelected($newSelected)
+    final public function hasSelected() : bool
     {
-        return $this->setBooleanProperty('selected', $newSelected);
+        return $this->selecte !== null;
+    }
+
+    /**
+     * @return $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
+     */
+    final public function setSelected(bool $newSelected = null) : self
+    {
+        if ($this->selected !== $newSelected) {
+            $this->selected = $newSelected;
+            $this->setChanged(true);
+        }
+
+        return $this;
     }
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-        . $this->renderHtmlAttribute('value', $this->value)
-        . $this->renderHtmlAttribute('selected', ($this->selected ? 'selected' : null))
+        . Util::renderHtmlAttribute('value', $this->value)
+        . Util::renderHtmlAttribute('selected', ($this->selected ? 'selected' : null))
         ;
     }
 

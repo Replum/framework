@@ -12,6 +12,7 @@
 namespace Replum\Html;
 
 use \Replum\PageInterface;
+use \Replum\Util;
 use \Replum\WidgetHasChangeEventInterface;
 use \Replum\WidgetHasChangeEventTrait;
 
@@ -130,8 +131,8 @@ class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormI
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-        . $this->renderHtmlAttribute('name', $this->name)
-        . $this->renderHtmlAttribute('size', $this->size)
+        . Util::renderHtmlAttribute('name', $this->name)
+        . Util::renderHtmlAttribute('size', $this->size)
         ;
     }
 
