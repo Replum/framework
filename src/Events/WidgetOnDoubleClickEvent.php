@@ -14,6 +14,7 @@ namespace Replum\Events;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class WidgetOnDoubleClickEvent extends WidgetEvent
+final class WidgetOnDoubleClickEvent extends WidgetEvent
 {
+    const NAME = 'dblclick';
 }

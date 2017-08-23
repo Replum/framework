@@ -14,6 +14,7 @@ namespace Replum\Events;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class WidgetOnClickEvent extends WidgetEvent
+final class WidgetOnClickEvent extends WidgetEvent
 {
+    const NAME = 'click';
 }

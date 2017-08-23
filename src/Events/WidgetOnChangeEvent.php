@@ -14,6 +14,7 @@ namespace Replum\Events;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class WidgetOnChangeEvent extends WidgetEvent
+final class WidgetOnChangeEvent extends WidgetEvent
 {
+    const NAME = 'change';
 }

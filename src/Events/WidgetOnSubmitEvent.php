@@ -14,6 +14,7 @@ namespace Replum\Events;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class WidgetOnSubmitEvent extends WidgetEvent
+final class WidgetOnSubmitEvent extends WidgetEvent
 {
+    const NAME = 'submit';
 }
