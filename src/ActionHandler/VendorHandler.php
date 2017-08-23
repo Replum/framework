@@ -33,7 +33,7 @@ class VendorHandler
     public function execute()
     {
         $context = $this->executer->getContext();
-        
+
         $resourceName = \rawurldecode($context->getRequest()->getPathInfo());
         $documentRoot = $context->getDocumentRoot();
         $vendorDir = $context->getVendorDir();
@@ -66,9 +66,24 @@ class VendorHandler
             }
 
             $symlinkName = $documentRoot . '/vendor/' . $vendor . '/' . $package . '/' . $path;
-            $fullResourcePath = $vendorDir . '/' . $vendor . '/' . $package . '/' . ($vendor !== 'components' ? 'public/' : '') . $path;
-            
-            if (!\file_exists($fullResourcePath)) {
+
+            $defaultFullResourcePath = $vendorDir . '/' . $vendor . '/' . $package . '/public/' . $path;
+            $vendorFullResourcePath = $vendorDir . '/' . $vendor . '/' . $package . '/' . $path;
+            $distFullResourcePath = $vendorDir . '/' . $vendor . '/' . $package . '/dist/' . $path;
+
+            if (\file_exists($defaultFullResourcePath)) {
+                $fullResourcePath = $defaultFullResourcePath;
+            }
+
+            elseif ($vendor === 'components' && \file_exists($vendorFullResourcePath)) {
+                $fullResourcePath = $vendorFullResourcePath;
+            }
+
+            elseif (\file_exists($distFullResourcePath)) {
+                $fullResourcePath = $distFullResourcePath;
+            }
+
+            else {
                 throw new \InvalidArgumentException('Invalid resource selection!', 7);
             }
 
