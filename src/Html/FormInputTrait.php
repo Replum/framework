@@ -11,12 +11,10 @@
 
 namespace Replum\Html;
 
+use \Replum\Util;
+
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @property boolean $disabled Enable/disable status of the form element
- * @property string $name Name of this button
- * @property string $type Type of the input
- * @property string $value Value to submit if this button is used to submit the formular
  */
 trait FormInputTrait
 {
@@ -291,7 +289,7 @@ trait FormInputTrait
      */
     protected function renderMinlengthAttribute()
     {
-        return (!\is_null($this->minlength) ? ' minlength="' . $this->escape($this->minlength) . '"' : '');
+        return Util::renderHtmlAttribute('minlength', $this->minlength);
     }
 
     /**
@@ -337,7 +335,7 @@ trait FormInputTrait
      */
     protected function renderMaxlengthAttribute()
     {
-        return (!\is_null($this->maxlength) ? ' maxlength="' . $this->escape($this->maxlength) . '"' : '');
+        return Util::renderHtmlAttribute('maxlength', $this->maxlength);
     }
 
     /**
@@ -424,7 +422,7 @@ trait FormInputTrait
      */
     protected function renderNameAttribute()
     {
-        return (\is_null($this->name) ? '' : ' name="' . $this->escape($this->name) . '"');
+        return Util::renderHtmlAttribute('name', $this->name);
     }
 
     /**
@@ -462,7 +460,7 @@ trait FormInputTrait
      */
     protected function renderPlaceholderAttribute()
     {
-        return (\is_null($this->placeholder) ? '' : ' placeholder="' . $this->escape($this->placeholder) . '"');
+        return Util::renderHtmlAttribute('placeholder', $this->placeholder);
     }
 
     /**
@@ -614,7 +612,7 @@ trait FormInputTrait
      */
     protected function renderTypeAttribute()
     {
-        return (!\is_null($this->type) ? ' type="' . $this->escape($this->type) . '"' : '');
+        return Util::renderHtmlAttribute('type', $this->type);
     }
 
     /**
@@ -648,7 +646,7 @@ trait FormInputTrait
      */
     protected function renderValueAttribute()
     {
-        return (\is_null($this->value) ? '' : ' value="' . $this->escape($this->value) . '"');
+        return Util::renderHtmlAttribute('value', $this->value);
     }
 
     /**

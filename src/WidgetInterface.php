@@ -25,41 +25,34 @@ interface WidgetInterface
 
     /**
      * Get the page this widget belongs to
-     *
-     * @return \Replum\PageInterface
      */
-    function getPage();
+    function getPage() : PageInterface;
 
     /**
      * Check if the selected widget is the topmost widget aka the page
-     *
-     * @return boolean
      */
-    function isRoot();
+    function isRoot() : bool;
 
     /**
      * Get the parent of this widget, used to navigate to the top of the widget tree.
-     *
-     * @return self
      */
-    function getParent();
+    function getParent() : self;
 
     /**
      * Set the current parent widget for the current widget.
      * Should not called directly to avoid creating corrupt widget hierarchies.
      * Instead this method should be called from a container when a widget is added to that container.
      *
-     * @param self
-     * @return static $this for chaining
+     * @return $this
      */
-    function setParent(WidgetInterface $newParent);
+    function setParent(self $newParent) : self;
 
     /**
      * Unset the parent, used to trigger WidgetRemoveEvent handler
      *
-     * @return static $this for chaining
+     * @return $this
      */
-    function clearParent();
+    function clearParent() : self;
 
     /**
      * Get the owner of this widget.
@@ -81,33 +74,28 @@ interface WidgetInterface
      * The first element is the parent and the last element is the root.
      * If $filterByType is supplied, only elements that are an instance of this type are returned.
      *
-     * @param string $filterByType
-     * @return array<self>
+     * @return \Traversable<self>
      */
-    function getAncestors($filterByType = null);
+    function getAncestors(string $filterByType = null) : \Traversable;
 
     /**
      * Get the nearest anchestor of the supplied type
      *
-     * @param string $type
      * @return null|object
      */
-    function getNearestAncestor($type);
+    function getNearestAncestor(string $type);
 
     /**
      * Check if the widget is marked as changed
-     *
-     * @return boolean
      */
-    function isChanged();
+    function isChanged() : bool;
 
     /**
      * Set/unset the changed status of the widget
      *
-     * @param boolean
-     * @return static $this for chaining
+     * @return $this
      */
-    function setChanged($changed = true);
+    function setChanged(bool $changed = true) : self;
 
     /**
      * Render the HTML representation of the widget and return it as a string

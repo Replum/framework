@@ -11,18 +11,19 @@
 
 namespace Replum\Html;
 
+use \Replum\Util;
 use \Replum\WidgetInterface;
-use \Replum\WidgetTrait;
 use \Replum\WidgetHasChangeEventInterface;
 use \Replum\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class FileInput implements FormElementInterface, WidgetHasChangeEventInterface
+final class FileInput extends HtmlElement implements FormElementInterface, WidgetHasChangeEventInterface
 {
-    use WidgetTrait,
-        WidgetHasChangeEventTrait;
+    const TAG = 'input';
+
+    use WidgetHasChangeEventTrait;
     use FormInputTrait {
         hasAutocomplete as public;
         enableAutocomplete as public;
@@ -82,7 +83,7 @@ class FileInput implements FormElementInterface, WidgetHasChangeEventInterface
      */
     protected function renderAcceptAttribute()
     {
-        return (!\is_null($this->accept) ? ' accept="' . $this->escape($this->accept) . '"' : '');
+        return Util::renderHtmlAttribute('accept', $this->accept);
     }
 
     public function __construct(WidgetInterface $parent = null)
@@ -91,7 +92,7 @@ class FileInput implements FormElementInterface, WidgetHasChangeEventInterface
         $this->setType('file');
     }
 
-    public function __toString()
+    public function render()
     {
         return '<input'
         . $this->renderAttributes()

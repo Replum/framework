@@ -11,6 +11,7 @@
 
 namespace Replum\Html;
 
+use \Replum\Util;
 use \Replum\WidgetInterface;
 use \Replum\WidgetTrait;
 use \Replum\WidgetHasChangeEventInterface;
@@ -80,7 +81,7 @@ class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
 
     private function renderMin()
     {
-        return (!is_null($this->min) ? ' min="' . $this->escape($this->min) . '"' : '');
+        return Util::renderHtmlAttribute('min', $this->min);
     }
 
     /**
@@ -116,7 +117,7 @@ class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
 
     private function renderMax()
     {
-        return (!is_null($this->max) ? ' max="' . $this->escape($this->max) . '"' : '');
+        return Util::renderHtmlAttribute('max', $this->max);
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace Replum\Html;
 
+use \Replum\Util;
 use \Replum\WidgetTrait;
 use \Replum\WidgetHasChangeEventInterface;
 use \Replum\WidgetHasChangeEventTrait;
@@ -128,16 +129,17 @@ class DropDown implements FormInputInterface, WidgetHasChangeEventInterface
         return $this;
     }
 
-    public function __toString()
+    public function render()
     {
-        $r = '<select name="' . $this->escape($this->name) . '"';
+        $r = '<select ';
+        $r .= Util::renderHtmlAttribute('name', $this->name);
         $r .= $this->renderAttributes();
         $r .= '>';
 
         foreach ($this->possible as $value => $display) {
-            $r .= '<option value="' . $this->escape($value) . '"';
+            $r .= '<option ' . Util::renderHtmlAttribute('value', $this->value);
             if ($this->value == $value) { $r .= ' selected="selected"'; }
-            $r .= '>' . $this->escape($display) . '</option>';
+            $r .= '>' . Util::escapeHtml($display) . '</option>';
         }
 
         $r .= '</select>';

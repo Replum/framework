@@ -20,13 +20,8 @@ use \Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
- * @property-read array<WidgetInterface> $ancestors Get all widgets above this widgets in the widget tree
- * @property-read array<WidgetInterface> $descendants Get all widgets below this widget in the widget tree
- * @property WidgetInterface $parent Widget directly above this widget
- * @property string $id Page wide unique identifier
- * @property string $role HTML role of this element on the page
- * @property string $title HTML title attribute
- * @property boolean $changed
+ * Default implementation of WidgetInterface
+ *
  */
 trait WidgetTrait
 {
@@ -58,9 +53,10 @@ trait WidgetTrait
     /**
      * Set the page if the constructor template can not be used
      */
-    final protected function setPage(PageInterface $page)
+    final protected function setPage(PageInterface $page) : WidgetInterface
     {
         $this->widgetTraitPage = $page;
+        return $this;
     }
 
     ######################################################################
@@ -83,55 +79,13 @@ trait WidgetTrait
     /**
      * Set the widget id if the constructor template can not be used
      */
-    final protected function setWidgetId(string $widgetId)
+    final protected function setWidgetId(string $widgetId) : WidgetInterface
     {
         if ($this->widgetId !== null && $this->widgetId !== $widgetId) {
             $this->getPage()->changeWidgetId($this, $this->widgetId, $widgetId);
         }
         $this->widgetId = $widgetId;
         return $this;
-    }
-
-
-    public function __get($propertyName)
-    {
-        if (\method_exists($this, 'get' . \ucfirst($propertyName))) {
-            return $this->{'get' . \ucfirst($propertyName)}();
-        }
-
-        if (\method_exists($this, 'is' . \ucfirst($propertyName))) {
-            return $this->{'is' . \ucfirst($propertyName)}();
-        }
-
-        if (\method_exists($this, 'has' . \ucfirst($propertyName))) {
-            return $this->{'has' . \ucfirst($propertyName)}();
-        }
-
-        throw new \InvalidArgumentException('Access to unknown property "' . $propertyName . '"');
-    }
-
-    public function __set($propertyName, $value)
-    {
-        if (\method_exists($this, 'set' . \ucfirst($propertyName))) {
-            $this->{'set' . \ucfirst($propertyName)}($value);
-        } elseif (($value === true) && \method_exists($this, 'enable' . \ucfirst($propertyName))) {
-            $this->{'enable' . \ucfirst($propertyName)}();
-        } elseif (($value === false) && \method_exists($this, 'disable' . \ucfirst($propertyName))) {
-            $this->{'disable' . \ucfirst($propertyName)}();
-        } else {
-            throw new \InvalidArgumentException('Writing unknown property "' . $propertyName . '"');
-        }
-
-        return $value;
-    }
-
-    public function __unset($propertyName)
-    {
-        if (\method_exists($this, 'unset' . \ucfirst($propertyName))) {
-            return $this->{'unset' . \ucfirst($propertyName)}();
-        }
-
-        throw new \InvalidArgumentException('Unsetting unknown property "' . $propertyName . '"');
     }
 
     /**
@@ -142,7 +96,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::isRoot()
      */
-    public function isRoot()
+    public function isRoot() : bool
     {
         return (($this instanceof PageInterface) || is_null($this->widgetTraitParent));
     }
@@ -150,7 +104,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::getParent()
      */
-    public function getParent()
+    public function getParent() : WidgetInterface
     {
         if (is_null($this->widgetTraitParent)) {
             throw new \InvalidArgumentException('No parent exists for this widget!');
@@ -165,7 +119,7 @@ trait WidgetTrait
      * @param string $type
      * @return null|object
      */
-    public function getNearestAncestor($type)
+    public function getNearestAncestor(string $type)
     {
         foreach ($this->getAncestors($type) as $ancestor) {
             return $ancestor;
@@ -178,7 +132,7 @@ trait WidgetTrait
      * @see \Replum\WidgetInterface::getAncestors()
      * @returns \Traversable<WidgetInterface>
      */
-    public function getAncestors($filterByType = null)
+    public function getAncestors(string $filterByType = null) : \Traversable
     {
         if ($this->isRoot()) { return; }
 
@@ -194,7 +148,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::setParent()
      */
-    public function setParent(WidgetInterface $newParent)
+    public function setParent(WidgetInterface $newParent) : WidgetInterface
     {
         // Avoid recursion
         if ($this->widgetTraitParent === $newParent) {
@@ -218,7 +172,7 @@ trait WidgetTrait
         return $this;
     }
 
-    public function clearParent()
+    public function clearParent() : WidgetInterface
     {
         // Prevent recursion
         if ($this->widgetTraitParent === null) {
@@ -241,7 +195,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::getRoot()
      */
-    public function getRoot()
+    public function getRoot() : bool
     {
         if ($this->isRoot()) {
             return $this;
@@ -258,7 +212,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::isChanged()
      */
-    public function isChanged()
+    public function isChanged() : bool
     {
         return $this->widgetTraitChanged;
     }
@@ -266,7 +220,7 @@ trait WidgetTrait
     /**
      * @see \Replum\WidgetInterface::setChanged()
      */
-    public function setChanged($changed = true)
+    public function setChanged(bool $changed = true) : WidgetInterface
     {
 // Nothing new here
         if ($changed === $this->widgetTraitChanged) {
@@ -337,18 +291,6 @@ trait WidgetTrait
     protected function renderAttributes()
     {
         return $this->renderWidgetAttributes();
-    }
-
-    /**
-     * Make the supplied data safe to use it in an HTML document
-     *
-     * @param string $string
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function escape($string)
-    {
-        return \htmlspecialchars($string, ENT_HTML5 | ENT_COMPAT, 'UTF-8');
     }
 
     ######################################################################
