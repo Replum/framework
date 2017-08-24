@@ -63,6 +63,11 @@ class Context implements ContextInterface
      */
     private $rewriteEnabled;
 
+    /**
+     * @var bool
+     */
+    private $production = false;
+
 
     public function __construct(ClassLoader $autoloader = null)
     {
@@ -239,5 +244,23 @@ class Context implements ContextInterface
     public function prependPageNamespace(string $namespace)
     {
         \array_unshift($this->pageNamespaces, $namespace);
+    }
+
+    ######################################################################
+    # Production mode                                                    #
+    ######################################################################
+
+    /**
+     * @see ContextInterface::isProduction()
+     */
+    public function isProduction() : bool
+    {
+        return $this->production;
+    }
+
+    public function setProduction(bool $production = true) : ContextInterface
+    {
+        $this->production = $production;
+        return $this;
     }
 }

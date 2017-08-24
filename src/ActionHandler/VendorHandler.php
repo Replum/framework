@@ -88,10 +88,13 @@ class VendorHandler
             }
 
             if (!is_dir(\dirname($symlinkName)) && !\mkdir(\dirname($symlinkName), 0755, true)) {
-                throw new \RuntimeException("Failed to create symlink", 8);
+                throw new \RuntimeException("Failed to copy resource", 8);
             }
-            if (!\symlink(Util::getRelativePath($symlinkName, $fullResourcePath), $symlinkName)) {
-                throw new \RuntimeException("Failed to create symlink", 9);
+
+            $copyResource = ($context->isProduction() || !@\symlink(Util::getRelativePath($symlinkName, $fullResourcePath), $symlinkName));
+
+            if ($copyResource && (!\copy($fullResourcePath, $symlinkName) || !\touch($symlinkName, \filemtime($fullResourcePath)))) {
+                throw new \RuntimeException("Failed to copy resource", 9);
             }
 
             return new RedirectResponse($context->getUrlPrefix() . $resourceName, Response::HTTP_PERMANENTLY_REDIRECT);

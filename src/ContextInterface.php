@@ -81,4 +81,9 @@ interface ContextInterface
      * Whether SSL is used or not
      */
     function hasTls() : bool;
+
+    /**
+     * Whether this app is in development or production mode
+     */
+    function isProduction() : bool;
 }
