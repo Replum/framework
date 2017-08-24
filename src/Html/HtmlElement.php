@@ -25,8 +25,7 @@ abstract class HtmlElement implements WidgetInterface, AriaAttributesInterface
      */
     protected function renderAttributes() : string
     {
-        return $this->renderWidgetAttributes()
-            . $this->renderHtmlWidgetAttributes()
+        return $this->renderHtmlWidgetAttributes()
             . $this->renderAriaAttributes()
         ;
     }

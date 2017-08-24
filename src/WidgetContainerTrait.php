@@ -80,7 +80,7 @@ trait WidgetContainerTrait
     {
         $r = '';
 
-        foreach ($this->children() AS $child) {
+        foreach ($this->getChildren() AS $child) {
             $r .= $child->render() . PHP_EOL;
         }
 
@@ -141,58 +141,6 @@ trait WidgetContainerTrait
             }
         }
 
-        return null;
-    }
-
-    /**
-     * The HTML tag to use for this container, defaults to DIV
-     * @var string
-     */
-    private $WidgetContainerTraitTag;
-
-    /**
-     * Return the HTML tag for this container
-     *
-     * @return string
-     */
-    public function getTag()
-    {
-        return (
-            $this->WidgetContainerTraitTag !== null
-            ? $this->WidgetContainerTraitTag
-            : (
-                    $this->validTags() !== null
-                    ? $this->validTags()[0]
-                    : 'div'
-                )
-        );
-    }
-
-    /**
-     * Change the used tag for this container
-     *
-     * @param string $newTag
-     * @return \Replum\WidgetContainer $this for chaining
-     */
-    public function setTag($newTag)
-    {
-        if (($this->validTags() !== null) && !\in_array($newTag, $this->validTags())) {
-            throw new \UnexpectedValueException('Invalid tag "' . $newTag . '" for class "' . static::class . '", valid tags are: ' . \implode(', ', $this->validTags()));
-        }
-
-        if ($this->WidgetContainerTraitTag !== $newTag) {
-            $this->WidgetContainerTraitTag = $newTag;
-            $this->setChanged(true);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return array<String> List of valid tags nor NULL for no restriction
-     */
-    protected function validTags()
-    {
         return null;
     }
 }

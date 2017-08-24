@@ -243,58 +243,6 @@ trait WidgetTrait
         $this->widgetTraitChanged = false;
     }
 
-    /**
-     * Verify the supplied name is a valid xml attribute name
-     *
-     * @param string $name
-     * @return boolean
-     * @link http://www.w3.org/TR/xml/#NT-Name
-     */
-    protected function validateAttributeName($name)
-    {
-        $nameStartChar = ':|[A-Z]|_|[a-z]|[\xC0-\xD6]|[\xD8-\xF6]|[\xF8-\x{2FF}]|[\x{370}-\x{37D}]|[\x{37F}-\x{1FFF}]|[\x{200C}-\x{200D}]|[\x{2070}-\x{218F}]|[\x{2C00}-\x{2FEF}]|[\x{3001}-\x{D7FF}]|[\x{F900}-\x{FDCF}]|[\x{FDF0}-\x{FFFD}]';
-        // |[\x{10000}-\x{EFFFF}] must be appended according to the ref but is invalid in PHP/PCRE
-        $nameChar = $nameStartChar . '|-|.|[0-9]|\xB7|[\x{0300}-\x{036F}]|[\x{203F}-\x{2040}]';
-
-        return \preg_match('/^(' . $nameStartChar . ')(' . $nameChar . ')*$/u', $name);
-    }
-
-    /**
-     * Render all common Widget attributes
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    protected function renderWidgetAttributes()
-    {
-        //\sort($this->widgetTraitClasses);
-
-        //if (($this->eventDispatcher !== null) || $this->widgetTraitNeedId) {
-        //    $this->getID();
-        //}
-
-        return
-            ($this->hasID() ? '' . Util::renderHtmlAttribute('id', $this->getID()) : '')
-            . Util::renderHtmlAttribute('class', $this->getClasses())
-        /*. $this->renderDataAttributes()
-        . $this->renderHtmlAttribute('role', $this->widgetTraitRole)
-        . $this->renderHtmlAttribute('title', $this->widgetTraitTitle)
-        . $this->renderHtmlAttribute('tabindex', $this->widgetTraitTabindex)*/
-        ;
-    }
-
-    /**
-     * Render all attributes of the current widget.
-     * Default implementation, override in concrete implementations.
-     * Include renderWidgetAttributes() instead of renaming renderAttributes() when using the trait.
-     *
-     * @return string
-     */
-    protected function renderAttributes()
-    {
-        return $this->renderWidgetAttributes();
-    }
-
     ######################################################################
     #
     # Event handling
