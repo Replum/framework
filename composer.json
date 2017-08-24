@@ -19,6 +19,8 @@
         }
     },
     "require": {
+        "php": ">=7.0",
+        "ext-apcu": "*",
         "symfony/event-dispatcher": "2.5.*",
         "symfony/http-foundation": "2.5.*",
 

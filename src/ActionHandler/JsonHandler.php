@@ -54,8 +54,8 @@ class JsonHandler
             $page_id = $request->request->get(self::PAGE_ID_PARAMETER_NAME);
 
             /* @var $page \Replum\PageInterface */
-            //$page = \apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id);
-            $page = \unserialize(\gzinflate(\apc_fetch($this->executer->getCacheNamespace() . '.' . $page_id)));
+            //$page = \apcu_fetch($this->executer->getCacheNamespace() . '.' . $page_id);
+            $page = \unserialize(\gzinflate(\apcu_fetch($this->executer->getCacheNamespace() . '.' . $page_id)));
 
             if (!($page instanceof \Replum\PageInterface)) {
                 throw new \RuntimeException('Can not restore page!');
@@ -101,8 +101,8 @@ class JsonHandler
             $page->off(WidgetChangeEvent::class, $changeHandler);
             $data = $this->handleChangedWidgets($page, $changedWidgets);
 
-            //\apc_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), $page, 0);
-            \apc_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
+            //\apcu_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), $page, 0);
+            \apcu_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
 
             $response = new JsonResponse($data);
         } catch (\Throwable $e) {

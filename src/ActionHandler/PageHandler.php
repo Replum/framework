@@ -53,8 +53,8 @@ class PageHandler
         $page = new $class($context);
         $response = new Response($page->render());
 
-        //\apc_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
-        \apc_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
+        //\apcu_store($this->executer->getCacheNamespace() . '.' . $page->id, $page, 0);
+        \apcu_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
 
         return $response;
     }
@@ -67,7 +67,7 @@ class PageHandler
         do {
             $r = Util::randomString($length);
             $length++;
-        } while (\apc_exists($this->executer->getCacheNamespace() . '.' . $r));
+        } while (\apcu_exists($this->executer->getCacheNamespace() . '.' . $r));
 
         return $r;
     }
