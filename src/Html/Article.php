@@ -21,7 +21,7 @@ use \Replum\PageInterface;
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @link https://www.w3.org/TR/html5/sections.html#the-article-element
  */
-final class Article extends HtmlElement
+final class Article extends HtmlElement implements FlowElementInterface
 {
     const TAG = 'article';
 

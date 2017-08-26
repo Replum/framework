@@ -15,45 +15,16 @@ use \Replum\PageInterface;
 use \Replum\Util;
 
 /**
- * @author Dennis Birkholz <dennis@birkholz.org>
+ * The ol element represents a list of items, where the items have been intentionally ordered, such that changing the order would change the meaning of the document.
  *
- * @property boolean $ordered List with numbered elements or not
- * @property int $start If list is ordered, first label to use
- * @property boolean $reversed Numbering is reversed for ordered list
- * @property string $type Type of the number to show for ordered lists, one of the TYPE_ constants.
+ * The items of the list are the li element child nodes of the ol element, in tree order.
+ *
+ * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/grouping-content.html#the-ol-element
  */
-class Listing extends HtmlElement
+final class Ol extends HtmlElement implements FlowElementInterface
 {
-    /**
-     * @var bool
-     */
-    private $ordered = false;
-
-    /**
-     * @return bool
-     */
-    public function isOrdered()
-    {
-        return $this->ordered;
-    }
-
-    /**
-     * @param bool $newOrdered
-     * @return \Replum\Html\Listing $this for chaining
-     */
-    public function setOrdered($newOrdered)
-    {
-        if (!is_bool($newOrdered)) {
-            throw new \InvalidArgumentException('Supplied value is not a boolean!');
-        }
-
-        if ($newOrdered != $this->ordered) {
-            $this->ordered = $newOrdered;
-            $this->setChanged(true);
-        }
-
-        return $this;
-    }
+    const TAG = 'ol';
 
     /**
      * @var int
@@ -65,22 +36,28 @@ class Listing extends HtmlElement
      * @return int
      * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-start
      */
-    public function getStart()
+    public function getStart() : int
     {
         return $this->start;
     }
 
     /**
-     * @param int $newStart Ordinal value of the first item
-     * @return \Replum\Html\Listing $this for chaining
+     * Check whether the start attribute is set
+     *
      * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-start
      */
-    public function setStart($newStart)
+    public function hasStart() : bool
     {
-        if (!is_int($newStart)) {
-            throw new \InvalidArgumentException('The start value of a list must be an integer.');
-        }
+        return ($this->start !== null);
+    }
 
+    /**
+     * @param int $newStart Ordinal value of the first item
+     * @return $this
+     * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-start
+     */
+    public function setStart(int $newStart = null) : self
+    {
         if ($newStart !== $this->start) {
             $this->start = $newStart;
             $this->setChanged(true);
@@ -99,22 +76,17 @@ class Listing extends HtmlElement
      * @return bool
      * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed
      */
-    public function isReversed()
+    public function isReversed() : bool
     {
         return $this->reversed;
     }
 
     /**
-     *
-     * @return \Replum\Html\Listing $this for chaining
+     * @return $this
      * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed
      */
-    public function setReversed($newReversed)
+    public function setReversed(bool $newReversed) : self
     {
-        if (!is_bool($newReversed)) {
-            throw new \InvalidArgumentException('The reversed flag of a list must be a boolean.');
-        }
-
         if ($newReversed !== $this->reversed) {
             $this->reversed = $newReversed;
             $this->setChanged(true);
@@ -164,28 +136,29 @@ class Listing extends HtmlElement
      * @return string
      * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-type
      */
-    public function getType()
+    public function getType() : string
     {
-        if (!$this->ordered) {
-            throw new \InvalidArgumentException('Unordered list has not list item type!');
-        }
-
         return $this->type;
     }
 
     /**
-     * Set the current type if the list is ordered
-     * @param mixed $newType
-     * @return \Replum\Html\Listing $this for chaining
+     * Check whether a type is set or the default is used
      * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-type
      */
-    public function setType($newType)
+    public function hasType() : bool
+    {
+        return ($this->type !== null);
+    }
+
+    /**
+     * Set the current type if the list is ordered
+     *
+     * @return $this
+     * @link http://www.w3.org/TR/html5/grouping-content.html#attr-ol-type
+     */
+    public function setType(string $newType = null) : self
     {
         $constants = (new \ReflectionClass(self::class))->getConstants();
-
-        if (!$this->isOrdered()) {
-            throw new \InvalidArgumentException('Can not set list type for unordered list.');
-        }
 
         if (!\in_array($newType, \array_values($constants))) {
             throw new \UnexpectedValueException('Invalid list type "' . $newType . '", valid types are: ' . __CLASS__ . '::' . \implode(', ' . __CLASS__ . '::', \array_keys($constants)));
@@ -200,23 +173,6 @@ class Listing extends HtmlElement
     }
 
     /**
-     * Render the widget as html
-     *
-     * @return string
-     */
-    public function render() : string
-    {
-        $r = '<' . ($this->isOrdered() ? 'ol' : 'ul') . $this->renderAttributes() . '>';
-
-        foreach ($this->children() AS $child) {
-            $r .= $child->render();
-        }
-
-        $r .= '</' . ($this->isOrdered() ? 'ol' : 'ul') . '>';
-        return $r;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function renderAttributes() : string
@@ -224,18 +180,8 @@ class Listing extends HtmlElement
         return parent::renderAttributes()
             . Util::renderHtmlAttribute('reversed', ($this->isReversed() ? 'reversed' : null))
             . Util::renderHtmlAttribute('start', $this->start)
-            . Util::renderHtmlAttribute('type', $this->isOrdered() && ($this->type !== null) ? $this->type : null)
+            . Util::renderHtmlAttribute('type', $this->type)
         ;
-    }
-
-    /**
-     * Enforce that only list elements can be members of a list
-     */
-    protected function validateWidget($widget)
-    {
-        if (!($widget instanceof Listing) && (!($widget instanceof ListElement))) {
-            throw new \InvalidArgumentException('A list can only contain ' . ListElement::class . ' elements.');
-        }
     }
 
     public static function create(PageInterface $page) : self

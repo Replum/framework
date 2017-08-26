@@ -21,7 +21,7 @@ use \Replum\PageInterface;
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @link http://www.w3.org/TR/html5/sections.html#the-aside-element
  */
-final class Aside extends HtmlElement
+final class Aside extends HtmlElement implements FlowElementInterface
 {
     const TAG = 'aside';
 

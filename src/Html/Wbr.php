@@ -14,16 +14,17 @@ namespace Replum\Html;
 use \Replum\PageInterface;
 
 /**
+ * The wbr element represents a line break opportunity.
+ *
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link https://www.w3.org/TR/html5/grouping-content.html#the-li-element
+ * @link https://www.w3.org/TR/html5/text-level-semantics.html#the-wbr-element
  */
-class ListElement extends HtmlElement
+final class Wbr extends HtmlElement implements PhrasingElementInterface
 {
-    const TAG = 'li';
+    const TAG = 'wbr';
 
     public static function create(PageInterface $page) : self
     {
         return new self($page);
     }
-
 }

@@ -14,14 +14,14 @@ namespace Replum\Html;
 use \Replum\PageInterface;
 
 /**
- * The section element represents a generic section of a document or application. A section, in this context, is a thematic grouping of content. The theme of each section should be identified, typically by including a heading (h1-h6 element) as a child of the section element.
+ * The figure element represents some flow content, optionally with a caption, that is self-contained (like a complete sentence) and is typically referenced as a single unit from the main flow of the document.
  *
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link https://www.w3.org/TR/html5/sections.html#the-section-element
+ * @link https://www.w3.org/TR/html5/grouping-content.html#the-figure-element
  */
-final class Section extends HtmlElement implements FlowElementInterface
+final class Figure extends HtmlElement implements FlowElementInterface
 {
-    const TAG = 'section';
+    const TAG = 'figure';
 
     public final static function create(PageInterface $page) : self
     {

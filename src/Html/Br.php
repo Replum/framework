@@ -14,14 +14,14 @@ namespace Replum\Html;
 use \Replum\PageInterface;
 
 /**
- * The div element has no special meaning at all. It represents its children. It can be used with the class, lang, and title attributes to mark up semantics common to a group of consecutive elements.
+ * The br element represents a line break.
  *
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link https://www.w3.org/TR/html5/grouping-content.html#the-div-element
+ * @link https://www.w3.org/TR/html5/text-level-semantics.html#the-br-element
  */
-final class Div extends HtmlElement implements FlowElementInterface
+final class Br extends HtmlElement implements PhrasingElementInterface
 {
-    const TAG = 'div';
+    const TAG = 'br';
 
     public static function create(PageInterface $page) : self
     {

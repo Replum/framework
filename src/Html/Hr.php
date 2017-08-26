@@ -14,14 +14,14 @@ namespace Replum\Html;
 use \Replum\PageInterface;
 
 /**
- * The div element has no special meaning at all. It represents its children. It can be used with the class, lang, and title attributes to mark up semantics common to a group of consecutive elements.
+ * The hr element represents a paragraph-level thematic break, e.g. a scene change in a story, or a transition to another topic within a section of a reference book.
  *
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link https://www.w3.org/TR/html5/grouping-content.html#the-div-element
+ * @link https://www.w3.org/TR/html5/grouping-content.html#the-hr-element
  */
-final class Div extends HtmlElement implements FlowElementInterface
+final class Hr extends HtmlElement implements FlowElementInterface
 {
-    const TAG = 'div';
+    const TAG = 'hr';
 
     public static function create(PageInterface $page) : self
     {
