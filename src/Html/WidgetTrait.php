@@ -33,7 +33,8 @@ trait WidgetTrait
     private $htmlWidgetTraitClasses = [];
 
     /**
-     *  @see \Replum\Html\WidgetInterface::addClass()
+     * @return static $this
+     * @see \Replum\Html\WidgetInterface::addClass()
      */
     final public function addClass(string $newClass) : WidgetInterface
     {
@@ -46,6 +47,7 @@ trait WidgetTrait
     }
 
     /**
+     * @return static $this
      * @see \Replum\Html\WidgetInterface::delClass()
      */
     final public function delClass(string $class, bool $isRegex = false) : WidgetInterface
@@ -142,6 +144,7 @@ trait WidgetTrait
     }
 
     /**
+     * @return static $this
      * @see \Replum\Html\WidgetInterface::setID()
      */
     final public function setID(string $newID) : WidgetInterface
@@ -193,6 +196,7 @@ trait WidgetTrait
     }
 
     /**
+     * @return static $this
      * @see \Replum\Html\WidgetInterface::setStyle()
      */
     final public function setStyle(string $newStyle = null) : WidgetInterface
@@ -234,6 +238,7 @@ trait WidgetTrait
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetInterface::setTabIndex()
      */
     final public function setTabIndex(int $newTabIndex = null) : WidgetInterface
@@ -275,6 +280,7 @@ trait WidgetTrait
     }
 
     /**
+     * @return static $this
      * @see \Replum\Html\WidgetInterface::setTitle()
      */
     final public function setTitle(string $newTitle = null) : WidgetInterface
@@ -300,6 +306,7 @@ trait WidgetTrait
     private $htmlWidgetTraitData = [];
 
     /**
+     * @return static $this
      * @see \Replum\Html\WidgetInterface::addData()
      */
     final public function addData(string $name, string $value) : WidgetInterface
@@ -336,6 +343,7 @@ trait WidgetTrait
     }
 
     /**
+     * @return static $this
      * @see \Replum\Html\WidgetInterface::setData()
      */
     final public function setData(string $name, string $newValue = null) : WidgetInterface
