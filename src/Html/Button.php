@@ -29,10 +29,8 @@ final class Button extends HtmlElement implements FormElementInterface, WidgetHa
 {
     const TAG = 'button';
 
+    use FormElementTrait;
     use WidgetHasClickEventTrait;
-    use FormInputTrait {
-        setType as public;
-    }
 
     /**
      * {@inheritdoc}
@@ -40,7 +38,7 @@ final class Button extends HtmlElement implements FormElementInterface, WidgetHa
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderFormInputAttributes()
+            . $this->renderFormElementAttributes()
         ;
     }
 

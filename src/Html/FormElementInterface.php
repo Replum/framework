@@ -33,4 +33,58 @@ interface FormElementInterface extends WidgetInterface
      * @return FormElementInterface $this for chaining
      */
     function setForm(Form $form);
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
+     */
+    function getAutofocus() : bool;
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
+     */
+    function setAutofocus(bool $autofocus) : self;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
+     */
+    function getDisabled() : bool;
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
+     */
+    function setDisabled(bool $disabled) : self;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    function getName() : string;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    function hasName() : bool;
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    function setName(string $name = null) : self;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    function getValue() : string;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    function hasValue() : bool;
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    function setValue(string $value = null) : self;
 }

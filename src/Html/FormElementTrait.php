@@ -11,9 +11,10 @@
 
 namespace Replum\Html;
 
+use \Replum\Util;
+
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @property-read Form $form Formular containing this button (if any)
  */
 trait FormElementTrait
 {
@@ -42,5 +43,142 @@ trait FormElementTrait
     public function setForm(Form $form)
     {
         $this->FormElementTraitForm = $form;
+    }
+
+    /**
+     * @var bool
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
+     */
+    private $autofocus = false;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
+     */
+    final public function getAutofocus() : bool
+    {
+        return $this->autofocus;
+    }
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
+     */
+    final public function setAutofocus(bool $autofocus) : FormElementInterface
+    {
+        if ($this->autofocus !== $autofocus) {
+            $this->autofocus = $autofocus;
+            $this->setChanged(true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @var bool
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
+     */
+    private $disabled = false;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
+     */
+    final public function getDisabled() : bool
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
+     */
+    final public function setDisabled(bool $disabled) : FormElementInterface
+    {
+        if ($this->disabled !== $disabled) {
+            $this->disabled = $disabled;
+            $this->setChanged(true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    private $name;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    final public function getName() : string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    final public function hasName() : bool
+    {
+        return ($this->name !== null);
+    }
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     */
+    final public function setName(string $name = null) : FormElementInterface
+    {
+        if ($this->name !== $name) {
+            $this->name = $name;
+            $this->setChanged(true);
+        }
+        return $this;
+    }
+
+    /**
+     * @var string
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    private $value;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    final public function getValue() : string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    final public function hasValue() : bool
+    {
+        return ($this->value !== null);
+    }
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    final public function setValue(string $value = null) : FormElementInterface
+    {
+        if ($this->value !== $value) {
+            $this->value = $value;
+            $this->setChecked(true);
+        }
+        return $this;
+    }
+
+    final protected function renderFormElementAttributes() : string
+    {
+        return
+            Util::renderHtmlAttribute('autofocus', $this->autofocus)
+            . Util::renderHtmlAttribute('disabled', $this->disabled)
+            . Util::renderHtmlAttribute('form', $this->FormElementTraitForm)
+            . Util::renderHtmlAttribute('name', $this->name)
+            . Util::renderHtmlAttribute('value', $this->value)
+        ;
     }
 }
