@@ -21,9 +21,13 @@ abstract class HtmlFactory
     /**
      * Create an A element
      */
-    final public static function a(PageInterface $page) : Html\A
+    final public static function a(PageInterface $page, string $href = null) : Html\A
     {
-        return new Html\A($page);
+        $obj = new Html\A($page);
+        if ($href !== null) {
+            $obj->setHref($href);
+        }
+        return $obj;
     }
 
     /**
@@ -61,9 +65,13 @@ abstract class HtmlFactory
     /**
      * Create an B element
      */
-    final public static function b(PageInterface $page) : Html\B
+    final public static function b(PageInterface $page, string $text = null) : Html\B
     {
-        return new Html\B($page);
+        $obj = new Html\B($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -125,17 +133,25 @@ abstract class HtmlFactory
     /**
      * Create an Cite element
      */
-    final public static function cite(PageInterface $page) : Html\Cite
+    final public static function cite(PageInterface $page, string $text = null) : Html\Cite
     {
-        return new Html\Cite($page);
+        $obj = new Html\Cite($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an Code element
      */
-    final public static function code(PageInterface $page) : Html\Code
+    final public static function code(PageInterface $page, string $text = null) : Html\Code
     {
-        return new Html\Code($page);
+        $obj = new Html\Code($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -149,9 +165,13 @@ abstract class HtmlFactory
     /**
      * Create an Data element
      */
-    final public static function data(PageInterface $page) : Html\Data
+    final public static function data(PageInterface $page, string $text = null) : Html\Data
     {
-        return new Html\Data($page);
+        $obj = new Html\Data($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -213,9 +233,13 @@ abstract class HtmlFactory
     /**
      * Create an Em element
      */
-    final public static function em(PageInterface $page) : Html\Em
+    final public static function em(PageInterface $page, string $text = null) : Html\Em
     {
-        return new Html\Em($page);
+        $obj = new Html\Em($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -269,49 +293,73 @@ abstract class HtmlFactory
     /**
      * Create an H1 element
      */
-    final public static function h1(PageInterface $page) : Html\H1
+    final public static function h1(PageInterface $page, string $text = null) : Html\H1
     {
-        return new Html\H1($page);
+        $obj = new Html\H1($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an H2 element
      */
-    final public static function h2(PageInterface $page) : Html\H2
+    final public static function h2(PageInterface $page, string $text = null) : Html\H2
     {
-        return new Html\H2($page);
+        $obj = new Html\H2($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an H3 element
      */
-    final public static function h3(PageInterface $page) : Html\H3
+    final public static function h3(PageInterface $page, string $text = null) : Html\H3
     {
-        return new Html\H3($page);
+        $obj = new Html\H3($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an H4 element
      */
-    final public static function h4(PageInterface $page) : Html\H4
+    final public static function h4(PageInterface $page, string $text = null) : Html\H4
     {
-        return new Html\H4($page);
+        $obj = new Html\H4($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an H5 element
      */
-    final public static function h5(PageInterface $page) : Html\H5
+    final public static function h5(PageInterface $page, string $text = null) : Html\H5
     {
-        return new Html\H5($page);
+        $obj = new Html\H5($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an H6 element
      */
-    final public static function h6(PageInterface $page) : Html\H6
+    final public static function h6(PageInterface $page, string $text = null) : Html\H6
     {
-        return new Html\H6($page);
+        $obj = new Html\H6($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -341,17 +389,25 @@ abstract class HtmlFactory
     /**
      * Create an I element
      */
-    final public static function i(PageInterface $page) : Html\I
+    final public static function i(PageInterface $page, string $text = null) : Html\I
     {
-        return new Html\I($page);
+        $obj = new Html\I($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an Img element
      */
-    final public static function img(PageInterface $page) : Html\Image
+    final public static function img(PageInterface $page, string $src = null) : Html\Img
     {
-        return new Html\Image($page);
+        $obj = new Html\Img($page);
+        if ($src !== null) {
+            $obj->setSrc($src);
+        }
+        return $obj;
     }
 
     /**
@@ -453,9 +509,13 @@ abstract class HtmlFactory
     /**
      * Create an P element
      */
-    final public static function p(PageInterface $page) : Html\P
+    final public static function p(PageInterface $page, string $text = null) : Html\P
     {
-        return new Html\P($page);
+        $obj = new Html\P($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -469,17 +529,25 @@ abstract class HtmlFactory
     /**
      * Create an Pre element
      */
-    final public static function pre(PageInterface $page) : Html\Pre
+    final public static function pre(PageInterface $page, string $text = null) : Html\Pre
     {
-        return new Html\Pre($page);
+        $obj = new Html\Pre($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an q element
      */
-    final public static function q(PageInterface $page) : Html\Q
+    final public static function q(PageInterface $page, string $text = null) : Html\Q
     {
-        return new Q($page);
+        $obj = new Html\Q($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -549,9 +617,13 @@ abstract class HtmlFactory
     /**
      * Create an S element
      */
-    final public static function s(PageInterface $page) : Html\S
+    final public static function s(PageInterface $page, string $text = null) : Html\S
     {
-        return new Html\S($page);
+        $obj = new Html\S($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -581,33 +653,49 @@ abstract class HtmlFactory
     /**
      * Create an Small element
      */
-    final public static function small(PageInterface $page) : Html\Small
+    final public static function small(PageInterface $page, string $text = null) : Html\Small
     {
-        return new Html\Small($page);
+        $obj = new Html\Small($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an Span element
      */
-    final public static function span(PageInterface $page) : Html\Span
+    final public static function span(PageInterface $page, string $text = null) : Html\Span
     {
-        return new Html\Span($page);
+        $obj = new Html\Span($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an Strong element
      */
-    final public static function strong(PageInterface $page) : Html\Strong
+    final public static function strong(PageInterface $page, string $text = null) : Html\Strong
     {
-        return new Html\Strong($page);
+        $obj = new Html\Strong($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
      * Create an Sub element
      */
-    final public static function sub(PageInterface $page) : Html\Sub
+    final public static function sub(PageInterface $page, string $text = null) : Html\Sub
     {
-        return new Html\Sub($page);
+        $obj = new Html\Sub($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -621,9 +709,13 @@ abstract class HtmlFactory
     /**
      * Create an Sup element
      */
-    final public static function sup(PageInterface $page) : Html\Sup
+    final public static function sup(PageInterface $page, string $text = null) : Html\Sup
     {
-        return new Html\Sup($page);
+        $obj = new Html\Sup($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
@@ -637,9 +729,13 @@ abstract class HtmlFactory
     /**
      * Create an Text element
      */
-    final public static function text(PageInterface $page) : Html\Text
+    final public static function text(PageInterface $page, string $text = null) : Html\Text
     {
-        return new Html\Text($page);
+        $obj = new Html\Text($page);
+        if ($text !== null) {
+            $obj->setText($text);
+        }
+        return $obj;
     }
 
     /**
@@ -669,9 +765,13 @@ abstract class HtmlFactory
     /**
      * Create an U element
      */
-    final public static function u(PageInterface $page) : Html\U
+    final public static function u(PageInterface $page, string $text = null) : Html\U
     {
-        return new Html\U($page);
+        $obj = new Html\U($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
     }
 
     /**
