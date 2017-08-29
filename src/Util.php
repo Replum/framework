@@ -95,13 +95,19 @@ abstract class Util
     {
         if (\is_null($value)) { return ''; }
 
-        if (\is_array($value)) {
+        if (\is_bool($value)) {
+            return ($value ? ' ' . $name : '');
+        }
+
+        elseif (\is_array($value)) {
             if (!\count($value)) { return ''; }
 
             $escaped = \array_reduce($value, function ($carry, $value) {
                 return ($carry ? $carry . ' ' : '') . self::escapeHtmlAttributeValue($value);
             });
-        } else {
+        }
+
+        else {
             $escaped = self::escapeHtmlAttributeValue($value);
         }
 
