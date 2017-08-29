@@ -44,7 +44,7 @@ trait InputMinLengthMaxLengthPatternSizeAttributesTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-maxlength
      */
     final public function setMaxlength(int $maxlength = null) : self
@@ -83,7 +83,7 @@ trait InputMinLengthMaxLengthPatternSizeAttributesTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-minlength
      */
     final public function setMinlength(int $minlength = null) : self
@@ -122,7 +122,7 @@ trait InputMinLengthMaxLengthPatternSizeAttributesTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-pattern
      */
     final public function setPattern(string $pattern = null) : self
@@ -157,7 +157,7 @@ trait InputMinLengthMaxLengthPatternSizeAttributesTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-size
      */
     final public function setSize(int $size = null) : self

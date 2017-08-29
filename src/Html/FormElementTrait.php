@@ -27,7 +27,7 @@ trait FormElementTrait
      * @implements FormElementInterface
      * {@inheritdoc}
      */
-    public function getForm()
+    public function getForm() : Form
     {
         if ($this->FormElementTraitForm !== null) {
             return $this->FormElementTraitForm;
@@ -40,7 +40,7 @@ trait FormElementTrait
      * @implements FormElementInterface
      * {@inheritdoc}
      */
-    public function setForm(Form $form)
+    public function setForm(Form $form) : FormElementInterface
     {
         $this->FormElementTraitForm = $form;
     }
@@ -60,7 +60,6 @@ trait FormElementTrait
     }
 
     /**
-     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
      */
     final public function setAutofocus(bool $autofocus) : FormElementInterface
@@ -88,7 +87,6 @@ trait FormElementTrait
     }
 
     /**
-     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
      */
     final public function setDisabled(bool $disabled) : FormElementInterface
@@ -124,7 +122,6 @@ trait FormElementTrait
     }
 
     /**
-     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
      */
     final public function setName(string $name = null) : FormElementInterface
@@ -159,7 +156,6 @@ trait FormElementTrait
     }
 
     /**
-     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
      */
     final public function setValue(string $value = null) : FormElementInterface

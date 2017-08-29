@@ -52,6 +52,8 @@ trait WidgetTrait
 
     /**
      * Set the page if the constructor template can not be used
+     *
+     * @return static $this
      */
     final protected function setPage(PageInterface $page) : WidgetInterface
     {
@@ -78,6 +80,8 @@ trait WidgetTrait
 
     /**
      * Set the widget id if the constructor template can not be used
+     *
+     * @return static $this
      */
     final protected function setWidgetId(string $widgetId) : WidgetInterface
     {
@@ -190,8 +194,8 @@ trait WidgetTrait
     }
 
     /**
+     * @return \Traversable<WidgetInterface>
      * @see \Replum\WidgetInterface::getAncestors()
-     * @returns \Traversable<WidgetInterface>
      */
     public function getAncestors(string $filterByType = null) : \Traversable
     {

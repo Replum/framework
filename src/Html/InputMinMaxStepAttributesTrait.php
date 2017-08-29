@@ -43,7 +43,7 @@ trait InputMinMaxStepAttributeTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-min
      */
     final public function setMinlength(float $min = null) : self
@@ -82,7 +82,7 @@ trait InputMinMaxStepAttributeTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-max
      */
     final public function setMaxlength(int $max = null) : self
@@ -121,7 +121,7 @@ trait InputMinMaxStepAttributeTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-step
      */
     final public function setStep(float $step = null) : self

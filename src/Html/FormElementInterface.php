@@ -20,19 +20,16 @@ interface FormElementInterface extends WidgetInterface
 {
     /**
      * Get the form this FormElement is associated with
-     *
-     * @return Form
      */
-    function getForm();
+    function getForm() : Form;
 
     /**
      * Set the form for the FormElement
      * Should only be used by handlers that manage form association,
      *
-     * @param Form $form
-     * @return FormElementInterface $this for chaining
+     * @return static $this
      */
-    function setForm(Form $form);
+    function setForm(Form $form) : self;
 
     /**
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus

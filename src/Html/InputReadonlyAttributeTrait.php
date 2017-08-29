@@ -33,7 +33,7 @@ trait InputReadonlyAttributeTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-readonly
      */
     final public function setReadonly(bool $readonly) : self

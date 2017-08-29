@@ -57,14 +57,14 @@ interface WidgetInterface
      * Should not called directly to avoid creating corrupt widget hierarchies.
      * Instead this method should be called from a container when a widget is added to that container.
      *
-     * @return $this
+     * @return static $this
      */
     function setParent(self $newParent) : self;
 
     /**
      * Unset the parent, used to trigger WidgetRemoveEvent handler
      *
-     * @return $this
+     * @return static $this
      */
     function clearParent() : self;
 
@@ -95,7 +95,7 @@ interface WidgetInterface
     /**
      * Get the nearest anchestor of the supplied type
      *
-     * @return null|object
+     * @return null|self
      */
     function getNearestAncestor(string $type);
 
@@ -107,7 +107,7 @@ interface WidgetInterface
     /**
      * Set/unset the changed status of the widget
      *
-     * @return $this
+     * @return static $this
      */
     function setChanged(bool $changed = true) : self;
 
@@ -128,7 +128,7 @@ interface WidgetInterface
      * @param string $eventName
      * @param callable $listener
      * @param int $priority
-     * @return static $this for chaining
+     * @return static $this
      */
     function on(string $eventName, callable $listener, int $priority = 50) : self;
 
@@ -138,7 +138,7 @@ interface WidgetInterface
      * @param string $eventName
      * @param callable $listener
      * @param int $priority
-     * @return static $this for chaining
+     * @return static $this
      */
     function one(string $eventName, callable $listener, int $priority = 50) : self;
 
@@ -149,7 +149,7 @@ interface WidgetInterface
      *
      * @param string $eventName
      * @param callable $listener
-     * @return static $this for chaining
+     * @return static $this
      */
     function off(string $eventName = null, callable $listener = null) : self;
 
@@ -163,6 +163,7 @@ interface WidgetInterface
      *
      * @param WidgetEvent $event
      * @param string $eventName Defaults to the class name of the supplied WidgetEvent
+     * @return static $this
      */
     function dispatch(WidgetEvent $event, string $eventName = null) : self;
 

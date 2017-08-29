@@ -39,6 +39,7 @@ trait InputAutocompleteAttributeTrait
     }
 
     /**
+     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete
      */
     final public function setAutocomplete(string $autocomplete = null) : self

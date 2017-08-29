@@ -33,7 +33,7 @@ trait InputRequiredAttributeTrait
     }
 
     /**
-     * @return $this
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-required
      */
     final public function setRequired(bool $required) : self

@@ -30,6 +30,7 @@ trait InputCheckedAttributeTrait
     }
 
     /**
+     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-checked
      */
     final public function setChecked(bool $checked) : self

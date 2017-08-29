@@ -45,7 +45,7 @@ interface AriaAttributesInterface extends \Replum\WidgetInterface
      * Set the ARIA role of the element.
      *
      * @param string $newRole
-     * @return static $this for chaining
+     * @return static $this
      * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
      * @link http://www.w3.org/TR/wai-aria/roles
      */

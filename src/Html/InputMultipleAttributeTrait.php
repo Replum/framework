@@ -31,6 +31,7 @@ trait InputMultipleAttributeTrait
     }
 
     /**
+     * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-multiple
      */
     final public function setMultiple(bool $multiple) : self

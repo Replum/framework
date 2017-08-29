@@ -23,14 +23,14 @@ interface WidgetContainerInterface extends WidgetInterface
      * Add a widget to this container, making this container the parent of the widget.
      * If the widget already exists, no error is raised.
      *
-     * @return $this
+     * @return static $this
      */
     function add(WidgetInterface $widget) : self;
 
     /**
      * Remove the supplied widget from the container. If the widget does not exists, an exception is thrown.
      *
-     * @return $this
+     * @return static $this
      */
     function del(WidgetInterface $widget) : self;
     
@@ -40,7 +40,7 @@ interface WidgetContainerInterface extends WidgetInterface
      * If $filterByType is supplied, only elements that are an instance of this type are returned.
      *
      * @param string $filterByType
-     * @return array<self>
+     * @return self[]
      */
     function getDescendants($filterByType = null);
 
@@ -54,6 +54,7 @@ interface WidgetContainerInterface extends WidgetInterface
 
     /**
      * Get the list of children of this container.
+     *
      * @return WidgetCollection
      */
     function children();

@@ -18,9 +18,6 @@ namespace Replum;
  * The first tag in that list is then used as the default tag (instead of DIV).
  *
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @property-read WidgetCollection $children Access the children array (collection) of this container.
- * @property-read array<WidgetInterface> $descendants All widgets below this widget in the tree.
- * @property string $tag The HTML tag to render this widget as.
  */
 trait WidgetContainerTrait
 {
