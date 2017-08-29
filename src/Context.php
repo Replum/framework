@@ -104,13 +104,19 @@ class Context implements ContextInterface
         $this->tls = $this->request->isSecure();
         $this->vendorDir = \dirname(\dirname((new \ReflectionClass($this->autoloader))->getFileName()));
 
-        if (\substr($_SERVER['REQUEST_URI'], 0, \strlen($_SERVER['SCRIPT_NAME'])) === $_SERVER['SCRIPT_NAME']) {
+        // URL starts with script name, so pathinfo is used as a prefix
+        if (\substr($this->request->getRequestUri(), 0, \strlen($this->request->getScriptName())) === $this->request->getScriptName()) {
             $this->rewriteEnabled = false;
             $this->urlPrefix = $this->request->getScriptName();
-        } elseif (\substr($_SERVER['REQUEST_URI'], 0, \strlen(\dirname($_SERVER['SCRIPT_NAME']))) === \dirname($_SERVER['SCRIPT_NAME'])) {
+        }
+
+        // URL uses rewriting, living inside basepath
+        elseif (\substr($this->request->getRequestUri(), 0, \strlen($this->request->getBasePath())) === $this->request->getBasePath()) {
             $this->rewriteEnabled = true;
             $this->urlPrefix = $this->request->getBasePath();
-        } else {
+        }
+
+        else {
             throw new \RuntimeException('Can not determine base url and rewrite status from current server config!');
         }
 
