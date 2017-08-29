@@ -14,21 +14,17 @@ namespace Replum\Html;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-final class DateInput extends Input
+final class RadioInput extends Input
 {
-    const TYPE = 'date';
+    const TYPE = 'radio';
 
-    use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributeTrait;
-    use InputReadonlyAttributeTrait;
+    use InputCheckedAttributeTrait;
     use InputRequiredAttributeTrait;
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinMaxStepAttributes()
-            . $this->renderInputReadonlyAttribute()
+            . $this->renderInputCheckedAttribute()
             . $this->renderInputRequiredAttribute()
         ;
     }

@@ -14,22 +14,18 @@ namespace Replum\Html;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-final class DateInput extends Input
+final class RangeInput extends Input
 {
-    const TYPE = 'date';
+    const TYPE = 'range';
 
     use InputAutocompleteAttributeTrait;
     use InputMinMaxStepAttributeTrait;
-    use InputReadonlyAttributeTrait;
-    use InputRequiredAttributeTrait;
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
             . $this->renderInputAutocompleteAttribute()
             . $this->renderInputMinMaxStepAttributes()
-            . $this->renderInputReadonlyAttribute()
-            . $this->renderInputRequiredAttribute()
         ;
     }
 }

@@ -12,143 +12,29 @@
 namespace Replum\Html;
 
 use \Replum\Util;
-use \Replum\WidgetInterface;
-use \Replum\WidgetTrait;
-use \Replum\WidgetHasChangeEventInterface;
-use \Replum\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
+final class NumberInput extends Input
 {
-    use WidgetTrait,
-        WidgetHasChangeEventTrait,
-        FormInputTrait {
-        hasAutocomplete as public;
-        enableAutocomplete as public;
-        disableAutocomplete as public;
-        unsetAutocomplete as public;
+    const TYPE = 'number';
 
-        hasAutofocus as public;
-        enableAutofocus as public;
-        disableAutofocus as public;
+    use InputAutocompleteAttributeTrait;
+    use InputMinMaxStepAttributeTrait;
+    use InputPlaceholderAttributeTrait;
+    use InputReadonlyAttributeTrait;
+    use InputRequiredAttributeTrait;
 
-        getPlaceholder as public;
-        setPlaceholder as public;
-
-        isReadonly as public;
-        enableReadonly as public;
-        disableReadonly as public;
-
-        isRequired as public;
-        enableRequired as public;
-        disableRequired as public;
-
-        setValue as private originalSetValue;
-    }
-
-    /**
-     * @var integer
-     */
-    private $min;
-
-    /**
-     * @return integer
-     */
-    public function getMin()
+    protected function renderAttributes() : string
     {
-        return $this->min;
-    }
-
-    /**
-     * @param integer $newMin
-     * @return static $this for chaining
-     */
-    public function setMin($newMin)
-    {
-        if (!is_int($newMin) && !is_float($newMin)) {
-            throw new \InvalidArgumentException('Minimum must be an integer or float number');
-        }
-
-        if ($this->min !== $newMin) {
-            $this->min = $newMin;
-            $this->setChanged();
-        }
-
-        return $this;
-    }
-
-    private function renderMin()
-    {
-        return Util::renderHtmlAttribute('min', $this->min);
-    }
-
-    /**
-     * @var integer
-     */
-    private $max;
-
-    /**
-     * @return integer
-     */
-    public function getMax()
-    {
-        return $this->max;
-    }
-
-    /**
-     * @param integer $newMax
-     * @return static $this for chaining
-     */
-    public function setMax($newMax)
-    {
-        if (!is_int($newMax) && !is_float($newMax)) {
-            throw new \InvalidArgumentException('Maximum must be an integer or float number');
-        }
-
-        if ($this->max !== $newMax) {
-            $this->max = $newMax;
-            $this->setChanged();
-        }
-
-        return $this;
-    }
-
-    private function renderMax()
-    {
-        return Util::renderHtmlAttribute('max', $this->max);
-    }
-
-    /**
-     * @var float
-     */
-    private $step;
-
-    /**
-     * @return float
-     */
-    public function getStep()
-    {
-        return $this->step;
-    }
-
-    /**
-     * @param float $newStep
-     * @return static $this for chaining
-     */
-    public function setStep($newStep)
-    {
-        if (!is_int($newStep) && !is_float($newStep)) {
-            throw new \InvalidArgumentException('Step must be an integer or float number');
-        }
-
-        if ($this->step !== $newStep) {
-            $this->step = $newStep;
-            $this->setChanged();
-        }
-
-        return $this;
+        return parent::renderAttributes()
+            . $this->renderInputAutocompleteAttribute()
+            . $this->renderInputMinMaxStepAttributes()
+            . $this->renderInputPlaceholderAttribute()
+            . $this->renderInputReadonlyAttribute()
+            . $this->renderInputRequiredAttribute()
+        ;
     }
 
     public function setValue($newValue)
@@ -178,25 +64,5 @@ class NumberInput implements FormInputInterface, WidgetHasChangeEventInterface
         }
 
         return $this->originalSetValue($newValue);
-    }
-
-    /**
-     * @param \Replum\WidgetInterface $parent
-     * @param string $name
-     */
-    public function __construct(WidgetInterface $parent = null)
-    {
-        if (!is_null($parent)) { $this->setParent($parent); }
-        $this->setType('number');
-    }
-
-    public function __toString()
-    {
-        return '<input'
-        . $this->renderAttributes()
-        . $this->renderFormInputAttributes()
-        . $this->renderMin()
-        . $this->renderMax()
-        . ' />';
     }
 }

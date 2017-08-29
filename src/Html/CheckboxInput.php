@@ -14,21 +14,17 @@ namespace Replum\Html;
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
-final class DateInput extends Input
+final class CheckboxInput extends Input
 {
-    const TYPE = 'date';
+    const TYPE = 'checkbox';
 
-    use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributeTrait;
-    use InputReadonlyAttributeTrait;
+    use InputCheckedAttributeTrait;
     use InputRequiredAttributeTrait;
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinMaxStepAttributes()
-            . $this->renderInputReadonlyAttribute()
+            . $this->renderInputCheckedAttribute()
             . $this->renderInputRequiredAttribute()
         ;
     }

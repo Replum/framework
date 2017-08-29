@@ -12,91 +12,61 @@
 namespace Replum\Html;
 
 use \Replum\Util;
-use \Replum\WidgetInterface;
-use \Replum\WidgetHasChangeEventInterface;
-use \Replum\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/forms.html#file-upload-state-(type=file)
  */
-final class FileInput extends HtmlElement implements FormElementInterface, WidgetHasChangeEventInterface
+final class FileInput extends Input
 {
-    const TAG = 'input';
+    const TYPE = 'file';
 
-    use WidgetHasChangeEventTrait;
-    use FormInputTrait {
-        hasAutocomplete as public;
-        enableAutocomplete as public;
-        disableAutocomplete as public;
-        unsetAutocomplete as public;
-
-        hasAutofocus as public;
-        enableAutofocus as public;
-        disableAutofocus as public;
-
-        getMinlength as public;
-        setMinlength as public;
-
-        getMaxlength as public;
-        setMaxlength as public;
-
-        getPlaceholder as public;
-        setPlaceholder as public;
-
-        isReadonly as public;
-        enableReadonly as public;
-        disableReadonly as public;
-
-        isRequired as public;
-        enableRequired as public;
-        disableRequired as public;
-    }
+    use InputMultipleAttributeTrait;
+    use InputRequiredAttributeTrait;
 
     /**
      * @var string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
+     * @link https://www.w3.org/TR/html5/forms.html#attr-input-accept
      */
     private $accept;
 
     /**
-     * @return string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
+     * @link https://www.w3.org/TR/html5/forms.html#attr-input-accept
      */
-    public function getAccept()
+    final public function getAccept() : string
     {
         return $this->accept;
     }
 
     /**
-     * @param string $newAccept
-     * @return \Replum\Html\Input $this for chaining
-     * @link http://www.w3.org/TR/html5/forms.html#attr-input-accept
+     * @return boolean
+     * @link https://www.w3.org/TR/html5/forms.html#attr-input-accept
      */
-    public function setAccept($newAccept)
+    final public function hasAccept() : bool
     {
-        $this->accept = $newAccept;
+        return ($this->accept !== null);
+    }
+
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-input-accept
+     */
+    final public function setAccept(string $accept = null) : self
+    {
+        if ($this->accept !== $accept) {
+            $this->accept = $accept;
+            $this->setChanged(true);
+        }
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    protected function renderAcceptAttribute()
+    protected function renderAttributes() : stzring
     {
-        return Util::renderHtmlAttribute('accept', $this->accept);
-    }
-
-    public function __construct(WidgetInterface $parent = null)
-    {
-        if (!is_null($parent)) { $this->setParent($parent); }
-        $this->setType('file');
-    }
-
-    public function render()
-    {
-        return '<input'
-        . $this->renderAttributes()
-        . $this->renderFormInputAttributes()
-        . ' />';
+        return parent::renderAttributes()
+            . Util::renderHtmlAttribute('accept', $this->accept)
+            . $this->renderInputMultipleAttribute()
+            . $this->renderInputRequiredAttribute()
+        ;
     }
 }
