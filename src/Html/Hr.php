@@ -22,6 +22,7 @@ use \Replum\PageInterface;
 final class Hr extends HtmlElement implements FlowElementInterface
 {
     const TAG = 'hr';
+    const EMPTY_ELEMENT = true;
 
     public static function create(PageInterface $page) : self
     {

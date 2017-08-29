@@ -20,6 +20,8 @@ abstract class HtmlElement implements WidgetInterface, AriaAttributesInterface
     use WidgetTrait;
     use AriaAttributesTrait;
 
+    const EMPTY_ELEMENT = false;
+
     /**
      * {@inheritDoc}
      */
@@ -32,11 +34,22 @@ abstract class HtmlElement implements WidgetInterface, AriaAttributesInterface
 
     public function render() : string
     {
-        return '<'
-            . static::TAG
-            . $this->renderAttributes()
-            . '>' . PHP_EOL
-            . $this->renderChildren() . PHP_EOL
-            . '</' . static::TAG . '>' . PHP_EOL;
+        if (static::EMPTY_ELEMENT) {
+            return '<'
+                . static::TAG
+                . $this->renderAttributes()
+                . ' />' . PHP_EOL
+            ;
+        }
+
+        else {
+            return '<'
+                . static::TAG
+                . $this->renderAttributes()
+                . '>' . PHP_EOL
+                . $this->renderChildren() . PHP_EOL
+                . '</' . static::TAG . '>' . PHP_EOL
+            ;
+        }
     }
 }

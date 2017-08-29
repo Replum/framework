@@ -22,6 +22,7 @@ use \Replum\PageInterface;
 final class Br extends HtmlElement implements PhrasingElementInterface
 {
     const TAG = 'br';
+    const EMPTY_ELEMENT = true;
 
     public static function create(PageInterface $page) : self
     {

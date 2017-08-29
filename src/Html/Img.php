@@ -19,6 +19,7 @@ use \Replum\Util;
 final class Img extends HtmlElement
 {
     const TAG = 'img';
+    const EMPTY_ELEMENT = true;
 
     /**
      * The src URL of this image
