@@ -24,8 +24,7 @@ trait FormElementTrait
     private $FormElementTraitForm;
 
     /**
-     * @implements FormElementInterface
-     * {@inheritdoc}
+     * @see FormElementInterface::getForm()
      */
     public function getForm() : Form
     {
@@ -37,8 +36,7 @@ trait FormElementTrait
     }
 
     /**
-     * @implements FormElementInterface
-     * {@inheritdoc}
+     * @see FormElementInterface::setForm()
      */
     public function setForm(Form $form) : FormElementInterface
     {
@@ -162,7 +160,7 @@ trait FormElementTrait
     {
         if ($this->value !== $value) {
             $this->value = $value;
-            $this->setChecked(true);
+            $this->setChanged(true);
         }
         return $this;
     }

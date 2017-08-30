@@ -651,6 +651,14 @@ abstract class HtmlFactory
     }
 
     /**
+     * Create an Select element
+     */
+    final public static function select(PageInterface $page) : Html\Select
+    {
+        return new Html\Select($page);
+    }
+
+    /**
      * Create an Small element
      */
     final public static function small(PageInterface $page, string $text = null) : Html\Small

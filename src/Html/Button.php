@@ -12,6 +12,7 @@
 namespace Replum\Html;
 
 use \Replum\PageInterface;
+use \Replum\Util;
 use \Replum\WidgetHasClickEventInterface;
 use \Replum\WidgetHasClickEventTrait;
 
@@ -27,10 +28,104 @@ use \Replum\WidgetHasClickEventTrait;
  */
 final class Button extends HtmlElement implements FormElementInterface, WidgetHasClickEventInterface
 {
-    const TAG = 'button';
-
     use FormElementTrait;
     use WidgetHasClickEventTrait;
+
+    const TAG = 'button';
+
+    const TYPE_SUBMIT = 'submit';
+    const TYPE_RESET = 'reset';
+    const TYPE_BUTTON = 'button';
+
+    ######################################################################
+    # autofocus attribute                                                #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # disabled attribute                                                 #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # form attribute                                                     #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # formaction, formenctype, formmethod, formnovalidate, formtarget    #
+    # attributes                                                         #
+    ######################################################################
+
+    // missing
+
+    ######################################################################
+    # menu attribute                                                     #
+    ######################################################################
+
+    // missing
+
+    ######################################################################
+    # name attribute                                                     #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # type attribute                                                     #
+    ######################################################################
+
+    /**
+     * @var string
+     * @link https://www.w3.org/TR/html5/forms.html#attr-button-type
+     */
+    private $type;
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-button-type
+     */
+    final public function getType() : string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-button-type
+     */
+    final public function hasType() : bool
+    {
+        return ($this->type !== null);
+    }
+
+    /**
+     * @return static $this
+     * @link https://www.w3.org/TR/html5/forms.html#attr-button-type
+     */
+    final public function setType(string $type = null) : self
+    {
+        if ($type !== null && $type !== self::TYPE_SUBMIT && $type !== self::TYPE_RESET && $type !== self::TYPE_BUTTON) {
+            throw new \InvalidArgumentException('Invalid button type "' . $type . '", use one of ' . self::class . '::TYPE_BUTTON, ' . self::class . '::TYPE_RESET, ' . self::class . '::TYPE_SUBMIT');
+        }
+
+        if ($this->type !== $type) {
+            $this->type = $type;
+            $this->setChanged(true);
+        }
+        return $this;
+    }
+
+    ######################################################################
+    # value attribute                                                    #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # rendering                                                          #
+    ######################################################################
 
     /**
      * {@inheritdoc}
@@ -39,11 +134,17 @@ final class Button extends HtmlElement implements FormElementInterface, WidgetHa
     {
         return parent::renderAttributes()
             . $this->renderFormElementAttributes()
+            . Util::renderHtmlAttribute('type', $this->type)
         ;
     }
 
-    public static function create(PageInterface $page) : self
+    /**
+     * Restrict valid ARIA roles
+     */
+    protected function validRoles() : array
     {
-        return new self($page);
+        return [
+            'button', 'link', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'radio',
+        ];
     }
 }

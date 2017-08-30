@@ -11,46 +11,147 @@
 
 namespace Replum\Html;
 
-use \Replum\PageInterface;
+use \Replum\HtmlFactory as Html;
 use \Replum\Util;
 use \Replum\WidgetHasChangeEventInterface;
 use \Replum\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @property string $name   Name this element is identified with in its form
- * @property array  $values The possible values in this select
- * @property string $value  The currently selected value
  */
-class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormInputInterface
+final class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormInputInterface
 {
-    use WidgetHasChangeEventTrait,
-        FormElementTrait;
+    use FormElementTrait;
+    use WidgetHasChangeEventTrait;
+
+    const TAG = 'select';
+
+    ######################################################################
+    # autofocus attribute                                                #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # disabled attribute                                                 #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # form attribute                                                     #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # multiple attribute                                                 #
+    ######################################################################
 
     /**
-     * @var string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     * @var bool
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-multiple
      */
-    protected $name;
+    private $multiple = false;
 
     /**
-     * @return string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-multiple
      */
-    public function getName()
+    final public function getMultiple() : bool
     {
-        return $this->name;
+        return $this->multiple;
     }
 
     /**
-     * @param string $newName
-     * @return \Replum\Html\Input $this for chaining
-     * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-multiple
      */
-    public function setName($newName)
+    final public function setMultiple(bool $multiple) : self
     {
-        return $this->setStringProperty('name', $newName);
+        if ($this->multiple !== $multiple) {
+            $this->multiple = $multiple;
+            $this->setChanged(true);
+        }
+        return $this;
     }
+
+    ######################################################################
+    # name attribute                                                     #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # required attribute                                                 #
+    ######################################################################
+
+    // from FormElementTrait
+
+    ######################################################################
+    # size attribute                                                     #
+    ######################################################################
+
+    /**
+     * @var int
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-size
+     */
+    private $size;
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-size
+     */
+    final public function getSize() : int
+    {
+        return $this->size;
+    }
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-size
+     */
+    final public function hasSize() : bool
+    {
+        return ($this->size !== null);
+    }
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-select-size
+     */
+    final public function setSize(int $size = null) : self
+    {
+        if ($size !== null && $size < 1) {
+            throw new \InvalidArgumentException("The size of a select element must be 1 or greater!");
+        }
+
+        if ($this->size !== $size) {
+            $this->size = $size;
+            $this->setChanged(true);
+        }
+        return $this;
+    }
+
+    ######################################################################
+    # rendering                                                          #
+    ######################################################################
+
+    protected function renderAttributes() : string
+    {
+        return parent::renderAttributes()
+        . Util::renderHtmlAttribute('name', $this->name)
+        . Util::renderHtmlAttribute('size', $this->size)
+        ;
+    }
+
+    public function render() : string
+    {
+        if (!\count($this->children()) && \count($this->values)) {
+            $this->createOptions($this, $this->values);
+        }
+
+        return parent::render();
+    }
+
+    ######################################################################
+    # helper functions                                                   #
+    ######################################################################
 
     /**
      * @var array
@@ -85,94 +186,22 @@ class Select extends HtmlElement implements WidgetHasChangeEventInterface, FormI
         return $this;
     }
 
-    /**
-     * @var string
-     */
-    protected $value;
-
-    /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     *
-     * @param type $newValue
-     * @return \Replum\Html\Select
-     */
-    public function setValue($newValue)
-    {
-        return $this->setStringProperty('value', $newValue);
-    }
-
-    /**
-     * @var int
-     */
-    protected $size;
-
-    /**
-     * @return int
-     */
-    public function getSize() {
-        return $this->size;
-    }
-
-    /**
-     * @param int $newSize
-     * @return \Replum\Html\Select
-     */
-    public function setSize($newSize) {
-        return $this->setPropertyValue('size', (int)$newSize);
-    }
-
-    protected function renderAttributes() : string
-    {
-        return parent::renderAttributes()
-        . Util::renderHtmlAttribute('name', $this->name)
-        . Util::renderHtmlAttribute('size', $this->size)
-        ;
-    }
-
-    public function render() : string
-    {
-        try {
-            //$this->children = [];
-            $this->createOptions($this, $this->values);
-
-            return '<select' . $this->renderAttributes() . '>'
-            . $this->renderChildren()
-            . '</select>'
-            ;
-        } catch (\Exception $e) {
-            echo '<pre>' . $e;
-            exit;
-        }
-    }
-
     protected function createOptions($parent, $values)
     {
         foreach ($values as $value => $label) {
             if (\is_array($label)) {
-                $optgroup = OptionGroup::create($this->getPage(), 'label', $value);
+                $optgroup = Html::optGroup($this->getPage())->setLabel($value);
                 $parent->add($optgroup);
                 $this->{__FUNCTION__}($optgroup, $label);
             }
 
             else {
-                $option = Option::create($this->getPage())->setLabel($label)->setValue($this->isAssoc ? $value : $label);
+                $option = Html::option($this->getPage())->setLabel($label)->setValue($this->isAssoc ? $value : $label);
                 if (($this->value !== null) && ($value === $this->value)) {
                     $option->setSelected(true);
                 }
                 $parent->add($option);
             }
         }
-    }
-
-    public static function create(PageInterface $page) : self
-    {
-        return new self($page);
     }
 }

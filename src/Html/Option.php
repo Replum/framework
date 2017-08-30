@@ -11,28 +11,62 @@
 
 namespace Replum\Html;
 
-use \Replum\PageInterface;
 use \Replum\Util;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @property string  $label    User-visible label
- * @property string  $value    Value to be used for form submission
- * @property boolean $selected Whether the option is selected by default
- * @link http://www.w3.org/TR/html5/forms.html#the-option-element
+ * @link https://www.w3.org/TR/html5/forms.html#the-option-element
  */
-class Option extends HtmlElement
+final class Option extends HtmlElement
 {
+    const TAG = 'option';
+    const EMPTY_ELEMENT = true;
+
+    ######################################################################
+    # disabled attribute                                                 #
+    ######################################################################
+
+    /**
+     * @var bool
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-disabled
+     */
+    private $disabled = false;
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-disabled
+     */
+    final public function getDisabled() : bool
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-disabled
+     */
+    final public function setDisabled(bool $disabled) : self
+    {
+        if ($this->disabled !== $disabled) {
+            $this->disabled = $disabled;
+            $this->setChanged(true);
+        }
+
+        return $this;
+    }
+
+    ######################################################################
+    # label attribute                                                    #
+    ######################################################################
+
     /**
      * The text value to show for this element
      *
      * @var string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-label
      */
-    protected $label;
+    private $label;
 
     /**
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-label
      */
     final public function getLabel() : string
     {
@@ -40,16 +74,16 @@ class Option extends HtmlElement
     }
 
     /**
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-label
      */
     final public function hasLabel() : bool
     {
-        return $this->label !== null;
+        return ($this->label !== null);
     }
 
     /**
      * @return $this
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-label
+     * @link https://www.w3.org/TR/html5/forms.html#attr-option-label
      */
     final public function setLabel(string $newLabel = null) : self
     {
@@ -60,6 +94,50 @@ class Option extends HtmlElement
 
         return $this;
     }
+
+    ######################################################################
+    # selected attribute                                                 #
+    ######################################################################
+
+    /**
+     * @var boolean
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
+     */
+    protected $selected;
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
+     */
+    final public function getSelected() : bool
+    {
+        return $this->selected;
+    }
+
+    /**
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
+     */
+    final public function hasSelected() : bool
+    {
+        return $this->selected !== null;
+    }
+
+    /**
+     * @return $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
+     */
+    final public function setSelected(bool $newSelected = null) : self
+    {
+        if ($this->selected !== $newSelected) {
+            $this->selected = $newSelected;
+            $this->setChanged(true);
+        }
+
+        return $this;
+    }
+
+    ######################################################################
+    # value attribute                                                    #
+    ######################################################################
 
     /**
      * The value to submit if this element is selected
@@ -99,57 +177,24 @@ class Option extends HtmlElement
         return $this;
     }
 
-    /**
-     * @var boolean
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
-     */
-    protected $selected;
-
-    /**
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
-     */
-    final public function getSelected() : bool
-    {
-        return $this->selected;
-    }
-
-    /**
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
-     */
-    final public function hasSelected() : bool
-    {
-        return $this->selecte !== null;
-    }
-
-    /**
-     * @return $this
-     * @link http://www.w3.org/TR/html5/forms.html#attr-option-selected
-     */
-    final public function setSelected(bool $newSelected = null) : self
-    {
-        if ($this->selected !== $newSelected) {
-            $this->selected = $newSelected;
-            $this->setChanged(true);
-        }
-
-        return $this;
-    }
+    ######################################################################
+    # rendering                                                          #
+    ######################################################################
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-        . Util::renderHtmlAttribute('value', $this->value)
-        . Util::renderHtmlAttribute('selected', ($this->selected ? 'selected' : null))
+            . Util::renderHtmlAttribute('disabled', $this->disabled)
+            . Util::renderHtmlAttribute('label', $this->label)
+            . Util::renderHtmlAttribute('selected', $this->selected)
+            . Util::renderHtmlAttribute('value', $this->value)
         ;
     }
 
-    public function render() : string
+    public function render(): string
     {
-        return '<option' . $this->renderAttributes() . '>' . Util::escapeHtml($this->label) . '</option>';
-    }
-
-    public static function create(PageInterface $page) : self
-    {
-        return new self($page);
+        return '<' . self::TAG . $this->renderAttributes() . '>'
+            . Util::escapeHtml($this->label !== null ? $this->label : $this->value)
+            . '</' . self::TAG . '>' . PHP_EOL;
     }
 }
