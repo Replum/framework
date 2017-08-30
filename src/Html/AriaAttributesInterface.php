@@ -20,13 +20,31 @@ namespace Replum\Html;
 interface AriaAttributesInterface extends \Replum\WidgetInterface
 {
     ######################################################################
+    # Common attributes                                                  #
+    ######################################################################
+
+    /**
+     * Get the aria-$name attribute
+     */
+    function getAria(string $name) : string;
+
+    /**
+     * Check whether the aria-$name attribute is set
+     */
+    function hasAria(string $name) : bool;
+
+    /**
+     * @return static $this
+     */
+    function setAria(string $name, string $value = null) : self;
+
+    ######################################################################
     # Role attribute                                                     #
     ######################################################################
 
     /**
      * Get the ARIA role of the element if defined.
      *
-     * @return string
      * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
      * @link http://www.w3.org/TR/wai-aria/roles
      */
@@ -35,7 +53,6 @@ interface AriaAttributesInterface extends \Replum\WidgetInterface
     /**
      * Whether the aria role is set.
      *
-     * @return string
      * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
      * @link http://www.w3.org/TR/wai-aria/roles
      */
@@ -44,7 +61,6 @@ interface AriaAttributesInterface extends \Replum\WidgetInterface
     /**
      * Set the ARIA role of the element.
      *
-     * @param string $newRole
      * @return static $this
      * @link http://www.w3.org/TR/html5/dom.html#aria-role-attribute
      * @link http://www.w3.org/TR/wai-aria/roles

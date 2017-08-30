@@ -11,12 +11,14 @@
 
 namespace Replum\Html;
 
+use \Replum\WidgetContainerTrait;
+
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
 abstract class HtmlElement implements WidgetInterface, AriaAttributesInterface
 {
-    use \Replum\WidgetContainerTrait;
+    use WidgetContainerTrait;
     use WidgetTrait;
     use AriaAttributesTrait;
 

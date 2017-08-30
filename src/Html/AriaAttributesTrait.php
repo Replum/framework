@@ -95,8 +95,49 @@ trait AriaAttributesTrait
     # Attribute handling                                                 #
     ######################################################################
 
+    private $ariaAttributesTraitAttributes = [];
+
+    /**
+     * @see AriaAttributesInterface::getAria()
+     */
+    final public function getAria(string $name) : string
+    {
+        return $this->ariaAttributesTraitAttributes[$name];
+    }
+
+    /**
+     * @see AriaAttributesInterface::hasAria()
+     */
+    final public function hasAria(string $name) : bool
+    {
+        return (isset($this->ariaAttributesTraitAttributes[$name]) && $this->ariaAttributesTraitAttributes[$name] !== null);
+    }
+
+    /**
+     * @see AriaAttributesInterface::setAria()
+     */
+    final public function setAria(string $name, string $value = null) : AriaAttributesInterface
+    {
+        if ($value === null) {
+            unset($this->ariaAttributesTraitAttributes[$name]);
+        } else {
+            $this->ariaAttributesTraitAttributes[$name] = $value;
+        }
+        return $this;
+    }
+
+    ######################################################################
+    # Attribute handling                                                 #
+    ######################################################################
+
     final protected function renderAriaAttributes() : string
     {
-        return Util::renderHtmlAttribute('role', $this->ariaAttributesTraitRole);
+        $r = Util::renderHtmlAttribute('role', $this->ariaAttributesTraitRole);
+
+        foreach ($this->ariaAttributesTraitAttributes as $attribute => $value) {
+            $r .= Util::renderHtmlAttribute('aria-' . $attribute, $value);
+        }
+
+        return $r;
     }
 }
