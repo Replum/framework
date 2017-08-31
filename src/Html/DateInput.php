@@ -17,7 +17,7 @@ namespace Replum\Html;
 final class DateInput extends Input
 {
     use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributeTrait;
+    use InputMinMaxStepAttributesTrait;
     use InputReadonlyAttributeTrait;
     use InputRequiredAttributeTrait;
 

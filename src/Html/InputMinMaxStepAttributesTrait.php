@@ -18,7 +18,7 @@ use \Replum\Util;
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-max
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-step
  */
-trait InputMinMaxStepAttributeTrait
+trait InputMinMaxStepAttributesTrait
 {
     /**
      * @var float

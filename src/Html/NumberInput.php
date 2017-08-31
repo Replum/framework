@@ -19,7 +19,7 @@ use \Replum\Util;
 final class NumberInput extends Input
 {
     use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributeTrait;
+    use InputMinMaxStepAttributesTrait;
     use InputPlaceholderAttributeTrait;
     use InputReadonlyAttributeTrait;
     use InputRequiredAttributeTrait;

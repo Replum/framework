@@ -17,7 +17,7 @@ namespace Replum\Html;
 final class RangeInput extends Input
 {
     use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributeTrait;
+    use InputMinMaxStepAttributesTrait;
 
     const TYPE = 'range';
 
