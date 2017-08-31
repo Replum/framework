@@ -24,9 +24,6 @@ abstract class Input extends HtmlElement implements FormInputInterface
     const TAG = 'input';
     const EMPTY_ELEMENT = true;
 
-    const AUTOCOMPLETE_ON = 'on';
-    const AUTOCOMPLETE_OFF = 'off';
-
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()

@@ -33,7 +33,7 @@ class TextInputTest extends HtmlTestBase
         "name"           => ["foo", "bar"],
         "value"          => ["foo", "bar"],
 
-        "autocomplete"   => [Input::AUTOCOMPLETE_ON, Input::AUTOCOMPLETE_OFF],
+        "autocomplete"   => [Form::AUTOCOMPLETE_ON, Form::AUTOCOMPLETE_OFF],
         "dirname"        => null,
         "inputmode"      => null,
         "list"           => null,

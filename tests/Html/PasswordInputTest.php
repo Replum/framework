@@ -33,7 +33,7 @@ class PasswordInputTest extends HtmlTestBase
         "name"           => ["foo", "bar"],
         "value"          => ["foo", "bar"],
 
-        "autocomplete"   => [Input::AUTOCOMPLETE_ON, Input::AUTOCOMPLETE_OFF],
+        "autocomplete"   => [Form::AUTOCOMPLETE_ON, Form::AUTOCOMPLETE_OFF],
         "inputmode"      => null,
         "maxlength"      => [20, 10],
         "minlength"      => [10, 20],

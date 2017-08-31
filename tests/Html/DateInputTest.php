@@ -33,7 +33,7 @@ class DateInputTest extends HtmlTestBase
         "name"           => ["foo", "bar"],
         "value"          => ["foo", "bar"],
 
-        "autocomplete"   => [Input::AUTOCOMPLETE_ON, Input::AUTOCOMPLETE_OFF],
+        "autocomplete"   => [Form::AUTOCOMPLETE_ON, Form::AUTOCOMPLETE_OFF],
         "list"           => null,
         "max"            => [20, 10],
         "min"            => [10, 20],

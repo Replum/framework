@@ -36,7 +36,7 @@ abstract class HtmlTestBase extends TestCase
 
         "accept"         => null,
         "alt"            => null,
-        "autocomplete"   => [Input::AUTOCOMPLETE_ON, Input::AUTOCOMPLETE_OFF],
+        "autocomplete"   => [Form::AUTOCOMPLETE_ON, Form::AUTOCOMPLETE_OFF],
         "checked"        => true,
         "dirname"        => ["foo", "bar"],
         "formaction"     => ["foo", "bar"],
@@ -71,10 +71,15 @@ abstract class HtmlTestBase extends TestCase
 
     abstract protected function factory() : HtmlElement;
 
+    private function makeAccessor(string $prefix, string $attribute) : string
+    {
+        return $prefix . \implode('', \array_map('ucfirst', \explode('-', $attribute)));
+    }
+
     final protected function runBoolAttributeTest(string $attributeName)
     {
-        $getter = 'get' . \ucfirst($attributeName);
-        $setter = 'set' . \ucfirst($attributeName);
+        $getter = $this->makeAccessor('get', $attributeName);
+        $setter = $this->makeAccessor('set', $attributeName);
 
         $input = $this->factory();
 
@@ -99,9 +104,9 @@ abstract class HtmlTestBase extends TestCase
 
     final protected function runNullableAttributeTest(string $attributeName, ...$values)
     {
-        $getter = 'get' . \ucfirst($attributeName);
-        $hasser = 'has' . \ucfirst($attributeName);
-        $setter = 'set' . \ucfirst($attributeName);
+        $getter = $this->makeAccessor('get', $attributeName);
+        $hasser = $this->makeAccessor('has', $attributeName);
+        $setter = $this->makeAccessor('set', $attributeName);
 
         $input = $this->factory();
 
@@ -173,7 +178,7 @@ abstract class HtmlTestBase extends TestCase
                 continue;
             }
 
-            $setter = 'set' . \ucfirst($attribute);
+            $setter = $this->makeAccessor('set', $attribute);
             if (\is_array($values)) {
                 $element->{$setter}($values[0]);
                 $ref[$attribute] = (string)$values[0];

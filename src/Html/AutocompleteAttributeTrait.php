@@ -44,7 +44,7 @@ trait AutocompleteAttributeTrait
      */
     final public function setAutocomplete(string $autocomplete = null) : self
     {
-        if ($autocomplete !== Input::AUTOCOMPLETE_ON && $autocomplete !== Input::AUTOCOMPLETE_OFF && $autocomplete !== null) {
+        if ($autocomplete !== Form::AUTOCOMPLETE_ON && $autocomplete !== Form::AUTOCOMPLETE_OFF && $autocomplete !== null) {
             throw new \InvalidArgumentException('Valid values for autocomplete are: ' . Input::class . '::AUTOCOMPLETE_ON, ' . Input::class . '::AUTOCOMPLETE_OFF and NULL!');
         }
 
