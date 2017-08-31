@@ -19,22 +19,22 @@ use \Replum\Util;
  */
 final class NumberInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributesTrait;
-    use InputPlaceholderAttributeTrait;
-    use InputReadonlyAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use AutocompleteAttributeTrait;
+    use MinMaxStepAttributesTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
 
     const TYPE = 'number';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinMaxStepAttributes()
-            . $this->renderInputPlaceholderAttribute()
-            . $this->renderInputReadonlyAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderAutocompleteAttribute()
+            . $this->renderMinMaxStepAttributes()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
         ;
     }
 }

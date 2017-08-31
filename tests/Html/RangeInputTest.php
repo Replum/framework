@@ -15,14 +15,14 @@ use \Replum\Context;
 use \Replum\HtmlFactory;
 use Symfony\Component\Console\Tests\Input\InputTest;
 
-class TextInputTest extends HtmlTestBase
+class RangeInputTest extends HtmlTestBase
 {
     /**
-     * @return TextInput
+     * @return RangeInput
      */
     protected function factory() : HtmlElement
     {
-        return HtmlFactory::textInput($this->page);
+        return HtmlFactory::rangeInput($this->page);
     }
 
     protected $attributes = [
@@ -34,19 +34,13 @@ class TextInputTest extends HtmlTestBase
         "value"          => ["foo", "bar"],
 
         "autocomplete"   => [Input::AUTOCOMPLETE_ON, Input::AUTOCOMPLETE_OFF],
-        "dirname"        => null,
-        "inputmode"      => null,
         "list"           => null,
-        "maxlength"      => [20, 10],
-        "minlength"      => [10, 20],
-        "pattern"        => ["foo bar", "/blubb/baz/"],
-        "placeholder"    => ["placeholder I am", "Stupid text"],
-        "readonly"       => true,
-        "required"       => true,
-        "size"           => [5, 10],
+        "max"            => [20, 10],
+        "min"            => [10, 20],
+        "step"           => [5, 10],
     ];
 
     protected $additionalAttributes = [
-        "type"           => TextInput::TYPE,
+        "type"           => RangeInput::TYPE,
     ];
 }

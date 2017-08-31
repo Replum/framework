@@ -16,16 +16,22 @@ namespace Replum\Html;
  */
 final class TimeInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributesTrait;
+    use AutocompleteAttributeTrait;
+    use MinMaxStepAttributesTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
 
     const TYPE = 'time';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinMaxStepAttributes()
+            . $this->renderAutocompleteAttribute()
+            . $this->renderMinMaxStepAttributes()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
         ;
     }
 }

@@ -16,14 +16,26 @@ namespace Replum\Html;
  */
 final class UrlInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinLengthMaxLengthPatternSizeAttributesTrait;
+    use AutocompleteAttributeTrait;
+    use MinlengthMaxLengthAttributesTrait;
+    use PatternAttributeTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
+    use SizeAttributeTrait;
+
+    const TYPE = 'url';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinLengthMaxLengthPatternSizeAttributes()
+            . $this->renderAutocompleteAttribute()
+            . $this->renderMinlengthMaxlengthAttributes()
+            . $this->renderPatternAttribute()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
+            . $this->renderSizeAttribute()
         ;
     }
 }

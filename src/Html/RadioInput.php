@@ -17,7 +17,7 @@ namespace Replum\Html;
 final class RadioInput extends Input
 {
     use InputCheckedAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use RequiredAttributeTrait;
 
     const TYPE = 'radio';
 
@@ -25,7 +25,7 @@ final class RadioInput extends Input
     {
         return parent::renderAttributes()
             . $this->renderInputCheckedAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderRequiredAttribute()
         ;
     }
 }

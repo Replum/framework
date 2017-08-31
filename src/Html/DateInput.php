@@ -16,20 +16,22 @@ namespace Replum\Html;
  */
 final class DateInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinMaxStepAttributesTrait;
-    use InputReadonlyAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use AutocompleteAttributeTrait;
+    use MinMaxStepAttributesTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
 
     const TYPE = 'date';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinMaxStepAttributes()
-            . $this->renderInputReadonlyAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderAutocompleteAttribute()
+            . $this->renderMinMaxStepAttributes()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
         ;
     }
 }

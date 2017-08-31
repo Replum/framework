@@ -13,7 +13,7 @@ namespace Replum\Html;
 
 use \Replum\Util;
 
-trait InputAutocompleteAttributeTrait
+trait AutocompleteAttributeTrait
 {
     /**
      * @var AUTOCOMPLETE_ON|AUTOCOMPLETE_OFF
@@ -56,7 +56,7 @@ trait InputAutocompleteAttributeTrait
         return $this;
     }
 
-    final protected function renderInputAutocompleteAttribute() : string
+    final protected function renderAutocompleteAttribute() : string
     {
         return Util::renderHtmlAttribute('autocomplete', $this->autocomplete);
     }

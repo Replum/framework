@@ -13,27 +13,32 @@ namespace Replum\Html;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/forms.html#e-mail-state-(type=email)
  */
 final class EmailInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinLengthMaxLengthPatternSizeAttributesTrait;
-    use InputMultipleAttributeTrait;
-    use InputPlaceholderAttributeTrait;
-    use InputReadonlyAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use AutocompleteAttributeTrait;
+    use MinlengthMaxLengthAttributesTrait;
+    use MultipleAttributeTrait;
+    use PatternAttributeTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
+    use SizeAttributeTrait;
 
     const TYPE = 'email';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinLengthMaxLengthPatternSizeAttributes()
-            . $this->renderInputMultipleAttribute()
-            . $this->renderInputPlaceholderAttribute()
-            . $this->renderInputReadonlyAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderAutocompleteAttribute()
+            . $this->renderMinlengthMaxlengthAttributes()
+            . $this->renderMultipleAttribute()
+            . $this->renderPatternAttribute()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
+            . $this->renderSizeAttribute()
         ;
     }
 }

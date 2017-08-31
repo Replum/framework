@@ -16,7 +16,7 @@ use \Replum\Util;
 /**
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-placeholder
  */
-trait InputPlaceholderAttributeTrait
+trait PlaceholderAttributeTrait
 {
     /**
      * @var string
@@ -53,7 +53,7 @@ trait InputPlaceholderAttributeTrait
         return $this;
     }
 
-    final protected function renderInputPlaceholderAttribute() : string
+    final protected function renderPlaceholderAttribute() : string
     {
         return Util::renderHtmlAttribute('placeholder', $this->placeholder);
     }

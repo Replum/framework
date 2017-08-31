@@ -16,16 +16,26 @@ namespace Replum\Html;
  */
 final class SearchInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinLengthMaxLengthPatternSizeAttributesTrait;
+    use AutocompleteAttributeTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
+    use MinlengthMaxLengthAttributesTrait;
+    use PatternAttributeTrait;
+    use SizeAttributeTrait;
 
     const TYPE = 'search';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinLengthMaxLengthPatternSizeAttributes()
-        ;
+            . $this->renderAutocompleteAttribute()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
+            . $this->renderMinlengthMaxlengthAttributes()
+            . $this->renderPatternAttribute()
+            . $this->renderSizeAttribute()
+            ;
     }
 }

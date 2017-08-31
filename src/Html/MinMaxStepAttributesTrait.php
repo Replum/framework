@@ -18,7 +18,7 @@ use \Replum\Util;
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-max
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-step
  */
-trait InputMinMaxStepAttributesTrait
+trait MinMaxStepAttributesTrait
 {
     /**
      * @var float
@@ -134,7 +134,7 @@ trait InputMinMaxStepAttributesTrait
         return $this;
     }
 
-    final protected function renderInputMinMaxStepAttributes() : string
+    final protected function renderMinMaxStepAttributes() : string
     {
         return Util::renderHtmlAttribute('min', $this->min)
             . Util::renderHtmlAttribute('max', $this->max)

@@ -16,14 +16,14 @@ namespace Replum\Html;
  */
 final class ColorInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
+    use AutocompleteAttributeTrait;
 
     const TYPE = 'color';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
+            . $this->renderAutocompleteAttribute()
         ;
     }
 }

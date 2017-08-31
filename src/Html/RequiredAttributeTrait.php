@@ -16,7 +16,7 @@ use \Replum\Util;
 /**
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-required
  */
-trait InputRequiredAttributeTrait
+trait RequiredAttributeTrait
 {
     /**
      * @var boolean
@@ -45,8 +45,7 @@ trait InputRequiredAttributeTrait
         return $this;
     }
 
-
-    final protected function renderInputRequiredAttribute() : string
+    final protected function renderRequiredAttribute() : string
     {
         return Util::renderHtmlAttribute('required', $this->required);
     }

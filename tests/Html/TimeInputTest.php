@@ -15,38 +15,32 @@ use \Replum\Context;
 use \Replum\HtmlFactory;
 use Symfony\Component\Console\Tests\Input\InputTest;
 
-class TextInputTest extends HtmlTestBase
+class TimeInputTest extends HtmlTestBase
 {
     /**
-     * @return TextInput
+     * @return TimeInput
      */
     protected function factory() : HtmlElement
     {
-        return HtmlFactory::textInput($this->page);
+        return HtmlFactory::timeInput($this->page);
     }
 
     protected $attributes = [
-        // Common attributes
         "autofocus"      => true,
-        "disabled"       => true,
-        "form"           => null,
         "name"           => ["foo", "bar"],
         "value"          => ["foo", "bar"],
 
         "autocomplete"   => [Input::AUTOCOMPLETE_ON, Input::AUTOCOMPLETE_OFF],
-        "dirname"        => null,
-        "inputmode"      => null,
         "list"           => null,
-        "maxlength"      => [20, 10],
-        "minlength"      => [10, 20],
-        "pattern"        => ["foo bar", "/blubb/baz/"],
+        "max"            => [20, 10],
+        "min"            => [10, 20],
         "placeholder"    => ["placeholder I am", "Stupid text"],
         "readonly"       => true,
         "required"       => true,
-        "size"           => [5, 10],
+        "step"           => [5, 10],
     ];
 
     protected $additionalAttributes = [
-        "type"           => TextInput::TYPE,
+        "type"           => TimeInput::TYPE,
     ];
 }

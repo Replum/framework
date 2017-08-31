@@ -16,7 +16,7 @@ use \Replum\Util;
 /**
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-readonly
  */
-trait InputReadonlyAttributeTrait
+trait ReadonlyAttributeTrait
 {
     /**
      * @var bool
@@ -45,8 +45,7 @@ trait InputReadonlyAttributeTrait
         return $this;
     }
 
-
-    final protected function renderInputReadonlyAttribute() : string
+    final protected function renderReadonlyAttribute() : string
     {
         return Util::renderHtmlAttribute('readonly', $this->readonly);
     }

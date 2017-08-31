@@ -19,8 +19,8 @@ use \Replum\Util;
  */
 final class FileInput extends Input
 {
-    use InputMultipleAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use MultipleAttributeTrait;
+    use RequiredAttributeTrait;
 
     const TYPE = 'file';
 
@@ -61,12 +61,12 @@ final class FileInput extends Input
         return $this;
     }
 
-    protected function renderAttributes() : stzring
+    protected function renderAttributes() : string
     {
         return parent::renderAttributes()
             . Util::renderHtmlAttribute('accept', $this->accept)
-            . $this->renderInputMultipleAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderMultipleAttribute()
+            . $this->renderRequiredAttribute()
         ;
     }
 }

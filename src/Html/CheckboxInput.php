@@ -17,7 +17,7 @@ namespace Replum\Html;
 final class CheckboxInput extends Input
 {
     use InputCheckedAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use RequiredAttributeTrait;
 
     const TYPE = 'checkbox';
 
@@ -25,7 +25,7 @@ final class CheckboxInput extends Input
     {
         return parent::renderAttributes()
             . $this->renderInputCheckedAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderRequiredAttribute()
         ;
     }
 }

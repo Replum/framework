@@ -14,7 +14,7 @@ namespace Replum\Html;
 /**
  * @link https://www.w3.org/TR/html5/forms.html#attr-input-multiple
  */
-trait InputMultipleAttributeTrait
+trait MultipleAttributeTrait
 {
     /**
      * @var bool
@@ -44,7 +44,7 @@ trait InputMultipleAttributeTrait
         return $this;
     }
 
-    final protected function renderInputMultipleAttribute() : string
+    final protected function renderMultipleAttribute() : string
     {
         return \Replum\Util::renderHtmlAttribute('multiple', $this->multiple);
     }

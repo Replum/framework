@@ -31,11 +31,7 @@ abstract class Input extends HtmlElement implements FormInputInterface
     {
         return parent::renderAttributes()
             . $this->renderFormElementAttributes()
-            . Util::renderHtmlAttribute('autofocus', $this->autofocus)
-            . Util::renderHtmlAttribute('disabled', $this->disabled)
-            . Util::renderHtmlAttribute('name', $this->name)
             . Util::renderHtmlAttribute('type', static::TYPE)
-            . Util::renderHtmlAttribute('value', $this->value)
         ;
     }
 }

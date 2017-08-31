@@ -15,14 +15,14 @@ use \Replum\Context;
 use \Replum\HtmlFactory;
 use Symfony\Component\Console\Tests\Input\InputTest;
 
-class TextInputTest extends HtmlTestBase
+class SearchInputTest extends HtmlTestBase
 {
     /**
-     * @return TextInput
+     * @return SearchInput
      */
     protected function factory() : HtmlElement
     {
-        return HtmlFactory::textInput($this->page);
+        return HtmlFactory::searchInput($this->page);
     }
 
     protected $attributes = [
@@ -47,6 +47,6 @@ class TextInputTest extends HtmlTestBase
     ];
 
     protected $additionalAttributes = [
-        "type"           => TextInput::TYPE,
+        "type"           => SearchInput::TYPE,
     ];
 }

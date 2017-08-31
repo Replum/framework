@@ -13,25 +13,30 @@ namespace Replum\Html;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/forms.html#text-(type=text)-state-and-search-state-(type=search)
  */
 final class TextInput extends Input
 {
-    use InputAutocompleteAttributeTrait;
-    use InputMinLengthMaxLengthPatternSizeAttributesTrait;
-    use InputPlaceholderAttributeTrait;
-    use InputReadonlyAttributeTrait;
-    use InputRequiredAttributeTrait;
+    use AutocompleteAttributeTrait;
+    use MinlengthMaxLengthAttributesTrait;
+    use PatternAttributeTrait;
+    use PlaceholderAttributeTrait;
+    use ReadonlyAttributeTrait;
+    use RequiredAttributeTrait;
+    use SizeAttributeTrait;
 
     const TYPE = 'text';
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderInputAutocompleteAttribute()
-            . $this->renderInputMinLengthMaxLengthPatternSizeAttributes()
-            . $this->renderInputPlaceholderAttribute()
-            . $this->renderInputReadonlyAttribute()
-            . $this->renderInputRequiredAttribute()
+            . $this->renderAutocompleteAttribute()
+            . $this->renderMinlengthMaxlengthAttributes()
+            . $this->renderPatternAttribute()
+            . $this->renderPlaceholderAttribute()
+            . $this->renderReadonlyAttribute()
+            . $this->renderRequiredAttribute()
+            . $this->renderSizeAttribute()
         ;
     }
 }
