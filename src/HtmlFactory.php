@@ -747,6 +747,14 @@ abstract class HtmlFactory
     }
 
     /**
+     * Create an Textarea element
+     */
+    final public static function textarea(PageInterface $page) : Html\Textarea
+    {
+        return new Html\Textarea($page);
+    }
+
+    /**
      * Create an Input[type=text] element
      */
     final public static function textInput(PageInterface $page) : Html\TextInput
