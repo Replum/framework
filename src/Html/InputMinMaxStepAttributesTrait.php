@@ -46,7 +46,7 @@ trait InputMinMaxStepAttributesTrait
      * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-min
      */
-    final public function setMinlength(float $min = null) : self
+    final public function setMin(float $min = null) : self
     {
         if ($min !== null && $this->max !== null && $this->max < $min) {
             throw new \InvalidArgumentException('Minimum must be less or equal to the maximum (' . $this->max . ')');
@@ -85,7 +85,7 @@ trait InputMinMaxStepAttributesTrait
      * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-max
      */
-    final public function setMaxlength(int $max = null) : self
+    final public function setMax(int $max = null) : self
     {
         if ($this->min !== null && $max && $max < $this->min) {
             throw new \InvalidArgumentException('Maximum must be greater equal to the minimum (' . $this->min . ')');
