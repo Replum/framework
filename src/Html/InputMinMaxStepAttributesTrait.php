@@ -85,7 +85,7 @@ trait InputMinMaxStepAttributesTrait
      * @return static $this
      * @link https://www.w3.org/TR/html5/forms.html#attr-input-max
      */
-    final public function setMax(int $max = null) : self
+    final public function setMax(float $max = null) : self
     {
         if ($this->min !== null && $max && $max < $this->min) {
             throw new \InvalidArgumentException('Maximum must be greater equal to the minimum (' . $this->min . ')');

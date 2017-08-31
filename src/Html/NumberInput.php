@@ -15,6 +15,7 @@ use \Replum\Util;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/forms.html#number-state-(type=number)
  */
 final class NumberInput extends Input
 {

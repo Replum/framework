@@ -18,6 +18,9 @@ final class TextInput extends Input
 {
     use InputAutocompleteAttributeTrait;
     use InputMinLengthMaxLengthPatternSizeAttributesTrait;
+    use InputPlaceholderAttributeTrait;
+    use InputReadonlyAttributeTrait;
+    use InputRequiredAttributeTrait;
 
     const TYPE = 'text';
 
@@ -26,6 +29,9 @@ final class TextInput extends Input
         return parent::renderAttributes()
             . $this->renderInputAutocompleteAttribute()
             . $this->renderInputMinLengthMaxLengthPatternSizeAttributes()
+            . $this->renderInputPlaceholderAttribute()
+            . $this->renderInputReadonlyAttribute()
+            . $this->renderInputRequiredAttribute()
         ;
     }
 }
