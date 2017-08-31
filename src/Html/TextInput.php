@@ -19,6 +19,8 @@ final class TextInput extends Input
     use InputAutocompleteAttributeTrait;
     use InputMinLengthMaxLengthPatternSizeAttributesTrait;
 
+    const TYPE = 'text';
+
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()

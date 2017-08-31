@@ -19,6 +19,8 @@ final class SearchInput extends Input
     use InputAutocompleteAttributeTrait;
     use InputMinLengthMaxLengthPatternSizeAttributesTrait;
 
+    const TYPE = 'search';
+
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()

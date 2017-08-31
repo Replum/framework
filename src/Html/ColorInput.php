@@ -16,9 +16,9 @@ namespace Replum\Html;
  */
 final class ColorInput extends Input
 {
-    const TYPE = 'color';
-
     use InputAutocompleteAttributeTrait;
+
+    const TYPE = 'color';
 
     protected function renderAttributes() : string
     {

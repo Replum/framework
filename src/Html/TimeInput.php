@@ -19,6 +19,8 @@ final class TimeInput extends Input
     use InputAutocompleteAttributeTrait;
     use InputMinMaxStepAttributeTrait;
 
+    const TYPE = 'time';
+
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()

@@ -18,13 +18,13 @@ use \Replum\Util;
  */
 final class NumberInput extends Input
 {
-    const TYPE = 'number';
-
     use InputAutocompleteAttributeTrait;
     use InputMinMaxStepAttributeTrait;
     use InputPlaceholderAttributeTrait;
     use InputReadonlyAttributeTrait;
     use InputRequiredAttributeTrait;
+
+    const TYPE = 'number';
 
     protected function renderAttributes() : string
     {

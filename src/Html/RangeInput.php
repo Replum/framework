@@ -16,10 +16,10 @@ namespace Replum\Html;
  */
 final class RangeInput extends Input
 {
-    const TYPE = 'range';
-
     use InputAutocompleteAttributeTrait;
     use InputMinMaxStepAttributeTrait;
+
+    const TYPE = 'range';
 
     protected function renderAttributes() : string
     {

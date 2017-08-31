@@ -19,10 +19,10 @@ use \Replum\Util;
  */
 final class FileInput extends Input
 {
-    const TYPE = 'file';
-
     use InputMultipleAttributeTrait;
     use InputRequiredAttributeTrait;
+
+    const TYPE = 'file';
 
     /**
      * @var string

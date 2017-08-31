@@ -16,10 +16,10 @@ namespace Replum\Html;
  */
 final class CheckboxInput extends Input
 {
-    const TYPE = 'checkbox';
-
     use InputCheckedAttributeTrait;
     use InputRequiredAttributeTrait;
+
+    const TYPE = 'checkbox';
 
     protected function renderAttributes() : string
     {

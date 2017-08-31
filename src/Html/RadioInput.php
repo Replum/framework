@@ -16,10 +16,10 @@ namespace Replum\Html;
  */
 final class RadioInput extends Input
 {
-    const TYPE = 'radio';
-
     use InputCheckedAttributeTrait;
     use InputRequiredAttributeTrait;
+
+    const TYPE = 'radio';
 
     protected function renderAttributes() : string
     {

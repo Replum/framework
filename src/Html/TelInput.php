@@ -19,6 +19,8 @@ final class TelInput extends Input
     use InputAutocompleteAttributeTrait;
     use InputMinLengthMaxLengthPatternSizeAttributesTrait;
 
+    const TYPE = 'tel';
+
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()

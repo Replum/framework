@@ -16,14 +16,14 @@ namespace Replum\Html;
  */
 final class EmailInput extends Input
 {
-    const TYPE = 'email';
-
     use InputAutocompleteAttributeTrait;
     use InputMinLengthMaxLengthPatternSizeAttributesTrait;
     use InputMultipleAttributeTrait;
     use InputPlaceholderAttributeTrait;
     use InputReadonlyAttributeTrait;
     use InputRequiredAttributeTrait;
+
+    const TYPE = 'email';
 
     protected function renderAttributes() : string
     {

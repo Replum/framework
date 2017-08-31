@@ -16,4 +16,5 @@ namespace Replum\Html;
  */
 final class SubmitInput extends Input
 {
+    const TYPE = 'submit';
 }
