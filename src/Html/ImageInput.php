@@ -34,7 +34,6 @@ final class ImageInput extends Input
             . $this->renderAltAttribute()
             . $this->renderHeightWidthAttributes()
             . $this->renderSrcAttribute()
-            . Util::renderHtmlAttribute('alt', $this->alt)
         ;
     }
 }
