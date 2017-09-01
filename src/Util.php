@@ -83,7 +83,7 @@ abstract class Util
 
     public static function escapeHtml($value)
     {
-        return \htmlentities($value, null, 'UTF-8');
+        return \htmlentities($value, \ENT_COMPAT|\ENT_HTML5, 'UTF-8');
     }
 
     public static function escapeHtmlAttributeValue($value)
