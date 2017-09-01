@@ -88,7 +88,7 @@ abstract class Util
 
     public static function escapeHtmlAttributeValue($value)
     {
-        return \htmlentities($value, \ENT_COMPAT|\ENT_HTML5, 'UTF-8');
+        return \htmlspecialchars($value, \ENT_QUOTES||\ENT_HTML5, 'UTF-8');
     }
 
     public static function renderHtmlAttribute(string $name, $value) : string
