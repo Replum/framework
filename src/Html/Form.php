@@ -367,8 +367,8 @@ final class Form extends HtmlElement implements WidgetHasSubmitEventInterface
 
     protected function renderAttributes() : string
     {
-        return
-            Util::renderHtmlAttribute('accept-charset', $this->acceptCharset)
+        return parent::renderAttributes()
+            . Util::renderHtmlAttribute('accept-charset', $this->acceptCharset)
             . Util::renderHtmlAttribute('action', $this->action)
             . $this->renderAutocompleteAttribute()
             . Util::renderHtmlAttribute('enctype', $this->enctype)
@@ -376,7 +376,6 @@ final class Form extends HtmlElement implements WidgetHasSubmitEventInterface
             . Util::renderHtmlAttribute('name', $this->name)
             . Util::renderHtmlAttribute('novalidate', $this->novalidate)
             . Util::renderHtmlAttribute('target', $this->target)
-
         ;
     }
 
