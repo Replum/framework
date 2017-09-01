@@ -29,6 +29,7 @@ class IframeTest extends HtmlTestBase
         "name"           => ["foo", "bar"],
         "width"          => [20, 10],
         "height"         => [10, 20],
+        "scrolling"      => [Iframe::SCROLLING_AUTO, Iframe::SCROLLING_YES, Iframe::SCROLLING_NO],
     ];
 
     /**

@@ -268,6 +268,66 @@ final class Iframe extends HtmlElement implements FlowElementInterface
     // from HeightWidthAttributesTrait
 
     ######################################################################
+    # scrolling attribute LEGACY!                                        #
+    ######################################################################
+
+    /**
+     * Provide a scroll bar only when needed
+     */
+    const SCROLLING_AUTO = 'auto';
+
+    /**
+     * Always provide a scroll bar
+     */
+    const SCROLLING_YES = 'yes';
+
+    /**
+     * Never provide a scroll bar
+     */
+    const SCROLLING_NO = 'no';
+
+    /**
+     * @var string
+     * @link https://www.w3.org/TR/html401/present/frames.html#adef-scrolling
+     */
+    private $scrolling;
+
+    /**
+     * Get the scrollbars setting
+     * WARNING: obsolete in HTML5
+     */
+    final public function getScrolling() : string
+    {
+        return $this->scrolling;
+    }
+
+    /**
+     * Check whether the scrollbars setting is set
+     * WARNING: obsolete in HTML5
+     */
+    final public function hasScrolling() : bool
+    {
+        return ($this->scrolling !== null);
+    }
+
+    /**
+     * Set the scrollbars setting
+     * WARNING: obsolete in HTML5
+     */
+    final public function setScrolling(string $scrolling = null) : self
+    {
+        if ($scrolling !== null && $scrolling !== self::SCROLLING_AUTO && $scrolling !== self::SCROLLING_YES && $scrolling !== self::SCROLLING_NO) {
+            throw new \InvalidArgumentException("Invalid scrolling value provided!");
+        }
+
+        if ($this->scrolling !== $scrolling) {
+            $this->scrolling = $scrolling;
+            $this->setChanged(true);
+        }
+        return $this;
+    }
+
+    ######################################################################
     # rendering                                                          #
     ######################################################################
 
@@ -279,6 +339,7 @@ final class Iframe extends HtmlElement implements FlowElementInterface
             . Util::renderHtmlAttribute('srcdoc', $this->srcdoc)
             . Util::renderHtmlAttribute('name', $this->name)
             . Util::renderHtmlAttribute('sandbox', ($this->sandbox && \count($this->sandboxFeatures) > 0 ? $this->sandboxFeatures : $this->sandbox))
+            . Util::renderHtmlAttribute('scrolling', $this->scrolling)
         ;
     }
 }
