@@ -31,7 +31,6 @@ class TextareaTest extends HtmlTestBase
         "disabled"       => true,
         "form"           => null,
         "name"           => ["foo", "bar"],
-        "value"          => ["foo", "bar"],
 
         "autocomplete"   => [Form::AUTOCOMPLETE_ON, Form::AUTOCOMPLETE_OFF],
         "cols"           => [20, 10],
@@ -45,4 +44,30 @@ class TextareaTest extends HtmlTestBase
         "rows"           => [5, 10],
         "wrap"           => [Textarea::WRAP_SOFT, Textarea::WRAP_HARD],
     ];
+
+    /**
+     * Special handling for text area value (that is written as element content, not value attribute)
+     *
+     * @test
+     */
+    public function testValue()
+    {
+        $values = [
+            "simple text",
+            "text with\n\nnewlines\n",
+            "text with <pre>html</pre> which must be escaped\nand a newline\nand a <textarea>textarea</textarea> element",
+        ];
+
+        $element = $this->factory();
+
+        foreach ($values as $value) {
+            $this->assertSame($element, $element->setValue($value));
+            $this->assertTrue($element->hasValue());
+            $this->assertSame($value, $element->getValue());
+
+            $parsed = \DOMDocument::loadHtml($element->render());
+            $dom = $parsed->getElementsByTagName($element::TAG)[0];
+            $this->assertEquals($value, $dom->nodeValue);
+        }
+    }
 }

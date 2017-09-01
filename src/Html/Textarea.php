@@ -162,7 +162,7 @@ final class Textarea extends HtmlElement implements FormInputInterface
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . $this->renderFormElementAttributes()
+            . $this->renderFormElementAttributes(false)
             . $this->renderAutocompleteAttribute()
             . $this->renderMinlengthMaxlengthAttributes()
             . $this->renderPlaceholderAttribute()
@@ -171,6 +171,14 @@ final class Textarea extends HtmlElement implements FormInputInterface
             . Util::renderHtmlAttribute('cols', $this->cols)
             . Util::renderHtmlAttribute('rows', $this->rows)
             . Util::renderHtmlAttribute('wrap', $this->wrap)
+        ;
+    }
+
+    public function render(): string
+    {
+        return '<' . self::TAG . $this->renderAttributes() . '>'
+            . ($this->hasValue() ? Util::escapeHtml($this->getValue()) : null)
+            . '</' . self::TAG . '>' . PHP_EOL
         ;
     }
 }

@@ -165,14 +165,14 @@ trait FormElementTrait
         return $this;
     }
 
-    final protected function renderFormElementAttributes() : string
+    final protected function renderFormElementAttributes(bool $renderValueAttribute = true) : string
     {
         return
             Util::renderHtmlAttribute('autofocus', $this->autofocus)
             . Util::renderHtmlAttribute('disabled', $this->disabled)
             . Util::renderHtmlAttribute('form', $this->FormElementTraitForm)
             . Util::renderHtmlAttribute('name', $this->name)
-            . Util::renderHtmlAttribute('value', $this->value)
+            . ($renderValueAttribute ? Util::renderHtmlAttribute('value', $this->value) : '')
         ;
     }
 }
