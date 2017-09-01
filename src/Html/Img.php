@@ -11,53 +11,30 @@
 
 namespace Replum\Html;
 
+use Replum\Html\Attributes\AltAttributeTrait;
+use Replum\Html\Attributes\HeightWidthAttributesTrait;
+use \Replum\Html\Attributes\SrcAttributeTrait;
 use \Replum\Util;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element
  */
 final class Img extends HtmlElement
 {
+    use AltAttributeTrait;
+    use HeightWidthAttributesTrait;
+    use SrcAttributeTrait;
+
     const TAG = 'img';
     const EMPTY_ELEMENT = true;
-
-    /**
-     * The src URL of this image
-     * @var string
-     */
-    private $src;
-
-    /**
-     */
-    public function getSrc() : string
-    {
-        return $this->src;
-    }
-
-    /**
-     */
-    public function hasSrc() : bool
-    {
-        return ($this->src !== null);
-    }
-
-    /**
-     * @return $this
-     */
-    public function setSrc(string $src) : self
-    {
-        if ($this->src !== $src) {
-            $this->src = $src;
-            $this->setChanged(true);
-        }
-
-        return $this;
-    }
 
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-            . Util::renderHtmlAttribute('src', $this->src)
-            ;
+            . $this->renderAltAttribute()
+            . $this->renderHeightWidthAttributes()
+            . $this->renderSrcAttribute()
+        ;
     }
 }

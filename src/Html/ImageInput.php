@@ -11,54 +11,29 @@
 
 namespace Replum\Html;
 
+use Replum\Html\Attributes\AltAttributeTrait;
+use \Replum\Html\Attributes\HeightWidthAttributesTrait;
+use \Replum\Html\Attributes\SrcAttributeTrait;
 use \Replum\Util;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link
  */
 final class ImageInput extends Input
 {
+    use AltAttributeTrait;
+    use HeightWidthAttributesTrait;
+    use SrcAttributeTrait;
+
     const TYPE = 'image';
 
-    /**
-     * @var string
-     * @link https://www.w3.org/TR/html5/forms.html#attr-input-alt
-     */
-    private $alt;
-
-    /**
-     * @link https://www.w3.org/TR/html5/forms.html#attr-input-alt
-     */
-    final public function getAlt() : string
-    {
-        return $this->alt;
-    }
-
-    /**
-     * @return boolean
-     * @link https://www.w3.org/TR/html5/forms.html#attr-input-alt
-     */
-    final public function hasAlt() : bool
-    {
-        return ($this->alt !== null);
-    }
-
-    /**
-     * @link https://www.w3.org/TR/html5/forms.html#attr-input-alt
-     */
-    final public function setAlt(string $alt = null) : self
-    {
-        if ($this->alt !== $alt) {
-            $this->alt = $alt;
-            $this->setChanged(true);
-        }
-
-        return $this;
-    }
-
-    protected function renderAttributes() : string#
+    protected function renderAttributes() : string
     {
         return parent::renderAttributes()
+            . $this->renderAltAttribute()
+            . $this->renderHeightWidthAttributes()
+            . $this->renderSrcAttribute()
             . Util::renderHtmlAttribute('alt', $this->alt)
         ;
     }
