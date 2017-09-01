@@ -190,15 +190,20 @@ abstract class HtmlTestBase extends TestCase
             }
         }
 
-        $html = $element->render();
+        $attributes = self::getAttributesForTag($element->render(), $element::TAG);
+        $this->assertEquals($ref, $attributes);
+    }
+
+    public static function getAttributesForTag(string $html, string $tagName) : array
+    {
         $parsed = \DOMDocument::loadHtml($html);
-        $dom = $parsed->getElementsByTagName($element::TAG)[0];
+        $dom = $parsed->getElementsByTagName($tagName)[0];
         $attributes = [];
 
         foreach ($dom->attributes as $attribute) {
             $attributes[$attribute->name] = ($attribute->value == $attribute->name || $attribute->value === '' ? true : $attribute->value);
         }
 
-        $this->assertEquals($ref, $attributes);
+        return $attributes;
     }
 }

@@ -399,6 +399,14 @@ abstract class HtmlFactory
     }
 
     /**
+     * Create an Iframe element
+     */
+    final public static function iframe(PageInterface $page) : Html\Iframe
+    {
+        return new Html\Iframe($page);
+    }
+
+    /**
      * Create an Img element
      */
     final public static function img(PageInterface $page, string $src = null) : Html\Img
