@@ -48,9 +48,9 @@ abstract class HtmlElement implements WidgetInterface, AriaAttributesInterface
             return '<'
                 . static::TAG
                 . $this->renderAttributes()
-                . '>' . PHP_EOL
-                . $this->renderChildren() . PHP_EOL
-                . '</' . static::TAG . '>' . PHP_EOL
+                . '>'
+                . $this->renderChildren()
+                . '</' . static::TAG . '>'
             ;
         }
     }
