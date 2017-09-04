@@ -11,18 +11,12 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetInterface;
-
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link http://www.w3.org/TR/html5/tabular-data.html#the-tbody-element
+ * @link https://www.w3.org/TR/html5/tabular-data.html#the-th-element
+ * @FIXME: scop, abbr and sorted attribute missing
  */
-class TableBody implements WidgetInterface, TableSectionInterface
+final class Th extends TableCellElement
 {
-    use TableSectionTrait;
-
-    public function __toString()
-    {
-        return $this->renderTableSection('tbody');
-    }
+    const TAG = 'th';
 }

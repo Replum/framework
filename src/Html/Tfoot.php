@@ -11,18 +11,11 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetInterface;
-
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link http://www.w3.org/TR/html5/tabular-data.html#the-thead-element
+ * @link https://www.w3.org/TR/html5/tabular-data.html#the-tfoot-element
  */
-class TableHeader implements WidgetInterface, TableSectionInterface
+final class Tfoot extends HtmlElement
 {
-    use TableSectionTrait;
-
-    public function __toString()
-    {
-        return $this->renderTableSection('thead');
-    }
+    const TAG = 'tfoot';
 }

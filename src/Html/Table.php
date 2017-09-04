@@ -11,87 +11,99 @@
 
 namespace Replum\Html;
 
+use Replum\Util;
 use \Replum\WidgetInterface;
 use \Replum\WidgetTrait;
 use \Replum\WidgetCollection;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
- * @link http://www.w3.org/TR/html5/tabular-data.html#the-table-element
+ * @link https://www.w3.org/TR/html5/tabular-data.html#the-table-element
  */
-class Table implements WidgetInterface
+final class Table extends HtmlElement implements FlowElementInterface
 {
-    use WidgetTrait;
+    const TAG = 'table';
 
-    protected function getUnfilteredChildren()
+    ######################################################################
+    # border attribute                                                   #
+    ######################################################################
+
+    /**
+     * Indicates that the table element is not being used for layout purposes
+     *
+     * @var bool
+     * @link https://www.w3.org/TR/html5/tabular-data.html#attr-table-border
+     */
+    private $border = false;
+
+    /**
+     * Check whether it is indicated that the table element is not being used for layout purposes
+     */
+    final public function getBorder() : bool
     {
-        return \array_merge([$this->header], ($this->bodies ? $this->bodies->toArray() : []), [$this->footer]);
+        return $this->border;
     }
 
     /**
-     * @var TableHeader
+     * Toggle indication
+     * that the table element is not being used for layout purposes
+     *
+     * @return static $this
      */
-    private $header;
-
-    public function getHeader()
+    final public function setBorder(bool $border) : self
     {
-        return $this->header;
-    }
+        if ($this->border !== $border) {
+            $this->border = $border;
+            $this->setChanged(true);
+        }
 
-    public function setHeader(TableHeader $newHeader)
-    {
-        $this->header = $newHeader;
         return $this;
     }
 
-    /**
-     * @var TableFooter
-     */
-    private $footer;
+    ######################################################################
+    # sortable attribute                                                 #
+    ######################################################################
 
-    public function getFooter()
+    /**
+     * Enables/disables a sorting interface for the table
+     *
+     * @var bool
+     */
+    private $sortable = false;
+
+    /**
+     * Check whether a sorting interface for the table is enabled
+     */
+    final public function getSortable() : bool
     {
-        return $this->footer;
+        return $this->sortable;
     }
 
-    public function setFooter(TableFooter $newFooter)
+    /**
+     * Enables/disables a sorting interface for the table
+     * WARNING: not implemented by most browsers, removed in HTML 5.1
+     *
+     * @return static $this
+     */
+    final public function setSortable(bool $sortable) : self
     {
-        $this->footer = $newFooter;
+        if ($this->sortable !== $sortable) {
+            $this->sortable = $sortable;
+            $this->setChanged(true);
+        }
+
         return $this;
     }
 
-    /**
-     * @var \Replum\WidgetCollection
-     */
-    private $bodies;
+    ######################################################################
+    # rendering                                                          #
+    ######################################################################
 
-    public function bodies()
+    protected function renderAttributes() : string
     {
-        if (is_null($this->bodies)) {
-            $this->bodies = new WidgetCollection($this, false);
-        }
-
-        return $this->bodies;
-    }
-
-    public function __toString()
-    {
-        $r = '<table' . $this->renderAttributes() . '>' . PHP_EOL;
-
-        if (!is_null($this->getHeader())) {
-            $r .= $this->getHeader();
-        }
-
-        if (!is_null($this->getFooter())) {
-            $r .= $this->getFooter();
-        }
-
-        foreach ($this->bodies() as $body) {
-            $r .= $body;
-        }
-
-        $r .= '</table>' . PHP_EOL;
-
-        return $r;
+        return parent::renderAttributes()
+            . Util::renderHtmlAttribute('border', $this->border)
+            . Util::renderHtmlAttribute('sortable', $this->sortable)
+            ;
     }
 }

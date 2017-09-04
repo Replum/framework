@@ -735,6 +735,70 @@ abstract class HtmlFactory
     }
 
     /**
+     * Create a Table element
+     */
+    final public static function table(PageInterface $page) : Html\Table
+    {
+        return new Html\Table($page);
+    }
+
+    /**
+     * Create a Tbody element
+     */
+    final public static function tbody(PageInterface $page) : Html\Tbody
+    {
+        return new Html\Tbody($page);
+    }
+
+    /**
+     * Create a Thead element
+     */
+    final public static function thead(PageInterface $page) : Html\Thead
+    {
+        return new Html\Thead($page);
+    }
+
+    /**
+     * Create a Tfoot element
+     */
+    final public static function tfoot(PageInterface $page) : Html\Tfoot
+    {
+        return new Html\Tfoot($page);
+    }
+
+    /**
+     * Create a tr element
+     */
+    final public static function tr(PageInterface $page) : Html\Tr
+    {
+        return new Html\Tr($page);
+    }
+
+    /**
+     * Create an Td element
+     */
+    final public static function td(PageInterface $page, string $text = null) : Html\Td
+    {
+        $obj = new Html\Td($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
+    }
+
+    /**
+     * Create an Th element
+     */
+    final public static function th(PageInterface $page, string $text = null) : Html\Th
+    {
+        $obj = new Html\Th($page);
+        if ($text !== null) {
+            $obj->add(self::text($page, $text));
+        }
+        return $obj;
+    }
+
+    /**
      * Create an Input[type=tel] element
      */
     final public static function telInput(PageInterface $page) : Html\TelInput
