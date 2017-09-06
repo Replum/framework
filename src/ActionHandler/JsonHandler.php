@@ -70,7 +70,7 @@ class JsonHandler
             };
             $page->on(WidgetChangeEvent::class, $changeHandler);
 
-            $widget = $page->getWidgetById($request->request->get(self::SOURCE_PARAMETER_NAME));
+            $widget = $page->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
             if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {
                 $widget->setValue($request->request->get(self::VALUE_PARAMETER_NAME));
             } elseif ($request->request->get(self::CHECKED_PARAMETER_NAME) !== null) {

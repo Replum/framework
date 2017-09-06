@@ -55,31 +55,6 @@ interface PageInterface extends WidgetInterface, WidgetContainerInterface
      */
     function initParameterRegistry(\Replum\ParameterRegistry $newParameterRegistry = null) : self;
 
-    ######################################################################
-    # Widget management                                                  #
-    ######################################################################
-
-    /**
-     * Make the widget known to the page.
-     * This is required so events, etc. can work.
-     *
-     * This method returns the unique internal ID this widget is identified by within this page.
-     */
-    function registerWidget(WidgetInterface $widget) : string;
-
-    /**
-     * Change the ID of the provided widget to the new ID.
-     * Should not be called directly. Use WidgetInterface::setID() instead.
-     *
-     * WARNING: this must happen before event handler for this widget are registered!
-     */
-    function changeWidgetId(WidgetInterface $widget, string $oldId, string $newId);
-
-    /**
-     * Get the widget identified by the supplied ID
-     */
-    function getWidgetById(string $id) : WidgetInterface;
-
     /**
      * Get the document title
      * @return string

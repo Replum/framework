@@ -148,54 +148,6 @@ abstract class Page implements PageInterface
     }
 
     ######################################################################
-    # Widget management                                                  #
-    ######################################################################
-
-    /**
-     * @var WidgetInterface[]
-     */
-    private $widgetByIdMapping = [];
-
-    /**
-     * @see PageInterface::registerWidget()
-     */
-    final public function registerWidget(WidgetInterface $widget) : string
-    {
-        $length = 5;
-        do {
-            $id = Util::randomString($length++);
-        } while (isset($this->widgetByIdMapping[$id]));
-
-        $this->widgetByIdMapping[$id] = $widget;
-        return $id;
-    }
-
-    /**
-     * @see PageInterface::changeWidgetId()
-     */
-    final public function changeWidgetId(WidgetInterface $widget, string $oldId, string $newId)
-    {
-        if (isset($this->widgetByIdMapping[$newId]) && $this->widgetByIdMapping[$newId] !== $widget) {
-            throw new \InvalidArgumentException('Can not reassign taken ID "' . $newId . '"!');
-        }
-
-        unset($this->widgetByIdMapping[$oldId]);
-        $this->widgetByIdMapping[$newId] = $widget;
-    }
-
-    /**
-     * @see PageInterface::getWidgetById()
-     */
-    final public function getWidgetById(string $id) : WidgetInterface
-    {
-        if (!isset($this->widgetByIdMapping[$id]) || !($this->widgetByIdMapping[$id] instanceof WidgetInterface)) {
-            throw new \InvalidArgumentException('Unknown widget with ID "' . $id . '"!');
-        }
-
-        return $this->widgetByIdMapping[$id];
-    }
-
-    ######################################################################
     # Page handling                                                      #
     ######################################################################
 

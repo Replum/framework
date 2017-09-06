@@ -98,9 +98,6 @@ trait WidgetTrait
      */
     final protected function setWidgetId(string $widgetId) : WidgetInterface
     {
-        if ($this->widgetId !== null && $this->widgetId !== $widgetId) {
-            $this->getPage()->changeWidgetId($this, $this->widgetId, $widgetId);
-        }
         $this->widgetId = $widgetId;
         return $this;
     }
