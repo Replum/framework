@@ -38,7 +38,7 @@ interface WidgetHasSubmitEventInterface extends WidgetInterface
      * @param int $prio
      * @return static $this
      */
-    function onSubmit(callable $eventHandler, $prio = 5) : self;
+    function onSubmit(callable $eventHandler, int $prio = 5) : self;
 
     /**
      * Register a handler for the submit event that is only executed on the first occurence of the event and removed afterwards.
@@ -48,7 +48,7 @@ interface WidgetHasSubmitEventInterface extends WidgetInterface
      * @param int $prio
      * @return static $this
      */
-    function onSubmitOnce(callable $eventHandler, $prio = 5) : self;
+    function onSubmitOnce(callable $eventHandler, int $prio = 5) : self;
 
     /**
      * Remove a previously registered event handler.
