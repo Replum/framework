@@ -11,8 +11,6 @@
 
 namespace Replum\Html;
 
-use \Replum\PageInterface;
-
 /**
  * The br element represents a line break.
  *
@@ -23,9 +21,4 @@ final class Br extends HtmlElement implements PhrasingElementInterface
 {
     const TAG = 'br';
     const EMPTY_ELEMENT = true;
-
-    public static function create(PageInterface $page) : self
-    {
-        return new self($page);
-    }
 }

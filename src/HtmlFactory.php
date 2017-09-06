@@ -107,6 +107,14 @@ abstract class HtmlFactory
     }
 
     /**
+     * Create an Br element
+     */
+    final public static function br(PageInterface $page) : Html\Br
+    {
+        return new Html\Br($page);
+    }
+
+    /**
      * Create an Button element
      */
     final public static function button(PageInterface $page) : Html\Button
