@@ -28,6 +28,11 @@ interface WidgetInterface
     ######################################################################
 
     /**
+     * Check whether the current widget is attached to a page
+     */
+    function isDetached() : bool;
+
+    /**
      * Get the page this widget belongs to
      */
     function getPage() : PageInterface;

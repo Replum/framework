@@ -25,40 +25,49 @@ use \Symfony\Component\EventDispatcher\EventDispatcher;
  */
 trait WidgetTrait
 {
-    public function __construct(PageInterface $page)
-    {
-        $this->setPage($page);
-
-        $widgetId = $this->getPage()->registerWidget($this);
-        $this->setWidgetId($widgetId);
-    }
-
     ######################################################################
     # Page handling                                                      #
     ######################################################################
 
     /**
-     * @var \Replum\PageInterface
-     */
-    private $widgetTraitPage = null;
-
-    /**
      * @see \Replum\WidgetInterface::getPage()
+     * @throws \Replum\WidgetDetachedException
      */
     final public function getPage() : PageInterface
     {
-        return $this->widgetTraitPage;
+        // Widget is the page itself
+        if ($this instanceof Page) {
+            return $this;
+        }
+
+        // Widget is detached
+        elseif ($this->widgetTraitParent === null) {
+            throw new WidgetDetachedException();
+        }
+
+        else {
+            return $this->widgetTraitParent->getPage();
+        }
     }
 
     /**
-     * Set the page if the constructor template can not be used
-     *
-     * @return static $this
+     * @return bool
      */
-    final protected function setPage(PageInterface $page) : WidgetInterface
+    final public function isDetached() : bool
     {
-        $this->widgetTraitPage = $page;
-        return $this;
+        // Widget is page so not detached
+        if ($this instanceof Page) {
+            return false;
+        }
+
+        // Widget has no parent so is detached obviously
+        elseif ($this->widgetTraitParent === null) {
+            return true;
+        }
+
+        else {
+            return $this->widgetTraitParent->isDetached();
+        }
     }
 
     ######################################################################
@@ -75,6 +84,10 @@ trait WidgetTrait
      */
     final public function getWidgetId() : string
     {
+        if ($this->widgetId === null) {
+            $this->widgetId = Util::randomString(16);
+        }
+
         return $this->widgetId;
     }
 

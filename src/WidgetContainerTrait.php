@@ -29,6 +29,7 @@ trait WidgetContainerTrait
     private $widgetContainerTraitChildren = [];
 
     /**
+     * @return static $this
      * @see WidgetContainerInterface::add()
      */
     final public function add(WidgetInterface $widget) : WidgetContainerInterface
@@ -85,25 +86,29 @@ trait WidgetContainerTrait
     }
 
     /**
-     * @see \Replum\WidgetInterface::getDescendants()
+     * @see \Replum\WidgetContainerInterface::getDescendants()
      */
-    public function getDescendants($filterByType = null)
+    final public function getDescendants(string $filterByType = null, bool $breadthFirst = false) : \Traversable
     {
-        $descendants = [];
-
         foreach ($this->getChildren() AS $child) {
             if ($child === null) { continue; }
 
-            if (is_null($filterByType) || is_a($child, $filterByType, true)) {
-                $descendants[] = $child;
+            if ($filterByType === null || \is_a($child, $filterByType, true)) {
+                yield $child;
             }
 
-            if ($child instanceof WidgetContainerInterface) {
-                $descendants = \array_merge($descendants, $child->getDescendants($filterByType));
+            if (!$breadthFirst && $child instanceof WidgetContainerInterface) {
+                yield from $child->getDescendants($filterByType, $breadthFirst);
             }
         }
 
-        return $descendants;
+        if ($breadthFirst) {
+            foreach ($this->getChildren() as $child) {
+                if ($child instanceof WidgetContainerInterface) {
+                    yield from $child->getDescendants($filterByType, $breadthFirst);
+                }
+            }
+        }
     }
 
     /**
@@ -122,18 +127,18 @@ trait WidgetContainerTrait
     }
 
     /**
-     * @see \Replum\WidgetInterface::findById()
+     * @see \Replum\WidgetContainerInterface::findById()
      */
     public function findById($id)
     {
-        if ($this->hasID() && ($this->getID() === $id)) {
-            return $this;
-        }
-
         foreach ($this->getChildren() as $child) {
             if ($child === null) { continue; }
 
-            if (null !== ($found = $child->findById($id))) {
+            if ($child->getWidgetId() === $id) {
+                return $child;
+            }
+
+            if ($child instanceof WidgetContainerInterface && ($found = $child->findById($id)) !== null) {
                 return $found;
             }
         }

@@ -33,16 +33,17 @@ interface WidgetContainerInterface extends WidgetInterface
      * @return static $this
      */
     function del(WidgetInterface $widget) : self;
-    
+
     /**
-     * Return the list of all widgets below this widget in the tree.
-     * The returned list is not ordnered in a specific way.
-     * If $filterByType is supplied, only elements that are an instance of this type are returned.
+     * Get a \Traversable for all descendants of the current node.
+     * If the $filterByType parameter is supplied, only instances of the supplied class are returned.
+     * The $breadthFirst parameter determines whether to do a depth-first-search ($breadthFirst = false, default)
+     *  or breadth-first-search ($breadthFirst = true).
      *
-     * @param string $filterByType
-     * @return self[]
+     * @see https://en.wikipedia.org/wiki/Breadth-first_search
+     * @see https://en.wikipedia.org/wiki/Depth-first_search
      */
-    function getDescendants($filterByType = null);
+    function getDescendants(string $filterByType = null, bool $breadthFirst = false) : \Traversable;
 
     /**
      * Search the widget tree for a widget with the supplied ID.

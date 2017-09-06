@@ -14,7 +14,7 @@ namespace Replum;
 /**
  * A page represents the main entity to visualize
  */
-interface PageInterface extends WidgetInterface
+interface PageInterface extends WidgetInterface, WidgetContainerInterface
 {
     /**
      * Constructor requires the context as parameter

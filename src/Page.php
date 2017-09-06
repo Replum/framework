@@ -13,7 +13,7 @@ namespace Replum;
 
 abstract class Page implements PageInterface
 {
-    use WidgetTrait;
+    use WidgetContainerTrait;
 
     /**
      * Default constructor
