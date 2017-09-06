@@ -19,35 +19,39 @@ use \Replum\Events\WidgetOnDoubleClickEvent;
 trait WidgetHasDoubleClickEventTrait
 {
     /**
+     * @return static $this
      * @see \Replum\WidgetHasDoubleClickEventInterface::onDoubleClick()
      */
-    public function onDoubleClick(callable $eventHandler, $prio = 5)
+    final public function onDoubleClick(callable $eventHandler, int $prio = 5) : WidgetHasDoubleClickEventInterface
     {
         $this->addData('handler', 'dblclick');
         return $this->on(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasDoubleClickEventInterface::onDoubleClickOnce()
      */
-    public function onDoubleClickOnce(callable $eventHandler, $prio = 5)
+    final public function onDoubleClickOnce(callable $eventHandler, int $prio = 5) : WidgetHasDoubleClickEventInterface
     {
         $this->addData('handler', 'dblclick');
         return $this->one(WidgetOnDoubleClickEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasDoubleClickEventInterface::removeOnDoubleClick()
      */
-    public function removeOnDoubleClick(callable $eventHandler)
+    final public function removeOnDoubleClick(callable $eventHandler) : WidgetHasDoubleClickEventInterface
     {
         return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasDoubleClickEventInterface::removeOnDoubleClickOnce()
      */
-    public function removeOnDoubleClickOnce(callable $eventHandler)
+    final public function removeOnDoubleClickOnce(callable $eventHandler) : WidgetHasDoubleClickEventInterface
     {
         return $this->off(WidgetOnDoubleClickEvent::class, $eventHandler);
     }

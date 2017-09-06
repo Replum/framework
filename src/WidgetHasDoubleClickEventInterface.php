@@ -35,32 +35,32 @@ interface WidgetHasDoubleClickEventInterface extends WidgetInterface
      *
      * @param callable $eventHandler
      * @param int $prio
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function onDoubleClick(callable $eventHandler, $prio = 5);
+    function onDoubleClick(callable $eventHandler, $prio = 5) : self;
 
     /**
      * Register a handler for the double click event that is only executed on the first occurence of the event and removed afterwards.
      * Multiple handler methods can be registered with this method.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function onDoubleClickOnce(callable $eventHandler, $prio = 5);
+    function onDoubleClickOnce(callable $eventHandler, $prio = 5) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function removeOnDoubleClick(callable $eventHandler);
+    function removeOnDoubleClick(callable $eventHandler) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function removeOnDoubleClickOnce(callable $eventHandler);
+    function removeOnDoubleClickOnce(callable $eventHandler) : self;
 }

@@ -21,33 +21,37 @@ use \Replum\Events\WidgetOnSubmitEvent;
 trait WidgetHasSubmitEventTrait
 {
     /**
+     * @return static $this
      * @see \Replum\WidgetHasSubmitEventInterface::onSubmit()
      */
-    public function onSubmit(callable $eventHandler, $prio = 5)
+    final public function onSubmit(callable $eventHandler, int $prio = 5) : WidgetHasSubmitEventInterface
     {
         return $this->on(WidgetOnSubmitEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasSubmitEventInterface::onSubmitOnce()
      */
-    public function onSubmitOnce(callable $eventHandler, $prio = 5)
+    final public function onSubmitOnce(callable $eventHandler, int $prio = 5) : WidgetHasSubmitEventInterface
     {
         return $this->one(WidgetOnSubmitEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasSubmitEventInterface::removeOnSubmit()
      */
-    public function removeOnSubmit(callable $eventHandler)
+    final public function removeOnSubmit(callable $eventHandler) : WidgetHasSubmitEventInterface
     {
         return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasSubmitEventInterface::removeOnSubmitOnce()
      */
-    public function removeOnSubmitOnce(callable $eventHandler)
+    final public function removeOnSubmitOnce(callable $eventHandler) : WidgetHasSubmitEventInterface
     {
         return $this->off(WidgetOnSubmitEvent::class, $eventHandler);
     }

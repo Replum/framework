@@ -21,33 +21,37 @@ use \Replum\Events\WidgetOnChangeEvent;
 trait WidgetHasChangeEventTrait
 {
     /**
+     * @return static $this
      * @see \Replum\WidgetHasChangeEventInterface::onChange()
      */
-    public function onChange(callable $eventHandler, $prio = 5)
+    final public function onChange(callable $eventHandler, int $prio = 5) : WidgetHasChangeEventInterface
     {
         return $this->on(WidgetOnChangeEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasChangeEventInterface::onChangeOnce()
      */
-    public function onChangeOnce(callable $eventHandler, $prio = 5)
+    final public function onChangeOnce(callable $eventHandler, int $prio = 5) : WidgetHasChangeEventInterface
     {
         return $this->one(WidgetOnChangeEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasChangeEventInterface::removeOnChange()
      */
-    public function removeOnChange(callable $eventHandler)
+    final public function removeOnChange(callable $eventHandler) : WidgetHasChangeEventInterface
     {
         return $this->off(WidgetOnChangeEvent::class, $eventHandler);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasChangeEventInterface::removeOnChangeOnce()
      */
-    public function removeOnChangeOnce(callable $eventHandler)
+    final public function removeOnChangeOnce(callable $eventHandler) : WidgetHasChangeEventInterface
     {
         return $this->off(WidgetOnChangeEvent::class, $eventHandler);
     }

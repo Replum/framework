@@ -35,9 +35,9 @@ interface WidgetHasChangeEventInterface extends WidgetInterface
      *
      * @param callable $eventHandler
      * @param int $prio
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function onChange(callable $eventHandler, $prio = 5);
+    function onChange(callable $eventHandler, int $prio = 5) : self;
 
     /**
      * Register a handler for the change event that is only executed on the first occurence of the event and removed afterwards.
@@ -45,23 +45,23 @@ interface WidgetHasChangeEventInterface extends WidgetInterface
      *
      * @param callable $eventHandler
      * @param int $prio
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function onChangeOnce(callable $eventHandler, $prio = 5);
+    function onChangeOnce(callable $eventHandler, int $prio = 5) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function removeOnChange(callable $eventHandler);
+    function removeOnChange(callable $eventHandler) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function removeOnChangeOnce(callable $eventHandler);
+    function removeOnChangeOnce(callable $eventHandler) : self;
 }

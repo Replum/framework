@@ -19,35 +19,39 @@ use \Replum\Events\WidgetOnClickEvent;
 trait WidgetHasClickEventTrait
 {
     /**
+     * @return static $this
      * @see \Replum\WidgetHasClickEventInterface::onClick()
      */
-    public function onClick(callable $eventHandler, $prio = 5)
+    public function onClick(callable $eventHandler, int $prio = 5) : WidgetHasClickEventInterface
     {
         $this->addData('handler', 'click');
         return $this->on(WidgetOnClickEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasClickEventInterface::onClickOnce()
      */
-    public function onClickOnce(callable $eventHandler, $prio = 5)
+    public function onClickOnce(callable $eventHandler, int $prio = 5) : WidgetHasClickEventInterface
     {
         $this->addData('handler', 'click');
         return $this->one(WidgetOnClickEvent::class, $eventHandler, $prio);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasClickEventInterface::removeOnClick()
      */
-    public function removeOnClick(callable $eventHandler)
+    public function removeOnClick(callable $eventHandler) : WidgetHasClickEventInterface
     {
         return $this->off(WidgetOnClickEvent::class, $eventHandler);
     }
 
     /**
+     * @return static $this
      * @see \Replum\WidgetHasClickEventInterface::removeOnClickOnce()
      */
-    public function removeOnClickOnce(callable $eventHandler)
+    public function removeOnClickOnce(callable $eventHandler) : WidgetHasClickEventInterface
     {
         return $this->off(WidgetOnClickEvent::class, $eventHandler);
     }

@@ -35,32 +35,32 @@ interface WidgetHasClickEventInterface extends WidgetInterface
      *
      * @param callable $eventHandler
      * @param int $prio
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function onClick(callable $eventHandler, $prio = 5);
+    function onClick(callable $eventHandler, int $prio = 5) : self;
 
     /**
      * Register a handler for the click event that is only executed on the first occurence of the event and removed afterwards.
      * Multiple handler methods can be registered with this method.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function onClickOnce(callable $eventHandler, $prio = 5);
+    function onClickOnce(callable $eventHandler, int $prio = 5) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function removeOnClick(callable $eventHandler);
+    function removeOnClick(callable $eventHandler) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasChangeEvent $this for chaining
+     * @return static $this
      */
-    function removeOnClickOnce(callable $eventHandler);
+    function removeOnClickOnce(callable $eventHandler) : self;
 }

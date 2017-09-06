@@ -36,6 +36,7 @@ trait FormElementTrait
     }
 
     /**
+     * @return static $this
      * @see FormElementInterface::setForm()
      */
     public function setForm(Form $form) : FormElementInterface
@@ -58,6 +59,7 @@ trait FormElementTrait
     }
 
     /**
+     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-autofocus
      */
     final public function setAutofocus(bool $autofocus) : FormElementInterface
@@ -85,6 +87,7 @@ trait FormElementTrait
     }
 
     /**
+     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-disabled
      */
     final public function setDisabled(bool $disabled) : FormElementInterface
@@ -120,6 +123,7 @@ trait FormElementTrait
     }
 
     /**
+     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-fe-name
      */
     final public function setName(string $name = null) : FormElementInterface
@@ -154,6 +158,7 @@ trait FormElementTrait
     }
 
     /**
+     * @return static $this
      * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
      */
     final public function setValue(string $value = null) : FormElementInterface

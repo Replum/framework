@@ -36,9 +36,9 @@ interface WidgetHasSubmitEventInterface extends WidgetInterface
      *
      * @param callable $eventHandler
      * @param int $prio
-     * @return WidgetHasSubmitEvent $this for chaining
+     * @return static $this
      */
-    function onSubmit(callable $eventHandler, $prio = 5);
+    function onSubmit(callable $eventHandler, $prio = 5) : self;
 
     /**
      * Register a handler for the submit event that is only executed on the first occurence of the event and removed afterwards.
@@ -46,23 +46,23 @@ interface WidgetHasSubmitEventInterface extends WidgetInterface
      *
      * @param callable $eventHandler
      * @param int $prio
-     * @return WidgetHasSubmitEvent $this for chaining
+     * @return static $this
      */
-    function onSubmitOnce(callable $eventHandler, $prio = 5);
+    function onSubmitOnce(callable $eventHandler, $prio = 5) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasSubmitEvent $this for chaining
+     * @return static $this
      */
-    function removeOnSubmit(callable $eventHandler);
+    function removeOnSubmit(callable $eventHandler) : self;
 
     /**
      * Remove a previously registered event handler.
      *
      * @param callable $eventHandler
-     * @return WidgetHasSubmitEvent $this for chaining
+     * @return static $this
      */
-    function removeOnSubmitOnce(callable $eventHandler);
+    function removeOnSubmitOnce(callable $eventHandler) : self;
 }
