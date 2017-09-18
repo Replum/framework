@@ -52,6 +52,7 @@ trait WidgetContainerTrait
         }
 
         unset($this->widgetContainerTraitChildren[$widget->getWidgetId()]);
+        return $this;
     }
 
     /**
