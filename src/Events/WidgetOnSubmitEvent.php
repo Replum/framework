@@ -11,10 +11,31 @@
 
 namespace Replum\Events;
 
+use Replum\WidgetInterface;
+
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  */
 final class WidgetOnSubmitEvent extends WidgetEvent
 {
     const NAME = 'submit';
+
+    /**
+     * @var array
+     */
+    private $data;
+
+    /**
+     * Get the data submitted
+     */
+    public function getData() : array
+    {
+        return $this->data;
+    }
+
+    public function __construct(WidgetInterface $widget, array $data)
+    {
+        parent::__construct($widget);
+        $this->data = $data;
+    }
 }

@@ -65,17 +65,12 @@ class JsonHandler
 
             // Handler to monitor changes
             $changedWidgets = new \SplObjectStorage();
-            $changeHandler = function(WidgetChangeEvent $event) use ($changedWidgets) {
+            $changeHandler = function (WidgetChangeEvent $event) use ($changedWidgets) {
                 $changedWidgets->attach($event->widget);
             };
             $page->on(WidgetChangeEvent::class, $changeHandler);
 
             $widget = $page->findById($request->request->get(self::SOURCE_PARAMETER_NAME));
-            if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {
-                $widget->setValue($request->request->get(self::VALUE_PARAMETER_NAME));
-            } elseif ($request->request->get(self::CHECKED_PARAMETER_NAME) !== null) {
-                $widget->setChecked($request->request->get(self::CHECKED_PARAMETER_NAME));
-            }
 
             switch ($event) {
                 case WidgetOnClickEvent::NAME:
@@ -83,7 +78,19 @@ class JsonHandler
                     break;
 
                 case WidgetOnChangeEvent::NAME:
-                    $widget->dispatch(new WidgetOnChangeEvent($widget));
+                    if ($request->request->get(self::VALUE_PARAMETER_NAME) !== null) {
+                        $oldValue = ($widget->hasValue() ? $widget->getValue() : '');
+                        $widget->setValue($request->request->get(self::VALUE_PARAMETER_NAME));
+                        $newValue = $widget->getValue();
+                    } elseif ($request->request->get(self::CHECKED_PARAMETER_NAME) !== null) {
+                        $oldValue = $widget->getChecked();
+                        $widget->setChecked($request->request->get(self::CHECKED_PARAMETER_NAME));
+                        $newValue = $widget->getChecked();
+                    } else {
+                        throw new \RuntimeException("Change event without change!");
+                    }
+
+                    $widget->dispatch(new WidgetOnChangeEvent($widget, $oldValue, $newValue));
                     break;
 
                 case WidgetOnDoubleClickEvent::NAME:
@@ -91,7 +98,8 @@ class JsonHandler
                     break;
 
                 case WidgetOnSubmitEvent::NAME:
-                    $widget->dispatch(new WidgetOnSubmitEvent($widget));
+                    $widget->dispatch(new WidgetOnSubmitEvent($widget,
+                        $request->request->get(self::DATA_PARAMETER_NAME)));
                     break;
 
                 default:
@@ -102,10 +110,13 @@ class JsonHandler
             $data = $this->handleChangedWidgets($page, $changedWidgets);
 
             //\apcu_store($this->executer->getCacheNamespace() . '.' . $page->getPageID(), $page, 0);
-            \apcu_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(), \gzdeflate(\serialize($page)), 0);
+            \apcu_store($this->executer->getCacheNamespace() . '.' . $page->getWidgetId(),
+                \gzdeflate(\serialize($page)), 0);
 
             $response = new JsonResponse($data);
-        } catch (\Throwable $e) {
+        }
+
+        catch(\Throwable $e) {
             $data = [[
                 self::ACTION_PARAMETER_NAME => 'error',
                 self::PARAMS_PARAMETER_NAME => [$this->dumpException($e)],

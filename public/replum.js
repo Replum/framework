@@ -117,12 +117,18 @@ $(function() {
         }
 
         currentEvent = eventQueue.shift();
-        console.log(currentEvent);
+        console.log("Handle current event: ", currentEvent);
 
-        params = [];
+        var params = [];
 
         if (currentEvent.type === "submit") {
-            params = $(currentEvent.target).serializeArray();
+            var formData = $(currentEvent.target).serializeArray();
+
+            for (var i=0; i<formData.length; i++) {
+                var dataEntry = formData[i], n1, n2;
+                [n1, n2] = dataEntry.name.split('[', 2);
+                params.push( { name: DATA_PARAMETER_NAME + "[" + n1 + "]" + (n2 !== undefined ? '[' + n2 : ''), value: dataEntry.value });
+            }
         } else if (currentEvent.target.type && ((currentEvent.target.type === "radio") || (currentEvent.target.type === "checkbox"))) {
             params.push( { name: CHECKED_PARAMETER_NAME, value: currentEvent.target.checked } );
         } else if ((currentEvent.target.value !== null) && (currentEvent.target.value !== undefined)) {
@@ -134,39 +140,56 @@ $(function() {
         params.push( { name: SOURCE_PARAMETER_NAME, value: currentEvent.currentTarget.id } );
 
         //console.log("Executing action with parameters: ", params);
-        $.post(document.URL, params, handleResponse);
+        $.post(document.URL, params).always(handleResponse);
     };
 
     var handleResponse = function(data) {
-        console.log(data);
+        console.log("HandleResponse: ", data);
 
-        if (data.constructor === Array) {
-            for (var i=0; i<data.length; i++) {
-                if (data[i][ACTION_PARAMETER_NAME] === "replace") {
-                    console.log("Issuing replace action", $("#" + data[i][TARGET_PARAMETER_NAME]));
-                    $("#" + data[i][TARGET_PARAMETER_NAME]).replaceWith(data[i][DATA_PARAMETER_NAME]);
+        var reply = (data.constructor === Array ? data : data.responseJSON);
+
+        for (var i=0; i<reply.length; i++) {
+            if (reply[i][ACTION_PARAMETER_NAME] === "error") {
+                var element = document.getElementById('replum-error-msg');
+                if (element === null) {
+                    element = document.createElement('div');
+                    element.id = 'replum-error-msg';
+                    document.body.appendChild(element);
                 }
 
-                else {
-                    var fn = methods[data[i][ACTION_PARAMETER_NAME]];
-                    if (typeof fn === 'function') {
-                        console.log('Executing method "' + data[i][ACTION_PARAMETER_NAME] + '" with ', data[i][PARAMS_PARAMETER_NAME]);
-                        fn.apply(null, data[i][PARAMS_PARAMETER_NAME]);
-                    } else {
-                        console.log('Invalid method "' + data[i][ACTION_PARAMETER_NAME] + '"');
-                    }
+                var errorMsg = '';
+
+                for (var j=0; j<reply[i][PARAMS_PARAMETER_NAME].length; j++) {
+                    errorMsg += reply[i][PARAMS_PARAMETER_NAME][j] + "\n";
                 }
+
+                element.innerHTML = '<pre>' + errorMsg + '</pre>';
             }
 
-            refresh();
+            else if (reply[i][ACTION_PARAMETER_NAME] === "replace") {
+                console.log("Issuing replace action", $("#" + reply[i][TARGET_PARAMETER_NAME]));
+                $("#" + reply[i][TARGET_PARAMETER_NAME]).replaceWith(reply[i][DATA_PARAMETER_NAME]);
+            }
+
+            else {
+                var fn = methods[reply[i][ACTION_PARAMETER_NAME]];
+                if (typeof fn === 'function') {
+                    console.log('Executing method "' + reply[i][ACTION_PARAMETER_NAME] + '" with ', reply[i][PARAMS_PARAMETER_NAME]);
+                    fn.apply(null, reply[i][PARAMS_PARAMETER_NAME]);
+                } else {
+                    console.log('Invalid method "' + reply[i][ACTION_PARAMETER_NAME] + '"');
+                }
+            }
         }
+
+        refresh();
 
         currentEvent = null;
         executeActions();
     };
 
     var refresh = function() {
-        //$('[data-toggle~=tooltip]').tooltip();
+        $('[data-toggle~=tooltip]').tooltip();
         //$('[data-toggle~=popover]').popover();
         // Display forced popovers that are not already visible (avoid flickering)
         //$('[data-toggle~=popover][data-trigger=manual][data-visible=always]').filter(':not([aria-describedby])').popover('show');
