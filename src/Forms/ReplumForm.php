@@ -127,7 +127,7 @@ abstract class ReplumForm
         return $this;
     }
 
-    protected function getFields() : \Traversable
+    protected function getFields() : array
     {
         return $this->fields;
     }
@@ -178,12 +178,14 @@ abstract class ReplumForm
     {
         $field = $this->getField($fieldName);
 
-        $formGroup = $this->formGroups[$fieldName] = Html::div()
+        $formGroup = $this->formGroups[$fieldName] = Html::div();
+        $formGroup
             ->needID()
             ->addClass('form-group')
         ;
 
-        $input = $this->inputs[$fieldName] = Html::textInput()
+        $input = $this->inputs[$fieldName] = Html::textInput();
+        $input
             ->needID()
             ->setName($this->getRealFieldName($fieldName))
             ->addClass('form-control')
@@ -191,8 +193,13 @@ abstract class ReplumForm
             ->onChange([$this, 'handleFormChange'])
         ;
 
+        if ($field->hasDefaultValue()) {
+            $input->setValue($field->getDefaultValue());
+        }
+
         if ($field->hasLabel()) {
-            $label = $this->labels[$fieldName] = Html::label()
+            $label = $this->labels[$fieldName] = Html::label();
+            $label
                 ->add(Html::text($field->getLabel()))
                 ->setFor($input)
             ;
@@ -407,5 +414,23 @@ abstract class ReplumForm
 
         $this->errorDivs[$fieldName]->add(Html::text($errorMsg));
         $this->formGroups[$fieldName]->setChanged(true);
+    }
+
+    public function importData(array $values)
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field instanceof FieldDefinition) {
+                // Nothing to import here
+                if (!isset($values[$field->getName()])) { continue; }
+
+                $value = $values[$field->getName()];
+                if ($field->hasTranslator()) {
+                    $imported = $field->getTranslator()->import($value);
+                } else {
+                    $imported = $value;
+                }
+                $field->setDefaultValue($imported);
+            }
+        }
     }
 }
