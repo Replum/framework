@@ -12,14 +12,17 @@
 namespace Replum\Html;
 
 use \Replum\Util;
+use Replum\WidgetHasChangeEventInterface;
+use Replum\WidgetHasChangeEventTrait;
 
 /**
  * @author Dennis Birkholz <dennis@birkholz.org>
  * @todo: implement dirname attribute
  */
-abstract class Input extends HtmlElement implements FormInputInterface
+abstract class Input extends HtmlElement implements FormInputInterface, WidgetHasChangeEventInterface
 {
     use FormElementTrait;
+    use WidgetHasChangeEventTrait;
 
     const TAG = 'input';
     const EMPTY_ELEMENT = true;
