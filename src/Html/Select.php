@@ -140,15 +140,6 @@ final class Select extends HtmlElement implements WidgetHasChangeEventInterface,
         ;
     }
 
-    public function render() : string
-    {
-        if (!\count($this->children()) && \count($this->values)) {
-            $this->createOptions($this, $this->values);
-        }
-
-        return parent::render();
-    }
-
     ######################################################################
     # helper functions                                                   #
     ######################################################################
@@ -173,15 +164,38 @@ final class Select extends HtmlElement implements WidgetHasChangeEventInterface,
 
     /**
      * @param array $values
-     * @param boolean $hasKeys $values contains separate values and labels
      * @return static $this for chaining
      */
-    public function setValues($values, $hasKeys = true)
+    public function setValues($values)
     {
-        if (($this->values !== $values) && ($this->isAssoc !== $hasKeys)) {
+        if ($this->values !== $values) {
             $this->values = $values;
-            $this->isAssoc = (bool) $hasKeys;
+            $this->isAssoc = (\array_keys($values) !== \range(0, \count($values)-1));
             $this->setChanged(true);
+
+            foreach ($this->getChildren() as $child) {
+                $this->del($child);
+            }
+            $this->createOptions($this, $this->values);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-input-value
+     */
+    final public function setValue(string $value = null) : FormElementInterface
+    {
+        if ($this->value !== $value) {
+            $this->value = $value;
+            $this->setChanged(true);
+
+            /* @var $option Option */
+            foreach ($this->getDescendants(Option::class) as $option) {
+                $option->setSelected($option->getValue() === $value);
+            }
         }
         return $this;
     }
@@ -190,16 +204,24 @@ final class Select extends HtmlElement implements WidgetHasChangeEventInterface,
     {
         foreach ($values as $value => $label) {
             if (\is_array($label)) {
-                $optgroup = Html::optGroup($this->getPage())->setLabel($value);
+                $optgroup = Html::optGroup()->setLabel($value);
                 $parent->add($optgroup);
                 $this->{__FUNCTION__}($optgroup, $label);
             }
 
             else {
-                $option = Html::option($this->getPage())->setLabel($label)->setValue($this->isAssoc ? $value : $label);
-                if (($this->value !== null) && ($value === $this->value)) {
+                $value = ($this->isAssoc ? $value : $label);
+                $option = Html::option()->setLabel($label)->setValue($value);
+
+                if ($value === '') {
+                    $option->setDisabled(true);
+                    $option->setSelected($this->value === null);
+                }
+
+                elseif ($value === $this->value) {
                     $option->setSelected(true);
                 }
+
                 $parent->add($option);
             }
         }

@@ -43,9 +43,9 @@ final class FieldDefinition
     private $defaultValue;
 
     /**
-     * @var \Traversable
+     * @var array
      */
-    private $values = [];
+    private $values;
 
     /**
      * @var bool
@@ -154,7 +154,7 @@ final class FieldDefinition
         return $this;
     }
 
-    public function getValues() : \Traversable
+    public function getValues() : array
     {
         return $this->values;
     }
@@ -164,7 +164,7 @@ final class FieldDefinition
         return ($this->values !== null);
     }
 
-    public function setValues(\Traversable $values) : self
+    public function setValues(array $values) : self
     {
         $this->values = $values;
         return $this;

@@ -184,14 +184,33 @@ abstract class ReplumForm
             ->addClass('form-group')
         ;
 
-        $input = $this->inputs[$fieldName] = Html::textInput();
-        $input
-            ->needID()
-            ->setName($this->getRealFieldName($fieldName))
-            ->addClass('form-control')
-            ->addClass('boxed')
-            ->onChange([$this, 'handleFormChange'])
-        ;
+        if ($field->hasValues()) {
+            $input = $this->inputs[$fieldName] = Html::select();
+            $input
+                ->needID()
+                ->setName($this->getRealFieldName($fieldName))
+                ->addClass('form-control')
+                ->addClass('boxed')
+                ->onChange([$this, 'handleFormChange'])
+            ;
+
+            $input->setValues($field->getValues());
+        }
+
+        else {
+            $input = $this->inputs[$fieldName] = Html::textInput();
+            $input
+                ->needID()
+                ->setName($this->getRealFieldName($fieldName))
+                ->addClass('form-control')
+                ->addClass('boxed')
+                ->onChange([$this, 'handleFormChange'])
+            ;
+
+            if ($field->hasPlaceholder()) {
+                $input->setPlaceHolder($field->getPlaceholder());
+            }
+        }
 
         if ($field->hasDefaultValue()) {
             $input->setValue($field->getDefaultValue());
@@ -204,10 +223,6 @@ abstract class ReplumForm
                 ->setFor($input)
             ;
             $formGroup->add($label);
-        }
-
-        if ($field->hasPlaceholder()) {
-            $input->setPlaceHolder($field->getPlaceholder());
         }
 
         if ($field->getRequired()) {
