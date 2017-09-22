@@ -12,6 +12,7 @@ namespace Replum\Forms;
 
 use Replum\Events\WidgetOnChangeEvent;
 use Replum\Events\WidgetOnSubmitEvent;
+use Replum\Html\FormInputInterface;
 use Replum\HtmlFactory as Html;
 use Replum\Html\Form;
 use Replum\Html\HtmlElement;
@@ -239,35 +240,68 @@ abstract class ReplumForm
 
     public function handleFormChange(WidgetOnChangeEvent $event)
     {
+        /* @var $input FormInputInterface */
         $input = $event->widget;
         $fieldName = $this->getLocalFieldName($this->getInternalFieldName($input->getName()));
         $field = $this->getField($fieldName);
 
-        if (!$field->hasTranslator()) {
-            $this->markFieldValid($fieldName);
-            return;
+        if ($field->getRequired() && empty($input->getValue())) {
+            $this->markFieldInvalid($field->getName(), 'Pflichtangabe, bitte ausfüllen.');
         }
 
-        $translator = $field->getTranslator();
+        elseif (!$field->hasTranslator()) {
+            $this->markFieldValid($field->getName());
+        }
 
-        try {
-            if (!$field->getRequired() && ($input->getValue() === '' || $input->getValue() === null)) {
-                $normalized = '';
-            } else {
-                $normalized = $translator->normalize($input->getValue());
+        else {
+            try {
+                if (!empty($input->getValue())) {
+                    $normalized = $field->getTranslator()->normalize($input->getValue());
+                    $input->setValue($normalized);
+                }
+                $this->markFieldValid($field->getName());
             }
-            $this->inputs[$fieldName]->setValue($normalized);
-            $this->markFieldValid($fieldName);
-        }
 
-        catch (ValueTranslationException $e) {
-            $this->markFieldInvalid($fieldName, $e->getMessage());
+            catch (ValueTranslationException $e) {
+                $this->markFieldInvalid($field->getName(), $e->getMessage());
+            }
         }
+    }
+
+    /**
+     * @var callable
+     */
+    private $formValidHandler;
+
+    /**
+     * @return static $this
+     */
+    final public function onFormValid(callable $handler) : self
+    {
+        $this->formValidHandler = $handler;
+        return $this;
     }
 
     public function handleFormSubmit(WidgetOnSubmitEvent $event)
     {
-        $validFormData = $this->validateForm($event->getData());
+        $formData = $this->validateForm($event->getData());
+        if (!$formData['valid']) {
+            throw new \RuntimeException("Form is invalid: " . \print_r($formData['errors'], true));
+            return;
+        }
+
+        try {
+            if ($this->formValidHandler !== null && \is_callable($this->formValidHandler)) {
+                $handler = $this->formValidHandler;
+                $handler($formData);
+            } else {
+                throw new \RuntimeException('No valid handler!');
+            }
+        }
+
+        catch (\FieldValidationException $e) {
+            throw new \RuntimeException('Form validation error', null, $e);
+        }
     }
 
     final protected function validateForm(array $data) : array
@@ -297,7 +331,12 @@ abstract class ReplumForm
 
                 else {
                     try {
-                        $normalized = $field->getTranslator()->normalize($data[$field->getName()]);
+                        if (empty($data[$field->getName()])) {
+                            $normalized = '';
+                        } else {
+                            $normalized = $field->getTranslator()->normalize($data[$field->getName()]);
+                        }
+
                         $result['data'][$field->getName()] = $field->getTranslator()->import($normalized);
                         $this->markFieldValid($field->getName());
                     }
