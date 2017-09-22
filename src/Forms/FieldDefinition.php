@@ -101,6 +101,11 @@ final class FieldDefinition
         return $this;
     }
 
+    public function getQualifiedName() : string
+    {
+        return ($this->form->hasPrefix() ? $this->form->getPrefix() . '.' : '') . $this->getName();
+    }
+
     public function getLabel() : string
     {
         return $this->label;
