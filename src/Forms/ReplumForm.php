@@ -286,7 +286,7 @@ abstract class ReplumForm
     {
         $formData = $this->validateForm($event->getData());
         if (!$formData['valid']) {
-            throw new \RuntimeException("Form is invalid: " . \print_r($formData['errors'], true));
+            //throw new \RuntimeException("Form is invalid: " . \print_r($formData['errors'], true));
             return;
         }
 
@@ -314,7 +314,27 @@ abstract class ReplumForm
 
         foreach ($this->fields as $field) {
             if ($field instanceof ReplumForm) {
+                $prefix = \explode('.', $field->getPrefix());
+                $subInData = $data;
+                $subErrors = &$result['errors'];
+                $subOutData = &$result['data'];
+                foreach ($prefix as $prefixElement) {
+                    $subInData = $subInData[$prefixElement];
+                    $subErrors = &$subErrors[$prefixElement];
+                    $subOutData = &$subOutData[$prefixElement];
+                }
 
+                $subFormResult = $field->validateForm($subInData);
+                foreach ($subFormResult['data'] as $key => $value) {
+                    $subOutData[$key] = $value;
+                }
+
+                if (!$subFormResult['valid']) {
+                    $result['valid'] = false;
+                    foreach ($subFormResult['errors'] as $key => $value) {
+                        $subErrors[$key] = $value;
+                    }
+                }
             }
 
             elseif ($field instanceof FieldDefinition) {
