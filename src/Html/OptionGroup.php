@@ -11,50 +11,59 @@
 
 namespace Replum\Html;
 
-use \Replum\WidgetContainer;
-use \Replum\WidgetInterface;
+use \Replum\Util;
 
 /**
- * @author Dennis Birkholz <dennis@birkholz.biz>
- * @property string $label User-visible label
- * @link http://www.w3.org/TR/html5/forms.html#the-optgroup-element
+ * @author Dennis Birkholz <dennis@birkholz.org>
+ * @link https://www.w3.org/TR/html5/forms.html#the-optgroup-element
  */
-class OptionGroup extends WidgetContainer
+final class OptionGroup extends HtmlElement
 {
+    const TAG = 'optgroup';
+
     /**
+     * User-visible label
+     *
      * @var string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-optgroup-label
+     * @link https://www.w3.org/TR/html5/forms.html#attr-optgroup-label
      */
     protected $label;
 
     /**
-     * @return string
-     * @link http://www.w3.org/TR/html5/forms.html#attr-optgroup-label
+     * Check whether the user-visible label is set
      */
-    public function getLabel()
+    public function getLabel() : string
     {
         return $this->label;
     }
 
     /**
-     * @param string $newLabel
-     * @return static $this for chaining
      * @link http://www.w3.org/TR/html5/forms.html#attr-optgroup-label
      */
-    public function setLabel($newLabel)
+    public function hasLabel() : bool
     {
-        return $this->setStringProperty('label', $newLabel);
+        return ($this->label !== null);
     }
 
-    public function renderAttributes()
+    /**
+     * Set or clear the user-visible label
+     *
+     * @return static $this
+     * @link http://www.w3.org/TR/html5/forms.html#attr-optgroup-label
+     */
+    public function setLabel(string $label = null) : self
+    {
+        if ($this->label !== $label) {
+            $this->label = $label;
+            $this->setChanged(true);
+        }
+        return $this;
+    }
+
+    protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-        . $this->renderHtmlAttribute('label', $this->label);
-    }
-
-    public function __construct(WidgetInterface $parent = null)
-    {
-        parent::__construct($parent);
-        $this->setTag('optgroup');
+            . Util::renderHtmlAttribute('label', $this->label)
+        ;
     }
 }
