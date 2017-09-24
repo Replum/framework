@@ -12,10 +12,10 @@ namespace Replum\Forms;
 
 use Replum\Events\WidgetOnChangeEvent;
 use Replum\Events\WidgetOnSubmitEvent;
-use Replum\Html\FormInputInterface;
-use Replum\HtmlFactory as Html;
 use Replum\Html\Form;
+use Replum\Html\FormInputInterface;
 use Replum\Html\HtmlElement;
+use Replum\HtmlFactory as Html;
 
 abstract class ReplumForm
 {
@@ -319,10 +319,12 @@ abstract class ReplumForm
             } else {
                 throw new \RuntimeException('No valid handler!');
             }
-        }
-
-        catch (\FieldValidationException $e) {
-            throw new \RuntimeException('Form validation error', null, $e);
+        } catch (FieldValidationException $e) {
+            if (isset($this->fields[$e->getField()])) {
+                $this->markFieldInvalid($e->getField(), $e->getMessage());
+            } else {
+                throw new \RuntimeException('Form validation error', null, $e);
+            }
         }
     }
 
