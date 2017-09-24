@@ -369,7 +369,11 @@ abstract class ReplumForm
                 }
 
                 elseif (!$field->hasTranslator()) {
-                    $result['data'][$field->getName()] = $data[$field->getName()];
+                    if (empty($data[$field->getName()])) {
+                        $result['data'][$field->getName()] = '';
+                    } else {
+                        $result['data'][$field->getName()] = $data[$field->getName()];
+                    }
                     $this->markFieldValid($field->getName());
                 }
 
