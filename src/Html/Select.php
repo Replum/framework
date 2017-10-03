@@ -135,8 +135,9 @@ final class Select extends HtmlElement implements WidgetHasChangeEventInterface,
     protected function renderAttributes() : string
     {
         return parent::renderAttributes()
-        . Util::renderHtmlAttribute('name', $this->name)
-        . Util::renderHtmlAttribute('size', $this->size)
+            . $this->renderFormElementAttributes()
+            . Util::renderHtmlAttribute('name', $this->name)
+            . Util::renderHtmlAttribute('size', $this->size)
         ;
     }
 
