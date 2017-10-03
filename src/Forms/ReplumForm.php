@@ -247,6 +247,11 @@ abstract class ReplumForm
 
         $formGroup->add($input);
 
+        $formGroup->add(
+            $this->errorDivs[$fieldName] = Html::div()
+                ->addClass('invalid-feedback')
+        );
+
         return $formGroup;
     }
 
