@@ -200,6 +200,6 @@ $(function() {
     refresh();
     $(document).on('click',    '*[data-handler~="click"]', defaultHandler);
     $(document).on('dblclick', '*[data-handler~="dblclick"]', defaultHandler);
-    $(document).on('change',   'input, textarea, select', changeHandler);
+    $(document).on('change',   'input[type!="file"], textarea, select', changeHandler);
     $(document).on('submit',   'form', submitHandler);
 });
